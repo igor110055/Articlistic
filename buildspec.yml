@@ -34,16 +34,16 @@ phases:
       # - command
   pre_build:
     commands:
-      cd Frontend/
-      npm install --legacy-peer-deps
-      cd ../backend/
-      npm install
+      - cd Frontend/
+      - npm install --legacy-peer-deps
+      - cd ../backend/
+      - npm install
       # - command
       # - command
   build:
     commands:
-      cd ../Frontend/
-      npm run build
+      - cd ../Frontend/
+      - npm run build
       # - command
       # - command
   #post_build:
