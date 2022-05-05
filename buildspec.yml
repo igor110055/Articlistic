@@ -4,7 +4,7 @@ env:
   variables:
      PORT: "3000"
      HOST: "0.0.0.0"
-     #NODE_OPTIONS: "--openssl-legacy-provider"
+     NODE_OPTIONS: "--openssl-legacy-provider"
      # key: "value"
      # key: "value"
   #parameter-store:
