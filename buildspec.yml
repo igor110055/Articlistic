@@ -2,9 +2,9 @@ version: 0.2
 
 env:
   variables:
-     PORT="3000"
-     HOST="0.0.0.0"
-     NODE_OPTIONS="--openssl-legacy-provider"
+     PORT: "3000"
+     HOST: "0.0.0.0"
+     NODE_OPTIONS: "--openssl-legacy-provider"
      # key: "value"
      # key: "value"
   #parameter-store:
