@@ -1,0 +1,23 @@
+.main-container {
+  background-color: #ffffff;
+  margin-right: 3em;
+  border-radius: 0px 20px 20px 20px;
+  padding: 2em 2em 0 2em;
+}
+.divider-line {
+  margin-left: 3em;
+  width: 95%;
+  padding-bottom: 0.6em;
+  padding-top: 0.6em;
+}
+.no-article-msg {
+  margin-left: 4em;
+  padding-bottom: 2em;
+}
+.progress-div {
+  width: 100%;
+  margin-top: 2em;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 2em;
+}

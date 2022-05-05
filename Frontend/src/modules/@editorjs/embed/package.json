@@ -1,0 +1,82 @@
+{
+  "_from": "@editorjs/embed@^2.5.0",
+  "_id": "@editorjs/embed@2.5.0",
+  "_inBundle": false,
+  "_integrity": "sha512-kKMblRKWzTYP0mX/sO2/Ysn5wd76eP47DAdQc15qCveocRBCO+pSlY57p6mTd1x79yP+yFo7mv4iaZZFa4idkw==",
+  "_location": "/@editorjs/embed",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@editorjs/embed@^2.5.0",
+    "name": "@editorjs/embed",
+    "escapedName": "@editorjs%2fembed",
+    "scope": "@editorjs",
+    "rawSpec": "^2.5.0",
+    "saveSpec": null,
+    "fetchSpec": "^2.5.0"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@editorjs/embed/-/embed-2.5.0.tgz",
+  "_shasum": "1f42277b8da91e84e9033b5d90b1615a117de456",
+  "_spec": "@editorjs/embed@^2.5.0",
+  "_where": "E:\\React\\Attentioun\\writer-selection\\at_onboarding\\Frontend",
+  "author": {
+    "name": "CodeX",
+    "email": "team@codex.so"
+  },
+  "bugs": {
+    "url": "https://github.com/editor-js/embed/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Embed Tool for Editor.js",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/register": "^7.9.0",
+    "@babel/runtime": "^7.9.2",
+    "babel-loader": "^8.1.0",
+    "chai": "^4.2.0",
+    "css-loader": "^3.5.3",
+    "debounce": "^1.2.0",
+    "eslint": "^7.25.0",
+    "eslint-config-codex": "^1.6.1",
+    "ignore-styles": "^5.0.1",
+    "mocha": "^7.1.1",
+    "postcss-loader": "^3.0.0",
+    "postcss-nested": "^4.2.1",
+    "postcss-nested-ancestors": "^2.0.0",
+    "style-loader": "^1.2.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "homepage": "https://github.com/editor-js/embed#readme",
+  "keywords": [
+    "codex editor",
+    "embed",
+    "tool",
+    "editor.js",
+    "editorjs"
+  ],
+  "license": "MIT",
+  "main": "./dist/bundle.js",
+  "name": "@editorjs/embed",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/editor-js/embed.git"
+  },
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development --watch",
+    "lint": "eslint src/ --ext .js",
+    "lint:errors": "eslint src/ --ext .js --quiet",
+    "lint:fix": "eslint src/ --ext .js --fix",
+    "test": "mocha -r @babel/register -r ignore-styles --recursive ./test"
+  },
+  "version": "2.5.0"
+}

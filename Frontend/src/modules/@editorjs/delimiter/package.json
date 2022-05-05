@@ -1,0 +1,68 @@
+{
+  "_from": "@editorjs/delimiter",
+  "_id": "@editorjs/delimiter@1.2.0",
+  "_inBundle": false,
+  "_integrity": "sha512-GKsCFPk85vH5FuCuVQ48NTLc9hk0T3DsBH9zABaicTYIJayFcUa8N4/Y+L3i4tduzDqqyvoxkv+5n43GmC5gEA==",
+  "_location": "/@editorjs/delimiter",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@editorjs/delimiter",
+    "name": "@editorjs/delimiter",
+    "escapedName": "@editorjs%2fdelimiter",
+    "scope": "@editorjs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@editorjs/delimiter/-/delimiter-1.2.0.tgz",
+  "_shasum": "5075f1a3e68765cfb6aec8694b316d81e2b41607",
+  "_spec": "@editorjs/delimiter",
+  "_where": "E:\\React\\Attentioun\\writer-selection\\at_onboarding\\Frontend",
+  "author": {
+    "name": "CodeX Team",
+    "email": "team@ifmo.su"
+  },
+  "bugs": {
+    "url": "https://github.com/editor-js/delimiter/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Delimiter Tool for Editor.js",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.5",
+    "babel-preset-env": "^1.7.0",
+    "css-loader": "^1.0.0",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
+  },
+  "homepage": "https://github.com/editor-js/delimiter#readme",
+  "keywords": [
+    "codex editor",
+    "delimiter",
+    "tool",
+    "editor.js",
+    "editorjs"
+  ],
+  "license": "MIT",
+  "main": "./dist/bundle.js",
+  "name": "@editorjs/delimiter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/editor-js/delimiter.git"
+  },
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development --watch"
+  },
+  "version": "1.2.0"
+}

@@ -1,0 +1,66 @@
+{
+  "_from": "@editorjs/code",
+  "_id": "@editorjs/code@2.7.0",
+  "_inBundle": false,
+  "_integrity": "sha512-gXtTce915fHp3H9i4IqhTxEDbbkT2heFfYiW/bhFHsCmZDpyGzfZxi94kmrEqDmbxXjV49ZZ6GZbR26If13KJw==",
+  "_location": "/@editorjs/code",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@editorjs/code",
+    "name": "@editorjs/code",
+    "escapedName": "@editorjs%2fcode",
+    "scope": "@editorjs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@editorjs/code/-/code-2.7.0.tgz",
+  "_shasum": "0a21de9ac15e4533605ffcc80969513ab2142ac5",
+  "_spec": "@editorjs/code",
+  "_where": "E:\\React\\Attentioun\\writer-selection\\at_onboarding\\Frontend",
+  "author": {
+    "name": "CodeX",
+    "email": "team@codex.so"
+  },
+  "bugs": {
+    "url": "https://github.com/editor-js/code/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Code Tool for Editor.js",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^3.5.3",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
+  },
+  "homepage": "https://github.com/editor-js/code#readme",
+  "keywords": [
+    "codex editor",
+    "code",
+    "tool",
+    "editor.js",
+    "editorjs"
+  ],
+  "license": "MIT",
+  "main": "./dist/bundle.js",
+  "name": "@editorjs/code",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/editor-js/code.git"
+  },
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development --watch"
+  },
+  "version": "2.7.0"
+}

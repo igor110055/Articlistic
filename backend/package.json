@@ -1,0 +1,48 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "sudo nohup /home/ec2-user/.nvm/versions/node/v17.3.0/bin/node src/api/index.js",
+    "test": "jest --watchAll",
+    "build": "webpack"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.js"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-memorydb": "^3.43.0",
+    "@sendgrid/mail": "^7.6.0",
+    "@sentry/node": "^6.16.1",
+    "@sentry/tracing": "^6.16.1",
+    "2factor": "^1.0.6",
+    "aws-sdk": "^2.1033.0",
+    "axios": "^0.24.0",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "ioredis": "^4.28.2",
+    "jsonwebtoken": "^8.5.1",
+    "log4js": "^6.3.0",
+    "mongodb": "^4.2.0",
+    "multer": "^1.4.3",
+    "node-gzip": "^1.1.2",
+    "redis": "^4.0.1",
+    "socket.io": "^4.4.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1",
+    "mongodb-memory-server": "^8.0.2",
+    "supertest": "^6.1.6"
+  }
+}

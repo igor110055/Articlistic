@@ -1,0 +1,21 @@
+.snackbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: red; */
+    margin-top: 4rem;
+    position: absolute;
+    width: 70vw;
+    z-index: 3 !important;
+}
+
+.snackbar-inner {
+    text-align: center;
+    width: 30vw;
+    background-color: #ffcc00;
+    border-radius: 10px;
+    padding: 1% 0% 1% 0%;
+    color: white;
+    font-family: Poppins;
+    font-size: 16px;
+}

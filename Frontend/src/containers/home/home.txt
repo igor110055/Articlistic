@@ -1,0 +1,182 @@
+import { Button, Dialog, DialogTitle } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { getRefreshToken, logout } from "../loginSignup/loginSignupAction";
+import Cookie from 'js-cookie';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { userUsername } from "../user/userActions";
+import crypto from 'crypto-js';
+import WriterEditor from "../writerEditor/writerEditor";
+import WriterDashboard from "../writerContent/writerDahsboard";
+import TempNavbar from "../navbar/tempNavbar";
+import WriterContent from "../writerContent/writerContent";
+
+const Home = () => {
+    const classes = useStyles();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [submitClicked, setSubmitClicked] = useState(false);
+    const [alreadySignedIn, setAlreadySignedIn] = useState(true);
+    const [keepSignedIn, setKeepSignedIn] = useState(false);
+
+    useEffect(() => {
+        if (Cookie.get('oneDayBeforeAccessToken')) {
+            setAlreadySignedIn(true);
+        } else {
+            setAlreadySignedIn(false);
+        }
+
+        // console.log(JSON.parse(localStorage.getItem('user')).userUserName);
+
+        dispatch(userUsername(JSON.parse(localStorage.getItem('user'))?.userUserName))
+        // console.log(user);
+    }, []);
+
+    const {
+        isLoggingOut,
+        logoutError,
+        user,
+        isGettingRefreshToken,
+        getRefreshTokenError,
+        getRefreshTokenErrorMsg,
+        getRefreshTokenResp,
+    } = useSelector((state) => ({
+        isLoggingOut: state.loginSignup.isLoggingOut,
+        logoutError: state.loginSignup.logoutError,
+        user: state.user,
+        isGettingRefreshToken: state.loginSignup.isGettingRefreshToken,
+        getRefreshTokenError: state.loginSignup.getRefreshTokenError,
+        getRefreshTokenErrorMsg: state.loginSignup.getRefreshTokenErrorMsg,
+        getRefreshTokenResp: state.loginSignup.getRefreshTokenResp,
+    }));
+
+    // console.log(CryptoJS.AES.decrypt('U2FsdGVkX18vOT3vnUtUTd93YC9VBKXglhW4Xnz+MJTw/ufeJUpGmxzIqRqN3/PcfZmd6l0v5wjEpNBB18Lq6o4zUdX/E+NuHNP06A+1p3YfpQYmZlxzPFFKjsWDmJP0FQG8bzucCC8esfgfK0S16yIh1kZFzEFoyUuVdlR4CMARkjYGFPleS772ix2t885OsSrdRrNMtEAfWBHnoFgovMP+x8j2bc/f/2rVFY70UTs=', 'secretKeyNotToBeShared').toString(CryptoJS.enc.Utf8));
+
+    useEffect(() => {
+        if (logoutError) {
+
+        } else {
+            if (!isLoggingOut && submitClicked) {
+                Cookie.remove('accessToken');
+                Cookie.remove('refreshToken');
+                Cookie.remove('oneDayBeforeAccessToken');
+                localStorage.removeItem('categories');
+                navigate('/login');
+            }
+        }
+    }, [isLoggingOut]);
+    const handleSignout = () => {
+        const temp = encryptedAccessToken.toString();
+        // console.log(Cookie.get('accessToken'), encryptedAccessToken, temp);
+        dispatch(logout({
+            accessToken: temp,
+            username: user.userUserName,
+        }, temp));
+        setSubmitClicked(true);
+    }
+
+    useEffect(() => {
+        if (getRefreshTokenError) {
+            setKeepSignedIn(false);
+        } else {
+            if (!isGettingRefreshToken && keepSignedIn) {
+                // const encAccessToken = CryptoJS.AES.encrypt(getRefreshTokenResp.accessToken, 'secretKeyNotToBeShared').toString();
+                const encAccessToken = getRefreshTokenResp.accessToken
+                Cookie.set("accessToken", encAccessToken, { expires: 7 });
+                Cookie.set('oneDayBeforeAccessToken', encAccessToken, { expires: 6 });
+                setAlreadySignedIn(true);
+            }
+        }
+    }, [isGettingRefreshToken]);
+
+    const handleKeepSignedIn = () => {
+        // const decRefBytes = CryptoJS.AES.decrypt(Cookie.get('refreshToken'), 'secretKeyNotToBeShared');
+        // const decRefreshToken = decRefBytes.toString(CryptoJS.enc.Utf8);
+        dispatch(getRefreshToken({}, Cookie.get('refreshToken')));
+        setKeepSignedIn(true);
+    }
+
+    return (
+        <div>
+            <TempNavbar />
+            <div className={classes.homeContainer}>
+                {/* <Dialog open={!alreadySignedIn}>
+                    <DialogTitle>Keep signed in?</DialogTitle>
+                    <div className={classes.signedInDialog}>
+                        <Button
+                            sx={{
+                                "&.MuiButton-text": { color: "white" },
+                                height: "4em",
+                                width: "25%",
+                                fontFamily: "Poppins",
+                                fontWeight: "700",
+                                fontSize: "0.9em",
+                                textTransform: "capitalize",
+                                background: 'linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)',
+                            }}
+                            onClick={handleSignout}
+                        >
+                            No
+                        </Button>
+                        <Button
+                            sx={{
+                                "&.MuiButton-text": { color: "white" },
+                                height: "4em",
+                                width: "25%",
+                                fontFamily: "Poppins",
+                                fontWeight: "700",
+                                fontSize: "0.9em",
+                                textTransform: "capitalize",
+                                background: 'linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)',
+                            }}
+                            onClick={handleKeepSignedIn}
+                        >
+                            Yes
+                        </Button>
+                    </div>
+                </Dialog> */}
+                {/* <Unsplash /> */}
+                {/* <WriterDashboard /> */}
+                <WriterContent />
+                {/* <WriterEditor /> */}
+                {/* <Button
+                sx={{
+                    "&.MuiButton-text": { color: "white" },
+                    height: "4em",
+                    width: "25%",
+                    fontFamily: "Poppins",
+                    fontWeight: "700",
+                    fontSize: "0.9em",
+                    textTransform: "capitalize",
+                    background: 'linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)',
+                }}
+                onClick={handleSignout}
+                disabled={isLoggingOut}
+            >
+                Sign Out
+            </Button> */}
+            </div>
+        </div>
+    );
+}
+
+const useStyles = makeStyles({
+    homeContainer: {
+        // display: 'flex',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        minHeight: '(100vh - 4.4rem)',
+        backgroundColor: 'white',
+        width: '100%',
+        marginTop: '4.2rem',
+    },
+
+    signedInDialog: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '3%',
+    }
+})
+
+export default Home;

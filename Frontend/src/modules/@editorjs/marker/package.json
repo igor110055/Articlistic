@@ -1,0 +1,67 @@
+{
+  "_from": "@editorjs/marker",
+  "_id": "@editorjs/marker@1.2.2",
+  "_inBundle": false,
+  "_integrity": "sha512-BN/IHbVKKahGnMAiBOV5U7XUjfF6JkIkTZ6qNLxtTr7PUPM8UsJV8G8pyll9CX+XRUYYZyokA2kEBHTS4vUyyw==",
+  "_location": "/@editorjs/marker",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@editorjs/marker",
+    "name": "@editorjs/marker",
+    "escapedName": "@editorjs%2fmarker",
+    "scope": "@editorjs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@editorjs/marker/-/marker-1.2.2.tgz",
+  "_shasum": "d9261a257436bf70179c0fa1e766ab85c823c96b",
+  "_spec": "@editorjs/marker",
+  "_where": "E:\\React\\Attentioun\\writer-selection\\at_onboarding\\Frontend",
+  "author": {
+    "name": "CodeX",
+    "email": "team@codex.so"
+  },
+  "bugs": {
+    "url": "https://github.com/editor-js/marker/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Marker Tool for Editor.js",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^1.0.0",
+    "raw-loader": "^3.1.0",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
+  },
+  "homepage": "https://github.com/editor-js/marker#readme",
+  "keywords": [
+    "codex editor",
+    "marker",
+    "tool",
+    "editor.js",
+    "editorjs"
+  ],
+  "license": "MIT",
+  "main": "./dist/bundle.js",
+  "name": "@editorjs/marker",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/editor-js/marker.git"
+  },
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development --watch"
+  },
+  "version": "1.2.2"
+}

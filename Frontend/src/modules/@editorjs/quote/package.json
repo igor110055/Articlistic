@@ -1,0 +1,66 @@
+{
+  "_from": "@editorjs/quote",
+  "_id": "@editorjs/quote@2.4.0",
+  "_inBundle": false,
+  "_integrity": "sha512-IWOBWjL2ngPP63GcIAltyD9kc7OVZFma4kS+T5JRHvKKDspYsnmrxsbRmCPc+coZQzqPxXHkiOZuNMdmGX/Y3w==",
+  "_location": "/@editorjs/quote",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@editorjs/quote",
+    "name": "@editorjs/quote",
+    "escapedName": "@editorjs%2fquote",
+    "scope": "@editorjs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@editorjs/quote/-/quote-2.4.0.tgz",
+  "_shasum": "effe570f9055831a230e0417fafa6091a6169a47",
+  "_spec": "@editorjs/quote",
+  "_where": "E:\\React\\Attentioun\\writer-selection\\at_onboarding\\Frontend",
+  "author": {
+    "name": "CodeX",
+    "email": "team@codex.so"
+  },
+  "bugs": {
+    "url": "https://github.com/editor-js/quote/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Quote Tool for Editor.js",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^1.0.0",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
+  },
+  "homepage": "https://github.com/editor-js/quote#readme",
+  "keywords": [
+    "codex editor",
+    "tool",
+    "quote",
+    "editor.js",
+    "editorjs"
+  ],
+  "license": "MIT",
+  "main": "./dist/bundle.js",
+  "name": "@editorjs/quote",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/editor-js/quote.git"
+  },
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development --watch"
+  },
+  "version": "2.4.0"
+}

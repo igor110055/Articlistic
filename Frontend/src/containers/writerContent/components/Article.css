@@ -1,0 +1,61 @@
+.article-container {
+  display: flex;
+}
+.article-img {
+  width: 8em;
+  height: 6em;
+  display: block;
+  margin-left: 1em;
+  border-radius: 12px;
+  flex-grow: 1;
+}
+.article-img-div {
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 1em;
+}
+.manage-btn-div {
+  height: inherit;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+.detail-div {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 1.5em;
+}
+.sub-title {
+  color: #636363;
+}
+.title {
+  font-family: Poppins;
+  color: #636363;
+  font-size: 1.2em;
+
+  font-weight: bolder;
+}
+.button-div {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  width: inherit;
+  justify-content: center;
+}
+.manage-btn {
+  padding: 0.6em 0.4em 0.6em 0.4em;
+  width: 10em;
+  border: 3px solid rgba(151, 151, 151, 1);
+  font-family: PoppinsBold;
+  font-size: 1em;
+  font-weight: 1000;
+  color: rgba(0, 0, 0, 1);
+  background-color: white;
+  border-radius: 10px;
+  margin-right: 3em;
+}
