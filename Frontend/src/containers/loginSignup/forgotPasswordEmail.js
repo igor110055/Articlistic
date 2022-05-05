@@ -95,22 +95,18 @@ const ForgotPasswordEmail = ({
       setTypeForDialog("email");
       setOpenNewPassword(true);
       // localStorage.setItem('user', JSON.stringify(user));
-      // console.log("Email:", user);
       // setDisplayPage('createProfile');
     }
   }, [isValidEmailOTP]);
 
   // useEffect(() => {
   //     const temp = localStorage.getItem('user');
-  //     console.log(temp);
   // }, []);
 
   useEffect(() => {
-    // console.log(verifyForgotEmailOTPError);
     if (verifyForgotEmailOTPError) {
       setIsValidEmailOTP(false);
       setOtpInputColor("error"); //false
-      // console.log('fails');
       setErrorVerifyingOTP(true);
     } else {
       if (emailOTPSent && !isVerifyingForgotEmailOTP) {

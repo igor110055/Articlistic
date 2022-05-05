@@ -51,7 +51,7 @@ const useStyles = makeStyles({
         fontFamily: 'Consolas',
         fontSize: '14px',
         border: '0px',
-        color: '#616161',
+        color: '#1A1A1A',
         // lineHeight: '38px',
         // minWidth: '100%',
         '&:focus': {

@@ -1,0 +1,198 @@
+.title-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items:flex-end ;
+  }
+  
+  .delete-button-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 1px;
+  }
+  .delete-publication-button{
+    cursor: pointer;
+    height: 32px;
+    width: 88px;
+    border: 1px solid #F38484;
+    color: #F38484;
+    padding: 6px;
+    padding-right: 7.5px;
+    padding-top: 7.5px;
+    box-sizing: border-box;
+    border-radius: 28px;
+    background-color: #ffffff;
+    font-family: "poppins";
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete_publication-svg{
+  /* position: relative; */
+  margin-top: 5px;
+}
+
+.delete-button-span{
+    padding-left: 7.45px;
+    padding-top: -1px;
+}
+
+
+.button-container{
+  display: flex;
+  padding-top: 2.3em;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: .8em;
+}
+.menu-icon{
+  margin-right: 20px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-div{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+}
+
+.menu-anchor{
+  padding-right: 2em;
+}
+
+.box-container{
+  padding: 30px;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+.modal-box:focus-visible{
+  outline: none;
+}
+.modal-header{
+  font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 36px;
+/* identical to box height */
+
+letter-spacing: -0.105151px;
+
+color: #000000;
+
+}
+
+.alert-container{
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  align-items: center;
+  justify-content: center;
+  padding: 13px;
+  background: #FFBBBA;
+border-radius: 10px;
+}
+
+.alert-underline{
+  width: 490.44px;
+  height: 0px;
+  border: 1px solid #EBEBEB;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
+.alert-svg{
+  padding-right: 10px;
+  padding-top: 2px;
+  margin-top: 3px;
+}
+
+.delete-span{
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 27px;
+  text-align: center;
+  letter-spacing: -0.0583333px;
+  color: #FFFFFF;
+  font-family: "poppins";
+}
+
+.cancel-span{
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 27px;
+  text-align: center;
+  letter-spacing: -0.0583333px;
+  color: #000000;
+  font-family: "poppins";
+}
+
+.cancel-button:hover{
+  border: 2px solid #979797;
+}
+
+.add-logo-container{
+  display: flex;
+  justify-self: center;
+  align-items: center;
+}
+
+.save-publication-button-container{
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-bottom: 100px;
+}
+
+.edit-about-page-button-container{
+  align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: -200px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .edit-about-page-button{
+    cursor: pointer;
+    height: 31px;
+    width: 155px;
+    border: 1px solid #636363;
+    color: #636363;
+    padding: 6px;
+    padding-right: 7.5px;
+    padding-top: 7.5px;
+    box-sizing: border-box;
+    border-radius: 28px;
+    background-color: #ffffff;
+    font-family: "poppins";
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.edit-about-page-svg{
+  position: relative;
+  margin-top: 5px;
+}
+
+.edit-about-page-button-span{
+    padding-left: 7.45px;
+    padding-bottom: 1px;
+  }
+  
+.delete-publication-span{
+  padding-bottom: 1px;
+  padding-right: 3px;
+}

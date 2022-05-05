@@ -1,0 +1,86 @@
+
+.deleted-publication-button{
+    width: 180px;
+    height: 47px;
+    margin-right: 20px;
+    margin-left: 20px;
+    background: #EF4949;
+    border-radius: 10px;
+    color: #ffffff;
+    border: none;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.button-text-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-right: 25px;
+}
+
+.separator{
+    width: 0px;
+    height: 16.14px;
+    margin-left: 12px;
+    margin-right: 11px;
+    border: 1px solid #C73F3F;
+    background-color: #C73F3F;
+}
+
+.deleted-button-time-span{
+    font-weight: 600;
+    font-size: 18px;
+    font-family: "poppins";
+    /* line-height: 27px; */
+    margin-bottom: 1em;
+    /* identical to box height */
+    margin-top: -8px;
+    letter-spacing: -0.10682px;
+    /* margin-left: 5px; */
+}
+
+.manege-button{
+    border: 2px solid #979797;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.deleted-time-svg{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 9px;
+}
+.deleted-button-text-span{
+    font-family: "poppins";
+    /* line-height: 21px; */
+    margin-top: 1.5em;
+
+}
+
+.deleting-soon-button{
+     width: 180px;
+    height: 47px;
+    margin-right: 20px;
+    margin-left: 20px;
+    background: #ebe9e9;
+    border-radius: 10px;
+    color: #979797;
+    border: 1px solid #979797;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.deleting-soon-span{
+    font-family: "poppins";
+    font-size: 16px;
+    font-weight: 600;
+}

@@ -32,8 +32,8 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
     verifyOTPError,
     verifyOTPErrorMsg,
     user,
-    userPhoneNumber,
-  } = useSelector((state) => ({
+    userPhoneNumber
+  } = useSelector(state => ({
     isGettingOTP: state.loginSignup.isGettingOTP,
     getOTPError: state.loginSignup.getOTPError,
     getOTPErrorMsg: state.loginSignup.getOTPErrorMsg,
@@ -42,22 +42,21 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
     verifyOTPError: state.loginSignup.verifyOTPError,
     verifyOTPErrorMsg: state.loginSignup.verifyOTPErrorMsg,
     user: state.user,
-    userPhoneNumber: state.user.userPhoneNumber,
+    userPhoneNumber: state.user.userPhoneNumber
   }));
 
   const dispatch = useDispatch();
   const [resendNumber, setResendNumber] = useState("");
-  const handleGetOTP = (number) => {
+  const handleGetOTP = number => {
     setOTPSent(false);
     setFinalCountry(country);
     if (number.length >= 10) {
       setIsValidNumber(true);
       setResendNumber(number);
-      // console.log(country);
       if (true) {
         dispatch(
           getOTP({
-            email: number,
+            email: number
           })
         );
       }
@@ -78,7 +77,6 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
       setBorderColor("error");
     }
   }, [isValidNumber]);
-  // console.log(finalCountry);
 
   useEffect(() => {
     if (getOTPError) {
@@ -98,7 +96,7 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
     }
   }, [isGettingOTP]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     //async
     setErrorOccured(false);
     e.preventDefault();
@@ -107,14 +105,14 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
         dispatch(
           verifyOTP({
             phone: phoneNumber,
-            code: OTP,
+            code: OTP
           })
         );
       } else {
         dispatch(
           verifyOTP({
             phone: phoneNumber,
-            code: OTP,
+            code: OTP
           })
         );
       }
@@ -127,7 +125,6 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
   useEffect(() => {
     if (isValidOTP && displayPage === "emailVerification") {
       localStorage.setItem("user", JSON.stringify(user));
-      // console.log(user);
       setDisplayPage("createProfile");
     }
   }, [userPhoneNumber, isValidOTP]);
@@ -138,10 +135,8 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
       setIsValidOTP(false); //false
       setErrorOccured(false);
     } else {
-      // console.log(resendNumber, OTPSent);
       dispatch(userPhone(resendNumber));
       if (!isVerifyingOTP && OTPSent) {
-        // console.log('1');
         setIsValidOTP(true);
       }
       setErrorOccured(false);
@@ -173,11 +168,11 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
               enableLongNumbers={true}
               color={inputBorderColor}
               className={classes.mobileNumber}
-              onChange={(val) => {
+              onChange={val => {
                 setDisableButton(false);
                 setPhoneNumber(val);
               }}
-              onKeyDown={(e) => {
+              onKeyDown={e => {
                 if (e.key === "Enter") {
                   handleGetOTP(phoneNumber);
                 }
@@ -196,7 +191,7 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
                 fontSize: "0.9em",
                 textTransform: "capitalize",
                 background:
-                  "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)",
+                  "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)"
               }}
               onClick={() => handleGetOTP(phoneNumber)}
               disabled={isGettingOTP}
@@ -217,7 +212,7 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
                 fontWeight: "700",
                 fontSize: "0.9em",
                 textTransform: "capitalize",
-                backgroundColor: "lightgrey",
+                backgroundColor: "lightgrey"
               }}
               onClick={() => handleGetOTP(phoneNumber)}
               disabled={isGettingOTP || disableButton}
@@ -232,7 +227,7 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
           variant="outlined"
           color={otpInputColor}
           type="number"
-          onChange={(e) => setOTP(e.target.value)}
+          onChange={e => setOTP(e.target.value)}
           disabled={!OTPSent || isGettingOTP || isVerifyingOTP}
         />
         <button
@@ -254,12 +249,11 @@ const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
   );
 };
 
-
 const SuccessfullOTPSent = ({
   number,
   handleGetOTP,
   finalCountry,
-  disableResendButton,
+  disableResendButton
 }) => {
   const classes = useStyles();
   return (
@@ -282,7 +276,7 @@ const SuccessfullOTPSent = ({
               marginLeft: "1em",
               textTransform: "capitalize",
               textDecoration: "underline",
-              borderRadius: "0px",
+              borderRadius: "0px"
             }}
             disabled={disableResendButton}
           >
@@ -296,7 +290,6 @@ const SuccessfullOTPSent = ({
   );
 };
 
-
 const useStyles = makeStyles({
   mobileVerificationCard: {
     backgroundColor: "white",
@@ -305,7 +298,7 @@ const useStyles = makeStyles({
     zIndex: 1,
     padding: "3em",
     minWidth: "300px",
-    ["@media (max-width:720px)"]: {
+    "@media (max-width:720px)": {
       // eslint-disable-line no-useless-computed-key
       width: "100%",
       height: "calc(100% - 4vh)",
@@ -315,13 +308,13 @@ const useStyles = makeStyles({
       alignItems: "center",
       flexDirection: "column",
       marginTop: "0",
-      minWidth: "0px",
+      minWidth: "0px"
     },
     marginTop: "4rem",
-    boxShadow: "20px 32px 64px 0px rgba(214, 230, 255, 0.5)",
+    boxShadow: "20px 32px 64px 0px rgba(214, 230, 255, 0.5)"
   },
   mobileNumber: {
-    width: "20em",
+    width: "20em"
   },
   nextButton: {
     // border: "2px black solid",
@@ -339,8 +332,8 @@ const useStyles = makeStyles({
     textDecoration: "bold",
     "&:hover": {
       backgroundColor: "#ffffff",
-      color: "#6B6B6B",
-    },
+      color: "#6B6B6B"
+    }
   },
   nextButtonDisabled: {
     backgroundColor: "white",
@@ -354,7 +347,7 @@ const useStyles = makeStyles({
     color: "#D3D3D3",
     fontSize: "0.9em",
     textTransform: "capitalize",
-    textDecoration: "bold",
+    textDecoration: "bold"
   },
 
   mobileVerififcationTitle: {
@@ -363,12 +356,12 @@ const useStyles = makeStyles({
     fontWeight: "700",
     fontSize: "1.6em",
     paddingBottom: "2%",
-    ["@media (max-width:720px)"]: {
+    "@media (max-width:720px)": {
       // eslint-disable-line no-useless-computed-key
       width: "100%",
       display: "flex",
-      alignItems: "flex-start",
-    },
+      alignItems: "flex-start"
+    }
   },
 
   mobileVerififcationOTPSection: {
@@ -377,20 +370,20 @@ const useStyles = makeStyles({
     alignItems: "center",
     marginTop: "5%",
     marginBottom: "5%",
-    ["@media (max-width:720px)"]: {
+    "@media (max-width:720px)": {
       // eslint-disable-line no-useless-computed-key
-      width: "100%",
-    },
+      width: "100%"
+    }
   },
 
   mobileVerificationInput: {
-    width: "70%",
+    width: "70%"
   },
   enterOtpInput: {
-    color: "primary",
+    color: "primary"
   },
   enterOtpInputError: {
-    color: "error",
+    color: "error"
   },
 
   successfullOTPSent: {
@@ -401,12 +394,12 @@ const useStyles = makeStyles({
     fontSize: "0.8em",
     padding: "2% 0% 2% 0%",
     justifyContent: "space-between",
-    marginTop: "1em",
+    marginTop: "1em"
   },
 
   successfullOTPSentMsg: {
     width: "fit-content",
-    paddingLeft: "2em",
+    paddingLeft: "2em"
   },
 
   successfullOTPSentResend: {
@@ -414,7 +407,7 @@ const useStyles = makeStyles({
     outline: "none",
     border: "none",
     backgroundColor: "transparent",
-    textDecoration: "underline",
+    textDecoration: "underline"
     // cursor: 'pointer',
   },
 
@@ -426,12 +419,12 @@ const useStyles = makeStyles({
     fontSize: "0.8em",
     padding: "2% 0% 2% 0%",
     justifyContent: "space-around",
-    alignItems: "center",
+    alignItems: "center"
   },
 
   wrongOTPMsg: {
-    width: "80%",
-  },
+    width: "80%"
+  }
 });
 
 export default EmailVerificationSignUp;

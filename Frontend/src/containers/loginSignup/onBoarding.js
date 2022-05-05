@@ -1,5 +1,5 @@
 import "./onBoarding.css";
-import backgroundSVG from "./../../Images/background.svg";
+// import backgroundSVG from "./../../Images/background.svg";
 import CreateProfile from "./createProfile";
 import OnBoardingTrack from "./onBoardinTrack";
 import { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ import {
   userPassword,
   userPhone,
   userPName,
-  userUsername,
+  userUsername
 } from "../user/userActions";
 import { useNavigate } from "react-router-dom";
 import Cookie from "js-cookie";
@@ -26,11 +26,9 @@ const OnBoarding = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => ({
-    user: state.user,
+  const { user } = useSelector(state => ({
+    user: state.user
   }));
-
-
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
@@ -55,7 +53,6 @@ const OnBoarding = () => {
   }, [displayPage]);
 
   useEffect(() => {
-
     if (localStorage.getItem("displayPage") !== undefined) {
       setDisplayPage(localStorage.getItem("displayPage"));
     } else if (localStorage.getItem("displayPage") === null) {
@@ -81,7 +78,7 @@ const OnBoarding = () => {
         <div className="alpha-tester-div">
           <div className="alpha-tester-name">
             <span>Alpha Adopter's Release &nbsp;</span>
-            <img src={rocket}></img>
+            <img src={rocket} alt="rocket"></img>
           </div>
         </div>
       </div>
@@ -93,7 +90,7 @@ const OnBoarding = () => {
         {displayPage !== "mapWritersAndCategories" && (
           <div className="onboarding-screen">
             <div className="onboarding-left-img">
-              <img src={left_img} className="bg-img-left"></img>
+              <img src={left_img} className="bg-img-left" alt="left_img"></img>
             </div>
             {displayPage === "mobileVerification" && (
               <MobileVerification
@@ -111,7 +108,7 @@ const OnBoarding = () => {
             )}
             {displayPage === "createProfile" && (
               <CreateProfile
-                className="onboarding-internal"
+                // className="onboarding-internal"
                 displayPage={displayPage}
                 className="onboarding-internal"
                 setDisplayPage={setDisplayPage}
@@ -119,7 +116,11 @@ const OnBoarding = () => {
             )}
             <div className="right-img">
               <div className="random-div">
-                <img src={left_img} className="bg-img-right"></img>
+                <img
+                  src={left_img}
+                  className="bg-img-right"
+                  alt="left_img"
+                ></img>
               </div>
             </div>
           </div>

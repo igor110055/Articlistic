@@ -1,10 +1,11 @@
 import { put, call, takeLatest } from "redux-saga/effects";
 import { baseURL, endPoints } from "../../utils/apiEndPoints";
 import {
-  getRequest,
+  // getRequest,
   authGetRequest,
   authPostRequest,
   authPutRequest,
+  authDeleteRequest
 } from "../../utils/apiRequests";
 import {
   CREATE_ABOUT_PUBLICATION_INIT,
@@ -12,6 +13,7 @@ import {
   GET_ABOUT_PUBLICATION_INIT,
   GET_PUBLICATIONS_INIT,
   UPDATE_PUBLICATIONS_INIT,
+  DELETE_PUBLICATION
 } from "../../utils/actionTypes";
 import {
   createAboutPublicationFailure,
@@ -24,12 +26,14 @@ import {
   getPublicationsSuccess,
   updatePublicationsFailure,
   updatePublicationsSuccess,
+  deletePublicationSuccess,
+  // deleteArticleSuccess
 } from "./writerActions";
 
 function* getPublications(action) {
   try {
     const headers = {
-      Authorization: action.data.token,
+      Authorization: action.data.token
     };
 
     const url = `${baseURL}/${endPoints.getPublications}?username=${action.data.userUserName}`;
@@ -49,13 +53,10 @@ export function* getPublicationsSaga() {
   yield takeLatest(GET_PUBLICATIONS_INIT, getPublications);
 }
 
-
-
-
 function* getAboutPublication(action) {
   try {
     const headers = {
-      Authorization: action.data.token,
+      Authorization: action.data.token
     };
 
     const url = `${baseURL}/${endPoints.updateAboutPublication}?publicationId=${action.data.publicationId}`;
@@ -74,15 +75,10 @@ export function* getAboutPublicationSaga() {
   yield takeLatest(GET_ABOUT_PUBLICATION_INIT, getAboutPublication);
 }
 
-
-
-
-
-
 function* createPublication(action) {
   try {
     const headers = {
-      Authorization: action.data.token,
+      Authorization: action.data.token
     };
     const url = `${baseURL}/${endPoints.createNewPublications}?username=${action.data.userUserName}&name=${action.data.name}`;
     const data = yield call(authPostRequest, url, action.data.fd, headers);
@@ -97,26 +93,27 @@ function* createPublication(action) {
   }
 }
 
-
-
 export function* createPublicationSaga() {
   yield takeLatest(CREATE_PUBLICATIONS_INIT, createPublication);
 }
 
 function* createAboutPublication(action) {
-
-  const aboutPublicationData = JSON.parse(action.data.publicationData)
+  const aboutPublicationData = JSON.parse(action.data.publicationData);
 
   try {
     const { userUserName, name, publicationId, publicationData } = action.data;
     const headers = {
-      Authorization: action.data.token,
+      Authorization: action.data.token
     };
     const url = `${baseURL}/${endPoints.updateAboutPublication}?publicationId=${publicationId}&username=${userUserName}&name=${name}`;
     const data = yield call(
       authPutRequest,
       url,
-      { writeup: publicationData, publicationId, intro: aboutPublicationData.blocks[0].data.text },
+      {
+        writeup: publicationData,
+        publicationId,
+        intro: aboutPublicationData.blocks[0].data.text
+      },
       headers
     );
 
@@ -138,12 +135,12 @@ function* updatePublication(action) {
   try {
     const { userUserName, name, publicationId } = action.data;
     const headers = {
-      Authorization: action.data.token,
+      Authorization: action.data.token
     };
     const url = `${baseURL}/${endPoints.updatePublication}?publicationId=${publicationId}&username=${userUserName}&name=${name}`;
     const data = yield call(authPutRequest, url, action.data.fd, headers);
-    data.publicationId = publicationId
-    data.publicationName = name
+    data.publicationId = publicationId;
+    data.publicationName = name;
 
     if (!data.error) {
       yield put(updatePublicationsSuccess(data));
@@ -157,4 +154,42 @@ function* updatePublication(action) {
 
 export function* updatePublicationSaga() {
   yield takeLatest(UPDATE_PUBLICATIONS_INIT, updatePublication);
+}
+
+// function* deleteArticle(action) {
+//   try {
+//     const { token, articleId } = action.data;
+//     const headers = {
+//       Authorization: token
+//     };
+//     const url = `${baseURL}/${endPoints.deleteArticleComplete}?articleId=${articleId}`;
+//
+//     const data = yield call(authDeleteRequest, url, headers);
+//
+//     data.articleId = articleId;
+//     yield put(deleteArticleSuccess(data));
+//   } catch (e) {}
+// }
+//
+// export function* deleteArticleSaga() {
+//   yield takeLatest(DELETE_ARTICLE, deleteArticle);
+// }
+
+function* deletePublication(action) {
+  try {
+    const { token, publicationId } = action.data;
+    const headers = {
+      Authorization: token
+    };
+    const url = `${baseURL}/${endPoints.deletePublication}?publicationId=${publicationId}`;
+
+    const data = yield call(authDeleteRequest, url, headers);
+    data.publicationId = publicationId;
+
+    yield put(deletePublicationSuccess(data));
+  } catch (e) {}
+}
+
+export function* deletePublicationSaga() {
+  yield takeLatest(DELETE_PUBLICATION, deletePublication);
 }

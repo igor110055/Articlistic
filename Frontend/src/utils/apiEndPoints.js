@@ -32,4 +32,6 @@ export const endPoints = {
   updatePublication: "publication",
   updateAboutPublication: "publication/article",
   publicationUploadImage: "publication/article/image",
+  deleteArticleComplete: "articles/markForDeletion",
+  deletePublication: "publication"
 };

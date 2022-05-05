@@ -1,22 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import Cookie from "js-cookie";
-import crypto from "crypto-js";
+
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import backgroundSVG from "./../Images/banner-background.svg";
 import ImageIcon from "./../Images/imagePNG.png";
 import UnsplashIcon from "./../Images/unsplashPNG.png";
 import "./Image.svg";
+import userImage from "./../Images/user-image.png";
 import "./../index.css";
 import WriterEditorCoverPhotoUnsplash from "./writerEditorCoverPhotoUnsplash";
-import SVG from "./../Images/background.svg";
-import { Dialog, TextareaAutosize } from "@mui/material";
-import $ from "jquery";
-import { uploadArticle } from "../containers/writerEditor/writerEditorActions";
+import { Button, Dialog, TextareaAutosize } from "@mui/material";
+
 import { showSnackbar } from "../containers/common/commonActions";
 import { baseURL, endPoints } from "../utils/apiEndPoints";
 import { getAuthToken } from "../containers/common/commonFunctions";
+import { Box } from "@mui/system";
 
 const CoverPhoto = ({
   setArticleTitle,
@@ -25,33 +24,30 @@ const CoverPhoto = ({
   articleTitle,
   articleDes,
   articleCover,
+  articleWriter,
   articleId,
   getArticleSuccess,
+  readingTimeLive
 }) => {
-  // console.log(articleTitle);
   const classes = useStyles();
   const [selectedFile, setSelectedFile] = useState(null);
-  // const [url, setUrl] = useState(data?.url ? data?.url : '');
-  // const [caption, setCaption] = useState(data?.caption ? data?.caption : '');
-  // const [description, setDescription] = useState(data?.description ? data?.description : '');
+
   const [progress, setProgress] = useState(0);
   const [unsplashSelected, setUnsplashSelected] = useState(false);
   const [openImageDialog, setOpenImageDialog] = useState(false);
-  const [getArticleInitiate, setGetArticleInitiate] = useState(false);
-  const [titleLength, setTitleLength] = useState(0);
-  const [subtitleLength, setSubtitleLength] = useState(0);
+  const [titleLength, setTitleLength] = useState(articleTitle.length || 0);
+  const [subtitleLength, setSubtitleLength] = useState(articleDes.length || 0);
   const titleRef = useRef(null);
   const [twoClicked, setTwoClicked] = useState(false);
   // const [unsplashURL, setUnsplashURL] = useState('');
-  const handleChange = (e) => {
+  const handleChange = e => {
     let img = new Image();
     let bData = [];
     bData.push(e.target.files[0]);
     img.src = window.URL.createObjectURL(
       new Blob(bData, { type: "application/zip" })
     );
-    // img.src = window?.URL?.createObjectURL(e.target.files[0]);
-    // console.log(e.target.files[0].size / 1024);
+
     img.onload = () => {
       if (
         img.width / img.height >= 4 / 3 &&
@@ -65,7 +61,6 @@ const CoverPhoto = ({
         );
       }
     };
-    // console.log(e.target.files[0]);
   };
 
   useEffect(() => {
@@ -74,21 +69,7 @@ const CoverPhoto = ({
     }
   }, [selectedFile]);
 
-  const {
-    user,
-    createNewArticleResp,
-    isUploadingImage,
-    uploadImageError,
-    uploadImageResp,
-    isGettingAllArticles,
-    getAllArticlesError,
-    isGettingArticle,
-    getArticleError,
-    getArticleResp,
-    uploadArticleError,
-    isUploadingArticle,
-    uploadArticleResp,
-  } = useSelector((state) => ({
+  const { getArticleResp, isUploadingArticle } = useSelector(state => ({
     user: state.user,
     createNewArticleResp: state.writerEditor.createNewArticleResp,
     isuploadingImage: state.writerEditor.isUploadingImage,
@@ -101,7 +82,7 @@ const CoverPhoto = ({
     getArticleResp: state.writerEditor.getArticleResp,
     uploadArticleError: state.writerEditor.uploadArticleError,
     isUploadingArticle: state.writerEditor.isUploadingArticle,
-    uploadArticleResp: state.writerEditor.uploadArticleResp,
+    uploadArticleResp: state.writerEditor.uploadArticleResp
   }));
 
   const [inputClicked, setInputClicked] = useState(false);
@@ -154,85 +135,64 @@ const CoverPhoto = ({
 
     const temp = getAuthToken();
     if (localStorage.getItem("articleId") === null) {
-      // console.log(localStorage.getItem('articleId'));
-      // dispatch(uploadArticle({
-      //     main: {
-      //         writeup: '{}',
-      //         status: "DRAFT",
-      //         title: '',
-      //         body: '',
-      //         articlePic: '',
-      //         readingTime: '',
-      //     },
-      // }, temp));
-      // console.log(twoClicked);
-      // setTwoClicked(true);
       dispatch(showSnackbar("Kindly add story title and subtitle.", "warning"));
     } else {
       hiddenInputTwo.current.click();
     }
-    // hiddenInputTwo.current.click();
   };
 
-  const fileUploadHandler = (e) => {
+  const fileUploadHandler = e => {
     const fd = new FormData();
     fd.append("image", selectedFile, selectedFile.name);
     const aId = localStorage.getItem("articleId");
 
     const temp = getAuthToken();
     axios
-      .put(
-        `${baseURL}/${endPoints.uploadImage}?articleId=${aId}`,
-        fd,
-        {
-          headers: {
-            Authorization: temp,
-          },
+      .put(`${baseURL}/${endPoints.uploadImage}?articleId=${aId}`, fd, {
+        headers: {
+          Authorization: temp
+        },
 
-          onUploadProgress: (progressEvent) => {
-            setProgress(
-              Math.round((progressEvent.loaded / progressEvent.total) * 100)
-            );
-          },
+        onUploadProgress: progressEvent => {
+          setProgress(
+            Math.round((progressEvent.loaded / progressEvent.total) * 100)
+          );
         }
-      )
-      .then((resp) => {
+      })
+      .then(resp => {
         // console.log(resp);
         setArticleCover(resp.data.image);
         setOpenImageDialog(false);
-        // onDataChange(resp.data.link, caption);
       })
-      .catch((error) => {
-        // console.log(error);
-      });
+      .catch(error => {});
   };
 
   const calculateHeight = () => {
     let intitalHeight = 0;
-    if (titleLength < 45) {
-      intitalHeight += 5.5;
-    } else if (titleLength > 45 && titleLength < 110) {
-      intitalHeight += 11;
+    if (titleLength <= 45) {
+      intitalHeight += 5;
+    } else if (titleLength > 45 && titleLength <= 110) {
+      intitalHeight += 7;
     } else {
-      intitalHeight += 14;
+      intitalHeight += 8;
     }
 
-    if (subtitleLength < 45) {
-      intitalHeight += 5.5;
-    } else if (subtitleLength > 45 && subtitleLength < 110) {
-      intitalHeight += 11;
+    if (subtitleLength <= 45) {
+      intitalHeight += 4;
+    } else if (subtitleLength >= 45 && subtitleLength <= 110) {
+      intitalHeight += 7.5;
     } else {
-      intitalHeight += 10;
+      intitalHeight += 11;
     }
     return `${intitalHeight}rem`;
   };
 
   const getFontSize = () => {
     let intitalFontSize = 0;
-    if (titleLength < 45) {
+    if (titleLength <= 45) {
       intitalFontSize += 35;
     } else if (titleLength > 45 && titleLength < 110) {
-      intitalFontSize += 28;
+      intitalFontSize += 26;
     } else {
       intitalFontSize += 23;
     }
@@ -242,34 +202,23 @@ const CoverPhoto = ({
   useEffect(() => {
     setTitleLength(articleTitle?.length);
   }, [articleTitle]);
-  // console.log(articleCover);
-  // console.log(articleTitle);
-  // console.log(articleDes);
+
+  const readingTime = parseInt(
+    readingTimeLive ||
+      JSON.parse(localStorage.getItem("article"))?.article?.public.readingTime
+  );
+  const date = JSON.parse(localStorage.getItem("article"))?.article
+    ?.lastUpdated;
+
+  const formatDate = date => {
+    let realDate = date || Date.now();
+    var d = new Date(parseInt(realDate, 10));
+    var ds = d.toString("MM dd");
+    return ds.substring(4, 10);
+  };
+
   return (
     <div className={classes.imageUploadSection}>
-      {/* {articleCover === '' ? (< div >
-                < input type="file" accept="image/*" onChange={handleChange} style={{ display: 'none' }} ref={hiddenInput} />
-                {progress === 0 ? (<div className={classes.input} onClick={handleInputClicked}>Select Cover Photo</div>)
-                    : (
-                        <div className={classes.progress}>{progress}% Uploaded</div>
-                    )}
-            </div>) : < div >
-                <div onClick={handleInputTwoClicked}>
-                    < input type="file" accept="image/*" onChange={handleChange} style={{ display: 'none' }} ref={hiddenInputTwo} />
-                    < img src={articleCover} className={classes.imageStyle} />
-                </div>
-                <div className={classes.captionContainer}>
-                    <img src={backgroundSVG} style={{ position: 'absolute' }} />
-                    <input className={classes.captionStyle} value={articleTitle} onChange={(e) => {
-                        setArticleTitle(e.target.value);
-                        // onDataChange(url, e.target.value);
-                    }} placeholder="Title" />
-                    <input className={classes.desCaptionStyle} value={articleDes} onChange={(e) => {
-                        setArticleDes(e.target.value);
-                        // onDataChange(url, e.target.value);
-                    }} placeholder="Subtitle" />
-                </div>
-            </div>} */}
       {
         <div>
           <div>
@@ -287,6 +236,7 @@ const CoverPhoto = ({
                   className={classes.imageStyle}
                   onClick={handleInputTwoClicked}
                   style={{ cursor: "pointer" }}
+                  alt="profile"
                 />
                 <Dialog
                   open={openImageDialog}
@@ -299,8 +249,8 @@ const CoverPhoto = ({
                       maxWidth: "30vw",
                       minWidth: "30vw",
                       padding: "1%",
-                      boxShadow: "none",
-                    },
+                      boxShadow: "none"
+                    }
                   }}
                 >
                   <div className={classes.input}>
@@ -310,7 +260,7 @@ const CoverPhoto = ({
                         style={{
                           border: "none",
                           outline: "none",
-                          backgroundColor: "white",
+                          backgroundColor: "white"
                         }}
                         disabled={isUploadingArticle}
                       >
@@ -318,6 +268,7 @@ const CoverPhoto = ({
                           src={ImageIcon}
                           style={{ width: "100px", cursor: "pointer" }}
                           className="imageIcon"
+                          alt="profile"
                         />
                       </button>
                     )}
@@ -327,6 +278,7 @@ const CoverPhoto = ({
                           src={UnsplashIcon}
                           style={{ width: "100px", cursor: "pointer" }}
                           className="imageIcon"
+                          alt="profile"
                         />
                       </div>
                     )}
@@ -344,7 +296,7 @@ const CoverPhoto = ({
                     <div></div>
                   </div>
                 ) : (
-                  <div className={classes.progress}>{progress}% Uploaded</div>
+                  <div className={classes.progress}></div>
                 )}
               </div>
             ) : (
@@ -363,7 +315,7 @@ const CoverPhoto = ({
                         style={{
                           display: "flex",
                           width: "50%",
-                          justifyContent: "space-around",
+                          justifyContent: "space-around"
                         }}
                       >
                         {!unsplashSelected && (
@@ -372,7 +324,7 @@ const CoverPhoto = ({
                             style={{
                               outline: "none",
                               border: "none",
-                              backgroundColor: "#F7F7F7",
+                              backgroundColor: "#F7F7F7"
                             }}
                             disabled={isUploadingArticle}
                           >
@@ -380,6 +332,7 @@ const CoverPhoto = ({
                               src={ImageIcon}
                               style={{ width: "100px", cursor: "pointer" }}
                               className="imageIcon"
+                              alt="profile"
                             />
                           </button>
                         )}
@@ -389,6 +342,7 @@ const CoverPhoto = ({
                               src={UnsplashIcon}
                               style={{ width: "100px", cursor: "pointer" }}
                               className="imageIcon"
+                              alt="profile"
                             />
                           </div>
                         )}
@@ -412,27 +366,19 @@ const CoverPhoto = ({
           </div>
           <div
             className={classes.captionContainer}
-            style={{ height: calculateHeight() }}
             style={{ backgroundImage: `url(${backgroundSVG})` }}
           >
-            {/* <img src={backgroundSVG} style={{ position: 'absolute', width: '100%', height:'100%'}} /> */}
-            {/* <div className={classes.caption}> */}
             <div
               className={classes.captionAndDescription}
               style={{ padding: "1rem" }}
             >
-              {/* <div contentEditable={true} id="test" maxLength="58" className={classes.captionStyle} value={articleTitle} onChange={(e) => {
-                            let text = e.target.value;
-                            if (2) text = text.split('\n').slice(0, 2 ?? undefined)
-                            setArticleTitle(text);
-                        }} id="test" /> */}
               <TextareaAutosize
                 maxLength="200"
                 ref={titleRef}
                 style={{ fontSize: getFontSize() }}
                 className={classes.captionStyle}
                 value={articleTitle}
-                onChange={(e) => {
+                onChange={e => {
                   let text = e.target.value;
                   setTitleLength(text.length);
                   if (e.nativeEvent.inputType === "insertLineBreak") {
@@ -448,7 +394,7 @@ const CoverPhoto = ({
                 maxLength="200"
                 className={classes.desCaptionStyle}
                 value={articleDes}
-                onChange={(e) => {
+                onChange={e => {
                   let text = e.target.value;
                   setSubtitleLength(text.length);
                   if (e.nativeEvent.inputType === "insertLineBreak") {
@@ -460,13 +406,83 @@ const CoverPhoto = ({
                 }}
                 placeholder="Enter Subtitle"
               />
-              {/* <div contentEditable={true} id="testD" maxLength="95" className={classes.desCaptionStyle} value={articleDes} onChange={(e) => {
-                            let text = e.target.value;
-                            if (2) text = text.split('\n').slice(0, 2 ?? undefined)
-                            setArticleDes(text);
-                        }} placeholder="Enter a subtitle" /> */}
-              {/* </div> */}
             </div>
+          </div>
+          <div className={classes.writerInfoContainer}>
+            <Box component="span" className={classes.writerInfoName}>
+              <Box className={classes.iconNameContainer}>
+                <Box sx={{ marginRight: "10px" }}>
+                  <img
+                    src={userImage}
+                    className={classes.writerDisplayIcon}
+                    alt="profile"
+                  />
+                </Box>
+                <Box>
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "800",
+                      color: "black"
+                    }}
+                  >
+                    {localStorage.getItem("writerName") || "Dummy Writer"}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "14px",
+                      color: "#636363",
+                      fontWeight: "600"
+                    }}
+                  >
+                    {formatDate(date)} ·{" "}
+                    {getArticleResp && !readingTime ? "0" : readingTime}{" "}
+                    {readingTime > 1 ? "mins read" : "min read"}
+                  </div>
+                </Box>
+              </Box>
+              <Box className={classes.rightDummyInfo}>
+                <Box className={classes.dummyRightContainer}>
+                  <div className={classes.dummySvgContainer}>
+                    <svg
+                      width="11"
+                      height="19"
+                      viewBox="0 0 13 21"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M12 20L6.17647 16.069L1 20V1H12V20Z"
+                        stroke="#2B406E"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+
+                  <Button
+                    sx={{
+                      "&.MuiButton-text": { color: "white" },
+                      width: "25%",
+                      fontFamily: "Poppins",
+                      fontWeight: "700",
+                      fontSize: "16px",
+                      letterSpacing: "1px",
+                      textTransform: "capitalize",
+                      background:
+                        "linear-gradient(128.16deg, #2B56FF 0%, #1395FD 90.57%)",
+                      borderRadius: "10px"
+                    }}
+                    style={{ marginRight: "4%", width: "8rem", height: "3rem" }}
+                  >
+                    Follow
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
           </div>
         </div>
       }
@@ -476,7 +492,7 @@ const CoverPhoto = ({
 
 const useStyles = makeStyles({
   imageUploadSection: {
-    marginBottom: "3%",
+    marginBottom: "0%"
   },
 
   input: {
@@ -485,17 +501,19 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
-    padding: "2% 0% 2% 0%",
+    padding: "2% 0% 2% 0%"
   },
 
   progress: {
     idth: "100%",
-    backgroundColor: "#F7F7F7",
+    backgroundColor: "white",
     outline: "none",
+    zIndex: -4,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: "2% 0% 2% 0%",
+    padding: "2% 0% 2% 0%"
+    // height: '14rem'
   },
 
   inputNi: {
@@ -506,7 +524,7 @@ const useStyles = makeStyles({
     justifyContent: "space-around",
     alignItems: "center",
     padding: "2% 0% 2% 0%",
-    height: "calc(100% - 10rem)",
+    height: "calc(100% - 10rem)"
   },
 
   progressNi: {
@@ -517,33 +535,34 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     padding: "2% 0% 2% 0%",
-    height: "calc(100% - 10rem)",
+    height: "calc(100% - 10rem)"
   },
 
   imageStyle: {
     width: "100%",
     height: "80vh",
     maxHeight: "35rem",
-    objectFit: "cover",
+    objectFit: "cover"
   },
 
   captionContainer: {
     marginTop: "-11rem",
     filter: "blur(0px)",
+    padding: "0.5rem",
     overflow: "hidden",
     background: "#191F28",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column",
+    flexDirection: "column"
   },
 
   captionAndDescription: {
     // backgroundColor: 'red',
     zIndex: 1,
-    width: "50%",
+    width: "758px",
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "column"
     // paddingTop: '2%',
   },
 
@@ -553,12 +572,12 @@ const useStyles = makeStyles({
     alignItems: "end",
     textAlign: "start",
     justifyContent: "flex-end",
-    clear: "both",
+    clear: "both"
   },
 
   captionStyle: {
-    maxWidth: "100%",
-    minWidth: "50%",
+    // maxWidth: "100%",
+    // minWidth: "50%",
     textWrap: "wrap",
     // textAlign: 'justify',
     outline: "none",
@@ -568,15 +587,13 @@ const useStyles = makeStyles({
     zIndex: 1,
     fontSize: "35px",
     fontFamily: "Merriweather",
-    resize: "none",
+    resize: "none"
     // textAlignLast: 'center',
     // textAlign: 'center',
     // textAlignLast: 'left',
   },
 
   desCaptionStyle: {
-    maxWidth: "100%",
-    minWidth: "50%",
     // textAlign: 'center',
     outline: "none",
     border: "none",
@@ -585,13 +602,71 @@ const useStyles = makeStyles({
     background: "transparent",
     fontSize: "20px",
     zIndex: 1,
-    resize: "none",
+    resize: "none"
   },
 
   coverIcon: {
-    backgroundImage: `url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 200'%3E%3Cpath d='M10 10h123v123H10z'/%3E%3C/svg%3E')`,
+    backgroundImage: `url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 200'%3E%3Cpath d='M10 10h123v123H10z'/%3E%3C/svg%3E')`
     // background-image: url( "" );
   },
+
+  writerInfoContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "1.4rem",
+    mixBlendMode: "normal"
+  },
+
+  writerInfoName: {
+    border: "1px solid #979797",
+    height: "93px",
+    width: "758px",
+    borderRadius: "20px",
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "space-between"
+  },
+
+  iconNameContainer: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginLeft: "20px"
+  },
+
+  rightDummyInfo: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginLeft: "20px"
+  },
+
+  dummySvgContainer: {
+    marginRight: "20px",
+    borderRadius: "50%",
+    border: "1px solid #CECECE",
+    width: "39px",
+    height: "39px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
+  dummyRightContainer: {
+    marginRight: "25px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
+  writerDisplayIcon: {
+    width: "40px",
+    marginTop: "8px",
+    height: "40px",
+    borderRadius: "50%",
+    objectFit: "cover"
+  }
 });
 
 export default CoverPhoto;

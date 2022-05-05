@@ -1,6 +1,6 @@
 import { Button, CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import {TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOTP, verifyOTP } from "./loginSignupAction";
@@ -9,7 +9,7 @@ import MuiPhoneNumber from "material-ui-phone-number";
 import "./../../index.css";
 import { Timer } from "./Timer";
 
-import { Error as WrongNumberError} from "./helper_functions/error";
+import { Error as WrongNumberError } from "./helper_functions/error";
 import { ErrorMessage } from "./helper_functions/errorMessageFunction";
 
 const MobileVerification = ({ setDisplayPage, displayPage }) => {
@@ -35,8 +35,8 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
     verifyOTPError,
     verifyOTPErrorMsg,
     user,
-    userPhoneNumber,
-  } = useSelector((state) => ({
+    userPhoneNumber
+  } = useSelector(state => ({
     isGettingOTP: state.loginSignup.isGettingOTP,
     getOTPError: state.loginSignup.getOTPError,
     getOTPErrorMsg: state.loginSignup.getOTPErrorMsg,
@@ -45,34 +45,33 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
     verifyOTPError: state.loginSignup.verifyOTPError,
     verifyOTPErrorMsg: state.loginSignup.verifyOTPErrorMsg,
     user: state.user,
-    userPhoneNumber: state.user.userPhoneNumber,
+    userPhoneNumber: state.user.userPhoneNumber
   }));
 
   const dispatch = useDispatch();
   const [resendNumber, setResendNumber] = useState("");
-  const handleGetOTP = (number) => {
+  const handleGetOTP = number => {
     number = number.replace("-", "");
     number = number.trim();
-    number = number.replace("(","")
-    number = number.replace(")","")
+    number = number.replace("(", "");
+    number = number.replace(")", "");
     setOTPSent(false);
     setFinalCountry(country);
     if (number.length >= 10) {
       setIsValidNumber(true);
       setResendNumber(number);
-      // console.log(country);
       if (phoneNumber.slice(0, 3) === "+91") {
         dispatch(
           getOTP({
             phone: number.slice(3),
-            international: false,
+            international: false
           })
         );
       } else {
         dispatch(
           getOTP({
             phone: number,
-            international: true,
+            international: true
           })
         );
       }
@@ -93,7 +92,6 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
       setBorderColor("error");
     }
   }, [isValidNumber]);
-  // console.log(finalCountry);
 
   useEffect(() => {
     if (getOTPError) {
@@ -113,20 +111,24 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
     }
   }, [isGettingOTP]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     //async
     setErrorOccured(false);
     e.preventDefault();
-    let number = phoneNumber.replace("(","")
-    number = number.replace(")","")
+    let number = phoneNumber.replace("(", "");
+    number = number.replace(")", "");
     if (OTP.length === 6) {
-      if (phoneNumber.slice(0, 3) === "+91" || phoneNumber.slice(0,3) === "+1(") {
+      if (
+        phoneNumber.slice(0, 3) === "+91" ||
+        phoneNumber.slice(0, 3) === "+1("
+      ) {
         dispatch(
           verifyOTP({
-            phone: phoneNumber.slice(0, 3) === "+91" ? phoneNumber.slice(3) : number,
+            phone:
+              phoneNumber.slice(0, 3) === "+91" ? phoneNumber.slice(3) : number,
             code: OTP,
-            international: phoneNumber.slice(0, 3) === "+91" ?  false : true,
-            sessionId: getOTPResp.sessionId,
+            international: phoneNumber.slice(0, 3) === "+91" ? false : true,
+            sessionId: getOTPResp.sessionId
           })
         );
       } else {
@@ -134,7 +136,7 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
           verifyOTP({
             phone: number,
             code: OTP,
-            international: true,
+            international: true
           })
         );
       }
@@ -147,7 +149,6 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
   useEffect(() => {
     if (isValidOTP && displayPage === "mobileVerification") {
       localStorage.setItem("user", JSON.stringify(user));
-      // console.log(user);
       setDisplayPage("emailVerification");
     }
   }, [userPhoneNumber, isValidOTP]);
@@ -158,10 +159,8 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
       setIsValidOTP(false); //false
       setErrorOccured(false);
     } else {
-      // console.log(resendNumber, OTPSent);
       dispatch(userPhone(resendNumber));
       if (!isVerifyingOTP && OTPSent) {
-        // console.log('1');
         setIsValidOTP(true);
       }
       setErrorOccured(false);
@@ -206,18 +205,18 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
                 classes={{
                   inputProps: {
                     color: "#636363",
-                    fontFamily: "Poppins",
-                  },
+                    fontFamily: "Poppins"
+                  }
                 }}
                 sx={{
                   "& .MuiInputBase-root": {
-                    borderRadius: "10px",
-                  },
+                    borderRadius: "10px"
+                  }
                 }}
                 inputProps={{
-                  fontFamily: "Poppins",
+                  fontFamily: "Poppins"
                 }}
-                onChange={(val) => {
+                onChange={val => {
                   setDisableButton(false);
                   val = val.includes(" ") ? val.replaceAll(" ", "") : val;
                   val = val.includes("-") ? val.replaceAll("-", "") : val;
@@ -227,7 +226,7 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
                 countryCodeEditable={true}
                 disableAreaCodes={true}
                 autoFormat={true}
-                onKeyDown={(e) => {
+                onKeyDown={e => {
                   if (e.key === "Enter") {
                     handleGetOTP(phoneNumber);
                   }
@@ -247,7 +246,7 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
                   textTransform: "capitalize",
                   borderRadius: "10px",
                   background:
-                    "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)",
+                    "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)"
                 }}
                 onClick={() => handleGetOTP(phoneNumber)}
                 disabled={isGettingOTP}
@@ -272,7 +271,7 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
                   filter: "opacity(0.5)",
 
                   background:
-                    "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)",
+                    "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)"
                 }}
                 onClick={() => handleGetOTP(phoneNumber)}
                 disabled={isGettingOTP || disableButton}
@@ -287,26 +286,26 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
             variant="outlined"
             sx={{
               fieldset: {
-                borderRadius: "10px",
-              },
+                borderRadius: "10px"
+              }
             }}
             InputLabelProps={{
               style: {
                 fontFamily: "Poppins",
                 fontSize: "14px",
-                fontWeight: "500",
-              },
+                fontWeight: "500"
+              }
             }}
             color={otpInputColor}
             inputProps={{
               style: {
                 fontFamily: "Poppins",
                 fontSize: "14px",
-                fontWeight: "500",
-              },
+                fontWeight: "500"
+              }
             }}
             type="number"
-            onChange={(e) => {
+            onChange={e => {
               if (e.target.value.length > 6) {
                 e.target.value = e.target.value.slice(0, 6);
               }
@@ -334,12 +333,11 @@ const MobileVerification = ({ setDisplayPage, displayPage }) => {
   );
 };
 
-
 const SuccessfullOTPSent = ({
   number,
   handleGetOTP,
   finalCountry,
-  disableResendButton,
+  disableResendButton
 }) => {
   const classes = useStyles();
   return (
@@ -362,7 +360,7 @@ const SuccessfullOTPSent = ({
               marginLeft: "1em",
               textTransform: "capitalize",
               textDecoration: "underline",
-              borderRadius: "0px",
+              borderRadius: "0px"
             }}
             disabled={disableResendButton}
           >
@@ -384,7 +382,7 @@ const useStyles = makeStyles({
     height: "fit-content",
     padding: "2em 2em 0 2em",
     minWidth: "30.25em",
-    ["@media (max-width:720px)"]: {
+    "@media (max-width:720px)": {
       // eslint-disable-line no-useless-computed-key
       width: "100%",
       height: "calc(100% - 4vh)",
@@ -394,13 +392,13 @@ const useStyles = makeStyles({
       alignItems: "center",
       flexDirection: "column",
       marginTop: "0",
-      minWidth: "0px",
+      minWidth: "0px"
     },
-    boxShadow: "20px 32px 64px 0px rgba(214, 230, 255, 0.5)",
+    boxShadow: "20px 32px 64px 0px rgba(214, 230, 255, 0.5)"
   },
   mobileNumber: {
     width: "20em",
-    borderRadius: "10px !important",
+    borderRadius: "10px !important"
   },
   nextButton: {
     // border: "2px black solid",
@@ -420,8 +418,8 @@ const useStyles = makeStyles({
     marginBottom: "2em",
     "&:hover": {
       backgroundColor: "#ffffff",
-      color: "#6B6B6B",
-    },
+      color: "#6B6B6B"
+    }
   },
   nextButtonDisabled: {
     backgroundColor: "white",
@@ -437,7 +435,7 @@ const useStyles = makeStyles({
     fontSize: "0.9em",
     textTransform: "capitalize",
     textDecoration: "bold",
-    marginBottom: "2em",
+    marginBottom: "2em"
   },
 
   mobileVerififcationTitle: {
@@ -446,18 +444,18 @@ const useStyles = makeStyles({
     fontWeight: "700",
     fontSize: "1.6em",
     paddingBottom: "2%",
-    ["@media (max-width:720px)"]: {
+    "@media (max-width:720px)": {
       // eslint-disable-line no-useless-computed-key
       width: "100%",
       display: "flex",
-      alignItems: "flex-start",
-    },
+      alignItems: "flex-start"
+    }
   },
   mobileVerifyDiv: {
     height: "100%",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   mobileVerififcationOTPSection: {
     display: "flex",
@@ -465,14 +463,14 @@ const useStyles = makeStyles({
     alignItems: "center",
     marginTop: "5%",
     marginBottom: "5%",
-    ["@media (max-width:720px)"]: {
+    "@media (max-width:720px)": {
       // eslint-disable-line no-useless-computed-key
-      width: "100%",
-    },
+      width: "100%"
+    }
   },
 
   mobileVerificationInput: {
-    width: "70%",
+    width: "70%"
   },
 
   successfullOTPSent: {
@@ -484,12 +482,12 @@ const useStyles = makeStyles({
     padding: "0.7em 0 0.7em 0",
     justifyContent: "space-around",
     marginTop: "1em",
-    marginRight: "1em",
+    marginRight: "1em"
   },
 
   successfullOTPSentMsg: {
     width: "70%",
-    paddingLeft: "1em",
+    paddingLeft: "1em"
   },
 
   successfullOTPSentResend: {
@@ -497,10 +495,9 @@ const useStyles = makeStyles({
     outline: "none",
     border: "none",
     backgroundColor: "transparent",
-    textDecoration: "underline",
+    textDecoration: "underline"
     // cursor: 'pointer',
-  },
-
+  }
 });
 
 export default MobileVerification;

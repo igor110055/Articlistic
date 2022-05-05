@@ -49,6 +49,4 @@ test("Check if update publication Form appears", async () => {
 
   userEvent.type(publicationName, "Test Publication");
   expect(publicationName).toHaveValue('Test Publication')
-
-  
 });

@@ -2,7 +2,6 @@ import {
     put, call,
     takeLatest,
 } from 'redux-saga/effects';
-import { baseURL, endPoints } from '../../utils/apiEndPoints';
 import { getRequest } from '../../utils/apiRequests';
 import {
     GET_UNSPLASH_INIT,

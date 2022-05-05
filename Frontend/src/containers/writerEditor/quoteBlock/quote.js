@@ -62,7 +62,7 @@ const useStyles = makeStyles({
     paddingLeft: "9px",
     borderImage:
       "linear-gradient(rgba(43, 86, 255, 1), rgba(19, 149, 253, 1)) 1",
-    color: "#616161",
+    color: "#1A1A1A",
     lineHeight: "38px",
     // minWidth: '100%',
     "&:focus": {

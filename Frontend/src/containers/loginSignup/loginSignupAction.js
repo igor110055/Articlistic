@@ -59,7 +59,6 @@ export const sendProfileInfoFailure = (error) => {
 
 export const sendProfileInfo = (params, headers) => {
     const payload = { params, headers };
-    // console.log(payload);
     return {
         type: SEND_PROFILE_INFO_INIT,
         payload,
@@ -82,7 +81,6 @@ export const loginFailure = (error) => {
 
 export const login = (params) => {
     const payload = { params };
-    // console.log(payload);
     return {
         type: LOGIN_INIT,
         payload,
@@ -170,7 +168,6 @@ export const getEmailOTPFailure = (error) => {
 
 export const getEmailOTP = (params) => {
     const payload = params;
-    // console.log(payload);
     return {
         type: GET_EMAIL_OTP_INIT,
         payload,
@@ -259,7 +256,6 @@ export const getForgotEmailOTPFailure = (error) => {
 
 export const getForgotEmailOTP = (params) => {
     const payload = params;
-    // console.log(payload)
     return {
         type: FORGOT_GET_EMAIL_OTP_INIT,
         payload,
@@ -303,7 +299,6 @@ export const resetPasswordFailure = (error) => {
 };
 
 export const resetPassword = (params) => {
-    // console.log(params)
     const payload = params;
     return {
         type: RESET_PASSWORD_INIT,
@@ -326,9 +321,7 @@ export const logoutFailure = (error) => {
 };
 
 export const logout = (params, headers) => {
-    // console.log(params)
     const payload = params;
-    // console.log(payload, headers);
     return {
         type: LOGOUT_INIT,
         payload,
@@ -350,7 +343,6 @@ export const getRefreshTokenFailure = (error) => {
 };
 
 export const getRefreshToken = (params, headers) => {
-    // console.log(params)
     const payload = { params, headers };
     return {
         type: GET_REFRESH_TOKEN_INIT,

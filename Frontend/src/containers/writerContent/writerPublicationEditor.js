@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Container, Box, Typography, Button } from "@mui/material";
+import { Container, Box,  Button } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -9,7 +9,7 @@ import List from "../writerEditor/list";
 import Embed from "@editorjs/embed";
 import DragDrop from "editorjs-drag-drop";
 import Undo from "editorjs-undo";
-import CodeTool from "@editorjs/code";
+// import CodeTool from "@editorjs/code";
 import Marker from "@editorjs/marker";
 import TempBlock from "../writerEditor/tempBlock";
 import SpotifyBlock from "../writerEditor/spotifyBlock/spotifyBlock";
@@ -63,7 +63,7 @@ const WriterPublicationEditor = () => {
     isGettingAboutPublication,
   } = useSelector((state) => ({
     isUpdatingAboutPublication: state.writerContent.isUpdatingAboutPublication,
-    isGettingAboutPublication: state.writerContent.isGettingAboutPublication,
+    // isGettingAboutPublication: state.writerContent.isGettingAboutPublication,
     userUserName: state.user.userUserName,
     aboutPublication: state.writerContent.aboutPublication,
     isGettingAboutPublication: state.writerContent.isGettingAboutPublication,
@@ -98,7 +98,6 @@ const WriterPublicationEditor = () => {
   }, []);
 
   const startEditor = () => {
-    // console.log('ajs');
     const editor = new EditorJS({
       inlineToolbar: true,
       onReady: () => {

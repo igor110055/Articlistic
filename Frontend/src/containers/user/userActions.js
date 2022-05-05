@@ -14,7 +14,6 @@ export const userEmail = (data) => {
 };
 
 export const userUsername = (data) => {
-    // console.log(data);
     return {
         type: USER_USERNAME,
         data,
