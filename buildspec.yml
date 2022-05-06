@@ -51,6 +51,8 @@ phases:
     commands:
       - cd ../Frontend/
       - npm run build
+      - ls
+      - cd ..
       # - command
       # - command
   #post_build:
@@ -65,10 +67,10 @@ phases:
     #base-directory: location
     #discard-paths: yes
     #file-format: JunitXml | CucumberJson
-#artifacts:
-  #files:
-    #- index.js
-    #- package.json
+artifacts:
+  files:
+    - Frontend/src/build
+    - backend/
     #- node_modules/**/*
     # - location
   #name: $(date +%Y-%m-%d)
