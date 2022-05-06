@@ -74,7 +74,7 @@ artifacts:
     - Frontend/build/**/*
     - Frontend/node_modules/**/*
     - backend/**/*
-  name: artifacts-$(date +%Y-%m-%d)
+  name: artifacts-$(Get-Date -UFormat "%Y%m%d-%H%M%S")
     #- node_modules/**/*
     # - location
   #name: $(date +%Y-%m-%d)
