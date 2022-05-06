@@ -1,2 +1,3 @@
 #!/bin/bash
-node src/api/index.js
+
+nohup node src/api/index.js &
