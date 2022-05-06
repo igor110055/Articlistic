@@ -74,7 +74,8 @@ artifacts:
     - Frontend/build/**/*
     - Frontend/node_modules/**/*
     - backend/**/*
-  name: artifacts-$(date +%Y-%m-%d)-$(date +%H:%M:%S:%N)
+  name: artifact
+  #-$(date +%Y-%m-%d)-$(date +%H:%M:%S:%N)
     #- node_modules/**/*
     # - location
   #name: $(date +%Y-%m-%d)
