@@ -53,6 +53,8 @@ phases:
       - npm run build
       - ls
       - cd ..
+      - ls
+      - pwd
       # - command
       # - command
   #post_build:
@@ -69,8 +71,8 @@ phases:
     #file-format: JunitXml | CucumberJson
 artifacts:
   files:
-    - Frontend/build
-    - backend/
+    - Frontend/build/*
+    - backend/*
     #- node_modules/**/*
     # - location
   #name: $(date +%Y-%m-%d)
