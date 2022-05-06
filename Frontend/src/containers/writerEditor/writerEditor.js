@@ -4,9 +4,12 @@ import Header from "./header";
 import Paragraph from "./paragraph";
 import List from "./list";
 import Embed from "@editorjs/embed";
+import SimpleImage from "@editorjs/simple-image"
+import Twitter from "./twitterBlock";
 import DragDrop from "editorjs-drag-drop";
+import { useLocation } from "react-router-dom";
 import Undo from "editorjs-undo";
-import Marker from "@editorjs/marker";
+// import Marker from "@editorjs/marker";
 import TempBlock from "./tempBlock";
 import SpotifyBlock from "./spotifyBlock/spotifyBlock";
 import DelimiterBlock from "./delimiterBlock/delimliterBlock";
@@ -26,11 +29,13 @@ import { CircularProgress } from "@mui/material";
 import { userUsername } from "../user/userActions";
 import { useInterval } from "./../../utils/common";
 import Auth from "../../components/auth";
+// import placeholderImage from '../../Images/icon_only.png'
 import CodeBlock from "./codeBlock/codeBlock";
 import VideoBlock from "./videoBlock/videoBlock";
 import MainLoader from "../../components/mainLoader";
 import "./../../index.css";
 import { getAuthToken } from "../common/commonFunctions";
+import { TwitterScriptHandler } from "../../utils/twitterHandler";
 
 const DEFAULT_INITIAL_DATA = () => {
   return {
@@ -41,15 +46,16 @@ const DEFAULT_INITIAL_DATA = () => {
         type: "header",
         data: {
           text: "",
-          level: 1,
-        },
-      },
-    ],
+          level: 1
+        }
+      }
+    ]
   };
 };
 
 const WriterEditor = () => {
   const classes = useStyles();
+  const {state} = useLocation()
   const navigate = useNavigate();
   const [editorData, setEditorData] = useState();
   const [check, setCheck] = useState(false);
@@ -72,9 +78,11 @@ const WriterEditor = () => {
   const [noSubtitleFound, setNoSubtitleFound] = useState(false);
   const [notFoundErrorMsg, setNotFoundErrorMsg] = useState("");
   const [alreadySignedIn, setAlreadySignedIn] = useState(false);
+  const [readingTimeLive, setReadingTimeLive] = useState('')
   const editorInstance = useRef();
   const [firstTimeSaved, setFirstTimeSaved] = useState(false);
   const [isSavingFirstTime, setIsSavingFirstTime] = useState(false);
+  const [firstTimeImport, setFirstTimeImport] = useState(true)
 
   useEffect(() => {
     window.addEventListener("mousedown", () => {
@@ -89,89 +97,134 @@ const WriterEditor = () => {
   }, []);
 
   const startEditor = () => {
-    // console.log('ajs');
-    const editor = new EditorJS({
-      inlineToolbar: true,
-      onReady: () => {
-        editorInstance.current = editor;
-        setCheck(true);
-        try {
-          new Undo({ editor });
-        } catch {
-          // console.log('wait a while');
-        }
-        try {
-          new DragDrop(editor);
-        } catch {
-          // console.log('wait a while');
-        }
-        // setInterval(() => {
-        //     saveDraft();
-        // }, 120000);
-      },
-      tools: {
-        paragraph: {
-          class: Paragraph,
-          inlineToolbar: true,
+
+    const twitter = TwitterScriptHandler()
+    twitter.initialize().then(() => {
+      const editor = new EditorJS({
+        inlineToolbar: true,
+        onChange: () => {
+          getReadingTime()            
         },
-        header: {
-          class: Header,
-          inlineToolbar: true,
-          config: {
-            placeholder:
-              "Write the first draft of this story, you can refine it later.",
-            levels: [1, 2, 3],
-            defaultLevel: 1,
-            // fontFamily: 'Merriweather',
+        onReady: () => {
+          editorInstance.current = editor;
+          getReadingTime()
+          if(state){
+            const {html, articleId, heading, subtitle} = state
+            setArticleTitle(heading)
+            setArticleDes(subtitle)
+            editorInstance?.current?.blocks?.renderFromHTML(html)
+            saveImport()
+            getReadingTime()
+          }
+          setCheck(true);
+          try {
+            new Undo({ editor });
+          } catch {
+            // console.log('wait a while');
+          }
+          try {
+            new DragDrop(editor);
+          } catch {
+            // console.log('wait a while');
+          }
+          // setInterval(() => {
+          //     saveDraft();
+          // }, 120000);
+        },
+        tools: {
+          paragraph: {
+            class: Paragraph,
+            inlineToolbar: true,
           },
-        },
-        list: {
-          class: List,
-          shortcut: "CMD+SHIFT+l",
-          inlineToolbar: true,
-        },
-        quote: QuoteBlock,
-        delimiter: DelimiterBlock,
-        // image: ImageUploadBlock,
-        image: {
-          class: ImageUploadBlock,
-          inlineToolbar: true,
-        },
-        unsplash: TempBlock,
-        video: VideoBlock,
-        spotify: SpotifyBlock,
-        embed: {
-          class: Embed,
-          config: {
-            services: {
-              youtube: true,
-              coub: true,
-              spotify: {
-                regex: /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(album|track|playlist)\/|\?uri=spotify:track:)((\w|-){22})/,
-                embedUrl:
-                  "https://embed.spotify.com/?uri=https://open.spotify.com/track/6teW0qt23aGnWhC0rSvtoz?si=a02a9857240a4e44",
-                html:
-                  "<iframe src='https://embed.spotify.com/?uri=https://open.spotify.com/track/6teW0qt23aGnWhC0rSvtoz?si=39d59b3cb3134df5' width='100%' height='380' frameBorder='0' allowfullscreen=' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'></iframe>",
-                height: 300,
-                width: 600,
-                // id: (groups) => groups.join('/embed/')
+          header: {
+            class: Header,
+            inlineToolbar: true,
+            config: {
+              placeholder:
+                "Write the first draft of this story, you can refine it later.",
+              levels: [1, 2, 3],
+              defaultLevel: 1,
+              // lineHeight: 15,
+              // fontFamily: 'Merriweather',
+            },
+          },
+          list: {
+            class: List,
+            shortcut: "CMD+SHIFT+l",
+            inlineToolbar: true,
+          },
+          quote: QuoteBlock,
+          delimiter: DelimiterBlock,
+          // image: ImageUploadBlock,
+          image: {
+            class: ImageUploadBlock,
+            inlineToolbar: true,
+          },
+          unsplash: TempBlock,
+          imageCopy: {
+            class: SimpleImage,
+            inlineToolbar: ["link"]
+          },
+          video: VideoBlock,
+          spotify: SpotifyBlock,
+          twitter: {
+            class: Twitter,
+          },
+          embed: {
+            class: Embed,
+            config: {
+              services: {
+                youtube: true,
+                coub: true,
+                spotify: {
+                  regex: /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(album|track|playlist)\/|\?uri=spotify:track:)((\w|-){22})/,
+                  embedUrl:
+                    "https://embed.spotify.com/?uri=https://open.spotify.com/track/6teW0qt23aGnWhC0rSvtoz?si=a02a9857240a4e44",
+                  html:
+                    "<iframe src='https://embed.spotify.com/?uri=https://open.spotify.com/track/6teW0qt23aGnWhC0rSvtoz?si=39d59b3cb3134df5' width='100%' height='380' frameBorder='0' allowfullscreen=' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'></iframe>",
+                  height: 300,
+                  width: 600,
+                  // id: (groups) => groups.join('/embed/')
+                },
               },
             },
           },
+          nft: NftBlock,
+          code: CodeBlock,
+          // Marker: {
+          //   class: Marker,
+          //   shortcut: "CMD+SHIFT+M",
+          // },
         },
-        nft: NftBlock,
-        code: CodeBlock,
-        Marker: {
-          class: Marker,
-          shortcut: "CMD+SHIFT+M",
-        },
-      },
-
-      data: editorData || DEFAULT_INITIAL_DATA,
-      autofocus: true,
-      // placeholder: 'Write your story!',
-    });
+  
+        data: editorData || DEFAULT_INITIAL_DATA,
+        autofocus: true,
+        // placeholder: 'Write your story!',
+      });
+    })
   };
+
+  const getReadingTime = () => {
+    editorInstance.current
+    ?.save()
+    .then((outputData) => {
+      let readTime = 0;
+      for (let i = 0; i < outputData.blocks.length; i++) {
+        // console.log(outputData.blocks[i].data);
+        if (outputData.blocks[i].data?.text !== undefined) {
+          readTime += readingTime(outputData.blocks[i]?.data?.text).time;
+        }
+        if (
+          outputData.blocks[i].type === "image" ||
+          outputData.blocks[i].type === "unsplash"
+        ) {
+          readTime += 8000;
+        }
+        setReadingTimeLive( Math.ceil(readTime / 60000) === 1
+      ? `${Math.ceil(readTime / 60000)} min`
+      : `${readTime / 60000} mins`)
+      }})
+  }
 
   useEffect(() => {
     if (!editorInstance.current && editorData) {
@@ -193,8 +246,8 @@ const WriterEditor = () => {
     uploadArticleResp,
     isGettingArticle,
     getArticleError,
-    getArticleResp,
-  } = useSelector((state) => ({
+    getArticleResp
+  } = useSelector(state => ({
     userUserName: state.user.userUserName,
     isUploadingArticle: state.writerEditor.isUploadingArticle,
     uploadArticleError: state.writerEditor.uploadArticleError,
@@ -202,7 +255,7 @@ const WriterEditor = () => {
     uploadArticleResp: state.writerEditor.uploadArticleResp,
     isGettingArticle: state.writerEditor.isGettingArticle,
     getArticleError: state.writerEditor.getArticleError,
-    getArticleResp: state.writerEditor.getArticleResp,
+    getArticleResp: state.writerEditor.getArticleResp
   }));
 
   useEffect(() => {
@@ -262,14 +315,14 @@ const WriterEditor = () => {
                   type: "header",
                   data: {
                     text: "",
-                    level: 1,
-                  },
-                },
-              ],
+                    level: 1
+                  }
+                }
+              ]
             });
           } else {
             editorInstance?.current?.render({
-              blocks: JSON.parse(getArticleResp.article?.writeup).blocks,
+              blocks: JSON.parse(getArticleResp.article?.writeup).blocks
             });
           }
         }
@@ -280,7 +333,7 @@ const WriterEditor = () => {
   useEffect(() => {
     if (userUserName !== "") {
       setInterval(() => {
-        setCounter((counter) => (counter === 120 ? 0 : counter + 1));
+        setCounter(counter => (counter === 120 ? 0 : counter + 1));
       }, 1000);
     }
   }, [startTimer]);
@@ -317,7 +370,7 @@ const WriterEditor = () => {
         setUploadSuccess(true);
         counter = 0;
         setCounter(counter);
-        if(uploadArticleResp?.articleId){
+        if (uploadArticleResp?.articleId) {
           localStorage.setItem("articleId", uploadArticleResp.articleId);
         }
         if (nextClicked) {
@@ -327,18 +380,70 @@ const WriterEditor = () => {
     }
   }, [isUploadingArticle]);
 
+
+  const saveImport = () => {
+    if(state && firstTimeImport) {
+      const temp = getAuthToken();
+      const {heading, subtitle, articleId, originUrl} = state
+      editorInstance.current
+      ?.save()
+      .then((outputData) => {
+        let readTime = 0;
+        for (let i = 0; i < outputData.blocks.length; i++) {
+          // console.log(outputData.blocks[i].data);
+          if (outputData.blocks[i].data?.text !== undefined) {
+            readTime += readingTime(outputData.blocks[i]?.data?.text).time;
+          }
+          if (
+            outputData.blocks[i].type === "image" ||
+            outputData.blocks[i].type === "unsplash"
+          ) {
+            readTime += 8000;
+          }
+        }
+      dispatch(
+        uploadArticle(
+          {
+            main: {
+              writeup: JSON.stringify(outputData),
+              status: "DRAFT",
+              newlyImported: true,
+              originUrl: originUrl,
+              origin: 'substack',
+              articlePic: articleCover,
+              title: heading || 'Imported Draft',
+              body: subtitle || '',
+              readingTime:
+                Math.ceil(readTime / 60000) === 1
+                  ? `${Math.ceil(readTime / 60000)} min`
+                  : `${readTime / 60000} mins`,
+            },
+
+            qParams: {
+              writer: userUserName,
+              articleId: articleId,
+            },
+          },
+          temp
+        )
+      );
+      setFirstTimeImport(false)
+      localStorage.setItem('articleId', articleId)
+    })}
+  }
+
   const saveDraft = () => {
     if (getArticleResp?.article?.status === "PUBLISHED") {
       return;
     }
-    if (articleTitle !== "" && articleDes !== "") {
+    if (articleTitle !== "" && articleDes !== "" && (!firstTimeImport || !state) ) {
       counter = 0;
 
       const temp = getAuthToken();
       // console.log(decAccessToken, articleCover);
       editorInstance.current
         ?.save()
-        .then((outputData) => {
+        .then(outputData => {
           let readTime = 0;
           for (let i = 0; i < outputData.blocks.length; i++) {
             // console.log(outputData.blocks[i].data);
@@ -366,13 +471,13 @@ const WriterEditor = () => {
                     readingTime:
                       Math.ceil(readTime / 60000) === 1
                         ? `${Math.ceil(readTime / 60000)} min`
-                        : `${readTime / 60000} mins`,
+                        : `${readTime / 60000} mins`
                   },
 
                   qParams: {
                     writer: userUserName,
-                    articleId: localStorage.getItem("articleId"),
-                  },
+                    articleId: localStorage.getItem("articleId")
+                  }
                 },
                 temp
               )
@@ -391,8 +496,8 @@ const WriterEditor = () => {
                     readingTime:
                       Math.ceil(readTime / 60000) === 1
                         ? `${Math.ceil(readTime / 60000)} min`
-                        : `${readTime / 60000} mins`,
-                  },
+                        : `${readTime / 60000} mins`
+                  }
                 },
                 temp
               )
@@ -403,7 +508,7 @@ const WriterEditor = () => {
         .then(() => {
           setIsSavingFirstTime(false);
         })
-        .catch((error) => {
+        .catch(error => {
           // console.log('Saving failed: ', error);
         });
       setUploadSuccess(false);
@@ -432,14 +537,14 @@ const WriterEditor = () => {
       ) {
         setIsSavingFirstTime(true);
         setFirstTimeSaved(true);
-        if (articleTitle !== "" && articleDes !== "") {
+        if (articleTitle !== "" && articleDes !== ""  && (!firstTimeImport || !state)) {
           counter = 0;
 
           const temp = getAuthToken();
           // console.log(decAccessToken, articleCover);
           editorInstance.current
             ?.save()
-            .then((outputData) => {
+            .then(outputData => {
               let readTime = 0;
               for (let i = 0; i < outputData.blocks.length; i++) {
                 // console.log(outputData.blocks[i].data);
@@ -468,13 +573,13 @@ const WriterEditor = () => {
                         readingTime:
                           Math.ceil(readTime / 60000) === 1
                             ? `${Math.ceil(readTime / 60000)} min`
-                            : `${readTime / 60000} mins`,
+                            : `${readTime / 60000} mins`
                       },
 
                       qParams: {
                         writer: userUserName,
-                        articleId: localStorage.getItem("articleId"),
-                      },
+                        articleId: localStorage.getItem("articleId")
+                      }
                     },
                     temp
                   )
@@ -493,8 +598,8 @@ const WriterEditor = () => {
                         readingTime:
                           Math.ceil(readTime / 60000) === 1
                             ? `${Math.ceil(readTime / 60000)} min`
-                            : `${readTime / 60000} mins`,
-                      },
+                            : `${readTime / 60000} mins`
+                      }
                     },
                     temp
                   )
@@ -505,7 +610,7 @@ const WriterEditor = () => {
             .then(() => {
               setIsSavingFirstTime(false);
             })
-            .catch((error) => {
+            .catch(error => {
               // console.log('Saving failed: ', error);
             });
           setUploadSuccess(false);
@@ -549,7 +654,7 @@ const WriterEditor = () => {
         setNextClicked(true);
         saveDraft();
       } else {
-        editorInstance.current?.save().then((outputData) => {
+        editorInstance.current?.save().then(outputData => {
           localStorage.setItem("article", JSON.stringify(outputData));
         });
         navigate("/writerSettings");
@@ -630,7 +735,7 @@ const WriterEditor = () => {
                       textTransform: "capitalize",
                       background:
                         "linear-gradient(136.99deg, #FFA700 10.01%, #FF6D00 81.93%)",
-                      borderRadius: "10px",
+                      borderRadius: "10px"
                     }}
                     style={{ marginRight: "4%", width: "8rem" }}
                     disabled={
@@ -656,7 +761,7 @@ const WriterEditor = () => {
                   textTransform: "capitalize",
                   background:
                     "linear-gradient(136.99deg, #FFA700 10.01%, #FF6D00 81.93%)",
-                  borderRadius: "10px",
+                  borderRadius: "10px"
                 }}
                 style={{ marginRight: "4%", width: "8rem" }}
                 disabled={isUploadingArticle || isGettingArticle}
@@ -682,6 +787,7 @@ const WriterEditor = () => {
             articleCover={articleCover}
             articleId={getArticleResp?.article?.articleId}
             getArticleSuccess={getArticleSuccess}
+            readingTimeLive={readingTimeLive}
           />
         </div>
       ) : (
@@ -696,11 +802,11 @@ const WriterEditor = () => {
           backgroundColor: "white",
           minHeight: "100vh",
           minWidth: "90vw",
-          marginTop: "2rem",
+          // marginTop: "2rem",
         }}
         maxWidth="xl"
       >
-        <Box p={5}>
+        <Box p={2}>
           <Box>
             <div id="editorjs" className={classes.editor}></div>
           </Box>
@@ -744,12 +850,12 @@ const LoginError = ({ message }) => {
 
 const useStyles = makeStyles({
   editor: {
-    backgrounColor: "red",
+    lineHeight:'2.1rem',
   },
   writerInfo: {
     border: "1px solid #979797",
     width: "fit-content",
-    borderRadius: "20px",
+    borderRadius: "20px"
   },
   saveBar: {
     width: "100%",
@@ -758,25 +864,25 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alginItems: "center",
     padding: "0.5% 0% 0.5% 0%",
-    zIndex: 4,
+    zIndex: 4
     // zIndex: 1,
   },
 
   editorHidden: {
-    visibility: "hidden",
+    visibility: "hidden"
   },
 
   editorVisible: {
-    visibility: "visible",
+    visibility: "visible"
   },
 
   saveBaricon: {
     width: "40px",
-    marginLeft: "1%",
+    marginLeft: "1%"
   },
 
   saveBarRight: {
-    display: "flex",
+    display: "flex"
   },
 
   saveBarButton: {
@@ -791,7 +897,7 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
-    width: "100px",
+    width: "100px"
   },
 
   saveTimer: {
@@ -800,24 +906,24 @@ const useStyles = makeStyles({
     alignItems: "center",
     flexDirection: "column",
     marginRight: "4%",
-    width: "100px",
+    width: "100px"
   },
 
   saveTimerTitle: {
     color: "rgba(89, 201, 149, 1)",
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
 
   saveTimerTime: {
     color: "rgba(150, 150, 150, 1)",
-    fontSize: "10px",
+    fontSize: "10px"
   },
 
   loginErrorContainer: {
     width: "100%",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
 
   loginError: {
@@ -830,18 +936,18 @@ const useStyles = makeStyles({
     justifyContent: "space-around",
     marginTop: "2%",
     height: "0.8rem",
-    position: "absolute",
+    position: "absolute"
   },
 
   loginErrorSVG: {
-    margin: "-0.3% 5% 0% 5%",
+    margin: "-0.3% 5% 0% 5%"
   },
 
   loginErrorMsg: {
     display: "flex",
     alignItems: "center",
-    width: "90%",
-  },
+    width: "90%"
+  }
 });
 
 export default WriterEditor;

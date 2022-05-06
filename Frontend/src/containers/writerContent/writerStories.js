@@ -1,6 +1,6 @@
-import { Tab } from "@mui/material";
+// import { Tab } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useEffect, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import orange_circle from "../../Images/orange_circle.svg";
 import green_circle from "../../Images/green_circle.svg";
 import { DraftStories, PublishedStories } from "./components/publishedStories";
@@ -18,11 +18,9 @@ const WriterStories = () => {
   );
   const [
     draftsLoadMoreButtonVisible,
-    setDraftsLoadMoreButtonVisible,
+    setDraftsLoadMoreButtonVisible
   ] = useState(false);
   const ref = useRef(null);
-
-
 
   return (
     <div className={classes.container}>
@@ -30,33 +28,33 @@ const WriterStories = () => {
         <div className={classes.Tabs}>
           <div
             className={
-              pageToBeDisplayed == "PUBLISHED"
+              pageToBeDisplayed === "PUBLISHED"
                 ? classes.SelectedPublishedstories
                 : classes.Publishedstories
             }
-            onClick={(e) => {
+            onClick={e => {
               setPageToBeDisplayed("PUBLISHED");
             }}
           >
-             <img className={classes.img_class} src={green_circle} /> 
+            <img className={classes.img_class} src={green_circle} alt="img" />
             Published
           </div>
           <div
             className={
-              pageToBeDisplayed == "DRAFTS"
+              pageToBeDisplayed === "DRAFTS"
                 ? classes.SelectedPublishedstories
                 : classes.Publishedstories
             }
-            onClick={(e) => {
+            onClick={e => {
               setPageToBeDisplayed("DRAFTS");
             }}
           >
-         <img className={classes.img_class} src={orange_circle} />
+            <img className={classes.img_class} src={orange_circle} alt="img" />
             Drafts
           </div>
         </div>
 
-        {pageToBeDisplayed == "PUBLISHED" ? (
+        {pageToBeDisplayed === "PUBLISHED" ? (
           <PublishedStories
             publishedCache={publishedCache}
             publishedCacheAvailable={publishedCacheAvailable}
@@ -88,14 +86,15 @@ const useStyles = makeStyles({
   Tabs: {
     display: "flex",
     marginTop: "3em",
+    marginLeft: "130px"
   },
 
   container: {
     width: "100vw",
-    height: "100vh",
+    minHeight: "100vh",
     border: "0.1px solid white",
 
-    backgroundColor: "#F6F6F7",
+    backgroundColor: "#F6F6F7"
   },
   Publishedstories: {
     padding: "1em",
@@ -103,14 +102,14 @@ const useStyles = makeStyles({
     fontSize: "1.1em",
     color: "rgba(49, 61, 124, 1)",
     fontWeight: "700",
-    cursor: "pointer",
+    cursor: "pointer"
   },
   img_class: {
     verticalAlign: "middle",
-    marginRight: "0.8em",
+    marginRight: "0.8em"
   },
   mainPage: {
-    marginLeft: "5em",
+    // marginLeft: "5em"
   },
   SelectedPublishedstories: {
     padding: "1em",
@@ -120,8 +119,8 @@ const useStyles = makeStyles({
     fontWeight: "700",
     backgroundColor: "#ffffff",
     cursor: "pointer",
-    borderRadius: "20px 20px 0px 0px",
-  },
+    borderRadius: "20px 20px 0px 0px"
+  }
 });
 
 export default WriterStories;

@@ -20,7 +20,7 @@ const WritersWithCards = ({
         <div className={classes.writersWithCardsContainer}>
             <div className={classes.writersWithCardsProfile}>
                 <div className={classes.writersWithCardsProfileImageContainer}>
-                    <img src={userPhoto} className={classes.writersWithCardsProfileImage} />
+                    <img src={userPhoto} className={classes.writersWithCardsProfileImage} alt="user"/>
                 </div>
                 <div className={classes.writersWithCardsProfileName}>Kim Lyons</div>
             </div>
@@ -71,8 +71,8 @@ const useStyles = makeStyles({
     writersWithCardsProfileImageContainer: {
         minWidth: '50px',
         maxHeight: '50px',
-        minWidth: '50px',
-        maxHeight: '50px',
+        // minWidth: '50px',
+        // maxHeight: '50px',
         borderRadius: '50%',
         overflow: 'hidden',
     },

@@ -33,7 +33,7 @@ const EmailVerification = ({ setDisplayPage, displayPage }) => {
     verifyEmailOTPError,
     verifyEmailOTPErrorMsg,
     user,
-    userEmailID,
+    // userEmailID,
   } = useSelector((state) => ({
     isGettingEmailOTP: state.loginSignup.isGettingEmailOTP,
     getEmailOTPError: state.loginSignup.getEmailOTPError,

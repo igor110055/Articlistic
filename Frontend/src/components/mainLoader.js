@@ -6,7 +6,7 @@ const MainLoader = () => {
     const classes = useStyles();
     return (
         <div className={classes.logoContainer}>
-            <img src={logo} alt="image" className='rotate'/>
+            <img src={logo} alt="circle" className='rotate'/>
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogTitle } from "@mui/material";
+// import { Button, Dialog, DialogTitle } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { getRefreshToken, logout } from "../loginSignup/loginSignupAction";
@@ -6,13 +6,21 @@ import Cookie from 'js-cookie';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { userUsername } from "../user/userActions";
-import crypto from 'crypto-js';
-import WriterEditor from "../writerEditor/writerEditor";
+// import crypto from 'crypto-js';
+// import WriterEditor from "../writerEditor/writerEditor";
 import WriterDashboard from "../writerContent/writerDahsboard";
 import TempNavbar from "../navbar/tempNavbar";
 import WriterContent from "../writerContent/writerContent";
 import Auth from "../../components/auth";
 import { getAuthToken } from "../common/commonFunctions";
+import {
+    // BrowserRouter,
+    Routes,
+    Route,
+  } from "react-router-dom";
+import WriterStories from "./writerStories";
+import WriterPublication from "./writerPublication";
+import WriterCommunity from "./writerCommunity";
 
 const WriterContentContainer = () => {
     const classes = useStyles();
@@ -39,7 +47,7 @@ const WriterContentContainer = () => {
         user,
         isGettingRefreshToken,
         getRefreshTokenError,
-        getRefreshTokenErrorMsg,
+        // getRefreshTokenErrorMsg,
         getRefreshTokenResp,
     } = useSelector((state) => ({
         isLoggingOut: state.loginSignup.isLoggingOut,
@@ -98,6 +106,13 @@ const WriterContentContainer = () => {
             <div className={classes.homeContainer}>
                 <WriterContent />
             </div>
+            <Routes>
+            <Route exact path="/" element={<WriterDashboard />} />
+            <Route exact path="stories" element={<WriterStories />} />
+            <Route exact path="community" element={<WriterCommunity />} />
+            <Route  exact path="publications" element={<WriterPublication />} />
+            {/* <Route index element={< />} /> */}
+          </Routes>
         </div>
     );
 }

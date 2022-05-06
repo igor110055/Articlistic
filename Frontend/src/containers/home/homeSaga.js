@@ -3,7 +3,7 @@ import {
     takeLatest,
 } from 'redux-saga/effects';
 import { baseURL, endPoints } from '../../utils/apiEndPoints';
-import { getRequest, authGetRequest, authPostRequest } from '../../utils/apiRequests';
+import {  authGetRequest, authPostRequest } from '../../utils/apiRequests';
 import {
     GET_FOLLOWED_WRITERS_INIT,
     BOOKMARK_ARTICLE_INIT,
@@ -19,7 +19,7 @@ import {
 function* getFollowedWriters(action) {
     // console.log(action);
     try {
-        const payload = action.data.params;
+        // const payload = action.data.params;
         const headers = {
             "Authorization": action.data.headers
         }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUnsplash } from "./unsplashActions";
-import { TextField, Button, Dialog } from "@mui/material";
+import { TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const Unsplash = ({ onDataChange, data, readOnly }) => {
@@ -85,7 +85,8 @@ const Unsplash = ({ onDataChange, data, readOnly }) => {
           <div className={classes.displayImageStyle}>
             <img
               src={selectedImageURL}
-              className={classes.displayImageInternal}
+                className={classes.displayImageInternal}
+                alt="selected"
             />
           </div>
           <div className={classes.uname}>
@@ -144,6 +145,7 @@ const Unsplash = ({ onDataChange, data, readOnly }) => {
                       eachImage.links.html
                     )
                   }
+                  alt="small"
                 />
               ))}
           </div>
@@ -190,7 +192,7 @@ const useStyles = makeStyles({
     backgroundColor: "#F7F7F7",
     fontSize: "14px",
     marginTop: "2px",
-    color: "#616161",
+    color: "#1A1A1A",
   },
 
   imageCaption: {
@@ -203,7 +205,7 @@ const useStyles = makeStyles({
     "&:focus": {
       outline: "none",
     },
-    color: "#616161",
+    color: "#1A1A1A",
   },
 
   displayImageInternal: {

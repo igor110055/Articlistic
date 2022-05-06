@@ -16,7 +16,7 @@ const CreateProfile = ({ setDisplayPage }) => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [errorInPassword, setErrorInPassword] = useState(false);
-  const [passwordHelperText, setPasswordHelperText] = useState(false);
+  // const [passwordHelperText, setPasswordHelperText] = useState(false);
   const [userNameAlreadyTaken, setUserNameAlreadyTaken] = useState(false);
   const [submitClicked, setSubmitClicked] = useState(false);
   const [isDataValid, setIsDataValid] = useState(false);
@@ -29,7 +29,7 @@ const CreateProfile = ({ setDisplayPage }) => {
   const navigate = useNavigate();
 
   const {
-    checkUsernameResp,
+    // checkUsernameResp,
     checkUsernameError,
     isCheckingUsername,
     user,

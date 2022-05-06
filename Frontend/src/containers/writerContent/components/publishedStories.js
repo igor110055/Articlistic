@@ -2,14 +2,13 @@ import { CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import * as React from "react";
-import axios from "axios";
-import crypto from "crypto-js";
-import { baseURL, endPoints } from "../../../utils/apiEndPoints";
-import Cookie from "js-cookie";
 import "./publishedStories.css";
 import divider from "../../../Images/divider_line.svg";
 import Article from "./Article";
 import { getAuthToken } from "../../common/commonFunctions";
+import { getArticlesInit } from "./articleActions.js";
+import { useDispatch, useSelector } from "react-redux";
+
 const useStyle = makeStyles({
   loadMoreButtonDiv: {
     width: "100%",
@@ -17,7 +16,7 @@ const useStyle = makeStyles({
     justifyContent: "center",
     marginTop: "2em",
     height: "fit-content",
-    marginBottom: "2em",
+    marginBottom: "2em"
   },
   loadMoreButton: {
     padding: "1em",
@@ -30,8 +29,8 @@ const useStyle = makeStyles({
     border: "none !important",
     fontWeight: "700",
     cursor: "pointer",
-    marginBottom: "2em",
-  },
+    marginBottom: "2em"
+  }
 });
 
 export const DraftStories = React.memo(
@@ -43,84 +42,57 @@ export const DraftStories = React.memo(
     setDraftsCacheAvailable,
     setIsFetchingDraftsData,
     draftsLoadMoreButtonVisible,
-    setDraftsLoadMoreButtonVisible,
+    setDraftsLoadMoreButtonVisible
   }) => {
     const classes = useStyle();
-    const [articleData, setData] = useState([]);
-    const [isFetchingData, setIsFetchingData] = useState(true);
-    const [Skip, setSkip] = useState(0);
     const [loadMore, setLoadMore] = useState(false);
-    const [btnVisible, setButtonVisible] = useState(false);
-    const destructureCache = (cache) => {
-      const keys = Object.keys(cache);
-      setData(JSON.parse(JSON.stringify(cache)));
-      setIsFetchingData(false);
-      setButtonVisible(draftsLoadMoreButtonVisible);
-    };
+
+    const { articleData, isGettingArticles, btnVisible } = useSelector(
+      state => ({
+        articleData: state.ArticleData.draftedArticleData,
+        isGettingArticles: state.ArticleData.isGettingArticles,
+        btnVisible: state.ArticleData.btnVisible
+      })
+    );
 
     useEffect(() => {
-      if (Skip > 0) setLoadMore(true);
-      if (!isDraftsCacheAvailable && !isFetchingDraftsData) {
-        fetchArticles(Skip);
-      } else if (isDraftsCacheAvailable) {
-        destructureCache(draftsCache);
-      }
-    }, [Skip]);
+      fetchArticles(0);
+    }, []);
 
-    const fetchArticles = (skip) => {
-      setLoadMore(true);
-      setIsFetchingDraftsData(true);
+    // const [value, setValue] = useState(false);
 
-      const temp = getAuthToken();
+    const dispatch = useDispatch();
 
-      const params = new URLSearchParams({
+    const fetchArticles = skip => {
+      const authToken = getAuthToken();
+      const data = {
+        authToken,
         skip: skip,
         limit: 5,
         filters: "DRAFT",
-      });
-      axios
-        .get(`${baseURL}/${endPoints.getAllArticles}?${params}`, {
-          headers: {
-            Authorization: temp,
-          },
-        })
-        .then((res) => {
-          if (res.data.articles.length > 0) {
-            setData(
-              JSON.parse(JSON.stringify([...articleData, ...res.data.articles]))
-            );
-            setDraftsCache(
-              JSON.parse(JSON.stringify(draftsCache.concat(res.data.articles)))
-            );
-
-            setButtonVisible(true);
-            setDraftsLoadMoreButtonVisible(true);
-          } else {
-            setDraftsCache(
-              JSON.parse(JSON.stringify(draftsCache.concat(res.data.articles)))
-            );
-            setButtonVisible(false);
-            setDraftsLoadMoreButtonVisible(false);
-          }
-          setDraftsCacheAvailable(true);
-          setIsFetchingDraftsData(false);
-          setLoadMore(false);
-          setIsFetchingData(false);
-        });
+        currentArticles: articleData
+      };
+      dispatch(getArticlesInit(data));
     };
     return (
       <div className="main-container">
-        <img src={divider} className="divider-line" />
-        {!isFetchingData ? (
+        {/* <img src={divider} className="divider-line" alt="porp" /> */}
+        {!isGettingArticles ? (
           <div>
             {articleData.length > 0 ? (
-              articleData.map((el) => {
-                return (
-                  <div>
-                    <Article data={el} key={el.public.articleId} />{" "}
-                    <img src={divider} className="divider-line" />
-                  </div>
-                );
+              articleData.map(el => {
+                if (!el.deleteAt)
+                  return (
+                    <div key={el.public.articleId}>
+                      <Article
+                        data={el}
+                        key={el.public.articleId}
+                        filters="DRAFT"
+                        // forceUpdate={forceUpdate}
+                      />
+                      <img src={divider} className="divider-line" alt="porp" />
+                    </div>
+                  );
               })
             ) : (
               <p className="no-article-msg">Currently you have no Drafts 📜</p>
@@ -142,7 +114,7 @@ export const DraftStories = React.memo(
           <div className={classes.loadMoreButtonDiv}>
             <button
               className={classes.loadMoreButton}
-              onClick={(e) => {
+              onClick={e => {
                 fetchArticles(articleData.length);
               }}
             >
@@ -166,91 +138,64 @@ export const PublishedStories = React.memo(
     setPublishedCacheAvailable,
     setIsFetchingPublishedData,
     publishedLoadMoreVisible,
-    setPublishedLoadMoreVisible,
+    setPublishedLoadMoreVisible
   }) => {
     const classes = useStyle();
-    const [articleData, setData] = useState([]);
-    const [isFetchingData, setIsFetchingData] = useState(true);
-    const [btnVisible, setButtonVisible] = useState(false);
-    const [Skip, setSkip] = useState(0);
+
     const [loadMore, setLoadMore] = useState(false);
-    const destructureCache = (cache) => {
-      const keys = Object.keys(cache);
-      setData(JSON.parse(JSON.stringify(cache)));
-      setIsFetchingData(false);
-      setButtonVisible(publishedLoadMoreVisible);
-    };
+
+    const dispatch = useDispatch();
+    const { articleData, isGettingArticles, btnVisible } = useSelector(
+      state => ({
+        articleData: state.ArticleData.publishedArticleData,
+        isGettingArticles: state.ArticleData.isGettingArticles,
+        btnVisible: state.ArticleData.btnVisible
+      })
+    );
 
     useEffect(() => {
-      if (Skip > 0) setLoadMore(true);
-      if ((!publishedCacheAvailable && !isFetchingPublishedData) || loadMore) {
-        fetchArticles(Skip);
-      }
-      if (publishedCacheAvailable) {
-        destructureCache(publishedCache);
-      }
-    }, [Skip]);
+      fetchArticles(0);
+    }, []);
 
-    const fetchArticles = (skip) => {
-      setLoadMore(true);
-      setIsFetchingPublishedData(true);
-      const temp = getAuthToken();
-      const params = new URLSearchParams({
+    const fetchArticles = skip => {
+      const authToken = getAuthToken();
+      const data = {
+        authToken,
         skip: skip,
         limit: 5,
         filters: "PUBLISHED",
-      });
-      axios
-        .get(`${baseURL}/${endPoints.getAllArticles}?${params}`, {
-          headers: {
-            Authorization: temp,
-          },
-        })
-        .then((res) => {
-          if (res.data.articles.length > 0) {
-            setData(
-              JSON.parse(JSON.stringify([...articleData, ...res.data.articles]))
-            );
-            setPublishedCache(
-              JSON.parse(
-                JSON.stringify(publishedCache.concat(res.data.articles))
-              )
-            );
-
-            setButtonVisible(true);
-            setPublishedLoadMoreVisible(true);
-          } else {
-            setButtonVisible(false);
-            setPublishedLoadMoreVisible(false);
-            setPublishedCache(
-              JSON.parse(
-                JSON.stringify(publishedCache.concat(res.data.articles))
-              )
-            );
-          }
-          setLoadMore(false);
-          setPublishedCacheAvailable(true);
-          setIsFetchingPublishedData(false);
-          setIsFetchingData(false);
-        });
+        currentArticles: articleData
+      };
+      dispatch(getArticlesInit(data));
     };
     return (
       <div className="main-container">
-        <img src={divider} className="divider-line" />
-        {!isFetchingData ? (
+        {/* <img src={divider} className="divider-line" alt="porp" /> */}
+        {!isGettingArticles ? (
           <div>
             {articleData.length > 0 ? (
-              articleData.map((el) => {
-                return (
-                  <div>
-                    <Article data={el} key={el.public.articleId} />{" "}
-                    <img src={divider} className="divider-line" />
-                  </div>
-                );
+              articleData.map((el, idx) => {
+                if (!el.deleteAt)
+                  return (
+                    <div key={el.public.articleId}>
+                      <Article
+                        data={el}
+                        key={el.public.articleId}
+                        filters="PUBLISHED"
+                      />{" "}
+                      {true && (
+                        <img
+                          src={divider}
+                          className="divider-line"
+                          alt="porp"
+                        />
+                      )}
+                    </div>
+                  );
               })
             ) : (
               <p className="no-article-msg">
-               Currently you have no Published Stories 👀
+                Currently you have no Published Stories 👀
               </p>
             )}
             {loadMore ? (
@@ -270,7 +215,7 @@ export const PublishedStories = React.memo(
           <div className={classes.loadMoreButtonDiv}>
             <button
               className={classes.loadMoreButton}
-              onClick={(e) => {
+              onClick={e => {
                 fetchArticles(articleData.length);
               }}
             >
@@ -284,3 +229,184 @@ export const PublishedStories = React.memo(
     );
   }
 );
+
+//===============================================================================================================
+//Draft
+
+// const [Skip, setSkip] = useState(0);
+// const [btnVisible, setButtonVisible] = useState(true);
+// const [currentNumberOfArticles, setCurrentNumber] = useState(0);
+
+// const destructureCache = cache => {
+//   setData(
+//     JSON.parse(JSON.stringify(cache)).filter(article => !article.deleteAt)
+//   );
+//   setIsFetchingData(false);
+//   setButtonVisible(draftsLoadMoreButtonVisible);
+// };
+
+// useEffect(() => {
+//   if (Skip > 0) setLoadMore(true);
+//   if (!isDraftsCacheAvailable && !isFetchingDraftsData) {
+//     fetchArticles(Skip);
+//   } else if (isDraftsCacheAvailable) {
+//     destructureCache(draftsCache);
+//   }
+// }, [Skip]);
+// useEffect(() => {
+//   console.log("articleData", articleData);
+// }, [articleData]);
+
+//       setLoadMore(true);
+//       setIsFetchingDraftsData(true);
+//
+//       const temp = getAuthToken();
+//
+//       const params = new URLSearchParams({
+//         skip: skip,
+//         limit: 5,
+//         filters: "DRAFT"
+//       });
+//       axios
+//         .get(`${baseURL}/${endPoints.getAllArticles}?${params}`, {
+//           headers: {
+//             Authorization: temp
+//           }
+//         })
+//         .then(res => {
+//           if (res.data.articles.length > 0) {
+//             setData(
+//               JSON.parse(
+//                 JSON.stringify([...articleData, ...res.data.articles])
+//               ).filter(article => !article.deleteAt)
+//             );
+//             setDraftsCache(
+//               JSON.parse(
+//                 JSON.stringify(draftsCache.concat(res.data.articles))
+//               ).filter(article => !article.deleteAt)
+//             );
+//
+//             setButtonVisible(true);
+//             setDraftsLoadMoreButtonVisible(true);
+//           } else {
+//             setDraftsCache(
+//               JSON.parse(
+//                 JSON.stringify(draftsCache.concat(res.data.articles))
+//               ).filter(article => !article.deleteAt)
+//             );
+//             setButtonVisible(false);
+//             setDraftsLoadMoreButtonVisible(false);
+//           }
+//           setDraftsCacheAvailable(true);
+//           setIsFetchingDraftsData(false);
+//           setLoadMore(false);
+//           setIsFetchingData(false);
+//         });
+
+//===============================================================================================================
+// PuBLISHED
+
+// const [articleData, setData] = useState([]);
+// const [isFetchingData, setIsFetchingData] = useState(true);
+// const [btnVisible, setButtonVisible] = useState(false);
+// const [Skip, setSkip] = useState(0);
+
+// const destructureCache = cache => {
+//   const keys = Object.keys(cache);
+//   setData(
+//     JSON.parse(JSON.stringify(cache)).filter(article => !article.deleteAt)
+//   );
+//   setIsFetchingData(false);
+//   setButtonVisible(publishedLoadMoreVisible);
+// };
+
+//     const forceUpdate = articleId => {
+//       articleData.forEach(article => {
+//         if (article.articleId === articleId) article.deleteAt = Date.now();
+//       });
+//
+//       setSkip(0);
+//
+//       const temp = getAuthToken();
+//       setPublishedCache([]);
+//       const params = new URLSearchParams({
+//         skip: 0,
+//         limit: articleData.length,
+//         filters: "PUBLISHED"
+//       });
+//       axios
+//         .get(`${baseURL}/${endPoints.getAllArticles}?${params}`, {
+//           headers: {
+//             Authorization: temp
+//           }
+//         })
+//         .then(res => {
+//           setData(
+//             JSON.parse(JSON.stringify(res.data.articles)).filter(
+//               article => !(article.deleteAt || article.articleId === articleId)
+//             )
+//           );
+//           setPublishedCache(
+//             JSON.parse(JSON.stringify(res.data.articles)).filter(
+//               article => !(article.deleteAt || article.articleId === articleId)
+//             )
+//           );
+//           setLoadMore(false);
+//           setPublishedCacheAvailable(true);
+//           setIsFetchingPublishedData(false);
+//           setIsFetchingData(false);
+//         });
+//     };
+
+// useEffect(() => {
+//   if (Skip > 0) setLoadMore(true);
+//   if ((!publishedCacheAvailable && !isFetchingPublishedData) || loadMore) {
+//     fetchArticles(Skip);
+//   }
+//   if (publishedCacheAvailable) {
+//     destructureCache(publishedCache);
+//   }
+// }, [Skip]);
+//       setLoadMore(true);
+//       setIsFetchingPublishedData(true);
+//       const temp = getAuthToken();
+//       const params = new URLSearchParams({
+//         skip: skip,
+//         limit: 5,
+//         filters: "PUBLISHED"
+//       });
+//       axios
+//         .get(`${baseURL}/${endPoints.getAllArticles}?${params}`, {
+//           headers: {
+//             Authorization: temp
+//           }
+//         })
+//         .then(res => {
+//           if (res.data.articles.length > 0) {
+//             setData(
+//               JSON.parse(
+//                 JSON.stringify([...articleData, ...res.data.articles])
+//               ).filter(article => !article.deleteAt)
+//             );
+//             setPublishedCache(
+//               JSON.parse(
+//                 JSON.stringify(publishedCache.concat(res.data.articles))
+//               ).filter(article => !article.deleteAt)
+//             );
+//
+//             setButtonVisible(true);
+//             setPublishedLoadMoreVisible(true);
+//           } else {
+//             setButtonVisible(false);
+//             setPublishedLoadMoreVisible(false);
+//             setPublishedCache(
+//               JSON.parse(
+//                 JSON.stringify(publishedCache.concat(res.data.articles))
+//               ).filter(article => !article.deleteAt)
+//             );
+//           }
+//           setLoadMore(false);
+//           setPublishedCacheAvailable(true);
+//           setIsFetchingPublishedData(false);
+//           setIsFetchingData(false);
+//         });

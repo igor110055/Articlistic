@@ -1,5 +1,5 @@
 import "./landingPage.css";
-import backgroundSVG from "./../../Images/background.svg";
+// import backgroundSVG from "./../../Images/background.svg";
 import LoginSignupLanding from "./loginSignupLanding";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
@@ -30,13 +30,13 @@ const LandingPage = () => {
         <div className="alpha-tester-div">
           <div className="alpha-tester-name">
             <span>Alpha Adopter's Release &nbsp;</span>
-            <img src={rocket}></img>
+            <img src={rocket} alt="rocket"></img>
           </div>
         </div>
       </div>
       <div className="main-div">
         <div className="left-img">
-          <img src={left_img} className="bg-img-left"></img>
+          <img src={left_img} className="bg-img-left" alt = "rocket"></img>
         </div>
         <div className="onboarding">
           <LoginSignupLanding />
@@ -44,7 +44,7 @@ const LandingPage = () => {
 
         <div className="right-img">
           <div className="random-div">
-            <img src={left_img} className="bg-img-right"></img>
+            <img src={left_img} className="bg-img-right" alt = "rocket"></img>
           </div>
         </div>
       </div>

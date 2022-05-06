@@ -46,7 +46,7 @@
   background-color: white;
   height: 4.31em;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   border-bottom: 2px solid #0fc7fc;
   box-shadow: 0px 2px 24px 0px rgba(199, 212, 223, 0.3761);
 }

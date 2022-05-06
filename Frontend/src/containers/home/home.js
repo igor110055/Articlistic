@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import Carousel from "react-material-ui-carousel";
-import ArticleCard from "../../components/home/articleCard";
+// import ArticleCard from "../../components/home/articleCard";
 import CarouselItem from "../../components/home/carouselItem";
 import { useDispatch, useSelector } from 'react-redux';
 import { getFollowedWriters } from "./homeActions";
 import WritersWithCards from "../../components/home/writersWithCards";
 import MiniDrawer from "../../components/home/writerDrawer";
 import WritersList from "../../components/home/writersList";
-import { userUsername } from "../user/userActions";
-import { Button, Dialog, DialogTitle, CircularProgress } from '@mui/material';
+// import { userUsername } from "../user/userActions";
+// import { Button, Dialog, DialogTitle, CircularProgress } from '@mui/material';
 import Cookie from 'js-cookie';
-import crypto from 'crypto-js';
-import Auth from "../../components/auth";
+// import crypto from 'crypto-js';
+// import Auth from "../../components/auth";
 import r1 from './../../Images/dummy/r1.jpg';
 import r2 from './../../Images/dummy/r2.jpg';
 import r3 from './../../Images/dummy/r3.jpg';
@@ -25,12 +25,12 @@ const Home = () => {
     const [alreadySignedIn, setAlreadySignedIn] = useState(false);
     const [getFollowedInitiate, setGetFollowedInitiate] = useState(false);
     const [dataReceived, setDataReceived] = useState(false);
-    const [bookmarkDialog, setBookmarkDialog] = useState(false);
+    // const [bookmarkDialog, setBookmarkDialog] = useState(false);
     const {
         isGettingFollowedWriters,
         getFollowedWritersError,
-        getFollowedWritersErrorMsg,
-        getFollowedWritersResp,
+        // getFollowedWritersErrorMsg,
+        // getFollowedWritersResp,
         userUserName,
     } = useSelector((state) => ({
         isGettingFollowedWriters: state.home.isGettingFollowedWriters,

@@ -15,7 +15,7 @@ export const Error = ({ message }) => {
   // if (error == "Please enter a valid verification code.") {
   //   error = "Account with this phone number doesn't exist.";
   // }
-  
+
   const classes = useStyles();
   return (
     <div className={classes.error}>
@@ -55,16 +55,16 @@ const useStyles = makeStyles({
     padding: "0.4em 0 0.4em 0",
     justifyContent: "space-around",
     alignItems: "center",
-  
+
     marginTop: "0.2em",
-    marginBottom: "0.2em",
+    marginBottom: "0.2em"
   },
 
   errorSVG: {
-    margin: "1% 0% 0% 1%",
+    margin: "1% 0% 0% 1%"
   },
 
   errorMsg: {
-    width: "90%",
+    width: "90%"
   }
 });

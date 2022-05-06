@@ -2,17 +2,29 @@
   background-color: #ffffff;
   margin-right: 3em;
   border-radius: 0px 20px 20px 20px;
-  padding: 2em 2em 0 2em;
+  padding: 36px 18px 0px 26px;
+  /* width: 85%; */
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  /* padding-top: 50px; */
+  margin-left: 130px; 
+  margin-right: 130px;
 }
 .divider-line {
-  margin-left: 3em;
-  width: 95%;
+  width: 97.5%;
+  margin-left: 1em; 
+  padding-right: 1em;
+  /* width: 100%; */
   padding-bottom: 0.6em;
   padding-top: 0.6em;
+  margin-left: 14px;
+  margin-right: 42px; 
 }
 .no-article-msg {
   margin-left: 4em;
   padding-bottom: 2em;
+  margin-top: -0.2em;
 }
 .progress-div {
   width: 100%;

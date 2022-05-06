@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
-import Cookie from 'js-cookie';
-import crypto from 'crypto-js';
+// import Cookie from 'js-cookie';
+// import crypto from 'crypto-js';
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
-import { uploadImage } from "../writerEditorActions";
+// import { uploadImage } from "../writerEditorActions";
 import { userUsername } from "../../user/userActions";
 import { baseURL, endPoints } from "../../../utils/apiEndPoints";
 import { getAuthToken } from "../../common/commonFunctions";
@@ -35,10 +35,10 @@ const ImageUpload = ({ onDataChange, data, readOnly }) => {
 
     const {
         user,
-        createNewArticleResp,
-        isUploadingImage,
-        uploadImageError,
-        uploadImageResp,
+        // createNewArticleResp,
+        // isUploadingImage,
+        // uploadImageError,
+        // uploadImageResp,
     } = useSelector((state) => ({
         user: state.user,
         createNewArticleResp: state.writerEditor.createNewArticleResp,
@@ -93,7 +93,7 @@ const ImageUpload = ({ onDataChange, data, readOnly }) => {
                         <div className={classes.progress}>{progress}% Uploaded</div>
                     )}
             </div>) : < div >
-                < img src={url} className={classes.imageStyle} />
+                < img src={url} className={classes.imageStyle} alt="caption"/>
                 <input className={classes.captionStyle} value={caption} onChange={(e) => {
                     setCaption(e.target.value);
                     onDataChange(url, e.target.value);
@@ -146,7 +146,7 @@ const useStyles = makeStyles(({
         textAlign: 'center',
         outline: 'none',
         fontFamily: 'Poppins',
-        color: '#616161',
+        color: '#1A1A1A',
     }
 }))
 
