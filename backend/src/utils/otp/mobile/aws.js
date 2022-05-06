@@ -2,7 +2,7 @@ var AWS = require('aws-sdk');
 const logger = require('../../logger/index');
 var config = require('../../../../config');
 
-
+/*
 async function sendMessage(phoneNumber, subject, message) {
 
     let params = {
@@ -38,6 +38,9 @@ async function sendMessage(phoneNumber, subject, message) {
     return res;
 }
 
+
+*/
+
 async function sendOTP(phoneNumber) {
 
     logger.debug("Sending to " + phoneNumber.toString());
@@ -47,6 +50,10 @@ async function sendOTP(phoneNumber) {
         /* required */
         LanguageCode: 'en-US'
     };
+
+    if (config.environment != 'prod') {
+        return "Sent";
+    }
 
     // AWS.config.region = 'us-east-1'
 
@@ -82,7 +89,21 @@ async function verifyOTP(otp, phoneNumber) {
         /* required */
         PhoneNumber: phoneNumber /* required */
     };
-    AWS.config.region = config.aws.region
+    AWS.config.region = config.aws.region;
+
+
+
+    if (config.environment != 'prod') {
+
+        if (otp == 123456) {
+
+            return "Verified";
+
+        } else {
+            throw "Wrong OTP"
+        }
+    }
+
 
     let sns = new AWS.SNS();
 
@@ -102,7 +123,6 @@ async function verifyOTP(otp, phoneNumber) {
 
 
 module.exports = {
-    sendMessage,
     sendOTP,
     verifyOTP
 }

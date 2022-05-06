@@ -1,10 +1,14 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_USERS,
+    MDB_COLLECTION_WRITERS
+} = require('../../../../constants');
 const MongoClient = require('mongodb').MongoClient;
 const logger = require('../../../utils/logger/index')
 
 const dbName = config.mongo.db;
-const uc = 'users';
-const wc = 'writers';
+const uc = MDB_COLLECTION_USERS;
+const wc = MDB_COLLECTION_WRITERS;
 const mongodbUri = config.mongo.uri;
 const {
     MDB

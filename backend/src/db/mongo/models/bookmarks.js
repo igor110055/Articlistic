@@ -1,11 +1,14 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_BOOKMARKS
+} = require('../../../../constants');
 const MongoClient = require('mongodb').MongoClient;
 
 const logger = require('../../../utils/logger/index')
 const MDB = require('../client').MDB;
 
 const dbName = config.mongo.db;
-const collection = 'bookmarks';
+const collection = MDB_COLLECTION_BOOKMARKS;
 const mongodbUri = config.mongo.uri; // TODO: Add mongo db url here -> In config and .env file
 
 
@@ -133,7 +136,7 @@ async function getBookmarks(username, limit, skip) {
         let timeTaken = endTime - startTime;
 
         logger.info("getBookmarks mongo response time: " + timeTaken.toString());
-
+        return bookmark;
 
     } catch (e) {
         throw e;

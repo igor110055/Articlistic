@@ -1,11 +1,13 @@
 var config = require('../../../../config');
-const MongoClient = require('mongodb').MongoClient;
+const {
+    MDB_COLLECTION_ARTICLES,
+    MDB_COLLECTION_CHATS
+} = require('../../../../constants');
 const logger = require('../../../utils/logger/index')
 
 const dbName = config.mongo.db;
-const cc = 'chats';
-const ac = 'articles';
-const mongodbUri = config.mongo.uri;
+const cc = MDB_COLLECTION_CHATS;
+const ac = MDB_COLLECTION_ARTICLES;
 
 const {
     MDB

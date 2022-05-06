@@ -1,12 +1,13 @@
 var config = require('../../../../config');
-const MongoClient = require('mongodb').MongoClient;
+const {
+    MDB_COLLECTION_CATEGORY
+} = require('../../../../constants');
 
 const logger = require('../../../utils/logger/index')
 const MDB = require('../client').MDB;
 
 const dbName = config.mongo.db;
-const collection = 'categories';
-const mongodbUri = config.mongo.uri; // TODO: Add mongo db url here -> In config and .env file
+const collection = MDB_COLLECTION_CATEGORY;
 
 async function getCategories(skip, limit) {
     let client;
@@ -40,7 +41,7 @@ async function getCategories(skip, limit) {
 
         logger.info("getCategories mongo response time: " + timeTaken.toString());
 
-        
+
         return {
             categories: allCategories,
             count
@@ -52,51 +53,6 @@ async function getCategories(skip, limit) {
     }
 }
 
-
-
-
-
-async function insertIntoCategory(articleId, categories = []) {
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-
-        const bulk = db.initializeUnorderedBulkOp();
-
-        categories.forEach((x) => bulk.find({
-            name: x
-        }).upsert().updateOne({
-
-            $addToSet: {
-                "articles": articleId
-            },
-
-        }));
-
-        await bulk.execute();
-
-
-        let endTime = Date.now();
-
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("insertIntoCategory mongo response time: " + timeTaken.toString());
-
-        
-        return 'Success';
-
-
-    } catch (e) {
-        throw e;
-    }
-}
 
 
 async function createUniquenessIndex() {
@@ -122,7 +78,7 @@ async function createUniquenessIndex() {
 
         logger.info("categories: createUniquenessIndex mongo response time: " + timeTaken.toString());
 
-        
+
 
 
     } catch (e) {
@@ -134,6 +90,5 @@ async function createUniquenessIndex() {
 
 module.exports = {
     getCategories,
-    insertIntoCategory,
     createUniquenessIndex
 }

@@ -1,10 +1,13 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_FOLLOWERS
+} = require('../../../../constants');
 const dbName = config.mongo.db;
 const MDB = require('../client').MDB;
 
 const logger = require('../../../utils/logger/index')
 
-const collection = 'followers';
+const collection = MDB_COLLECTION_FOLLOWERS;
 
 async function createUniqueIndex() {
     let client;

@@ -1,10 +1,13 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_PUBLICATIONS
+} = require('../../../../constants');
 
 const logger = require('../../../utils/logger/index')
 const MDB = require('../client').MDB;
 
 const dbName = config.mongo.db;
-const collection = 'publications';
+const collection = MDB_COLLECTION_PUBLICATIONS;
 const mongodbUri = config.mongo.uri;
 
 
@@ -82,6 +85,40 @@ async function getAllPublicationsForWriter(username) {
 }
 
 
+
+async function markForDelete(publicationId, deleteAt) {
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+
+        let res = await db.updateOne({
+            publicationId: publicationId
+        }, {
+            $set: {
+                deleteAt: deleteAt
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Delete Publication - mongo response time: " + timeTaken.toString());
+
+
+        return res;
+
+
+    } catch (e) {
+        throw e;
+    }
+}
 
 
 async function getPublicationForCheck(publicationId) {
@@ -258,5 +295,6 @@ module.exports = {
     getPublicationArticle,
     createUniquenessIndex,
     createUniquenessIndex2,
-    getAllPublicationsForWriter
+    getAllPublicationsForWriter,
+    markForDelete
 }

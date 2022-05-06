@@ -13,6 +13,7 @@ const DatabaseError = require('../../errors/DatabaseError');
 const ServiceError = require('../../errors/ServiceError');
 const NotAuthenticatedError = require('../../errors/NotAuthenticatedError');
 const NotFoundError = require('../../errors/NotFoundError')
+const BadRequestError = require('../../errors/BadRequestError')
 const checkDb = require('../../middleware/checkDb');
 const useAuth = require('../../middleware/auth');
 
@@ -24,6 +25,10 @@ const file = require('../../middleware/files')
 const {
     v4: uuidv4
 } = require('uuid');
+const {
+    IMAGE_SIZE_LIMIT,
+    DELETE_AFTER_PUBLICATION_TIMING
+} = require('../../../constants');
 
 
 module.exports = function publicationRouter() {
@@ -31,14 +36,35 @@ module.exports = function publicationRouter() {
     return new express.Router()
         .get('/', useAuth(), getPublication)
         .get('/all', useAuth(), getAllPublications)
+
         .post('/', useAuth(false, false, true), file.single('image'), newPublication)
         .put('/', useAuth(false, false, true), file.single('image'), updatePublication)
+        .delete('/', useAuth(false, false, true), checkDb(false, false, false, true, true), markForDeletion)
 
         .get('/article', useAuth(), getArticle)
         .put('/article', useAuth(), uploadArticle)
+
         .post('/article/image', useAuth(), file.single('image'), uploadImageEmbed);
 
 
+
+    async function markForDeletion(req, res) {
+        const routeName = 'mark publication for deletion';
+        const publicationId = req.publicationId;
+        // const twentyFourHours = ;
+        const deleteAt = Date.now() + DELETE_AFTER_PUBLICATION_TIMING;
+
+        try {
+            await mongo.publications.markForDelete(publicationId, deleteAt);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        return res.status(200).send({
+            message: 'marked for deletion'
+        })
+
+    }
 
     async function uploadImageEmbed(req, res) {
         let routeName = '/publication/article/image';
@@ -64,7 +90,7 @@ module.exports = function publicationRouter() {
             throw new NotAuthenticatedError('You can not upload images for this publication.', routeName);
         }
 
-        let sizeLimit = 5 * 1024 * 1024; //5 mbs. 
+        let sizeLimit = IMAGE_SIZE_LIMIT; //5 mbs. 
         let resLink;
 
         if (buffer.byteLength <= sizeLimit) {
@@ -94,13 +120,16 @@ module.exports = function publicationRouter() {
             publicationId
         } = req.query;
 
+        if (!publicationId) {
+            throw new MissingParamError('Publication Id required', routeName);
+        }
+
         try {
             var link = await mongo.publications.getPublicationArticle(publicationId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
 
-        logger.debug(link);
 
         if (!link || !link.publicationArticle) {
             throw new NotFoundError('There is no publication article', routeName);
@@ -119,7 +148,9 @@ module.exports = function publicationRouter() {
 
     async function getAllPublications(req, res) {
         let routeName = '/publication/all';
-        let username = req.query.username;
+        let {
+            username
+        } = req.query;
         let publications;
 
         if (!username) {
@@ -131,6 +162,12 @@ module.exports = function publicationRouter() {
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
+
+
+        /*
+         * This could have been at the start of the function 
+         * but I did a slight optimization.
+         */
 
         if (!publications || !publications.length) {
 
@@ -208,6 +245,12 @@ module.exports = function publicationRouter() {
     }
 
 
+    /**
+     * Get a publication by its id
+     * @param req - The request object.
+     * @param res - The response object.
+     * @returns The publication object.
+     */
 
     async function getPublication(req, res) {
         let routeName = '/get/publication';
@@ -215,6 +258,8 @@ module.exports = function publicationRouter() {
         let {
             publicationId
         } = req.query;
+
+        if (!publicationId) throw new MissingParamError('Missing publication Id', routeName)
 
         try {
             var publication = await mongo.publications.getPublication(publicationId);
@@ -230,10 +275,16 @@ module.exports = function publicationRouter() {
         return res.status(200).send(publication);
     }
 
+    /**
+     * Update a publication's name and/or image
+     * @param req - The request object.
+     * @param res - Response object
+     */
+
 
     async function updatePublication(req, res) {
         let routeName = '/publication/update';
-        let sizeLimit = 5 * 1024 * 1024;
+        let sizeLimit = IMAGE_SIZE_LIMIT;
         let username = req.username;
         let buffer = req.file ? req.file.buffer : null;
 
@@ -242,10 +293,13 @@ module.exports = function publicationRouter() {
             publicationId
         } = req.query;
 
+        if (!name && !buffer) {
+            throw new BadRequestError('Nothing to update', routeName)
+        }
+
         /*
         Checking required parameters
         */
-
 
         if (!publicationId) {
             throw new MissingParamError('Publication id required', routeName)
@@ -365,7 +419,7 @@ module.exports = function publicationRouter() {
 
         if (!name) throw new MissingParamError("Name is required", routeName)
 
-        let sizeLimit = 5 * 1024 * 1024;
+        let sizeLimit = IMAGE_SIZE_LIMIT;
 
         let resLink;
         let publicationId = uuidv4();

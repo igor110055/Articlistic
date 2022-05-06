@@ -1,10 +1,13 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_SELECTION
+} = require('../../../../constants');
 
 const logger = require('../../../utils/logger/index')
 const MDB = require('../client').MDB;
 
 const dbName = config.mongo.db;
-const collection = 'selection';
+const collection = MDB_COLLECTION_SELECTION;
 
 async function markMeaningful(username, articleId, selection) {
 

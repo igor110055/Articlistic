@@ -1,9 +1,13 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_PUBLICATIONS,
+    MDB_COLLECTION_WRITERS
+} = require('../../../../constants');
 const logger = require('../../../utils/logger/index')
 
 const dbName = config.mongo.db;
-const wc = 'writers';
-const pc = 'publications';
+const wc = MDB_COLLECTION_WRITERS;
+const pc = MDB_COLLECTION_PUBLICATIONS;
 const {
     MDB
 } = require('../client')

@@ -5,12 +5,13 @@ const NotAuthenticatedError = require('../errors/NotAuthenticatedError');
 const MissingParamError = require('../errors/MissingParamError');
 const NotFoundError = require('../errors/NotFoundError')
 const ServiceError = require('../errors/ServiceError');
+const BadRequestError = require('../errors/BadRequestError')
 
 const Sentry = require('@sentry/node');
 
 module.exports = function () {
     return function (err, req, res, next) {
-        if (err instanceof NetworkError || err instanceof DatabaseError || err instanceof NotAuthenticatedError || err instanceof MissingParamError || err instanceof NotFoundError || err instanceof ServiceError) {
+        if (err instanceof NetworkError || err instanceof DatabaseError || err instanceof NotAuthenticatedError || err instanceof MissingParamError || err instanceof NotFoundError || err instanceof ServiceError || err instanceof BadRequestError) {
             let route = err.route ? err.route : 'Unknown route.';
             let error = err.error ? err.error.toString() : 'No specific info related to error.';
             let statusCode = err.statusCode ? err.statusCode : 400;

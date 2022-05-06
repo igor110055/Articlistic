@@ -1,12 +1,18 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_ARTICLES,
+    MDB_COLLECTION_PUBLICATIONS,
+    MDB_COLLECTION_CATEGORY,
+    MDB_COLLECTION_WRITERS
+} = require('../../../../constants');
 const MongoClient = require('mongodb').MongoClient;
 const logger = require('../../../utils/logger/index')
 
 const dbName = config.mongo.db;
-const cc = 'categories';
-const ac = 'articles';
-const pc = 'publications'
-const wc = 'writers';
+const cc = MDB_COLLECTION_CATEGORY;
+const ac = MDB_COLLECTION_ARTICLES;
+const pc = MDB_COLLECTION_PUBLICATIONS
+const wc = MDB_COLLECTION_WRITERS;
 
 const mongodbUri = config.mongo.uri;
 const {
@@ -15,7 +21,7 @@ const {
 
 
 
-async function updatePublishedArticle(articleId, status, writeup, storySetting, earlyAccess = false, public, categories, publicationId) {
+async function updatePublishedArticle(articleId, status, writeup, storySetting, earlyAccess = false, pub, categories, publicationId) {
 
     let client;
     let updateParam = {};
@@ -29,8 +35,8 @@ async function updatePublishedArticle(articleId, status, writeup, storySetting, 
     if (storySetting) {
         updateParam.storySetting = storySetting;
     }
-    if (public) {
-        updateParam.public = public
+    if (pub) {
+        updateParam.public = pub
     }
     if (!publicationId) {
         throw "PublicationId is required"
@@ -94,15 +100,14 @@ async function updatePublishedArticle(articleId, status, writeup, storySetting, 
                 await session.abortTransaction();
                 throw "Transaction error - 1 - update article";
             }
-
             const bulk = categoriesCollection.initializeUnorderedBulkOp();
 
             categories.forEach((x) => bulk.find({
                 name: x,
             }).upsert().updateOne({
-                $addToSet: {
-                    "articles": articleId
-                },
+                $set: {
+                    name: x
+                }
             }));
 
 
@@ -119,7 +124,7 @@ async function updatePublishedArticle(articleId, status, writeup, storySetting, 
                 throw e;
 
             }
-            // logger.debug(bulkOp.result);
+
             try {
                 await writersCollection.updateOne({
                     publicationId
@@ -155,11 +160,7 @@ async function updatePublishedArticle(articleId, status, writeup, storySetting, 
     }
 }
 
-
-
-
-
-async function publishNewArticle(username, articleId, status, writeup, storySetting, earlyAccess = false, public, categories, publicationId) {
+async function publishNewArticle(username, articleId, status, writeup, storySetting, earlyAccess = false, pub, categories, publicationId) {
 
     let client;
     let updateParam = {};
@@ -175,8 +176,8 @@ async function publishNewArticle(username, articleId, status, writeup, storySett
     if (storySetting) {
         updateParam.storySetting = storySetting;
     }
-    if (public) {
-        updateParam.public = public
+    if (pub) {
+        updateParam.public = pub
     }
     if (!publicationId) {
         throw "PublicationId is required"
@@ -233,14 +234,14 @@ async function publishNewArticle(username, articleId, status, writeup, storySett
 
             const bulk = categoriesCollection.initializeUnorderedBulkOp();
 
+
             categories.forEach((x) => bulk.find({
                 name: x,
             }).upsert().updateOne({
-                $addToSet: {
-                    "articles": articleId
-                },
+                $set: {
+                    name: x
+                }
             }));
-
 
             try {
 
@@ -297,6 +298,7 @@ async function publishNewArticle(username, articleId, status, writeup, storySett
 
     }
 }
+
 
 module.exports = {
     updatePublishedArticle,

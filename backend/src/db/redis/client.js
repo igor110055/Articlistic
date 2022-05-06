@@ -1,3 +1,4 @@
+const Sentry = require('@sentry/node');
 var config = require('../../../config');
 const logger = require('../../utils/logger/index')
 var {
@@ -18,10 +19,20 @@ class RDB {
             url: config.redis.uri
         });
 
+        this.client.on('error', (err) => {
+            Sentry.captureException(err.toString());
+        });
+
         await this.client.connect();
 
         logger.info("Started Redis client now: " + (Date.now() - startTime).toString() + "ms");
 
+        return this.client;
+    }
+
+    static async setClient(client) {
+        this.client = client;
+        logger.info("Connected to redis...");
         return this.client;
     }
 

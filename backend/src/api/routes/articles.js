@@ -7,15 +7,20 @@ var file = require('../../middleware/files');
 
 // var gzip = require('gzip');
 
-
+const articleCheck = require('../../middleware/articleCheck');
 var mongo = require('../../db/mongo/index')
 var s3 = require('../../utils/s3/index')
 const apis = require('../../utils/api/index');
+const scrapeArticles = require('../../utils/scraping/articles');
 
 const NetworkError = require('../../errors/NetworkError');
 const MissingParamError = require('../../errors/MissingParamError');
+const BadRequestError = require('../../errors/BadRequestError');
+
 const DatabaseError = require('../../errors/DatabaseError');
 const ServiceError = require('../../errors/ServiceError');
+// const BadRequestError = require('../../errors/BadRequestError');
+
 const NotAuthenticatedError = require('../../errors/NotAuthenticatedError');
 const logger = require('../../utils/logger');
 
@@ -25,6 +30,10 @@ const {
 const NotFoundError = require('../../errors/NotFoundError');
 const checkDb = require('../../middleware/checkDb');
 const sha224 = require('crypto-js/sha224');
+const {
+    IMAGE_SIZE_LIMIT,
+    DELETE_AFTER_ARTICLE_TIMING
+} = require('../../../constants');
 
 
 module.exports = function articlesRouter() {
@@ -33,9 +42,15 @@ module.exports = function articlesRouter() {
         .get('/get', useAuth(), getArticle)
         .get('/getAllArticlesForUser', useAuth(), getAllArticlesForUser)
         .get('/getArticlesForPublication', useAuth(), getArticlesForPublication)
+        .get('/import', useAuth(false, false, true), importArticle)
+        .get('/topFunders', useAuth(), articleCheck(), getTopFunders)
 
-        .put('/uploadImage', useAuth(), checkDb(true), file.single('image'), uploadEmbed)
+
+        .put('/uploadImage', useAuth(), checkDb(true, false, true), file.single('image'), uploadEmbed)
         .put('/upload', useAuth(false, false, true), uploadArticle)
+
+        .delete('/markForDeletion', useAuth(false, false, true), checkDb(true, false, true), markForDeletion)
+
 
         // .post('/new', useAuth(), createArticleBluePrint)
         // .post('/discard', useAuth(), checkDb(true), discardArticle)
@@ -44,14 +59,115 @@ module.exports = function articlesRouter() {
         .post('/selection/unmeaningful', useAuth(), checkDb(true, false), removeFromMeaningful)
 
         .get('/selection/all', useAuth(), checkDb(true, false), showAllSelectionsForArticle)
-
         .get('/selection/find', useAuth(), checkDb(true), findSelection)
 
         .post('/selection/respond', useAuth(), checkDb(true, true), respondToSelection)
-        .post('/selection/tip', useAuth(), tipSelection)
-        .post('/selection/share', useAuth(), shareSelection)
+        // .post('/selection/tip', useAuth(), tipSelection)
+        // .post('/selection/share', useAuth(), shareSelection)
 
         .post('/deleteImage', useAuth(), deleteEmbed);
+
+
+    async function getTopFunders(req, res) {
+        const routeName = 'get top funders';
+        const articleId = req.articleId;
+
+        /**
+         * MongoDB query for top funders & first funders. 
+         */
+
+
+
+
+    }
+
+
+    async function markForDeletion(req, res) {
+        const routeName = 'mark for deletion';
+        const articleId = req.articleId;
+
+
+        const deleteAt = Date.now() + DELETE_AFTER_ARTICLE_TIMING;
+
+
+        try {
+            await mongo.articles.markForDeletion(articleId, deleteAt);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        return res.status(200).send({
+            message: 'Article marked for deletion'
+        })
+    }
+
+
+
+    async function importArticle(req, res) {
+
+        const routeName = 'import article';
+        const username = req.username;
+        const {
+            link
+        } = req.query;
+        let origin = 'substack';
+
+
+        if (!link) throw new MissingParamError('Some parameter is missing', routeName);
+
+
+        // if (link.includes('substack')) {
+        //     origin = 'substack';
+        // } else if (link.includes('medium')) {
+        //     origin = 'medium'
+        // } else {
+        //     origin = 'substack'
+        //     // throw new BadRequestError('Platform not supported', routeName);
+        // }
+
+        const articleId = uuidv4();
+
+
+        /**
+         * Do some site validation - from where it originates. 
+         * Reject If it isn't in the list of our own supported platforms. 
+         * Use axios to import article HTML into a variable.
+         */
+        let axiosRes;
+        try {
+
+            axiosRes = await apis.linkHTML.getHTMLForLink(link);
+
+        } catch (e) {
+            throw new ServiceError('axios - html', routeName, e);
+        }
+
+        /**
+         * Pass axios HTML into a import article utility function
+         * which returns HTML with replaced images on sub-stack.
+         * It also returns article title and subtitle. 
+         **/
+        let scrapedArticle;
+
+        try {
+            scrapedArticle = await scrapeArticles.scrapeArticle(origin, axiosRes, articleId, username)
+        } catch (e) {
+            throw new ServiceError(`scrape article - ${origin}`, routeName, e);
+        }
+
+
+        /**
+         * Save the article into the database with origin: {site: "medium", link: "---"}
+         */
+
+        return res.status(200).send({
+            message: 'Success',
+            articleId,
+            origin,
+            scrapedArticle
+        })
+
+    }
 
 
 
@@ -87,6 +203,7 @@ module.exports = function articlesRouter() {
 
     }
 
+    /*
 
     async function tipSelection(req, res) {
         let username = req.username;
@@ -96,7 +213,7 @@ module.exports = function articlesRouter() {
         let username = req.username;
     }
 
-
+    */
     async function findSelection(req, res) {
         let routeName = '/selection/find';
         let articleId = req.articleId;
@@ -132,11 +249,15 @@ module.exports = function articlesRouter() {
         }
 
         let selections;
+
+
         try {
             selections = await mongo.selection.getArticleSelections(articleId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
+
+
         return res.status(200).send({
             message: 'Successfully found!',
             selections
@@ -229,35 +350,6 @@ module.exports = function articlesRouter() {
         })
     }
 
-    /*
-    async function discardArticle(req, res) {
-        let routeName = '/articles/discard';
-        let articleId = req.articleId;
-
-        try {
-            var article = await mongo.articles.getArticleById(articleId);
-        } catch (error) {
-            throw new DatabaseError(routeName, error);
-        }
-
-        if (!article || article.status != "BLUEPRINT") {
-            throw new NotAuthenticatedError('Not allowed to operate this on drafts/published articles', routeName);
-        }
-
-        try {
-            await mongo.articles.discardArticle(articleId);
-        } catch (error) {
-            throw new DatabaseError(routeName, error);
-        }
-
-        return res.status(201).send({
-            'message': 'Article deleted successfully'
-        })
-    }
-
-    */
-
-
 
     async function uploadEmbed(req, res) {
         let routeName = '/article/uploadImage'
@@ -268,13 +360,10 @@ module.exports = function articlesRouter() {
 
 
         let buffer = req.file.buffer;
-
-
-
         let username = req.username;
         let articleId = req.articleId;
 
-        let sizeLimit = 5 * 1024 * 1024; //5 mbs. 
+        let sizeLimit = IMAGE_SIZE_LIMIT;
         let resLink;
 
         if (buffer.byteLength <= sizeLimit) {
@@ -319,7 +408,7 @@ module.exports = function articlesRouter() {
         let {
             articleId
         } = req.query;
-        let username = req.username;
+        // let username = req.username;
 
         if (!articleId) {
             throw new MissingParamError('Missing article id', routeName);
@@ -350,6 +439,14 @@ module.exports = function articlesRouter() {
 
         }
 
+
+        //In case user isn't the writer and it is a draft. 
+
+
+
+
+        /*
+
         if (username != article.username) {
             try {
                 await mongo.analytics.updateAnalyticsForArticleFetch(username, articleId, article.username);
@@ -357,6 +454,7 @@ module.exports = function articlesRouter() {
                 throw new DatabaseError(routeName, e);
             }
         }
+        */
 
         res.status(200).send({
             message: 'Article found',
@@ -378,6 +476,8 @@ module.exports = function articlesRouter() {
         if (!filters) {
             filters = ["DRAFT", "PUBLISHED"]
         } else {
+
+            if (filters != "DRAFT" && filters != "PUBLISHED") throw new BadRequestError('Bad filter', routeName)
             filters = [filters];
         }
 
@@ -397,32 +497,12 @@ module.exports = function articlesRouter() {
 
         return res.status(200).send({
             'message': 'Fetched articles',
-            count: articles.count,
-            articles: articles.articles
+            count: articles.count ? articles.count : 0,
+            articles: articles.articles ? articles.articles : []
         });
     }
 
-    /*
-        async function createArticleBluePrint(req, res) {
 
-            let routeName = '/articles/new';
-
-            let username = req.username;
-            let articleId = uuidv4();
-
-            try {
-                await mongo.articles.createArticleBluePrint(username, articleId);
-            } catch (error) {
-                throw new DatabaseError(routeName, error);
-            }
-
-            return res.status(200).send({
-                'message': 'Success',
-                articleId
-            });
-
-        }
-    */
     async function uploadArticle(req, res) {
 
         let routeName = '/articles/upload';
@@ -442,18 +522,28 @@ module.exports = function articlesRouter() {
             status,
             earlyAccess,
             earlyAccessLastDate,
-            publicationId
+            publicationId,
+            newlyImported,
+            origin,
+            originUrl,
+            canonicalUrl
         } = req.body;
 
         /*
         We require publication Id for uploading an article
         */
 
+        if (newlyImported && !articleId) throw new BadRequestError('Article id is required for newly imported articles', routeName)
+
         if (publicationId) {
             let res = await mongo.publications.getPublication(publicationId);
 
-            if (!res || res.username != username) {
+            if (!res) {
                 throw new NotFoundError('Publication not there/ User not allowed to do this operation', routeName);
+            }
+
+            if (res.username != username) {
+                throw new NotAuthenticatedError('Not allowed to do this operation', routeName);
             }
         }
 
@@ -510,30 +600,58 @@ module.exports = function articlesRouter() {
 
         } else {
 
+            if (newlyImported) {
+                const validOrigins = ['substack', 'medium']
 
-            /*
-            This is for the ownership of the article
-            */
 
-            newArticle = false;
-            let articleCheck;
-            try {
-                articleCheck = await mongo.articles.getArticleById(articleId);
-            } catch (e) {
-                throw new DatabaseError(routeName, e);
+                if (status != "DRAFT") {
+
+                    throw new BadRequestError('Newly imported article can not be published.', routeName)
+
+                }
+
+                if (!validOrigins.includes(origin)) {
+                    throw new BadRequestError('Origin is not supported', routeName);
+
+                }
+
+                if (!originUrl) {
+                    throw new BadRequestError('Origin url should be sent for newly imported articles', routeName)
+                }
+
+
+
+
+            } else {
+
+
+                /*
+                This is for the ownership of the article
+                */
+
+                newArticle = false;
+                let articleCheck;
+                try {
+                    articleCheck = await mongo.articles.getArticleById(articleId);
+                } catch (e) {
+                    throw new DatabaseError(routeName, e);
+                }
+
+                if (!articleCheck) {
+                    throw new NotFoundError('Could not find article', routeName);
+                }
+
+                if (articleCheck.username != username) {
+                    throw new NotAuthenticatedError('You are not allowed to change the article. ', routeName);
+                }
+
+                if (articleCheck.status == "PUBLISHED" && status != "PUBLISHED") {
+                    throw new NotAuthenticatedError('You can not change a published article to another type', routeName);
+                }
+
+
             }
 
-            if (!articleCheck) {
-                throw new NotFoundError('Could not find article', routeName);
-            }
-
-            if (articleCheck.username != username) {
-                throw new NotAuthenticatedError('You are not allowed to change the article. ', routeName);
-            }
-
-            if (articleCheck.status == "PUBLISHED" && status != "PUBLISHED") {
-                throw new NotAuthenticatedError('You can not change a published article to another type', routeName);
-            }
 
         }
 
@@ -593,18 +711,19 @@ module.exports = function articlesRouter() {
 
         // We don't have much in case of story settings, we'll just add the categories. 
         storySetting.categories = categories;
-
+        storySetting.canonicalUrl = canonicalUrl;
         /*
         The next few lines exist to update/insert the article in the database
         */
 
-        if (!newArticle) {
+        if (!newArticle && !newlyImported) {
             try {
                 if (status == "DRAFT") {
                     /*
                         In case of drafts we don't have story settings so we don't need to deal with many collections. Only the article collection will suffice. 
                     */
                     await mongo.articles.updateArticle(articleId, status, writeupUpload, false, false, publicData);
+
                 } else {
 
                     await mongo.transactionArticleCategory.updatePublishedArticle(articleId, status, writeupUpload, storySetting, false, publicData, categories, publicationId);
@@ -616,10 +735,12 @@ module.exports = function articlesRouter() {
         } else {
             try {
                 if (status == "DRAFT") {
+
                     /*
                         In case of drafts we don't have story settings. 
                     */
-                    await mongo.articles.createNewArticle(username, articleId, status, writeupUpload, false, false, publicData);
+
+                    await mongo.articles.createNewArticle(username, articleId, status, writeupUpload, false, false, publicData, origin, originUrl);
                 } else {
 
                     await mongo.transactionArticleCategory.publishNewArticle(username, articleId, status, writeupUpload, storySetting, false, publicData, categories, publicationId);
