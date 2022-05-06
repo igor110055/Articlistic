@@ -71,8 +71,9 @@ phases:
     #file-format: JunitXml | CucumberJson
 artifacts:
   files:
-    - Frontend/build/*
-    - backend/*
+    - Frontend/build/**/*
+    - Frontend/node_modules/**/*
+    - backend/**/*
     #- node_modules/**/*
     # - location
   #name: $(date +%Y-%m-%d)
