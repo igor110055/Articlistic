@@ -9,10 +9,10 @@ hooks:
   BeforeInstall:
     - location: backend/RunBackendScript.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
     - location: Frontend/RunFrontendScript.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
   #ApplicationStop:
     #- location: scripts/stop_server
       #timeout: 300
