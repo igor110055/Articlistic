@@ -34,7 +34,11 @@ const verifyEmailOTP = require('../../utils/functions/verifyEmailOTP');
 const articleCheck = require('../../middleware/articleCheck');
 const checkPin = require('../../middleware/checkPin');
 const {
-    WALLET_ATT_CUT_RATE
+    WALLET_ATT_CUT_RATE,
+    TYPE_WALLET_WITHDRAW,
+    TYPE_WALLET_ACTIVATION,
+    TYPE_WALLET_FUND_ACCOUNT,
+    TYPE_RESET_PIN
 } = require('../../../constants');
 
 
@@ -50,6 +54,8 @@ module.exports = function walletRouter() {
 
         .post('/activate/otp', auth(false, false, true), sendOTPForWalletActivation)
         .post('/activate', auth(false, false, true), activateWallet)
+
+        .post('/resetPIN/otp', auth(false, false, true), sendResetPinOTP)
         .post('/resetPIN', auth(false, false, true), resetPIN)
 
         .post('/funds/order', auth(false, false, true), createOrder)
@@ -60,8 +66,24 @@ module.exports = function walletRouter() {
         .post('/contact', auth(false, false, true), createContact)
         .post('/earnings/fundAccount', auth(false, false, true), checkPin(), createFundAccount)
         .post('/earning/fundAccount/otp', auth(false, false, true), sendOTPForSettingPayoutDetails)
+        .post('/earning/otp', auth(false, false, true), sendOTPForWithdraw)
         .post('/earnings/withdraw', auth(false, false, true), checkPin(), withdrawEarnings)
         .post('/earnings/self', auth(false, false, true), checkPin(), transferToWallet);
+
+
+    async function sendResetPinOTP(req, res) {
+        const routeName = 'send reset pin otp';
+        const user = req.user;
+
+        const email = staticDecrypt(user.email);
+
+        await createAndSendEmail(TYPE_RESET_PIN, email, routeName);
+
+        return res.status(200).send({
+            message: 'otp sent'
+        })
+
+    }
 
     async function transferToWallet(req, res) {
         const routeName = 'transfer to wallet';
@@ -89,8 +111,6 @@ module.exports = function walletRouter() {
         })
 
     }
-
-
 
     async function tipPassage(req, res) {
         const routeName = 'tip - passage';
@@ -179,28 +199,13 @@ module.exports = function walletRouter() {
     async function sendOTPForWalletActivation(req, res) {
         const routeName = 'send otp - wallet';
 
-        const email = staticDecrypt(req.user.email);
-        let code = Math.floor(100000 + Math.random() * 900000);
+        const user = req.user;
 
+        if (user.wallet) throw new BadRequestError('User already has wallet activated', routeName);
 
-        try {
-            await mongo.email.createWalletOTP(email, code.toString());
-        } catch (e) {
-            throw new DatabaseError(routeName, e);
-        }
+        const email = staticDecrypt(user.email);
 
-        try {
-            await otp.email.walletActivationOTP(email, code)
-
-        } catch (e) {
-            try {
-                await mongo.email.deleteOTP(otp);
-            } catch (e) {
-                logger.fatal(e);
-                logger.fatal("DOUBLE ERROR")
-            }
-            throw new ServiceError('Send Email OTP - RP', routeName, e);
-        }
+        await createAndSendEmail(TYPE_WALLET_ACTIVATION, email, routeName);
 
         return res.status(200).send({
             message: 'otp sent'
@@ -365,7 +370,7 @@ module.exports = function walletRouter() {
             throw new MissingParamError("Required parameters missing or bad params", routeName);
         }
 
-        var x = await verifyEmailOTP(otp, email, routeName);
+        await verifyEmailOTP(otp, email, routeName, TYPE_WALLET_ACTIVATION);
 
 
         var user = req.user;
@@ -404,7 +409,7 @@ module.exports = function walletRouter() {
             throw new MissingParamError("Required parameters missing or bad params", routeName);
         }
 
-        await verifyEmailOTP(otp.toString(), email, routeName);
+        await verifyEmailOTP(otp.toString(), email, routeName, TYPE_RESET_PIN);
 
 
         if (user.wallet) {
@@ -480,34 +485,12 @@ module.exports = function walletRouter() {
         const user = req.user;
         const email = staticDecrypt(user.email);
 
-        const code = Math.floor(100000 + Math.random() * 900000);
 
-
-        /**
-         * Create OTP in DB for setting payout details. 
-         */
-        try {
-            await mongo.email.createFundAccountOTP(email, code);
-        } catch (e) {
-            throw new DatabaseError(routeName, e);
-        }
-
-        /**
-         * Send email to the corresponding email (User)
-         */
-
-
-        try {
-            await otp.email.changePayoutAccountDetails(email, code);
-        } catch (e) {
-            throw new ServiceError('otp', routeName, e);
-        }
+        await createAndSendEmail(TYPE_WALLET_FUND_ACCOUNT, email, routeName);
 
         return res.status(200).send({
             message: 'otp sent'
         })
-
-
 
     }
 
@@ -527,14 +510,19 @@ module.exports = function walletRouter() {
             ifsc,
             accNo,
             upiId,
-            code
+            otp
         } = req.body;
 
         /**
          * Validation happening out here. 
          */
 
-        if (!user.wallet || !user.contactId || !code) {
+
+        if (type !== 'upi' && type !== 'bank') {
+            throw new BadRequestError('Type not right', routeName);
+        }
+
+        if (!user.wallet || !user.contactId || !otp) {
             throw new BadRequestError('Contact ID not created', routeName);
         }
 
@@ -558,7 +546,7 @@ module.exports = function walletRouter() {
          */
 
         try {
-            var res = await mongo.email.checkFundAccountOTP(email, code);
+            var res = await mongo.email.checkWalletOTP(email, otp, TYPE_WALLET_FUND_ACCOUNT)
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -567,6 +555,7 @@ module.exports = function walletRouter() {
             throw new NotAuthenticatedError('Code not correct', routeName);
         }
 
+        deleteAllOTPs(email, TYPE_WALLET_FUND_ACCOUNT);
 
         /**
          * Creating a fund account using Razorpay APIs.
@@ -604,9 +593,17 @@ module.exports = function walletRouter() {
         const routeName = 'send otp for withdraw';
         const user = req.user;
 
+        if (user.international) {
+            throw new BadRequestError('International users not allowed to payout', routeName);
+        }
 
+        const email = staticDecrypt(user.email);
 
+        await createAndSendEmail(TYPE_WALLET_WITHDRAW, email, routeName);
 
+        return res.status(200).send({
+            message: 'otp sent'
+        })
 
     }
 
@@ -614,14 +611,65 @@ module.exports = function walletRouter() {
 
         const routeName = 'withdraw earnings';
         const user = req.user;
+        const username = user.username;
+        const fundAccount = user.fundAccount;
+        const email = staticDecrypt(req.user.email);
+
+        const {
+            code,
+            amount
+        } = req.query;
 
         if (user.international) {
             throw new BadRequestError('International users not allowed to payout', routeName);
         }
 
+        /**
+         * Withdraw OTP check. 
+         */
         try {
-            await api.razorpay.createPayout();
+            var otpRes = mongo.email.checkWalletOTP(email, code, TYPE_WALLET_WITHDRAW);
         } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+
+        if (!otpRes) {
+            throw new NotAuthenticatedError('Bad OTP', routeName);
+        }
+
+        deleteAllOTPs(email, TYPE_WALLET_WITHDRAW);
+
+
+        /**
+         * Database query for Withdrawal of money
+         * Create entry for withdraw & deduct from earnings. 
+         * Get the reference ID from here. 
+         */
+
+        const payoutId = uuidv4();
+        try {
+            var payoutRes = await mongo.transactionUserPayout.payout(amount, username, payoutId);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+
+        if (!payoutRes) {
+            throw new BadRequestError('Sufficient Earnings not available', routeName);
+        }
+
+
+        try {
+            await api.razorpay.createPayout(amount, fundAccount, payoutId);
+        } catch (e) {
+
+            /**
+             * If we try to return the transaction here.
+             * There are two problems: 
+             * 1. If that error goes into errors - we anyway would have to check all the records. 
+             * 2.  
+             */
             throw new ServiceError('razorpay-payout', routeName, e);
         }
 
@@ -629,10 +677,56 @@ module.exports = function walletRouter() {
 
 
         return res.status(200).send({
-            'message': 'success'
+            message: 'success'
         });
 
 
     }
 
+}
+
+const createAndSendEmail = async (type, email, routeName) => {
+
+
+    let code = Math.floor(100000 + Math.random() * 900000);
+    code = code.toString();
+
+    try {
+        await mongo.email.createWalletOTP(email, code, type);
+    } catch (e) {
+        throw new DatabaseError(routeName, e);
+    }
+
+    try {
+
+        if (type === TYPE_WALLET_FUND_ACCOUNT) {
+            await otp.email.changePayoutAccountDetails(email, code);
+        } else if (type === TYPE_RESET_PIN) {
+            await otp.email.sendResetPinOTP(email, code);
+        } else if (type === TYPE_WALLET_ACTIVATION) {
+            await otp.email.walletActivationOTP(email, code)
+        } else if (type === TYPE_WALLET_WITHDRAW) {
+            await otp.email.withdraw(email, otp);
+        }
+
+    } catch (e) {
+
+        try {
+            await mongo.email.deleteOTP(code);
+        } catch (e) {
+            logger.fatal(e);
+        }
+
+        throw new ServiceError('Send Email OTP - RP', routeName, e);
+    }
+
+
+}
+
+const deleteAllOTPs = async (email, type) => {
+    try {
+        mongo.email.deleteAllWalletOTPsWithEmail(email, type);
+    } catch (e) {
+        logger.fatal('Some OTPs did not get deleted');
+    }
 }

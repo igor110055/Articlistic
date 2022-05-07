@@ -3,17 +3,17 @@ const DatabaseError = require('../../errors/DatabaseError');
 const MissingParamError = require('../../errors/MissingParamError');
 const NotAuthenticatedError = require('../../errors/NotAuthenticatedError');
 const logger = require('../logger');
-module.exports = async function verifyEmailOTP(otp, email, routeName) {
+module.exports = async function verifyEmailOTP(otp, email, routeName, type) {
     if (!otp || !email) {
 
         throw new MissingParamError('Please enter both email and code.', routeName)
 
     }
 
-    let mongoRes;
+
     try {
 
-        mongoRes = await mongo.email.checkWalletOTP(email, otp);
+        var mongoRes = await mongo.email.checkWalletOTP(email, otp, type);
 
     } catch (e) {
 
@@ -24,8 +24,7 @@ module.exports = async function verifyEmailOTP(otp, email, routeName) {
 
     if (mongoRes) {
         try {
-            var delRes = await mongo.email.deleteAllWalletOTPsWithEmail(email);
-            logger.debug(delRes);
+            await mongo.email.deleteAllWalletOTPsWithEmail(email, type)
         } catch (e) {
             logger.fatal("Could not delete OTP from verified for some duration.");
         }

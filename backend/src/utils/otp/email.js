@@ -11,6 +11,13 @@ async function sendVerificationOTP(email, otp) {
     await send(email, subject, body);
 }
 
+async function sendResetPinOTP(email, otp) {
+    const subject = 'Attentioun | Reset your wallet PIN';
+    const body = `Your Verification Code for Resetting wallet PIN is ${otp}.` + warning;
+
+    await send(email, subject, body);
+}
+
 async function walletActivationOTP(email, otp) {
     const subject = 'Attentioun | Wallet Activation Code';
     const body = `Your Wallet Activation code for Attentioun is ${otp}. Happy Funding!` + warning;
@@ -60,5 +67,6 @@ module.exports = {
     sendVerificationOTP,
     walletActivationOTP,
     changePayoutAccountDetails,
+    sendResetPinOTP,
     withdraw
 }

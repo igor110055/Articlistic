@@ -1,12 +1,12 @@
 var config = require('../../../../config');
 const {
-    MDB_COLLECTION_WALLET_OUT
+    MDB_COLLECTION_WALLET_PAYOUT
 } = require('../../../../constants');
 const logger = require('../../../utils/logger/index')
 const MDB = require('../client').MDB;
 
 const dbName = config.mongo.db;
-const collection = MDB_COLLECTION_WALLET_OUT;
+const collection = MDB_COLLECTION_WALLET_PAYOUT;
 
 async function payoutInitiated(orderId) {
 

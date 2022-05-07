@@ -24,3 +24,4 @@ module.exports.transactionPublicationWriter = require('./transactions/writer-pub
 module.exports.transactionWalletAddUser = require('./transactions/walletadd-user');
 module.exports.transactionWalletTip = require('./transactions/txns-user-writer');
 module.exports.transactionWalletEarnings = require('./transactions/txns-user-wallet-earnings');
+module.exports.transactionUserPayout = require('./transactions/userWallet-payouts');
