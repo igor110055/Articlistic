@@ -73,6 +73,7 @@ artifacts:
   files:
     - Frontend/build/**/*
     - Frontend/node_modules/**/*
+    - Frontend/RunFrontendScript.sh
     - backend/**/*
     - appspec.yml
   name: artifact-1.0.2
