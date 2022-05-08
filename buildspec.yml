@@ -74,7 +74,8 @@ artifacts:
     - Frontend/build/**/*
     - Frontend/node_modules/**/*
     - backend/**/*
-  name: artifact-1.0.1
+    - appspec.yml
+  name: artifact-1.0.2
   #-$(date +%Y-%m-%d)-$(date +%H:%M:%S:%N)
     #- node_modules/**/*
     # - location
