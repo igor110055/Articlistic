@@ -1,0 +1,165 @@
+.sign-in-container {
+  overflow-y: hidden;
+  width: 90%;
+  margin: 5rem auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-in-container .sign-in-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.sign-in-container .sign-in-section .attentioun-logo {
+  width: 4.9rem;
+}
+
+.sign-in-container .sign-in-section .sign-in-text {
+  font-family: "Poppins";
+  font-weight: 500;
+  font-size: 15px;
+  margin: 0.75rem 0 2px 0;
+}
+
+.sign-in-container .sign-in-section .attentioun-header {
+  font-family: "Poppins";
+  font-weight: 700;
+  font-size: 27px;
+  line-height: 32px;
+  /* identical to box height */
+  margin: 0;
+  color: #373946;
+}
+
+.sign-in-container .sign-in-buttons {
+  width: 100%;
+  margin-top: 2.1rem;
+
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+}
+
+.sign-in-container .sign-in-buttons .or-div {
+  font-family: "Poppins";
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 18px;
+  text-align: center;
+  /* identical to box height */
+  position: relative;
+
+  margin: 10px auto;
+  color: #b5b7c2;
+  display: flex;
+  width: 100%;
+}
+
+.sign-in-container .sign-in-buttons .or-div::after {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 1px;
+  background: #efefef;
+  margin-top: 10px;
+}
+.sign-in-container .sign-in-buttons .or-div::before {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 1px;
+  background: #efefef;
+  margin-top: 10px;
+}
+/* .sign-in-container .sign-in-buttons .email-sign-in {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+} */
+
+.sign-in-container .sign-in-buttons .email-sign-in .wrong-email {
+  box-sizing: border-box;
+  font-family: "Poppins";
+  width: 100%;
+  background-color: #ffc4bf;
+  color: #eb4335;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  border-radius: 10px;
+  padding-left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+.sign-in-container .sign-in-buttons .email-sign-in .wrong-email .error-svg {
+  width: 13px;
+  height: 13px;
+}
+
+.sign-in-container .sign-in-buttons .email-sign-in .wrong-email span {
+  margin-left: 8px;
+}
+.sign-in-container .sign-in-buttons .email-sign-in input {
+  box-sizing: border-box;
+  padding: 0;
+  font-family: "Poppins";
+  width: 100%;
+  border-radius: 10px;
+  margin-right: 10%;
+  height: 3rem;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 18px;
+  color: #777983;
+  border: 1px solid #c4c4c4;
+  margin-bottom: 16px;
+  outline: none;
+}
+
+.sign-in-container .sign-in-buttons .email-sign-in input:active {
+  border: 1px solid #c4c4c4;
+  outline: none;
+}
+
+.sign-in-container .sign-in-buttons .email-sign-in .forgot-password {
+  margin: 1.5rem auto;
+  width: 100%;
+  text-align: center;
+  font-family: "Poppins";
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #1395fd;
+}
+
+.sign-in-container .sign-up {
+  margin: 0;
+  font-family: "Poppins";
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #000000;
+}
+
+.sign-in-container .sign-up span {
+  font-weight: 700;
+  color: #1395fd;
+  cursor: pointer;
+}

@@ -1,0 +1,97 @@
+.verify-otp-container {
+  width: 90%;
+  margin: 0 auto;
+  padding-top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.verify-otp-container .verify-otp-header {
+  font-weight: 700;
+  font-size: 27px;
+  line-height: 32px;
+  color: #373946;
+}
+
+.verify-otp-container .verify-otp-subtitle {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  /* or 133% */
+
+  text-align: center;
+
+  color: #777983;
+}
+
+.verify-otp-container .pin-field {
+  width: 43px;
+  height: 43px;
+  color: black;
+  border: 1px solid #b5b7c2;
+  border-radius: 10px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  /* line-height: 34px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2.5px;
+  margin-right: 2.5px;
+  caret-color: transparent;
+
+  text-align: center;
+  transition-duration: 250ms;
+  transition-property: background, color, border, box-shadow, transform;
+  /* padding-left: 11px; */
+}
+
+.verify-otp-container .pin-field:focus-visible {
+  outline: none;
+  border: 1px solid #b5b7c2;
+}
+
+.verify-otp-container .pin-field:invalid {
+  animation: shake 3 linear 75ms;
+  border-color: rgb(220, 53, 69);
+  box-shadow: 0 0 0.25rem rgba(220, 53, 69, 0.5);
+}
+.pin-field:invalid {
+  animation: shake 3 linear 75ms;
+  border-color: rgb(220, 53, 69);
+  box-shadow: 0 0 0.25rem rgba(220, 53, 69, 0.5);
+}
+
+.pin-field[completed] .pin-field {
+  border-color: rgb(40, 167, 69);
+  background-color: rgba(40, 167, 69, 0.25);
+}
+
+@keyframes shake {
+  from {
+    transform: scale(1.05) translateY(-5%);
+  }
+  to {
+    transform: scale(1.05) translateY(5%);
+  }
+}
+
+.verify-otp-container button {
+  margin-top: 1rem;
+}
+
+.get-code-text {
+  margin-top: 8rem;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #1395fd;
+}

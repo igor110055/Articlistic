@@ -24,6 +24,7 @@
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.1.1",
     "@mui/styles": "^5.1.1",
+    "@soywod/pin-field": "^0.2.2",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/user-event": "^12.8.3",
     "amplify": "0.0.11",
@@ -51,6 +52,7 @@
     "react-material-ui-carousel": "^3.1.1",
     "react-materialui-tags": "^1.0.4",
     "react-phone-number-input": "^3.1.44",
+    "react-pin-field": "^2.0.0-beta.3",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
@@ -92,7 +94,10 @@
     "@testing-library/react": "^12.1.2",
     "@types/crypto-js": "^4.1.0",
     "@types/js-cookie": "^3.0.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest-dom": "^4.0.0",
+    "prettier": "^2.6.2",
     "react-test-renderer": "^17.0.2"
   }
 }

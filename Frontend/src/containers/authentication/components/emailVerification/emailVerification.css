@@ -1,0 +1,102 @@
+.sign-up-with-email-container {
+  width: 90%;
+  margin: 0 auto;
+  padding-top: 50%;
+}
+
+.sign-up-with-email-container .sign-up-with-email-header {
+  font-weight: 700;
+  font-size: 27px;
+  line-height: 32px;
+  /* identical to box height */
+
+  margin-bottom: 52px;
+  color: #373946;
+}
+
+.sign-up-with-email-container .email-input-div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.sign-up-with-email-container .email-input-div label {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  margin-bottom: 4px;
+  /* identical to box height */
+  color: #777983;
+}
+
+.sign-up-with-email-container .email-input-div input {
+  box-sizing: border-box;
+  padding: 0;
+  font-family: "Poppins";
+  width: 100%;
+  border-radius: 10px;
+  margin-right: 10%;
+  height: 2.5rem;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 18px;
+  color: #777983;
+  border: 1px solid #c4c4c4;
+  margin-bottom: 16px;
+  outline: none;
+}
+
+.sign-up-with-email-container .email-input-div input:active {
+  border: 1px solid #c4c4c4;
+  outline: none;
+}
+
+.sign-up-with-email-container .email-input-div .wrong-email {
+  box-sizing: border-box;
+  font-family: "Poppins";
+  width: 100%;
+  height: 2rem;
+  background-color: #ffc4bf;
+  color: #eb4335;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  border-radius: 10px;
+  padding-left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+
+.sign-up-with-email-container .email-input-div .wrong-email span {
+  margin-left: 8px;
+}
+
+.sign-up-with-email-container .other-options {
+  margin-top: 8rem;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sign-up-with-email-container .other-options .other-options-svg {
+  margin-right: 10px;
+}
+
+.sign-up-with-email-container .other-options .other-options-text {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #1395fd;
+}

@@ -19,6 +19,8 @@ import WriterPublicationEditor from "./containers/writerContent/writerPublicatio
 import AboutPublication from "./containers/writerContent/aboutPublication";
 import "./App.css";
 import MultipleTab from "./utils/MultipleTab";
+import SignUp from "./containers/authentication/signup";
+import SignIn from "./containers/authentication/signin";
 // import {
 //   getAuthToken,
 //   getRefreshToken
@@ -27,12 +29,12 @@ import MultipleTab from "./utils/MultipleTab";
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
   const [mulitpleTabs, setMultipleTabs] = useState(false);
-  const { variant, message, open } = useSelector(state => ({
+  const { variant, message, open } = useSelector((state) => ({
     // thisState: state,
     loginError: state.loginSignup.isLoggedIn,
     variant: state.common.snackbar.variant,
     message: state.common.snackbar.message,
-    open: state.common.snackbar.open
+    open: state.common.snackbar.open,
   }));
 
   const dispatch = useDispatch();
@@ -55,7 +57,7 @@ function App() {
   }, []);
 
   localStorage.openpages = Date.now();
-  var onLocalStorageEvent = function(e) {
+  var onLocalStorageEvent = function (e) {
     if (e.key === "openpages") {
       // Listen if anybody else is opening the same page!
       localStorage.page_available = Date.now();
@@ -96,6 +98,8 @@ function App() {
             />
             <Route exact path="/login" element={<LandingPage />} />
             <Route exact path="/signup" element={<OnBoarding />} />
+            <Route exact path="/signups" element={<SignUp />} />
+            <Route exact path="/signins" element={<SignIn />} />
             <Route
               exact
               path="/story"
