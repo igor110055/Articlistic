@@ -1,2 +1,2 @@
 #!/bin/bash
-fuser -k 3001/tcp || true
+fuser -k 3001/tcp || true   
