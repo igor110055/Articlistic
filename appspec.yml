@@ -8,15 +8,15 @@ file_exists_behavior: OVERWRITE
 hooks:
   ApplicationStop:
     - location: backend/BackendStopScript.sh
-      timeout: 300
+      timeout: 60
       runas: root
     - location: Frontend/FrontendStopScript.sh
-      timeout: 300
+      timeout: 60
       runas: root
   ApplicationStart:
     - location: backend/RunBackendScript.sh
-      timeout: 300
+      timeout: 60
       runas: root
     - location: Frontend/RunFrontendScript.sh
-      timeout: 300
+      timeout: 60
       runas: root
