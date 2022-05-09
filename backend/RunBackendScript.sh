@@ -1,3 +1,3 @@
 #!/bin/bash
-pwd
-nohup node backend/src/api/index.js &
+cd /home/ec2-user/deployment/backend/src/api
+nohup node index.js &
