@@ -1,2 +1,3 @@
 #!/bin/bash
-nohup node src/api/index.js &
+pwd
+nohup node backend/src/api/index.js &
