@@ -131,10 +131,10 @@ async function resetPIN(username, newPin) {
 }
 
 
-async function setFundAccount(username, fundAccount) {
+async function setFundAccount(username, faId, faDetails) {
 
-    if (!username || !fundAccount) {
-        throw "Fund account & username is required";
+    if (!username || !faId || !faDetails) {
+        throw "Fund account id & details & username is required";
     }
 
     try {
@@ -149,7 +149,8 @@ async function setFundAccount(username, fundAccount) {
             username: username
         }, {
             $set: {
-                'wallet.fundAccount': fundAccount
+                'wallet.faId': faId,
+                'wallet.faDetails': [faDetails]
             }
         });
 

@@ -36,7 +36,6 @@ async function tip(tipId, username, writer, articleId, selection, earning, attTa
 
     client = await MDB.getClient();
 
-    let writersCollection = client.db(dbName).collection(wc);
     let usersCollection = client.db(dbName).collection(uc);
     let internalTransactionsCollection = client.db(dbName).collection(itc);
 
@@ -55,7 +54,7 @@ async function tip(tipId, username, writer, articleId, selection, earning, attTa
     }
 
 
-    var res = await session.withTransaction(async () => {
+    await session.withTransaction(async () => {
 
 
         /**
@@ -64,7 +63,7 @@ async function tip(tipId, username, writer, articleId, selection, earning, attTa
          */
 
         try {
-            var x = await internalTransactionsCollection.insertOne(objToBeInsert, {
+            await internalTransactionsCollection.insertOne(objToBeInsert, {
                 session: session
             });
         } catch (e) {
@@ -93,6 +92,7 @@ async function tip(tipId, username, writer, articleId, selection, earning, attTa
             logger.error("tip-2");
             throw e;
         }
+
 
         /**
          * Deducting from user's wallet

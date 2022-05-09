@@ -34,7 +34,6 @@ async function getDollarValue() {
 
         logger.info("getDollarValue mongo response time: " + timeTaken.toString());
 
-        logger.debug(res.value);
         return res.value;
 
 

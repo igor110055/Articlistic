@@ -64,9 +64,9 @@ module.exports = function walletRouter() {
         .post('/tip/selection', auth(false, false, true), articleCheck(true), checkPin(), tipPassage)
 
         .post('/contact', auth(false, false, true), createContact)
-        .post('/earnings/fundAccount', auth(false, false, true), checkPin(), createFundAccount)
-        .post('/earning/fundAccount/otp', auth(false, false, true), sendOTPForSettingPayoutDetails)
-        .post('/earning/otp', auth(false, false, true), sendOTPForWithdraw)
+        .patch('/earnings/fa', auth(false, false, true), createFundAccount)
+        .post('/earnings/fa/otp', auth(false, false, true), sendOTPForSettingPayoutDetails)
+        .post('/earnings/otp', auth(false, false, true), sendOTPForWithdraw)
         .post('/earnings/withdraw', auth(false, false, true), checkPin(), withdrawEarnings)
         .post('/earnings/self', auth(false, false, true), checkPin(), transferToWallet);
 
@@ -89,7 +89,12 @@ module.exports = function walletRouter() {
         const routeName = 'transfer to wallet';
         var user = req.user;
         const username = user.username;
-        const amount = Number.parseFloat(req.query.amount);
+
+        const {
+            amount
+        } = req.body;
+
+        if (!amount || amount <= 0) throw new MissingParamError('Amount required', routeName);
 
 
         /**
@@ -97,12 +102,12 @@ module.exports = function walletRouter() {
          */
 
         try {
-            var res = await mongo.transactionWalletEarnings.convertEarningsToWalletCredits(amount, username);
+            var mres = await mongo.transactionWalletEarnings.convertEarningsToWalletCredits(amount, username);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
 
-        if (!res) {
+        if (!mres) {
             throw new BadRequestError('Not enough balance', routeName);
         }
 
@@ -129,6 +134,7 @@ module.exports = function walletRouter() {
             throw new MissingParamError('Required parameters missing', routeName);
         }
 
+
         if (writer === user.username) {
             throw new BadRequestError('Can not tip yourself', routeName);
         }
@@ -151,6 +157,11 @@ module.exports = function walletRouter() {
             credits = amount;
         }
 
+
+        if (credits < 30) {
+            throw new BadRequestError('Minimum amount to tip is 30', routeName);
+        }
+
         /**
          * Compute Taxes, currently we have: 
          * 1. Attentioun Tax - 10%
@@ -160,7 +171,6 @@ module.exports = function walletRouter() {
         const attTax = attentiounTaxRate * credits;
 
         const earnings = credits - attTax;
-
 
         /**
          * MongoDB query which does the following: 
@@ -172,9 +182,8 @@ module.exports = function walletRouter() {
          */
 
         const tipId = uuidv4();
-        var tipRes;
         try {
-            tipRes = await mongo.transactionWalletTip.tip(tipId, user.username, writer, article.articleId, selection, earnings, attTax, 0, credits, message)
+            var tipRes = await mongo.transactionWalletTip.tip(tipId, user.username, writer, article.articleId, selection, earnings, attTax, 0, credits, message)
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -349,7 +358,6 @@ module.exports = function walletRouter() {
 
     async function activateWallet(req, res) {
         const routeName = 'activate wallet';
-        const email = staticDecrypt(req.user.email);
 
         /**
          * Algorithm: 
@@ -360,30 +368,35 @@ module.exports = function walletRouter() {
          * 
          */
 
+        var user = req.user;
+
         var {
             pin,
             otp
         } = req.body;
 
-        pin = pin.toString();
-        if (!pin || !otp || !email || pin.length != 6) {
+        const email = staticDecrypt(user.email);
+        const username = user.username;
+
+
+        if (!pin || !otp || pin.length != 6) {
             throw new MissingParamError("Required parameters missing or bad params", routeName);
         }
 
-        await verifyEmailOTP(otp, email, routeName, TYPE_WALLET_ACTIVATION);
-
-
-        var user = req.user;
-
-
-        if (user.wallet && user.wallet.status == 'activated') {
+        if (user.wallet) {
             throw new BadRequestError('Wallet already activated', routeName);
         }
+
+
+
+        pin = pin.toString();
+
+        await verifyEmailOTP(otp, email, routeName, TYPE_WALLET_ACTIVATION);
 
         pin = await Pin.hash(pin);
 
         try {
-            await mongo.users.activateWallet(user.username, pin);
+            await mongo.users.activateWallet(username, pin);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -405,6 +418,7 @@ module.exports = function walletRouter() {
             otp
         } = req.body;
 
+        newPin = newPin.toString();
         if (!newPin || !otp || newPin.length != 6) {
             throw new MissingParamError("Required parameters missing or bad params", routeName);
         }
@@ -439,6 +453,7 @@ module.exports = function walletRouter() {
         var message;
         const name = user.name;
         const email = staticDecrypt(user.email);
+        const username = user.username;
 
         if (!user.wallet) {
             throw new BadRequestError('wallet not activated', routeName);
@@ -454,16 +469,17 @@ module.exports = function walletRouter() {
         } else {
 
             try {
-                contactId = await api.razorpay.createContact(name, email, user.username);
+                contactId = (await api.razorpay.createContact(name, email, username)).id;
             } catch (e) {
                 throw new ServiceError('razorpay contact id', routeName, e);
             }
 
-
+            if (!contactId) {
+                throw new ServiceError('razorpay contact id', routeName, "Contact ID not generated ");
+            }
             /**
              * Database query for setting contactId. 
              */
-
             try {
                 await mongo.users.setContactId(username, contactId);
             } catch (e) {
@@ -522,7 +538,7 @@ module.exports = function walletRouter() {
             throw new BadRequestError('Type not right', routeName);
         }
 
-        if (!user.wallet || !user.contactId || !otp) {
+        if (!user.wallet || !user.wallet.contactId || !otp) {
             throw new BadRequestError('Contact ID not created', routeName);
         }
 
@@ -537,6 +553,7 @@ module.exports = function walletRouter() {
             }
         }
 
+        logger.debug(user.wallet);
         const contactId = user.wallet.contactId;
 
 
@@ -546,12 +563,12 @@ module.exports = function walletRouter() {
          */
 
         try {
-            var res = await mongo.email.checkWalletOTP(email, otp, TYPE_WALLET_FUND_ACCOUNT)
+            var mres = await mongo.email.checkWalletOTP(email, otp.toString(), TYPE_WALLET_FUND_ACCOUNT)
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
 
-        if (!res) {
+        if (!mres) {
             throw new NotAuthenticatedError('Code not correct', routeName);
         }
 
@@ -560,26 +577,47 @@ module.exports = function walletRouter() {
         /**
          * Creating a fund account using Razorpay APIs.
          */
-        var fundAccount;
+        var fundAccount, faId;
         try {
+
+
+            /**
+             * Fund account id for UPI comes from this response.fund_account_id 
+             * while for bank account it comes from response.id 
+             */
+
             if (type === "upi") {
-                fundAccount = await api.razorpay.createUPIFundAccount(upiId, user.wallet.contactId);
+                fundAccount = await api.razorpay.createUPIFundAccount(upiId, contactId);
+
+
+                faId = fundAccount.fund_account_id;
+
             } else {
                 fundAccount = await api.razorpay.createBankFundAccount(name, ifsc, contactId, accNo);
+                faId = fundAccount.id;
             }
+
 
         } catch (e) {
             throw new ServiceError('api-rp-create-fund-acc', routeName, e);
         }
 
+        logger.debug(fundAccount);
 
         /**
          * Add this information to mongoDB
          */
 
 
+        /**
+         * There will be only one faId -
+         *  which will be the primary id & multiple fund accounts in the database. 
+         * This single faId will be where the money will be credited. 
+         */
+
+
         try {
-            await mongo.users.setFundAccount(user.username, fundAccount);
+            await mongo.users.setFundAccount(user.username, faId, fundAccount);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -622,6 +660,10 @@ module.exports = function walletRouter() {
 
         if (user.international) {
             throw new BadRequestError('International users not allowed to payout', routeName);
+        }
+
+        if (amount < 500) {
+            throw new BadRequestError('Amount required should be >500');
         }
 
         /**
@@ -674,6 +716,7 @@ module.exports = function walletRouter() {
         }
 
         //Database Query. 
+        //
 
 
         return res.status(200).send({
@@ -684,6 +727,13 @@ module.exports = function walletRouter() {
     }
 
 }
+
+/**
+ * It creates a random 6 digit number, saves it to the database, and then sends it to the user's email.
+ * @param type - TYPE_WALLET_FUND_ACCOUNT
+ * @param email - email address
+ * @param routeName - The name of the route that is calling this function
+ */
 
 const createAndSendEmail = async (type, email, routeName) => {
 
