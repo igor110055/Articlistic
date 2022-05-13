@@ -48,11 +48,13 @@ const dev = {
         clientId: process.env.GOOGLE_CLIENT_ID
     },
     dollar: {
-        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE
+        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE,
+        avApiKey: process.env.ALPHAVANTAGE_API_KEY
     },
     ip: {
         apiKey: process.env.IP_API_KEY
-    }
+    },
+
 
 }
 
@@ -102,7 +104,8 @@ const local = {
         clientId: process.env.GOOGLE_CLIENT_ID
     },
     dollar: {
-        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE
+        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE,
+        avApiKey: process.env.ALPHAVANTAGE_API_KEY
     },
     ip: {
         apiKey: process.env.IP_API_KEY
@@ -155,7 +158,8 @@ const prod = {
         clientId: process.env.GOOGLE_CLIENT_ID
     },
     dollar: {
-        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE
+        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE,
+        avApiKey: process.env.ALPHAVANTAGE_API_KEY
     },
     ip: {
         apiKey: process.env.IP_API_KEY
@@ -207,7 +211,8 @@ const test = {
         clientId: process.env.GOOGLE_CLIENT_ID
     },
     dollar: {
-        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE
+        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE,
+        avApiKey: process.env.ALPHAVANTAGE_API_KEY
     },
     ip: {
         apiKey: process.env.IP_API_KEY

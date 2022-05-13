@@ -8,8 +8,7 @@ const {
 } = require('../utils/api');
 const ServiceError = require('../errors/ServiceError');
 
-async function insertDollarValue() {
-    let now = Date.now();
+module.exports = async function insertDollarValue() {
 
     /**
      * Call API for getting current dollar value. 
@@ -18,7 +17,7 @@ async function insertDollarValue() {
     logger.info("Insert dollar value cronjob is working");
 
     try {
-        var value = await getDollarValue.getDollarValue();
+        var dollarApiResponse = await getDollarValue.getDollarValue();
     } catch (e) {
         Sentry.captureException("Could not fetch dollar value");
     }
@@ -27,13 +26,16 @@ async function insertDollarValue() {
      * Insert the value into database. 
      */
 
+    const dollarValue = Number.parseFloat(dollarApiResponse.dollarValue);
+    const date = dollarApiResponse.date;
+
     try {
-        await mongo.dollarValue.insertDollarValue(value);
+        await mongo.dollarValue.insertDollarValue(dollarValue, date);
     } catch (e) {
         Sentry.captureException("Database error in dollar value");
     }
 
-    logger.info('Dollar value is updated to: ' + value);
+    logger.info('Dollar value is updated to: ' + dollarValue);
 
 
 }
