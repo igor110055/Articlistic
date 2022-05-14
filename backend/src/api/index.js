@@ -12,6 +12,7 @@ const {
 
 
 let env = config.environment;
+console.log(env);
 let port = config.hosting.port || 3000;
 let host = config.hosting.host || '0.0.0.0';
 
