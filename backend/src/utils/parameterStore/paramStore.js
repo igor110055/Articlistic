@@ -41,9 +41,7 @@ async function setConfig(result) {
     try {
         // logger.info("====>>>>", result);
         config_var = {
-            environment: {
-                type: process.env["NODE_ENV"],
-            },
+            environment: "Development",
             hosting: {
                 host: result["DEV_host"],
                 port: parseInt[result["DEV_po"]] || 3000
