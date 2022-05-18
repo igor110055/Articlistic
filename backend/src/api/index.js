@@ -24,7 +24,7 @@ async function x() {
     } = require('../db/redis/client');
 
 
-    let env = config.environment.type;
+    let env = config.environment;
     let port = config.hosting.port || 3000;
     let host = config.hosting.host || '0.0.0.0';
 
