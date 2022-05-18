@@ -5,8 +5,8 @@ var result = {};
 // var test1 = { "name": "hamdi" }
 var ssmClient;
 
-var credentials = new AWS.SharedIniFileCredentials({ profile: 'default' });
-AWS.config.credentials = credentials;
+// var credentials = new AWS.SharedIniFileCredentials({ profile: 'default' });
+// AWS.config.credentials = credentials;
 
 
 
