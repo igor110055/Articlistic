@@ -25,7 +25,7 @@ env:
 phases:
   install:
     runtime-versions:
-      nodejs: 14
+      nodejs: 12
     commands:
       - n 17
   #install:
