@@ -6,7 +6,6 @@ const email = 'test1@gmail.com';
 const username = 'test-user';
 const international = false;
 const name = 'sam';
-const phone = '9315859952'
 const password = 'Default@123'
 let id;
 

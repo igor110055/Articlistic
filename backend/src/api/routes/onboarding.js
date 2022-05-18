@@ -247,7 +247,7 @@ module.exports = function onboardingRouter() {
         }
 
 
-        if (!user) {
+        if (!user || user.googleUser) {
             throw new NotAuthenticatedError('Wrong password!', routeName);
         }
 
@@ -378,7 +378,7 @@ module.exports = function onboardingRouter() {
          * This won't be there while creating a user using google user.
          */
 
-        if (googleUser) {
+        if (!googleUser) {
 
             var privateField = {
                 email,
@@ -403,7 +403,7 @@ module.exports = function onboardingRouter() {
         user.name = name;
 
 
-        if (googleUser) {
+        if (!googleUser) {
             user.private = encryptedPrivateField;
         }
 
@@ -434,6 +434,7 @@ module.exports = function onboardingRouter() {
         let accessToken = encryption.jwt.sign(user.username);
         let rt = encryption.encryptForFrontend(refreshToken);
 
+    
 
         delete user.private;
         delete user.email;
@@ -549,7 +550,7 @@ module.exports = function onboardingRouter() {
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
-        const id = mon.insertedId;
+        const id = mon;
         logger.debug(id);
 
         return res.status(200).send({

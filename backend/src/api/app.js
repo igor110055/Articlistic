@@ -1,5 +1,7 @@
 'use strict';
 
+const config = require('../../config');
+
 var express = require('express');
 require('express-async-errors');
 var bodyParser = require('body-parser');
@@ -15,7 +17,6 @@ var publicationRouter = require('./routes/publication');
 var walletRouter = require('./routes/wallet');
 
 var errorHandlingMiddleware = require('../middleware/errors');
-const config = require('../../config');
 
 let app = express();
 

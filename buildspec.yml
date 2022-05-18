@@ -7,7 +7,7 @@ env:
      NODE_OPTIONS: "--openssl-legacy-provider"
      # key: "value"
      # key: "value"
-  #parameter-store:
+  parameter-store:
      # key: "value"
      # key: "value"
   #secrets-manager:
