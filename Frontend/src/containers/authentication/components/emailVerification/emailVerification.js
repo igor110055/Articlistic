@@ -56,7 +56,7 @@ function EmailVerification({ setDisplayPage }) {
             )}
             <Button text="Continue" blue callback={handleContinue} />
           </div>
-          <div className="other-options">
+          <div className="other-options" onClick = {() => setDisplayPage("")}  >
             <OtherOptions className="other-options-svg" />
             <p className="other-options-text">Other sign up options</p>
           </div>
