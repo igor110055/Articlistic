@@ -39,6 +39,7 @@ phases:
       # - command
   pre_build:
     commands:
+      - aws codeartifact login --tool npm --repository attentioun-web-app --domain attentioun --domain-owner 605567701750
       - cd Frontend/
       - ls
       - node --version
