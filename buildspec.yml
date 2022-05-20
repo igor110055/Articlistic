@@ -7,7 +7,7 @@ env:
      NODE_OPTIONS: "--openssl-legacy-provider"
      # key: "value"
      # key: "value"
-  parameter-store:
+  #parameter-store:
      # key: "value"
      # key: "value"
   #secrets-manager:
@@ -25,7 +25,7 @@ env:
 phases:
   install:
     runtime-versions:
-      nodejs: 14
+      nodejs: 12
     commands:
       - n 17
   #install:
@@ -39,6 +39,7 @@ phases:
       # - command
   pre_build:
     commands:
+      - aws codeartifact login --tool npm --repository attentioun-web-app --domain attentioun --domain-owner 605567701750
       - cd Frontend/
       - ls
       - node --version
