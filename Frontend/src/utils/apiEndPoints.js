@@ -1,4 +1,25 @@
-export const baseURL = process.env.REACT_APP_SERVER_LINK;
+import config from "../config";
+
+// console.log("Api end points", config);
+// let baseURL = config["REACT_APP_SERVER_LINK"],
+//   encryptionSalt = config["REACT_APP_ENCRYPTION_SALT"];
+
+let baseURL;
+setTimeout(() => {
+  baseURL = config["REACT_APP_SERVER_LINK"];
+  // console.log(baseURL);
+}, 2000);
+export { baseURL };
+
+let encryptionSalt;
+setTimeout(() => {
+  encryptionSalt = config["REACT_APP_ENCRYPTION_SALT"];
+  // console.log(encryptionSalt);
+}, 2000);
+export { encryptionSalt };
+
+// export { config, baseURL, encryptionSalt };
+
 export const endPoints = {
   categoriesAndWriters: "onboarding/getCategoriesAndWriters",
   status: "onboarding/getStatus",
