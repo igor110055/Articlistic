@@ -13,8 +13,9 @@ module.exports.followers = require('./models/follower');
 module.exports.bookmarks = require('./models/bookmarks');
 module.exports.walletAdd = require('./models/wallet-add');
 module.exports.dollarValue = require('./models/dollar-value');
-module.exports.bookmarks = require('./models/bookmarks')
+module.exports.bookmarks = require('./models/bookmarks');
 module.exports.security = require('./models/security');
+module.exports.payouts = require('./models/wallet-out');
 
 module.exports.transactionsUserAnalytics = require('./transactions/user-analytics');
 module.exports.transactionArticleChat = require('./transactions/article-chat');

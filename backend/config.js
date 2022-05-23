@@ -85,7 +85,8 @@ const local = {
         s3BucketProfile: process.env.AWS_S3_BUCKET_PROFILE,
         region: process.env.AWS_REGION,
         urlForArticles: process.env.URL_FOR_ARTICLES,
-        urlForProfile: process.env.URL_FOR_PROFILE
+        urlForProfile: process.env.URL_FOR_PROFILE,
+        s3BucketErrors: process.env.AWS_S3_BUCKET_ERRORS
     },
     redis: {
         uri: process.env.REDIS_URI
