@@ -288,7 +288,7 @@ module.exports = function onboardingRouter() {
     async function checkUsername(req, res) {
 
 
-        let routeName = "POST /onboarding/checkUsername";
+        let routeName = "GET /onboarding/checkUsername";
 
         let username = req.query.username;
 
@@ -434,7 +434,7 @@ module.exports = function onboardingRouter() {
         let accessToken = encryption.jwt.sign(user.username);
         let rt = encryption.encryptForFrontend(refreshToken);
 
-    
+
 
         delete user.private;
         delete user.email;

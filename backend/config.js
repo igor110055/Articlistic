@@ -224,14 +224,14 @@ const test = {
 }
 
 
-// config = {
-//     dev,
-//     prod,
-//     local,
-//     test
-// }
+config = {
+    dev,
+    prod,
+    local,
+    test
+}
 
-// module.exports = config[env];
+module.exports = config[env];
 
-module.export = devEnvVariables;
+//module.export = devEnvVariables;
 //module.exports = { getData }
