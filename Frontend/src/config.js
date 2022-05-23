@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
 require("dotenv").config();
+var ssmClient;
 
 let config = {};
 const getFromParamStore = async (envArrayElem) => {
