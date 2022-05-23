@@ -1,3 +1,4 @@
+import { getEnvVariables } from "./config";
 import LandingPage from "./containers/loginSignup/landingPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import TempNavbar from "./containers/navbar/tempNavbar";
@@ -19,6 +20,8 @@ import WriterPublicationEditor from "./containers/writerContent/writerPublicatio
 import AboutPublication from "./containers/writerContent/aboutPublication";
 import "./App.css";
 import MultipleTab from "./utils/MultipleTab";
+import MainLoader from "./components/mainLoader";
+
 // import {
 //   getAuthToken,
 //   getRefreshToken
@@ -27,6 +30,7 @@ import MultipleTab from "./utils/MultipleTab";
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
   const [mulitpleTabs, setMultipleTabs] = useState(false);
+  const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
   const { variant, message, open } = useSelector(state => ({
     // thisState: state,
     loginError: state.loginSignup.isLoggedIn,
@@ -38,7 +42,11 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log(getRefreshToken());
+    getEnvVariables(
+      ["REACT_APP_ENCRYPTION_SALT", "REACT_APP_SERVER_LINK"],
+      setEnvVariablesSuccess
+    );
+
     window.addEventListener("online", updateOnlineStatus);
     window.addEventListener("offline", updateOnlineStatus);
 
@@ -69,12 +77,14 @@ function App() {
 
   return (
     //for writers
-    <div className="App">
-      {!mulitpleTabs && (
-        <Router>
-          {/* <Auth> */}
-          <Routes>
-            {/* <Route
+    <div>
+      {getEnvVariablesSuccess ? (
+        <div className="App">
+          {!mulitpleTabs && (
+            <Router>
+              {/* <Auth> */}
+              <Routes>
+                {/* <Route
             exact
             path="/"
             element={
@@ -84,69 +94,77 @@ function App() {
               </PrivateRoute>
             }
           /> */}
-            <Route
-              exact
-              path="/writerDashboard/*"
-              element={
-                <PrivateRoute>
-                  {/* <Home /> */}
-                  <WriterContentContainer />
-                </PrivateRoute>
-              }
-            />
-            <Route exact path="/login" element={<LandingPage />} />
-            <Route exact path="/signup" element={<OnBoarding />} />
-            <Route
-              exact
-              path="/story"
-              element={
-                <PrivateRoute>
-                  <WriterEditor />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              exact
-              path="/publication/:username/:publicationName"
-              element={
-                <PrivateRoute>
-                  <AboutPublication />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              exact
-              path="/publication/edit"
-              element={
-                <PrivateRoute>
-                  <WriterPublicationEditor />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              exact
-              path="/writersettings"
-              element={
-                <PrivateRoute>
-                  <WriterSetting />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <NotFound />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-          {/* </Auth> */}
-        </Router>
+                <Route
+                  exact
+                  path="/writerDashboard/*"
+                  element={
+                    <PrivateRoute>
+                      {/* <Home /> */}
+                      <WriterContentContainer />
+                    </PrivateRoute>
+                  }
+                />
+                <Route exact path="/login" element={<LandingPage />} />
+                <Route exact path="/signup" element={<OnBoarding />} />
+                <Route
+                  exact
+                  path="/story"
+                  element={
+                    <PrivateRoute>
+                      <WriterEditor />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
+                  path="/publication/:username/:publicationName"
+                  element={
+                    <PrivateRoute>
+                      <AboutPublication />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
+                  path="/publication/edit"
+                  element={
+                    <PrivateRoute>
+                      <WriterPublicationEditor />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
+                  path="/writersettings"
+                  element={
+                    <PrivateRoute>
+                      <WriterSetting />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/"
+                  element={
+                    <PrivateRoute>
+                      <NotFound />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+              {/* </Auth> */}
+            </Router>
+          )}
+          {mulitpleTabs && <MultipleTab />}
+          <CustomizedSnackbars
+            variant={variant}
+            message={message}
+            openS={open}
+          />
+          {/* <Navbar /> */}
+        </div>
+      ) : (
+        <MainLoader />
       )}
-      {mulitpleTabs && <MultipleTab />}
-      <CustomizedSnackbars variant={variant} message={message} openS={open} />
-      {/* <Navbar /> */}
     </div>
   );
 }

@@ -14,5 +14,4 @@ export NODE_ENV=$(echo $DATA | jq '.Tags[0].Value')
 
 cd /home/ec2-user/deployment/backend/src/api
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
-node index.js > /home/ec2-user/deployment-$current_time.out 2>/home/ec2-user/deployment-$current_time.err &
-
+node index.js > /home/ec2-user/deploymentlogs/deployment-$current_time.out 2>/home/ec2-user/deploymentlogs/deployment-$current_time.err &
