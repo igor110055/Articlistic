@@ -46,6 +46,7 @@ phases:
       - npm install --legacy-peer-deps
       - cd ../backend/
       - npm install
+      - npm install aws-sdk
       # - command
       # - command
   build:
