@@ -7,15 +7,15 @@ import config from "../config";
 let baseURL;
 setTimeout(() => {
   baseURL = config["REACT_APP_SERVER_LINK"];
-  // console.log(baseURL);
-}, 2000);
+  console.log(baseURL);
+}, 3000);
 export { baseURL };
 
 let encryptionSalt;
 setTimeout(() => {
   encryptionSalt = config["REACT_APP_ENCRYPTION_SALT"];
   // console.log(encryptionSalt);
-}, 2000);
+}, 3000);
 export { encryptionSalt };
 
 // export { config, baseURL, encryptionSalt };
