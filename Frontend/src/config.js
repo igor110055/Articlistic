@@ -5,20 +5,20 @@ var ssmClient;
 let config = {};
 
 const getFromParamStore = async (envArrayElem) => {
-  if (!ssmClient)
-    ssmClient = new AWS.SSM({
-      region: "ap-south-1",
-      apiVersion: "latest"
-      
-    });
-  // if (!ssmClient) {
-  //   ssmClient = new AWS.SSM({
-  //     region: "ap-south-1",
-  //     apiVersion: "latest",
-  //     accessKeyId: "AKIAYZ7VF2L3EXEKVYER",
-  //     secretAccessKey: "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"
-  //   });
-  // }
+  //if (!ssmClient)
+  //ssmClient = new AWS.SSM({
+  //  region: "ap-south-1",
+  //  apiVersion: "latest"
+  //  
+  //});
+   if (!ssmClient) {
+     ssmClient = new AWS.SSM({
+       region: "ap-south-1",
+       apiVersion: "latest",
+       accessKeyId: "AKIAYZ7VF2L3EXEKVYER",
+       secretAccessKey: "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"
+     });
+   }
   try {
     let decryptedParameter = await ssmClient
       .getParameter({
@@ -46,8 +46,6 @@ export function getEnvVariables(envs, setEnvVariablesSuccess) {
   // AWS.config.credentials = credentials;
 
   // let ssmClient;
-  
-  AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
 
   envs.forEach(async env => {
     config[env] = await getFromParamStore(env);
