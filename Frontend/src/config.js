@@ -3,12 +3,12 @@ require("dotenv").config();
 var ssmClient;
 
 let config = {};
+
 const getFromParamStore = async (envArrayElem) => {
   if (!ssmClient)
     ssmClient = new AWS.SSM({
       region: "ap-south-1",
       apiVersion: "latest"
-      
     });
   // if (!ssmClient) {
   //   ssmClient = new AWS.SSM({
@@ -38,17 +38,15 @@ export function getEnvVariables(envs, setEnvVariablesSuccess) {
 // 
 //   });
 
-  let credentials = new AWS.CognitoIdentityCredentials({
-    profile: "default",
-    IdentityPoolId: "ap-south-1",
-    
-    
-  });
-  AWS.config.credentials = credentials;
+  // let credentials = new AWS.CognitoIdentityCredentials({
+  //   profile: "default",
+  //   IdentityPoolId: "ap-south-1",
+  // });
+  // AWS.config.credentials = credentials;
 
-  let ssmClient;
+  // let ssmClient;
   envs.forEach(async env => {
-    config[env] = await getFromParamStore(env, ssmClient);
+    config[env] = await getFromParamStore(env);
   });
   // console.log(config);
   setTimeout(() => {
