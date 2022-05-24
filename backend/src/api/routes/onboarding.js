@@ -189,9 +189,6 @@ module.exports = function onboardingRouter() {
 
     }
 
-
-
-
     /**
      * Given an entity (email, username) and a password, it will return the corresponding user object
      * @param req - The request object.
@@ -493,9 +490,8 @@ module.exports = function onboardingRouter() {
         try {
 
             await otp.email.sendVerificationOTP(email, code);
-        } catch (e) {
-
-
+        }
+        catch (e) {
             try {
                 await mongo.email.deleteOTP(code);
             } catch (e) {
