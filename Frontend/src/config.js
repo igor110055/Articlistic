@@ -9,6 +9,7 @@ const getFromParamStore = async (envArrayElem) => {
     ssmClient = new AWS.SSM({
       region: "ap-south-1",
       apiVersion: "latest"
+      
     });
   // if (!ssmClient) {
   //   ssmClient = new AWS.SSM({
