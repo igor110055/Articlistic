@@ -4,6 +4,9 @@ var ssmClient;
 
 let config = {};
 
+var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
+AWS.config.credentials = credentials;
+
 const getFromParamStore = async (envArrayElem) => {
   if (!ssmClient)
     ssmClient = new AWS.SSM({
