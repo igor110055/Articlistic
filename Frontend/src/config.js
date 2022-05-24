@@ -47,8 +47,7 @@ export function getEnvVariables(envs, setEnvVariablesSuccess) {
 
   // let ssmClient;
   
-  let credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
-  AWS.config.credentials = credentials;
+  AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
 
   envs.forEach(async env => {
     config[env] = await getFromParamStore(env);
