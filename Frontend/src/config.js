@@ -4,9 +4,6 @@ var ssmClient;
 
 let config = {};
 
-var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
-AWS.config.credentials = credentials;
-
 const getFromParamStore = async (envArrayElem) => {
   if (!ssmClient)
     ssmClient = new AWS.SSM({
@@ -36,11 +33,11 @@ const getFromParamStore = async (envArrayElem) => {
 };
 
 export function getEnvVariables(envs, setEnvVariablesSuccess) {
-//   let credentials = new AWS.CognitoIdentityCredentials({
-//     profile: "default",
-//     IdentityPoolId: "ap-south-1",
-// 
-//   });
+  //   let credentials = new AWS.CognitoIdentityCredentials({
+  //     profile: "default",
+  //     IdentityPoolId: "ap-south-1",
+  // 
+  //   });
 
   // let credentials = new AWS.CognitoIdentityCredentials({
   //   profile: "default",
@@ -49,6 +46,10 @@ export function getEnvVariables(envs, setEnvVariablesSuccess) {
   // AWS.config.credentials = credentials;
 
   // let ssmClient;
+  
+  var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
+  AWS.config.credentials = credentials;
+
   envs.forEach(async env => {
     config[env] = await getFromParamStore(env);
   });
