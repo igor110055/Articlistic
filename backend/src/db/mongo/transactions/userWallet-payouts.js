@@ -122,7 +122,6 @@ async function payout(amount, username, payoutId) {
 
 
 async function reversePayout(amount, username, payoutId) {
-    var suffBalance = true;
 
 
 
@@ -206,7 +205,7 @@ async function reversePayout(amount, username, payoutId) {
 
     logger.info("reverse payout - mongo response time: " + timeTaken.toString());
 
-    return suffBalance;
+    return;
 
 }
 

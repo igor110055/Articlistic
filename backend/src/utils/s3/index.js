@@ -39,6 +39,7 @@ function __init() {
             },
             signatureVersion: 'v4'
         });
+
     }
 
     return {
@@ -53,8 +54,14 @@ function __init() {
         fullDeleteArticle: fullDeleteArticle,
         withdrawTransactionReverseFailure,
         withdrawMarkAsSuccessFailure,
-        deleteMultipleFiles
+        deleteMultipleFilesFromErrorData
+
     }
+}
+
+
+async function deleteMultipleFilesFromErrorData(files = []) {
+    await deleteMultipleFiles(files, errorBucket);
 }
 
 async function withdrawTransactionReverseFailure(username, transactionId, amount) {
@@ -73,6 +80,7 @@ async function withdrawMarkAsSuccessFailure(username, transactionId) {
     await uploadFileFromStream(fileContent, fileName, errorBucket);
 
 }
+
 
 
 async function uploadPublicationArticle(buffer, username, publicationId) {
