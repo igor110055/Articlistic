@@ -1,12 +1,13 @@
 .pick-writers-container {
   box-sizing: border-box;
-  width: 90%;
+  width: 93%;
   margin: 0 auto;
   padding-top: 3.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-bottom: 15px;
 }
 
 .pick-writers-container .pick-writers-header {
@@ -21,6 +22,13 @@
   color: #373946;
 }
 
+.pick-writers-container .pick-writers-separator {
+  height: 1px;
+  width: 100%;
+  background-color: #ececec;
+  margin-top: -5px;
+  margin-bottom: 29px;
+}
 .pick-writers-container .tags-container {
   width: 100%;
   overflow-x: scroll;
@@ -55,7 +63,8 @@
   margin-top: 1rem;
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  /* flex-direction: column; */
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -63,7 +72,8 @@
 .writer-card-container {
   width: 100%;
   display: flex;
-
+  min-width: 312px;
+  max-width: 380px;
   align-items: center;
   gap: 1rem;
   background: #ffffff;
@@ -72,6 +82,8 @@
 }
 
 .writer-card-container .writer-card-writer-img {
+  height: 100%;
+  object-fit: cover;
 }
 
 .writer-card-container .writer-details .writer-name {
@@ -107,4 +119,57 @@
   letter-spacing: -0.0802083px;
 
   color: #373946;
+}
+
+.pick-writers-container .Mobile-button {
+  width: 100%;
+}
+.pick-writers-container .Desktop-buttons {
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .writer-card-container {
+    max-height: 105px;
+  }
+  .pick-writers-container .pick-writers-separator {
+    display: none;
+  }
+  .pick-writers-container .Desktop-buttons {
+    display: none;
+  }
+}
+@media (min-width: 480px) {
+  .pick-writers-container {
+    align-items: flex-start;
+
+    background: #ffffff;
+    box-shadow: 0px 0px 70px -35px rgba(27, 115, 232, 0.43);
+    border-radius: 32px;
+
+    margin-top: 5rem;
+
+    padding: 42px 60px;
+  }
+  .pick-writers-container .pick-writers-header {
+    text-align: left;
+  }
+
+  .pick-writers-container .tags-container {
+    display: none;
+  }
+  .pick-writers-container .Desktop-buttons .tags-container {
+    display: flex;
+    width: 60%;
+  }
+
+  .pick-writers-container .Desktop-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pick-writers-container .Mobile-button {
+    display: none;
+  }
 }

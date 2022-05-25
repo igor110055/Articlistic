@@ -5,6 +5,8 @@ import Button from "./components/primary-button/button";
 import { ReactComponent as ErrorSvg } from "../../Images/VectorErrorAlert.svg";
 import ForgotPassword from "./components/forgot-password/forgot-password";
 import { validateEmail } from "../../utils/common";
+
+import Input from "./components/primary-input/input";
 import "./signin.css";
 function SignIn() {
   const [validEmail, setValidEmail] = useState(true);
@@ -50,12 +52,18 @@ function SignIn() {
                   </span>
                 </p>
               )}
-              <input
+              {/* <input
                 type="email"
                 placeholder="Email"
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <input type="password" placeholder="Password" />
+              <input type="password" placeholder="Password" /> */}
+              <Input
+                type={"email"}
+                placeholder={"Email"}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input type="password" placeholder="Password" />
               <Button text="Sign In" blue callback={handleSignIn} />
               <p className="forgot-password" onClick={gotoForgot}>
                 Forgot Password?

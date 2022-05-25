@@ -6,7 +6,7 @@ import { countries } from "./countries";
 
 import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-
+import Input from "../primary-input/input";
 function SetUpProfile({ setDisplayPage }) {
   const handleCreateAccount = () => {
     setDisplayPage("pickFavouriteWriters");
@@ -44,18 +44,34 @@ function SetUpProfile({ setDisplayPage }) {
         Almost there! finish creating your account to experience attentioun.
       </p>
       <form className="user-inputs">
-        <label>
+        {/* <label>
           Name
           <input placeholder="Enter your name" />
-        </label>
-        <label>
+        </label> */}
+        <Input
+          labelName={"Name"}
+          placeholder={"Enter your name"}
+          labelColor={"#777983"}
+        />
+        <Input
+          labelName={"Username"}
+          placeholder={"Create a username"}
+          labelColor={"#777983"}
+        />
+        <Input
+          labelName={"Password"}
+          placeholder={"Create a Password"}
+          labelColor={"#777983"}
+          type={"password"}
+        />
+        {/* <label>
           Username
           <input placeholder="Create a username" />
         </label>
         <label>
           Password
           <input type="password" placeholder="Create a password" />
-        </label>
+        </label> */}
         <label>
           Country
           <Select

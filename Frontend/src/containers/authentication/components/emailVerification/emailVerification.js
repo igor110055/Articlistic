@@ -5,6 +5,7 @@ import { ReactComponent as OtherOptions } from "../../../../Images/VectorOtherOp
 import { ReactComponent as ErrorSvg } from "../../../../Images/VectorErrorAlert.svg";
 import Button from "../primary-button/button";
 import VerifyOtp from "../verifyOtp/verify-otp";
+import Input from "../primary-input/input";
 function EmailVerification({ setDisplayPage }) {
   const [email, setEmail] = useState("");
   const [validClick, setValidClick] = useState(true);
@@ -24,7 +25,7 @@ function EmailVerification({ setDisplayPage }) {
         <div className="sign-up-with-email-container">
           <h3 className="sign-up-with-email-header">Sign up with your email</h3>
           <div className="email-input-div">
-            <label
+            {/* <label
               htmlFor="email"
               style={
                 !validClick
@@ -48,6 +49,14 @@ function EmailVerification({ setDisplayPage }) {
                   : {}
               }
               onChange={(e) => setEmail(e.target.value)}
+            /> */}
+            <Input
+              placeholder={"Enter your email address"}
+              type={"email"}
+              labelName={"Email address"}
+              inputBorderColor={!validClick ? "#EB4335" : "#c4c4c4"}
+              labelColor={!validClick ? "#EB4335" : "#777983"}
+              onChange={(e) => setEmail(e.target.value)}
             />
             {!validClick && (
               <p className="wrong-email">
@@ -56,7 +65,7 @@ function EmailVerification({ setDisplayPage }) {
             )}
             <Button text="Continue" blue callback={handleContinue} />
           </div>
-          <div className="other-options" onClick = {() => setDisplayPage("")}  >
+          <div className="other-options" onClick={() => setDisplayPage("")}>
             <OtherOptions className="other-options-svg" />
             <p className="other-options-text">Other sign up options</p>
           </div>

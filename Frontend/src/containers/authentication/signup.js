@@ -6,6 +6,10 @@ import Button from "./components/primary-button/button";
 import EmailVerification from "./components/emailVerification/emailVerification";
 import SetUpProfile from "./components/set-up-profile/set-up-profile";
 import PickFavWriters from "./components/pick-fav-writers/pick-fav-writers";
+// import TempNavbar from "../navbar/tempNavbar";
+import OnboardingNavbar from "../navbar/onBoardingNavbar";
+import left_img from "../../Images/background-left.svg";
+import right_img from "../../Images/background-right.svg";
 import "./signup.css";
 function SignUp() {
   const [emailSignUp, setEmailSignUp] = useState(false);
@@ -19,7 +23,20 @@ function SignUp() {
   };
 
   return (
-    <div>
+    <div
+      style={
+        {
+          // display: "flex",
+          // justifyContent: "space-between",
+          // alignItems: "center",
+          // overflow: "hidden",
+        }
+      }
+    >
+      <div className="onboarding-navbar">
+        <OnboardingNavbar />
+      </div>
+      {/* <img src={left_img} alt="left-img" className="signup-bubble_img" /> */}
       {displayPage === "" && (
         <div className="signup-container">
           <div className="get-started-section">
@@ -55,6 +72,7 @@ function SignUp() {
       )}
 
       {displayPage === "pickFavouriteWriters" && <PickFavWriters />}
+      {/* <img src={right_img} alt="left-img" className="signup-bubble_img" /> */}
     </div>
   );
 }
