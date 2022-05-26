@@ -51,7 +51,25 @@ module.exports = function onboardingRouter() {
 
         .get('/getCategoriesAndWriters', useAuth(), getCategoriesAndWriters)
         .get('/checkUsername', checkUsername)
-        .post('/updateStatus', useAuth(), updateOnboardingStatus);
+        .post('/updateStatus', useAuth(), updateOnboardingStatus)
+        .get('/writers', useAuth(), getListOfWriters);
+
+
+    async function getListOfWriters(req, res) {
+        const routeName = 'get onboarding writers';
+
+        try {
+            var writers = await mongo.writers.getWriters();
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+
+        return res.status(200).send({
+            writers
+        })
+
+    }
 
 
     async function signupUsingGoogle(req, res) {
