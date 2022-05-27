@@ -290,7 +290,8 @@ module.exports = function publicationRouter() {
 
         let {
             name,
-            publicationId
+            publicationId,
+            publicationOneLiner
         } = req.query;
 
         if (!name && !buffer) {
@@ -303,6 +304,11 @@ module.exports = function publicationRouter() {
 
         if (!publicationId) {
             throw new MissingParamError('Publication id required', routeName)
+        }
+
+
+        if (publicationOneLiner && publicationOneLiner.length < 255) {
+            throw new BadRequestError('Minimum length of one liner is 255');
         }
 
         try {
@@ -391,7 +397,7 @@ module.exports = function publicationRouter() {
         let publicationName = name;
 
         try {
-            await mongo.transactionPublicationWriter.updatePublication(publicationId, publicationName, publicationPic, username);
+            await mongo.transactionPublicationWriter.updatePublication(publicationId, publicationName, publicationPic, username, publicationOneLiner);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -414,10 +420,16 @@ module.exports = function publicationRouter() {
         let buffer = req.file ? req.file.buffer : null;
 
         let {
-            name
+            name,
+            publicationOneLiner
         } = req.query;
 
         if (!name) throw new MissingParamError("Name is required", routeName)
+
+
+        if (publicationOneLiner && publicationOneLiner.length < 255) {
+            throw new BadRequestError('Minimum length of one liner is 255');
+        }
 
         let sizeLimit = IMAGE_SIZE_LIMIT;
 
@@ -458,7 +470,7 @@ module.exports = function publicationRouter() {
 
         try {
 
-            await mongo.transactionPublicationWriter.createPublication(publicationId, name.trim(), publicationPic, username);
+            await mongo.transactionPublicationWriter.createPublication(publicationId, name.trim(), publicationPic, username, publicationOneLiner);
 
         } catch (e) {
 
@@ -482,7 +494,8 @@ module.exports = function publicationRouter() {
             'message': 'Created new publication',
             publicationId,
             publicationName: name,
-            publicationPic
+            publicationPic,
+            publicationOneLiner
         })
 
 

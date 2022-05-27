@@ -1,0 +1,22 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/deployment/
+    overwrite: true
+file_exists_behavior: OVERWRITE
+hooks:
+  ApplicationStop:
+    - location: backend/BackendStopScript.sh
+      timeout: 60
+      runas: root
+    - location: Frontend/FrontendStopScript.sh
+      timeout: 60
+      runas: root
+  ApplicationStart:
+    - location: backend/RunBackendScript.sh
+      timeout: 60
+      runas: root
+    - location: Frontend/RunFrontendScript.sh
+      timeout: 60
+      runas: root

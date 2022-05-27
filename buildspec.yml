@@ -25,7 +25,7 @@ env:
 phases:
   install:
     runtime-versions:
-      nodejs: 14
+      nodejs: 12
     commands:
       - n 17
   #install:
@@ -39,6 +39,7 @@ phases:
       # - command
   pre_build:
     commands:
+      - aws codeartifact login --tool npm --repository attentioun-web-app --domain attentioun --domain-owner 605567701750
       - cd Frontend/
       - ls
       - node --version
@@ -73,8 +74,12 @@ artifacts:
   files:
     - Frontend/build/**/*
     - Frontend/node_modules/**/*
+    - Frontend/RunFrontendScript.sh
+    - Frontend/FrontendStopScript.sh
     - backend/**/*
-  name: artifacts-$(date +%Y-%m-%d)-$(date +%H:%M:%S:%N)
+    - appspec.yml
+  name: artifact-1.0.2
+  #-$(date +%Y-%m-%d)-$(date +%H:%M:%S:%N)
     #- node_modules/**/*
     # - location
   #name: $(date +%Y-%m-%d)

@@ -1,6 +1,18 @@
 require('dotenv').config();
 
+var environVarArray = ['SENTRY_URI', 'ATT_AWS_ACCESS_ID', 'ATT_AWS_REGION', 'ATT_AWS_S3_BUCKET_ARTICLES',
+    'ATT_AWS_S3_BUCKET_PROFILE', 'ATT_AWS_SECRET_KEY', 'DEV_MONGO_DB_NAME',
+    'DEV_MONGO_DB_URI', 'DEV_SALT_ENC', 'DEV_host', 'DEV_port', 'EXCHANGE_API_RATE_ACCESS_CODE',
+    'GOOGLE_CLIENT_ID', 'IP_API_KEY', 'REACT_APP_ENCRYPTION_SALT',
+    'REACT_APP_SERVER_LINK', 'REDIS_URI', 'RP_KEY_ID', 'RP_SECRET_KEY',
+    'SENDGRID_KEY', 'TF_API_KEY', 'TOKEN_SECRET', 'URL_FOR_ARTICLES', 'URL_FOR_PROFILE'
+]
+
 const env = process.env.NODE_ENV;
+
+
+
+const devEnvVariables = {}
 
 const dev = {
     environment: process.env.NODE_ENV,
@@ -15,7 +27,6 @@ const dev = {
     utils: {
         encryptionSalt: process.env.DEV_SALT_ENC
     },
-
     jwt: {
         tokenSecret: process.env.TOKEN_SECRET
     },
@@ -53,11 +64,8 @@ const dev = {
     },
     ip: {
         apiKey: process.env.IP_API_KEY
-    },
-
-
+    }
 }
-
 
 const local = {
     environment: process.env.NODE_ENV,
@@ -112,6 +120,7 @@ const local = {
         apiKey: process.env.IP_API_KEY
     }
 }
+
 
 
 const prod = {
@@ -221,11 +230,14 @@ const test = {
 }
 
 
-const config = {
-    dev,
-    prod,
-    local,
-    test
-}
+// config = {
+//     dev,
+//     prod,
+//     local,
+//     test
+// }
 
-module.exports = config[env];
+// module.exports = config[env];
+
+module.export = devEnvVariables;
+//module.exports = { getData }
