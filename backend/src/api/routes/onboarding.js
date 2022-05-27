@@ -38,6 +38,10 @@ let eStatusCode = 400;
         }
 */
 
+
+
+
+
 module.exports = function onboardingRouter() {
 
     return new express.Router()
@@ -71,7 +75,21 @@ module.exports = function onboardingRouter() {
 
     }
 
+    async function getListOfWriters(req, res) {
+        const routeName = 'get onboarding writers';
 
+        try {
+            var writers = await mongo.writers.getWriters();
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+
+        return res.status(200).send({
+            writers
+        })
+
+    }
     async function signupUsingGoogle(req, res) {
         const routeName = 'signup using google';
 
