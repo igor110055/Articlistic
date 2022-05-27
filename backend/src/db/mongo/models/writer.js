@@ -65,7 +65,6 @@ async function getWriters() {
     }
 }
 
-getWriters()
 
 async function getWriterByName(username) {
     let client;

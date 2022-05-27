@@ -56,8 +56,71 @@ module.exports = function onboardingRouter() {
         .get('/getCategoriesAndWriters', useAuth(), getCategoriesAndWriters)
         .get('/checkUsername', checkUsername)
         .post('/updateStatus', useAuth(), updateOnboardingStatus)
-        .get('/writers', useAuth(), getListOfWriters);
+        .get('/writers', useAuth(), getListOfWriters)
 
+        .post('/followMultiple', useAuth(), bulkFollow);
+
+
+    async function bulkFollow(req, res) {
+        const routeName = 'onboarding bulk follow';
+
+        var {
+            usernames
+        } = req.body;
+        const username = req.username;
+
+        if (usernames.includes(username)) {
+            throw new BadRequestError("Cannot follow yourself", routeName)
+        }
+        /**
+         * Check if all the usernames exist in the database. 
+         * If count of usernames is not equal to the result
+         * Return an error. 
+         */
+
+
+        try {
+            var verificationCount = await mongo.users.checkIfDocumentsExist(usernames);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+        if (verificationCount !== usernames.length) {
+            throw new BadRequestError('Followers list not valid', routeName);
+        }
+
+
+        const multipleFollowerAdd = [];
+
+        /**
+         * Iterate over the usernames that are to be followed array. 
+         * Make an array of follower document.
+         * Use this array in the mongoDB query.  
+         */
+
+
+        for (let i = 0; i < usernames.length; i++) {
+            const follows = usernames[i];
+
+            multipleFollowerAdd.push({
+                username,
+                follows,
+                timestamp: Date.now()
+            })
+
+        }
+
+
+        try {
+            var insertedCount = await mongo.followers.followMultiple(multipleFollowerAdd);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        res.status(200).send({
+            message: 'success',
+            followedCount: insertedCount
+        });
+    }
 
     async function getListOfWriters(req, res) {
         const routeName = 'get onboarding writers';
