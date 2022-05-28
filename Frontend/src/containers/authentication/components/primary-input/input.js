@@ -15,7 +15,7 @@ function Input({
       <input
         type={type}
         placeholder={placeholder}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         style={{ borderColor: `${inputBorderColor}` }}
       />
     </div>

@@ -96,7 +96,8 @@ export const AButton = styled(Button)({
 });
 
 export const validateEmail = (email) => {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
 
@@ -108,7 +109,8 @@ export const validatePhoneNumber = (number) => {
 
 export const validateURL = (link) => {
   // eslint-disable-next-line
-  const regx = /^(?:https:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
+  const regx =
+    /^(?:https:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g;
   return regx.test(link);
 };
 
@@ -116,6 +118,18 @@ export const validatePassword = (password) => {
   // eslint-disable-next-line
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}/;
   return regex.test(password);
+};
+
+export const validateUserName = (uName) => {
+  if (
+    uName[uName.length - 1] !== "-" &&
+    uName[0] !== "-" &&
+    uName.length > 3 &&
+    uName.length < 21
+  ) {
+    return true;
+  }
+  return false;
 };
 
 export const publicationAboutDefault = {
@@ -133,8 +147,7 @@ export const publicationAboutDefault = {
       id: "vTHArw8I86",
       type: "paragraph",
       data: {
-        text:
-          'Follow to get full access to the newsletter and <a href="https://www.attentioun.com">website</a>. Never miss an update.',
+        text: 'Follow to get full access to the newsletter and <a href="https://www.attentioun.com">website</a>. Never miss an update.',
       },
     },
     {
@@ -149,8 +162,7 @@ export const publicationAboutDefault = {
       id: "XoVRideYLU",
       type: "paragraph",
       data: {
-        text:
-          "You won’t have to worry about missing anything. Every new edition of the newsletter goes directly to your inbox and your homepage.",
+        text: "You won’t have to worry about missing anything. Every new edition of the newsletter goes directly to your inbox and your homepage.",
       },
     },
     {
@@ -165,8 +177,7 @@ export const publicationAboutDefault = {
       id: "HfwJlwuvzk",
       type: "paragraph",
       data: {
-        text:
-          'Be part of a community of people who share your interests. To find out more about the company that provides the tech for this newsletter, visit <a href="https://www.attentioun.com">Attentioun.com</a>',
+        text: 'Be part of a community of people who share your interests. To find out more about the company that provides the tech for this newsletter, visit <a href="https://www.attentioun.com">Attentioun.com</a>',
       },
     },
   ],

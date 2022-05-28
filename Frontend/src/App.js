@@ -21,26 +21,31 @@ import "./App.css";
 import MultipleTab from "./utils/MultipleTab";
 import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
+
+import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 // import {
 //   getAuthToken,
-//   getRefreshToken
+//   getRefreshToken,
 // } from "./containers/common/commonFunctions";
 
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
   const [mulitpleTabs, setMultipleTabs] = useState(false);
-  const { variant, message, open } = useSelector((state) => ({
-    // thisState: state,
-    loginError: state.loginSignup.isLoggedIn,
+  const { variant, message, open, thisState } = useSelector((state) => ({
+    thisState: state,
+    loginError: state.signupReducer.isLoggedIn,
     variant: state.common.snackbar.variant,
     message: state.common.snackbar.message,
     open: state.common.snackbar.open,
   }));
 
   const dispatch = useDispatch();
-
+  // useEffect(() => {
+  //   console.log(thisState);
+  // }, [thisState]);
   useEffect(() => {
-    // console.log(getRefreshToken());
+    // console.log(getAuthToken());
+    // console.log(thisState);
     window.addEventListener("online", updateOnlineStatus);
     window.addEventListener("offline", updateOnlineStatus);
 
@@ -100,6 +105,7 @@ function App() {
             <Route exact path="/signup" element={<OnBoarding />} />
             <Route exact path="/signups" element={<SignUp />} />
             <Route exact path="/signins" element={<SignIn />} />
+            {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
             <Route
               exact
               path="/story"

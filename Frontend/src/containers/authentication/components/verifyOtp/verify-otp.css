@@ -118,7 +118,7 @@
   font-size: 15px;
   line-height: 18px;
   /* identical to box height */
-
+  cursor: pointer;
   color: #1395fd;
 }
 

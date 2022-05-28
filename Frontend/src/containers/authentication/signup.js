@@ -8,15 +8,22 @@ import SetUpProfile from "./components/set-up-profile/set-up-profile";
 import PickFavWriters from "./components/pick-fav-writers/pick-fav-writers";
 // import TempNavbar from "../navbar/tempNavbar";
 import OnboardingNavbar from "../navbar/onBoardingNavbar";
+import { useNavigate } from "react-router-dom";
 import left_img from "../../Images/background-left.svg";
 import right_img from "../../Images/background-right.svg";
 import "./signup.css";
 function SignUp() {
+  const navigate = useNavigate();
   const [emailSignUp, setEmailSignUp] = useState(false);
   const [displayPage, setDisplayPage] = useState("");
   useEffect(() => {
-    console.log(emailSignUp);
+    // console.log(emailSignUp);
   }, [emailSignUp]);
+
+  useEffect(() => {
+    const id = localStorage.getItem("createUserId");
+    if (id) setDisplayPage("setUpProfile");
+  }, []);
 
   const signUpWithGoogle = () => {
     return;
@@ -24,14 +31,12 @@ function SignUp() {
 
   return (
     <div
-      style={
-        {
-          // display: "flex",
-          // justifyContent: "space-between",
-          // alignItems: "center",
-          // overflow: "hidden",
-        }
-      }
+    // style={{
+    //   display: "flex",
+    //   justifyContent: "space-between",
+    //   alignItems: "center",
+    //   overflow: "hidden",
+    // }}
     >
       <div className="onboarding-navbar">
         <OnboardingNavbar />
@@ -55,11 +60,17 @@ function SignUp() {
               text={"Sign up with email"}
               isSvg
               Svg={EmailLogo}
-              callback={() => setDisplayPage("EmailSignup")}
+              callback={() => {
+                setDisplayPage("EmailSignup");
+                setEmailSignUp(true);
+              }}
             />
           </div>
           <div className="already-have-account-section">
-            Already have an account? <span className="sign-in">Sign in</span>
+            Already have an account?{" "}
+            <span className="sign-in" onClick={() => navigate("/signins")}>
+              Sign in
+            </span>
           </div>
         </div>
       )}

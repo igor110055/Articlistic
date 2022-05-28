@@ -1,13 +1,17 @@
-import React from "react";
+import { useState, useEffect } from "react";
 
-function WriterCard({ writer }) {
+function WriterCard({ writer, callback }) {
   return (
     <div className="writer-card-container">
-      <img src={writer.img} alt="writer" className="writer-card-writer-img" />
+      <img
+        src={writer.details[0].profilePic}
+        alt="writer"
+        className="writer-card-writer-img"
+      />
       <div className="writer-details">
-        <h4 className="writer-name">{writer.name}</h4>
-        <p className="writer-category">{writer.category}</p>
-        <p className="writer-subtitle">{writer.subtitle}</p>
+        <h4 className="writer-name">{writer.details[0].name}</h4>
+        <p className="writer-category">{writer.categories[0] || "Politics"}</p>
+        <p className="writer-subtitle">{writer.details[0].about}</p>
       </div>
     </div>
   );

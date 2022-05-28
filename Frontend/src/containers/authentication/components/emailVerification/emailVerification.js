@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./emailVerification.css";
 import { validateEmail } from "../../../../utils/common";
 import { ReactComponent as OtherOptions } from "../../../../Images/VectorOtherOptions.svg";
@@ -6,18 +6,55 @@ import { ReactComponent as ErrorSvg } from "../../../../Images/VectorErrorAlert.
 import Button from "../primary-button/button";
 import VerifyOtp from "../verifyOtp/verify-otp";
 import Input from "../primary-input/input";
+import { useDispatch, useSelector } from "react-redux";
+import { getEmailOTPInit } from "../../signupActions";
+import PrimaryError from "../primary-error/primaryError";
 function EmailVerification({ setDisplayPage }) {
+  const {
+    isGettingEmailOTP,
+    getEmailOTPError,
+    getEmailOTPErrorMsg,
+    getEmailOTPResp,
+    getEmailOTPSuccess,
+  } = useSelector((state) => ({
+    isGettingEmailOTP: state.signupReducer.isGettingEmailOTP,
+    getEmailOTPError: state.signupReducer.getEmailOTPError,
+    getEmailOTPErrorMsg: state.signupReducer.getEmailOTPErrorMsg,
+    getEmailOTPResp: state.signupReducer.getEmailOTPResp,
+    getEmailOTPSuccess: state.signupReducer.getEmailOTPSuccess,
+  }));
+
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [validClick, setValidClick] = useState(true);
+  const [once, setOnce] = useState(false);
+  const [usedEmail, setUsedEmail] = useState(false);
   const [displaySection, setDisplaySection] = useState("enterEmail");
   const handleContinue = () => {
+    setUsedEmail(false);
+    setOnce(true);
+    // console.log(email);
     if (validateEmail(email)) {
       setValidClick(true);
-      setDisplaySection("enterOTP");
+      dispatch(getEmailOTPInit(email));
+      setUsedEmail(false);
+      localStorage.setItem("userEmail", email);
     } else {
       setValidClick(false);
     }
   };
+
+  useEffect(() => {
+    if (once) {
+      setValidClick(true);
+      if (getEmailOTPSuccess) {
+        setUsedEmail(false);
+        setDisplaySection("enterOTP");
+      } else {
+        setUsedEmail(true);
+      }
+    }
+  }, [getEmailOTPSuccess, getEmailOTPError]);
 
   return (
     <div>
@@ -56,12 +93,13 @@ function EmailVerification({ setDisplayPage }) {
               labelName={"Email address"}
               inputBorderColor={!validClick ? "#EB4335" : "#c4c4c4"}
               labelColor={!validClick ? "#EB4335" : "#777983"}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={setEmail}
             />
             {!validClick && (
-              <p className="wrong-email">
-                <ErrorSvg /> <span>Please enter a valid email address</span>
-              </p>
+              <PrimaryError message={"Please enter a valid email address"} />
+            )}
+            {usedEmail && (
+              <PrimaryError message={"This email is already in use"} />
             )}
             <Button text="Continue" blue callback={handleContinue} />
           </div>
@@ -74,7 +112,7 @@ function EmailVerification({ setDisplayPage }) {
 
       {displaySection === "enterOTP" && (
         <div style={{ width: "100%" }}>
-          <VerifyOtp setDisplayPage={setDisplayPage} />
+          <VerifyOtp setDisplayPage={setDisplayPage} email={email} />
         </div>
       )}
     </div>

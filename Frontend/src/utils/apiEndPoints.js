@@ -10,6 +10,7 @@ export const endPoints = {
   sendEmailOTP: "onboarding/email/sendOTP",
   verifyEmailOTP: "onboarding/email/verifyOTP",
   createUser: "onboarding/createUser",
+  getPickFavData: "onboarding/writers",
   forgotSendOTP: "utils/phone/sendOTP",
   forgotVerifyOTP: "utils/phone/verifyOTP",
   forgotSendEmailOTP: "utils/email/sendOTP",
@@ -33,5 +34,6 @@ export const endPoints = {
   updateAboutPublication: "publication/article",
   publicationUploadImage: "publication/article/image",
   deleteArticleComplete: "articles/markForDeletion",
-  deletePublication: "publication"
+  deletePublication: "publication",
+  followWriter: "users/followWriter",
 };

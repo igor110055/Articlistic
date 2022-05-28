@@ -83,6 +83,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .sign-up-with-email-container .other-options .other-options-svg {
@@ -110,6 +111,4 @@
     border-radius: 32px;
     padding: 47px 80px;
   }
-
-
 }

@@ -1,28 +1,80 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReactComponent as Logo } from "../../Images/logo.svg";
 import { ReactComponent as GoogleLogo } from "../../Images/GoogleLogo.svg";
 import Button from "./components/primary-button/button";
 import { ReactComponent as ErrorSvg } from "../../Images/VectorErrorAlert.svg";
 import ForgotPassword from "./components/forgot-password/forgot-password";
-import { validateEmail } from "../../utils/common";
-
+import { validateEmail, validatePassword } from "../../utils/common";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "./signupActions";
 import Input from "./components/primary-input/input";
+import PrimaryError from "./components/primary-error/primaryError";
+import { userEmail, userUsername, userPName } from "../user/userActions";
+import VerifyOTP from "./components/forgot-password/verifyOTP";
 import "./signin.css";
+import SetNewPassword from "./components/forgot-password/setNewPassword";
 function SignIn() {
-  const [validEmail, setValidEmail] = useState(true);
+  const {
+    isSendingLoginCred,
+    loginError,
+    loginErrorMsg,
+    isLoggedIn,
+    loginResp,
+    user,
+  } = useSelector((state) => ({
+    isSendingLoginCred: state.signupReducer.isSendingLoginCred,
+    loginError: state.signupReducer.loginError,
+    loginErrorMsg: state.signupReducer.loginErrorMsg,
+    isLoggedIn: state.signupReducer.isLoggedIn,
+    loginResp: state.signupReducer.loginResp,
+    user: state.user,
+  }));
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [validCred, setValidCred] = useState(true);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [type, setType] = useState("username");
+  // const [validPassword, setValidPassword] = useState("");
   const [displayPage, setDisplayPage] = useState("sign-in");
   const signInWithGoogle = () => {};
   const gotoForgot = () => {
     setDisplayPage("forgot-password");
   };
   const handleSignIn = () => {
-    if (validateEmail(email)) {
-      setValidEmail(true);
-    } else {
-      setValidEmail(false);
+    if (validateEmail(email)) setType("email");
+    else setType("username");
+
+    if (!validatePassword(password) && email !== "") {
+      setValidCred(false);
+      return;
     }
+    dispatch(login({ entity: email, type: type, password }));
   };
+
+  useEffect(() => {
+    if (!loginError && isLoggedIn) {
+      setValidCred(true);
+      // console.log(loginResp);
+
+      dispatch(userEmail(loginResp.private.email));
+      dispatch(userPName(loginResp.name));
+      dispatch(userUsername(loginResp.username));
+      // console.log("user", user);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userEmailID: loginResp.private.email,
+          userProfileName: loginResp.name,
+          userUserName: loginResp.username,
+        })
+      );
+
+      navigate("/writerDashboard");
+    } else if (loginError) setValidCred(false);
+  }, [loginError, isLoggedIn]);
+
   return (
     <div>
       {displayPage === "sign-in" && (
@@ -41,16 +93,19 @@ function SignIn() {
             />
             <p className="or-div"> &nbsp; OR &nbsp; &nbsp;</p>
             <div className="email-sign-in">
-              {!validEmail && (
+              {/* {!validCred && (
                 <p className="wrong-email">
                   <div className="error-svg">
                     <ErrorSvg />{" "}
                   </div>
                   <span>
-                    We couldn’t find an account matching the username and
-                    password you entered.
+                    We couldn’t find an account matching the email and password
+                    you entered.
                   </span>
                 </p>
+              )} */}
+              {!validCred && (
+                <PrimaryError message={"Check your credentials"} />
               )}
               {/* <input
                 type="email"
@@ -60,24 +115,35 @@ function SignIn() {
               <input type="password" placeholder="Password" /> */}
               <Input
                 type={"email"}
-                placeholder={"Email"}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder={"Email or username"}
+                onChange={setEmail}
               />
-              <Input type="password" placeholder="Password" />
-              <Button text="Sign In" blue callback={handleSignIn} />
+              <Input
+                type="password"
+                placeholder="Password"
+                onChange={setPassword}
+              />
+              <Button text="Sign In" blue callback={() => handleSignIn()} />
               <p className="forgot-password" onClick={gotoForgot}>
                 Forgot Password?
               </p>
             </div>
           </div>
           <p className="sign-up">
-            Don't have an account yet? <span>Sign up</span>
+            Don't have an account yet?{" "}
+            <span onClick={() => navigate("/signups")}>Sign up</span>
           </p>
         </div>
       )}
 
       {displayPage === "forgot-password" && (
         <ForgotPassword setDisplayPage={setDisplayPage} />
+      )}
+      {displayPage === "verifyOTP" && (
+        <VerifyOTP setDisplayPage={setDisplayPage} />
+      )}
+      {displayPage === "setNewPassword" && (
+        <SetNewPassword setDisplayPage={setDisplayPage} />
       )}
     </div>
   );

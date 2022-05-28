@@ -67,13 +67,16 @@
   /* flex-direction: column; */
   gap: 1rem;
   margin-bottom: 2rem;
+  height: 340px;
+  overflow: scroll;
 }
 
 .writer-card-container {
   width: 100%;
   display: flex;
   min-width: 312px;
-  max-width: 380px;
+  max-width: 368px;
+  height: 144px;
   align-items: center;
   gap: 1rem;
   background: #ffffff;
@@ -82,7 +85,9 @@
 }
 
 .writer-card-container .writer-card-writer-img {
-  height: 100%;
+  height: fit-content;
+  max-height: 143px;
+  max-width: 103px;
   object-fit: cover;
 }
 

@@ -1,61 +1,63 @@
 import { useState, useEffect } from "react";
-import { ReactComponent as ErrorSvg } from "../../../../Images/VectorErrorAlert.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmailOTPInit, verifyEmailOTPInit } from "../../signupActions";
-import "./verify-otp.css";
-import { Timer } from "../../Timer";
+import "../verifyOtp/verify-otp.css";
 import ReactPinField from "react-pin-field";
 import Button from "../primary-button/button";
+import { ReactComponent as ErrorSvg } from "../../../../Images/VectorErrorAlert.svg";
+import { Timer } from "../../Timer";
+import { getForgotEmailOTP, verifyForgotEmailOTP } from "../../signupActions";
 
-import { userEmail } from "../../../user/userActions";
-function VerifyOtp({ setDisplayPage, email }) {
+function VerifyOTP({ setDisplayPage }) {
   const dispatch = useDispatch();
+
+  const email = localStorage.getItem("forgotPasswordEmail");
   const [otp, setOtp] = useState("");
   const [validOtp, setValidOtp] = useState(true);
   const [sentAgain, setSentAgain] = useState(false);
+
   const {
-    isVerifyingEmailOTP,
-    verifyEmailOTPError,
-    verifyEmailOTPErrorMsg,
-    verifyEmailOTPResp,
-    emailOTPVerified,
+    isVerifyingForgotEmailOTP,
+    verifyForgotEmailOTPError,
+    verifyForgotEmailOTPSuccess,
+    verifyForgotEmailOTPResp,
   } = useSelector((state) => ({
-    isVerifyingEmailOTP: state.signupReducer.isVerifyingEmailOTP,
-    verifyEmailOTPError: state.signupReducer.verifyEmailOTPError,
-    verifyEmailOTPErrorMsg: state.signupReducer.verifyEmailOTPErrorMsg,
-    verifyEmailOTPResp: state.signupReducer.verifyEmailOTPResp,
-    emailOTPVerified: state.signupReducer.emailOTPVerified,
+    verifyForgotEmailOTPError: state.signupReducer.verifyForgotEmailOTPError,
+    verifyForgotEmailOTPSuccess:
+      state.signupReducer.verifyForgotEmailOTPSuccess,
+    verifyForgotEmailOTPResp: state.signupReducer.verifyForgotEmailOTPResp,
+    isVerifyingForgotEmailOTP: state.signupReducer.isVerifyingForgotEmailOTP,
   }));
 
   const handleVerify = () => {
     // console.log(otp);
     if (otp.length === 6) {
-      dispatch(verifyEmailOTPInit({ email, otp }));
+      dispatch(verifyForgotEmailOTP({ email, otp }));
       setValidOtp(true);
     } else setValidOtp(false);
   };
 
-  const resendEmail = (email) => {
-    dispatch(getEmailOTPInit(email));
+  const resendEmail = () => {
+    dispatch(getForgotEmailOTP(email));
   };
+
   useEffect(() => {
-    if (sentAgain) {
-      setTimeout(() => {
-        setSentAgain(false);
-      }, 30000);
-    }
-  }, [sentAgain]);
-  useEffect(() => {
-    if (!isVerifyingEmailOTP && !verifyEmailOTPError) {
-      if (emailOTPVerified) {
-        localStorage.setItem("createUserId", verifyEmailOTPResp.id);
-        // console.log(verifyEmailOTPResp.id);
-        dispatch(userEmail(email));
-        setDisplayPage("setUpProfile");
+    if (!isVerifyingForgotEmailOTP && !verifyForgotEmailOTPError) {
+      if (verifyForgotEmailOTPSuccess) {
         setValidOtp(true);
+        localStorage.setItem(
+          "forgotPasswordUserId",
+          verifyForgotEmailOTPResp.id
+        );
+        // console.log(verifyEmailOTPResp.id);
+        // dispatch(userEmail(email));
+        setDisplayPage("setNewPassword");
       }
     } else setValidOtp(false);
-  }, [verifyEmailOTPError, emailOTPVerified, isVerifyingEmailOTP]);
+  }, [
+    verifyForgotEmailOTPError,
+    verifyForgotEmailOTPSuccess,
+    isVerifyingForgotEmailOTP,
+  ]);
 
   return (
     <div className="verify-otp-container">
@@ -89,17 +91,17 @@ function VerifyOtp({ setDisplayPage, email }) {
         <p
           className="get-code-text"
           onClick={() => {
-            resendEmail(email);
+            resendEmail();
             setSentAgain(true);
           }}
         >
           Didn't get the code?
         </p>
       ) : (
-        <Timer  time={30} />
+        <Timer time={30} />
       )}
     </div>
   );
 }
 
-export default VerifyOtp;
+export default VerifyOTP;

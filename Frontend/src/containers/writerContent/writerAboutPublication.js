@@ -47,7 +47,6 @@ const WriterAboutPublication = () => {
     isGettingAboutPublication: state.writerContent.isGettingAboutPublication,
     userUserName: state.user.userUserName,
     aboutPublication: state.writerContent.aboutPublication,
-    isGettingAboutPublication: state.writerContent.isGettingAboutPublication,
     isGettingArticle: state.writerEditor.isGettingArticle,
     updateAboutError: state.writerEditor.updateAboutError,
   }));

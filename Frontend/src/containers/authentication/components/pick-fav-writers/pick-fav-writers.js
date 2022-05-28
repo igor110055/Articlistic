@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import "./pick-fav-writers.css";
 import WriterCard from "./writer-card";
 import Button from "../primary-button/button";
@@ -8,7 +9,48 @@ import Ashley from "../../../../Images/Ashley.png";
 import Margot from "../../../../Images/Margot.png";
 import Carl from "../../../../Images/Carl.png";
 import Shawn from "../../../../Images/Shawn.png";
+import { getAuthToken } from "../../../common/commonFunctions";
+import { followWriterInit, getPickFavDataInit } from "../../signupActions";
+import { useNavigate } from "react-router-dom";
 function PickFavWriters() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {
+    pickFavWritersData,
+    isGettingPickFavWritersData,
+    pickFavWritersDataError,
+  } = useSelector((state) => ({
+    pickFavWritersData: state.signupReducer.pickFavWritersData,
+    isGettingPickFavWritersData:
+      state.signupReducer.isGettingPickFavWritersData,
+    pickFavWritersDataError: state.signupReducer.pickFavWritersDataError,
+  }));
+
+  const [selection, setSelection] = useState(
+    new Array(pickFavWritersData.length)
+  );
+
+  useEffect(() => {
+    const token = getAuthToken();
+    dispatch(getPickFavDataInit({ token }));
+  }, []);
+
+  const handleWriterClick = (idx) => {
+    const array = selection.slice();
+    array[idx] = !array[idx];
+    setSelection(array);
+  };
+
+  const handleStartReading = () => {
+    const token = getAuthToken();
+
+    selection.forEach((value, idx) => {
+      const writerUsername = pickFavWritersData[idx].username;
+      if (value) console.log(writerUsername);
+      // dispatch(followWriterInit({ token, userUsername: writerUsername }));
+      navigate("/writerDashboard");
+    });
+  };
   const tagsData = [
     "All",
     "Technology",
@@ -27,50 +69,6 @@ function PickFavWriters() {
     "Politics",
   ];
 
-  const writersData = [
-    {
-      name: "Jarret Cawsey",
-      img: Jarret,
-      category: "Technology",
-      subtitle:
-        "Some small decroption about writer goes here just like that and its.",
-    },
-    {
-      name: "Nathan Drake",
-      img: Nathan,
-      category: "Automotive",
-      subtitle:
-        "Some small decroption about writer goes here just like that and its.",
-    },
-    {
-      name: "Shawn Richards",
-      img: Shawn,
-      category: "Politics",
-      subtitle:
-        "Some small decroption about writer goes here just like that and its.",
-    },
-    {
-      name: "Margot Rivera",
-      img: Margot,
-      category: "Fashion",
-      subtitle:
-        "Some small decroption about writer goes here just like that and its.",
-    },
-    {
-      name: "Carl Lee",
-      img: Carl,
-      category: "Politics",
-      subtitle:
-        "Some small decroption about writer goes here just like that and its.",
-    },
-    {
-      name: "Ashley Graham",
-      img: Ashley,
-      category: "Politics",
-      subtitle:
-        "Some small decroption about writer goes here just like that and its.",
-    },
-  ];
   return (
     <div className="pick-writers-container">
       <h3 className="pick-writers-header">Pick your favourite writers</h3>
@@ -86,10 +84,21 @@ function PickFavWriters() {
         ))}
       </div>
       <div className="writers-div">
-        {writersData.map((writer, idx) => (
-          <WriterCard writer={writer} key={idx} />
+        {pickFavWritersData.map((writer, idx) => (
+          <div
+            key={idx}
+            style={
+              selection[idx]
+                ? { border: "4px solid #1395FD", borderRadius: "16px" }
+                : { padding: "4px" }
+            }
+            onClick={() => handleWriterClick(idx)}
+          >
+            <WriterCard writer={writer} />
+          </div>
         ))}
       </div>
+      <div className="pick-writers-separator"></div>
       <div className="Mobile-button">
         <Button text={"Start Reading"} blue />
       </div>
@@ -106,7 +115,11 @@ function PickFavWriters() {
         </div>
 
         <div style={{ width: "33%" }}>
-          <Button text={"Start Reading"} blue />
+          <Button
+            text={"Start Reading"}
+            blue
+            callback={() => handleStartReading()}
+          />
         </div>
       </div>
     </div>
