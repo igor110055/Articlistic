@@ -79,6 +79,7 @@ const initialState = {
   resetPasswordError: false,
   resetPasswordErrorMsg: "",
   resetPasswordResp: {},
+  resetPasswordSuccess: false,
 };
 
 const signupReducer = (state = initialState, action) => {
@@ -300,6 +301,7 @@ const signupReducer = (state = initialState, action) => {
         ...state,
         isResettingPassword: false,
         resetPasswordResp: data,
+        resetPasswordSuccess: true,
       };
     }
 

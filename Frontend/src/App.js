@@ -23,10 +23,10 @@ import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
 
 import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
-// import {
-//   getAuthToken,
-//   getRefreshToken,
-// } from "./containers/common/commonFunctions";
+import {
+  getAuthToken,
+  getRefreshToken,
+} from "./containers/common/commonFunctions";
 
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
@@ -44,7 +44,7 @@ function App() {
   //   console.log(thisState);
   // }, [thisState]);
   useEffect(() => {
-    // console.log(getAuthToken());
+    console.log(getAuthToken());
     // console.log(thisState);
     window.addEventListener("online", updateOnlineStatus);
     window.addEventListener("offline", updateOnlineStatus);
@@ -105,7 +105,7 @@ function App() {
             <Route exact path="/signup" element={<OnBoarding />} />
             <Route exact path="/signups" element={<SignUp />} />
             <Route exact path="/signins" element={<SignIn />} />
-            {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
+            <Route exact path="/pick" element={<PickFavWriters />} />
             <Route
               exact
               path="/story"

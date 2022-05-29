@@ -36,4 +36,5 @@ export const endPoints = {
   deleteArticleComplete: "articles/markForDeletion",
   deletePublication: "publication",
   followWriter: "users/followWriter",
+  followMultipleWriters: "onboarding/followMultiple",
 };

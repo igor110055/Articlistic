@@ -43,13 +43,15 @@ function PickFavWriters() {
 
   const handleStartReading = () => {
     const token = getAuthToken();
+    const array = [];
 
     selection.forEach((value, idx) => {
       const writerUsername = pickFavWritersData[idx].username;
-      if (value) console.log(writerUsername);
-      // dispatch(followWriterInit({ token, userUsername: writerUsername }));
+      if (value) array.push(writerUsername);
       navigate("/writerDashboard");
     });
+    console.log(token, array);
+    dispatch(followWriterInit({ token, usernames: array }));
   };
   const tagsData = [
     "All",

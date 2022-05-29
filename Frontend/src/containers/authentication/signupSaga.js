@@ -191,7 +191,7 @@ function* followWriter(action) {
     const headers = {
       Authorization: action.data.token,
     };
-    const url = `${baseURL}/${endPoints.followWriter}?writer=${action.data.userUsername}`;
+    const url = `${baseURL}/${endPoints.followMultipleWriters}`;
     const data = yield call(authPostRequest, url, action.data.fd, headers);
 
     if (!data.error) {

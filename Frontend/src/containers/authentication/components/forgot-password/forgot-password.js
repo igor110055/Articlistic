@@ -22,6 +22,13 @@ function ForgotPassword({ setDisplayPage }) {
   };
 
   useEffect(() => {
+    if (
+      localStorage.getItem("forgotPasswordUserId") &&
+      localStorage.getItem("forgotPasswordEmail")
+    )
+      setDisplayPage("setNewPassword");
+  }, []);
+  useEffect(() => {
     if (!getForgotEmailOTPError && getForgotEmailSuccess)
       setDisplayPage("verifyOTP");
   }, [getForgotEmailOTPError, getForgotEmailSuccess]);
