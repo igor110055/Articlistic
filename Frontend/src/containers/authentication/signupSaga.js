@@ -9,6 +9,8 @@ import {
   RESET_PASSWORD_INIT,
   FORGOT_VERIFY_EMAIL_OTP_INIT,
   FORGOT_GET_EMAIL_OTP_INIT,
+  LOGOUT_INIT,
+  GET_REFRESH_TOKEN_INIT,
 } from "../../utils/actionTypes";
 import Cookie from "js-cookie";
 import { baseURL, endPoints } from "../../utils/apiEndPoints";
@@ -40,6 +42,10 @@ import {
   resetPasswordSuccess,
   verifyForgotEmailOTPSuccess,
   verifyForgotEmailOTPFailure,
+  logoutFailure,
+  logoutSuccess,
+  getRefreshTokenFailure,
+  getRefreshTokenSuccess,
 } from "./signupActions";
 function* getEmailOTP(action) {
   try {
@@ -273,4 +279,53 @@ function* resetPassword(action) {
 
 export function* resetPasswordSaga() {
   yield takeLatest(RESET_PASSWORD_INIT, resetPassword);
+}
+
+function* logout(action) {
+  try {
+    // const { headers } = action.payload;
+    const payload = action.payload;
+    const headers = {
+      Authorization: payload.accessToken,
+    };
+    // console.log(payload, headers);
+    // console.log(headers);
+    const url = `${baseURL}/${endPoints.logout}`;
+    const data = yield call(authPostRequest, url, payload, headers);
+    if (!data.error) {
+      yield put(logoutSuccess(data));
+    } else {
+      // console.log(data);
+      yield put(logoutFailure(data.message));
+    }
+  } catch (err) {
+    yield put(logoutFailure(err.message));
+  }
+}
+
+export function* logoutSaga() {
+  yield takeLatest(LOGOUT_INIT, logout);
+}
+
+function* getRefreshToken(action) {
+  try {
+    // const { headers } = action.payload;
+    const payload = action.payload;
+    const headers = {
+      Authorization: payload.headers,
+    };
+    const url = `${baseURL}/${endPoints.refreshToken}`;
+    const data = yield call(authPostRequest, url, {}, headers);
+    if (!data.error) {
+      yield put(getRefreshTokenSuccess(data));
+    } else {
+      yield put(getRefreshTokenFailure(data.message));
+    }
+  } catch (err) {
+    yield put(getRefreshTokenFailure(err.message));
+  }
+}
+
+export function* getRefreshTokenSaga() {
+  yield takeLatest(GET_REFRESH_TOKEN_INIT, getRefreshToken);
 }

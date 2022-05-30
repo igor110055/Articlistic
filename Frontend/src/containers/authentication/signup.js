@@ -68,7 +68,7 @@ function SignUp() {
           </div>
           <div className="already-have-account-section">
             Already have an account?{" "}
-            <span className="sign-in" onClick={() => navigate("/signins")}>
+            <span className="sign-in" onClick={() => navigate("/login")}>
               Sign in
             </span>
           </div>

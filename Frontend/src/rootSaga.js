@@ -1,6 +1,6 @@
 import { all, spawn } from "redux-saga/effects";
 import * as writerSagas from "./containers/writersAndCategories/writersAndCategoriesSaga";
-import * as loginSignupSagas from "./containers/loginSignup/loginSignupSaga";
+// import * as loginSignupSagas from "./containers/loginSignup/loginSignupSaga";
 import * as writerEditorSagas from "./containers/writerEditor/writerEditorSaga";
 import * as unsplashSagas from "./containers/unsplash/unsplashSaga";
 import * as nftSagas from "./containers/writerEditor/nftBlock/nftSaga";

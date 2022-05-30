@@ -14,6 +14,8 @@ import { userEmail, userUsername, userPName } from "../user/userActions";
 import VerifyOTP from "./components/forgot-password/verifyOTP";
 import "./signin.css";
 import SetNewPassword from "./components/forgot-password/setNewPassword";
+import Cookie from "js-cookie";
+
 function SignIn() {
   const {
     isSendingLoginCred,
@@ -54,6 +56,11 @@ function SignIn() {
   };
 
   useEffect(() => {
+    const accessToken = Cookie.get("accessToken");
+    if (accessToken) navigate("/writerDashboard");
+  });
+
+  useEffect(() => {
     if (!loginError && isLoggedIn) {
       setValidCred(true);
       // console.log(loginResp);
@@ -61,7 +68,6 @@ function SignIn() {
       dispatch(userEmail(loginResp.private.email));
       dispatch(userPName(loginResp.name));
       dispatch(userUsername(loginResp.username));
-      // console.log("user", user);
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -131,7 +137,7 @@ function SignIn() {
           </div>
           <p className="sign-up">
             Don't have an account yet?{" "}
-            <span onClick={() => navigate("/signups")}>Sign up</span>
+            <span onClick={() => navigate("/signup")}>Sign up</span>
           </p>
         </div>
       )}

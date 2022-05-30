@@ -1,7 +1,7 @@
-import LandingPage from "./containers/loginSignup/landingPage";
+// import LandingPage from "./containers/loginSignup/landingPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import TempNavbar from "./containers/navbar/tempNavbar";
-import OnBoarding from "./containers/loginSignup/onBoarding";
+// import OnBoarding from "./containers/loginSignup/onBoarding";
 import PrivateRoute from "./components/privateRoute";
 // import Home from "./containers/home/home";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,17 +22,17 @@ import MultipleTab from "./utils/MultipleTab";
 import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
 
-import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
-import {
-  getAuthToken,
-  getRefreshToken,
-} from "./containers/common/commonFunctions";
+// import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
+// import {
+//   getAuthToken,
+//   getRefreshToken,
+// } from "./containers/common/commonFunctions";
 
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
   const [mulitpleTabs, setMultipleTabs] = useState(false);
-  const { variant, message, open, thisState } = useSelector((state) => ({
-    thisState: state,
+  const { variant, message, open } = useSelector((state) => ({
+    // thisState: state,
     loginError: state.signupReducer.isLoggedIn,
     variant: state.common.snackbar.variant,
     message: state.common.snackbar.message,
@@ -44,7 +44,7 @@ function App() {
   //   console.log(thisState);
   // }, [thisState]);
   useEffect(() => {
-    console.log(getAuthToken());
+    // console.log(getAuthToken());
     // console.log(thisState);
     window.addEventListener("online", updateOnlineStatus);
     window.addEventListener("offline", updateOnlineStatus);
@@ -101,11 +101,11 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route exact path="/login" element={<LandingPage />} />
-            <Route exact path="/signup" element={<OnBoarding />} />
-            <Route exact path="/signups" element={<SignUp />} />
-            <Route exact path="/signins" element={<SignIn />} />
-            <Route exact path="/pick" element={<PickFavWriters />} />
+            {/* <Route exact path="/login" element={<LandingPage />} /> */}
+            {/* <Route exact path="/signup" element={<OnBoarding />} /> */}
+            <Route exact path="/signup" element={<SignUp />} />
+            <Route exact path="/login" element={<SignIn />} />
+            {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
             <Route
               exact
               path="/story"

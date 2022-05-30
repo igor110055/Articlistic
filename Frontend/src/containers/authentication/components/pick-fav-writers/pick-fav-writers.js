@@ -48,10 +48,10 @@ function PickFavWriters() {
     selection.forEach((value, idx) => {
       const writerUsername = pickFavWritersData[idx].username;
       if (value) array.push(writerUsername);
-      navigate("/writerDashboard");
     });
-    console.log(token, array);
+    // console.log(token, array);
     dispatch(followWriterInit({ token, usernames: array }));
+    navigate("/writerDashboard");
   };
   const tagsData = [
     "All",

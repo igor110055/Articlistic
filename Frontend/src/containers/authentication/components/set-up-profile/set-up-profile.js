@@ -61,7 +61,7 @@ function SetUpProfile({ setDisplayPage }) {
   useEffect(() => {
     if (once) {
       if (profileInfoSuccess) {
-        console.log(sendProfileInfoResp);
+        // console.log(sendProfileInfoResp);
         dispatch(userUsername(sendProfileInfoResp.username));
         dispatch(userPName(sendProfileInfoResp.name));
         Cookie.set("accessToken", sendProfileInfoResp.accessToken, {
@@ -71,7 +71,15 @@ function SetUpProfile({ setDisplayPage }) {
           expires: 30,
         });
         Cookie.set("oneDayBeforeAccessToken", true, { expires: 6 });
-        localStorage.setItem("user", JSON.stringify(user));
+        const email = localStorage.getItem("userEmail");
+        const newUser = {
+          userUserName: sendProfileInfoResp.username,
+          userProfileName: sendProfileInfoResp.name,
+          userEmail: email,
+        };
+
+        localStorage.setItem("user", JSON.stringify(newUser));
+        // localStorage.setItem("user", JSON.stringify(user));
         // console.log("Email:", user);
         // setDisplayPage('mapWritersAndCategories'); //for writers
         // navigate("/writerDashboard");

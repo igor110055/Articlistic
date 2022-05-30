@@ -29,6 +29,12 @@ import {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
   RESET_PASSWORD_INIT,
+  LOGOUT_INIT,
+  LOGOUT_FAILURE,
+  LOGOUT_SUCCESS,
+  GET_REFRESH_TOKEN_FAILURE,
+  GET_REFRESH_TOKEN_SUCCESS,
+  GET_REFRESH_TOKEN_INIT,
 } from "../../utils/actionTypes";
 
 export function getEmailOTPInit(payload) {
@@ -233,6 +239,50 @@ export const resetPassword = (params) => {
   const payload = params;
   return {
     type: RESET_PASSWORD_INIT,
+    payload,
+  };
+};
+
+export const logoutSuccess = (data) => {
+  return {
+    type: LOGOUT_SUCCESS,
+    data,
+  };
+};
+
+export const logoutFailure = (error) => {
+  return {
+    type: LOGOUT_FAILURE,
+    error,
+  };
+};
+
+export const logout = (params, headers) => {
+  const payload = params;
+  return {
+    type: LOGOUT_INIT,
+    payload,
+  };
+};
+
+export const getRefreshTokenSuccess = (data) => {
+  return {
+    type: GET_REFRESH_TOKEN_SUCCESS,
+    data,
+  };
+};
+
+export const getRefreshTokenFailure = (error) => {
+  return {
+    type: GET_REFRESH_TOKEN_FAILURE,
+    error,
+  };
+};
+
+export const getRefreshToken = (params, headers) => {
+  const payload = { params, headers };
+  return {
+    type: GET_REFRESH_TOKEN_INIT,
     payload,
   };
 };

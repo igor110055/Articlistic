@@ -36,8 +36,8 @@ function EmailVerification({ setDisplayPage }) {
     // console.log(email);
     if (validateEmail(email)) {
       setValidClick(true);
-      dispatch(getEmailOTPInit(email));
       setUsedEmail(false);
+      dispatch(getEmailOTPInit(email));
       localStorage.setItem("userEmail", email);
     } else {
       setValidClick(false);
@@ -47,10 +47,10 @@ function EmailVerification({ setDisplayPage }) {
   useEffect(() => {
     if (once) {
       setValidClick(true);
-      if (getEmailOTPSuccess) {
+      if (getEmailOTPSuccess && !getEmailOTPError) {
         setUsedEmail(false);
         setDisplaySection("enterOTP");
-      } else {
+      } else if (getEmailOTPError) {
         setUsedEmail(true);
       }
     }

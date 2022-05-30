@@ -30,12 +30,13 @@ function VerifyOtp({ setDisplayPage, email }) {
   const handleVerify = () => {
     // console.log(otp);
     if (otp.length === 6) {
-      dispatch(verifyEmailOTPInit({ email, otp }));
       setValidOtp(true);
+      dispatch(verifyEmailOTPInit({ email, otp }));
     } else setValidOtp(false);
   };
 
   const resendEmail = (email) => {
+    setValidOtp(true);
     dispatch(getEmailOTPInit(email));
   };
   useEffect(() => {
@@ -48,13 +49,13 @@ function VerifyOtp({ setDisplayPage, email }) {
   useEffect(() => {
     if (!isVerifyingEmailOTP && !verifyEmailOTPError) {
       if (emailOTPVerified) {
+        setValidOtp(true);
         localStorage.setItem("createUserId", verifyEmailOTPResp.id);
         // console.log(verifyEmailOTPResp.id);
         dispatch(userEmail(email));
         setDisplayPage("setUpProfile");
-        setValidOtp(true);
       }
-    } else setValidOtp(false);
+    } else if (verifyEmailOTPError) setValidOtp(false);
   }, [verifyEmailOTPError, emailOTPVerified, isVerifyingEmailOTP]);
 
   return (
@@ -96,7 +97,7 @@ function VerifyOtp({ setDisplayPage, email }) {
           Didn't get the code?
         </p>
       ) : (
-        <Timer  time={30} />
+        <Timer time={30} />
       )}
     </div>
   );

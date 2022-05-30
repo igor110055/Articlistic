@@ -26,6 +26,12 @@ import {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
   RESET_PASSWORD_INIT,
+  LOGOUT_INIT,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+  GET_REFRESH_TOKEN_INIT,
+  GET_REFRESH_TOKEN_SUCCESS,
+  GET_REFRESH_TOKEN_FAILURE,
 } from "../../utils/actionTypes";
 
 const initialState = {
@@ -80,6 +86,17 @@ const initialState = {
   resetPasswordErrorMsg: "",
   resetPasswordResp: {},
   resetPasswordSuccess: false,
+
+  isLoggingOut: false,
+  logoutError: false,
+  logoutErrorMsg: "",
+  logoutResp: {},
+  logoutSuccess: true,
+
+  isGettingRefreshToken: false,
+  getRefreshTokenError: false,
+  getRefreshTokenErrorMsg: "",
+  getRefreshTokenResp: {},
 };
 
 const signupReducer = (state = initialState, action) => {
@@ -311,6 +328,54 @@ const signupReducer = (state = initialState, action) => {
         isResettingPassword: false,
         resetPasswordError: true,
         resetPasswordErrorMsg: action.error,
+      };
+    case LOGOUT_INIT:
+      return {
+        ...state,
+        isLoggingOut: true,
+        logoutError: false,
+      };
+
+    case LOGOUT_SUCCESS: {
+      const { data } = action;
+      return {
+        ...state,
+        isLoggingOut: false,
+        logoutResp: data,
+        isLoggedIn: false,
+      };
+    }
+
+    case LOGOUT_FAILURE:
+      return {
+        ...state,
+        isLoggingOut: false,
+        logoutError: true,
+        logoutErrorMsg: action.error,
+      };
+
+    case GET_REFRESH_TOKEN_INIT:
+      return {
+        ...state,
+        isGettingRefreshToken: true,
+        getRefreshTokenError: false,
+      };
+
+    case GET_REFRESH_TOKEN_SUCCESS: {
+      const { data } = action;
+      return {
+        ...state,
+        isGettingRefreshToken: false,
+        getRefreshTokenResp: data,
+      };
+    }
+
+    case GET_REFRESH_TOKEN_FAILURE:
+      return {
+        ...state,
+        isGettingRefreshToken: false,
+        getRefreshTokenError: true,
+        getRefreshTokenErrorMsg: action.error,
       };
 
     default:
