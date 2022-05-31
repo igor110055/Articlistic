@@ -52,7 +52,7 @@ function VerifyOTP({ setDisplayPage }) {
         // dispatch(userEmail(email));
         setDisplayPage("setNewPassword");
       }
-    } else setValidOtp(false);
+    } else if (verifyForgotEmailOTPError) setValidOtp(false);
   }, [
     verifyForgotEmailOTPError,
     verifyForgotEmailOTPSuccess,

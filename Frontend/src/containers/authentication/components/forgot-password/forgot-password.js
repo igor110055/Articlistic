@@ -28,6 +28,7 @@ function ForgotPassword({ setDisplayPage }) {
     )
       setDisplayPage("setNewPassword");
   }, []);
+  
   useEffect(() => {
     if (!getForgotEmailOTPError && getForgotEmailSuccess)
       setDisplayPage("verifyOTP");

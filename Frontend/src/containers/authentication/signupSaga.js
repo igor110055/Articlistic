@@ -198,7 +198,12 @@ function* followWriter(action) {
       Authorization: action.data.token,
     };
     const url = `${baseURL}/${endPoints.followMultipleWriters}`;
-    const data = yield call(authPostRequest, url, action.data.fd, headers);
+    const data = yield call(
+      authPostRequest,
+      url,
+      action.data.usernames,
+      headers
+    );
 
     if (!data.error) {
       yield put(followWriterSuccess(data));
