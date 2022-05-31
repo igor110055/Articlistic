@@ -88,7 +88,7 @@
   height: fit-content;
   max-height: 143px;
   max-width: 103px;
-  object-fit: cover;
+  object-fit: fill;
 }
 
 .writer-card-container .writer-details .writer-name {
@@ -130,6 +130,9 @@
   width: 100%;
 }
 .pick-writers-container .Desktop-buttons {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
   width: 100%;
 }
 
@@ -170,8 +173,9 @@
 
   .pick-writers-container .Desktop-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
+    /* margin-right: 40px; */
   }
 
   .pick-writers-container .Mobile-button {

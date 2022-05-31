@@ -22,14 +22,14 @@ function SetUpProfile({ setDisplayPage }) {
     sendProfileInfoError,
     profileInfoSuccess,
     sendProfileInfoResp,
-    user,
-  } = useSelector((state) => ({
+    user
+  } = useSelector(state => ({
     validUsername: state.signupReducer.validUsername,
     checkUsernameError: state.signupReducer.checkUsernameError,
     sendProfileInfoError: state.signupReducer.sendProfileInfoError,
     profileInfoSuccess: state.signupReducer.profileInfoSuccess,
     sendProfileInfoResp: state.signupReducer.sendProfileInfoResp,
-    user: state.user,
+    user: state.user
   }));
   const dispatch = useDispatch();
   const [country, setCountry] = useState("India");
@@ -65,17 +65,17 @@ function SetUpProfile({ setDisplayPage }) {
         dispatch(userUsername(sendProfileInfoResp.username));
         dispatch(userPName(sendProfileInfoResp.name));
         Cookie.set("accessToken", sendProfileInfoResp.accessToken, {
-          expires: 7,
+          expires: 7
         });
         Cookie.set("refreshToken", sendProfileInfoResp.refreshToken, {
-          expires: 30,
+          expires: 30
         });
         Cookie.set("oneDayBeforeAccessToken", true, { expires: 6 });
         const email = localStorage.getItem("userEmail");
         const newUser = {
           userUserName: sendProfileInfoResp.username,
           userProfileName: sendProfileInfoResp.name,
-          userEmail: email,
+          userEmail: email
         };
 
         localStorage.setItem("user", JSON.stringify(newUser));
@@ -83,6 +83,7 @@ function SetUpProfile({ setDisplayPage }) {
         // console.log("Email:", user);
         // setDisplayPage('mapWritersAndCategories'); //for writers
         // navigate("/writerDashboard");
+        localStorage.removeItem("createUserId");
         setDisplayPage("pickFavouriteWriters");
       } else {
         localStorage.removeItem("email");
@@ -132,7 +133,7 @@ function SetUpProfile({ setDisplayPage }) {
         id: createUserId,
         isWriter: true,
         country: country,
-        googleUser: false,
+        googleUser: false
       })
     );
   };
@@ -141,10 +142,10 @@ function SetUpProfile({ setDisplayPage }) {
       width: "100%",
       boxSizing: "border-box",
       marginTop: "4px",
-      height: "3rem",
+      height: "3rem"
     },
     "label + &": {
-      marginTop: "3px",
+      marginTop: "3px"
     },
     "& .MuiInputBase-input": {
       width: "100%",
@@ -155,9 +156,9 @@ function SetUpProfile({ setDisplayPage }) {
       "&:focus": {
         borderRadius: 4,
         borderColor: "#80bdff",
-        boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
-      },
-    },
+        boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)"
+      }
+    }
   }));
 
   return (
@@ -212,7 +213,7 @@ function SetUpProfile({ setDisplayPage }) {
             value={country}
             label="country"
             input={<BootstrapInput />}
-            onChange={(e) => {
+            onChange={e => {
               setCountry(e.target.value);
               // console.log(e.target.value);
             }}

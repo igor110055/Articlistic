@@ -21,6 +21,7 @@ import "./App.css";
 import MultipleTab from "./utils/MultipleTab";
 import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
+// import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 
 // import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 // import {

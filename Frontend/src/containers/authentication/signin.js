@@ -13,6 +13,8 @@ import PrimaryError from "./components/primary-error/primaryError";
 import { userEmail, userUsername, userPName } from "../user/userActions";
 import VerifyOTP from "./components/forgot-password/verifyOTP";
 import "./signin.css";
+import OnboardingNavbar from "../navbar/onBoardingNavbar";
+
 import SetNewPassword from "./components/forgot-password/setNewPassword";
 import Cookie from "js-cookie";
 
@@ -23,14 +25,14 @@ function SignIn() {
     loginErrorMsg,
     isLoggedIn,
     loginResp,
-    user,
-  } = useSelector((state) => ({
+    user
+  } = useSelector(state => ({
     isSendingLoginCred: state.signupReducer.isSendingLoginCred,
     loginError: state.signupReducer.loginError,
     loginErrorMsg: state.signupReducer.loginErrorMsg,
     isLoggedIn: state.signupReducer.isLoggedIn,
     loginResp: state.signupReducer.loginResp,
-    user: state.user,
+    user: state.user
   }));
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -73,7 +75,7 @@ function SignIn() {
         JSON.stringify({
           userEmailID: loginResp.private.email,
           userProfileName: loginResp.name,
-          userUserName: loginResp.username,
+          userUserName: loginResp.username
         })
       );
 
@@ -83,6 +85,7 @@ function SignIn() {
 
   return (
     <div>
+      <OnboardingNavbar />
       {displayPage === "sign-in" && (
         <div className="sign-in-container">
           <div className="sign-in-section">

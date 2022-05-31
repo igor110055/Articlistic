@@ -6,6 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  max-height: 608px;
 }
 
 .sign-in-container .sign-in-section {
@@ -167,12 +168,14 @@
 
 @media (min-width: 720px) {
   .sign-in-container {
-    margin-top: 3rem;
+    margin-top: 5rem;
     box-sizing: border-box;
     max-width: 474px;
     background: #ffffff;
     box-shadow: 0px 0px 70px -35px rgba(27, 115, 232, 0.43);
     border-radius: 32px;
     padding: 47px 80px;
+    max-height: 608px;
+
   }
 }

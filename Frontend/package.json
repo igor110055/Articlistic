@@ -49,6 +49,7 @@
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^3.0.2",
     "react-dom": "^17.0.2",
+    "react-google-login": "^5.2.2",
     "react-infinite-scroll-component": "^6.1.0",
     "react-material-ui-carousel": "^3.1.1",
     "react-materialui-tags": "^1.0.4",

@@ -18,12 +18,12 @@ function PickFavWriters() {
   const {
     pickFavWritersData,
     isGettingPickFavWritersData,
-    pickFavWritersDataError,
-  } = useSelector((state) => ({
+    pickFavWritersDataError
+  } = useSelector(state => ({
     pickFavWritersData: state.signupReducer.pickFavWritersData,
     isGettingPickFavWritersData:
       state.signupReducer.isGettingPickFavWritersData,
-    pickFavWritersDataError: state.signupReducer.pickFavWritersDataError,
+    pickFavWritersDataError: state.signupReducer.pickFavWritersDataError
   }));
 
   const [selection, setSelection] = useState(
@@ -35,7 +35,7 @@ function PickFavWriters() {
     dispatch(getPickFavDataInit({ token }));
   }, []);
 
-  const handleWriterClick = (idx) => {
+  const handleWriterClick = idx => {
     const array = selection.slice();
     array[idx] = !array[idx];
     setSelection(array);
@@ -68,14 +68,14 @@ function PickFavWriters() {
     "Cultures",
     "Sports",
     "Economy",
-    "Politics",
+    "Politics"
   ];
 
   return (
     <div className="pick-writers-container">
       <h3 className="pick-writers-header">Pick your favourite writers</h3>
       <div className="pick-writers-separator"></div>
-      <div className="tags-container">
+      {/* <div className="tags-container">
         {tagsData.map((tag, idx) => (
           <button
             className={`tag-button ${idx === 1 ? "blue-tag" : ""}`}
@@ -84,7 +84,7 @@ function PickFavWriters() {
             {tag}
           </button>
         ))}
-      </div>
+      </div> */}
       <div className="writers-div">
         {pickFavWritersData.map((writer, idx) => (
           <div
@@ -105,7 +105,7 @@ function PickFavWriters() {
         <Button text={"Start Reading"} blue />
       </div>
       <div className="Desktop-buttons">
-        <div className="tags-container">
+        {/* <div className="tags-container">
           {tagsData.map((tag, idx) => (
             <button
               className={`tag-button ${idx === 1 ? "blue-tag" : ""}`}
@@ -114,9 +114,15 @@ function PickFavWriters() {
               {tag}
             </button>
           ))}
-        </div>
+        </div> */}
 
-        <div style={{ width: "33%" }}>
+        <div
+          style={{
+            minWidth: "312px",
+            maxWidth: "368px",
+            width: "100%"
+          }}
+        >
           <Button
             text={"Start Reading"}
             blue
