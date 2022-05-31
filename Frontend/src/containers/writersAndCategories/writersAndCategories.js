@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 import { userUsername } from "../user/userActions";
 import Cookie from "js-cookie";
 import crypto from "crypto-js";
-
+import { encryptionSalt } from "../../utils/apiEndPoints";
 const WritersAndCategories = () => {
   const [submitClicked, setSubmitClicked] = useState(false);
   const dispatch = useDispatch();
@@ -21,11 +21,11 @@ const WritersAndCategories = () => {
     localStorage.setItem("displayPage", "mapWritersAndCategories");
     const descryptedAccessToken = crypto.RC4.decrypt(
       Cookie.get("accessToken"),
-      process.env.REACT_APP_ENCRYPTION_SALT
+      encryptionSalt
     ).toString(crypto.enc.Utf8);
     const encryptedAccessToken = crypto.AES.encrypt(
       descryptedAccessToken,
-      process.env.REACT_APP_ENCRYPTION_SALT
+      encryptionSalt
     );
     dispatch(getCategoriesWriters({}, encryptedAccessToken));
     dispatch(

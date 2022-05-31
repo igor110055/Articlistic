@@ -7,6 +7,8 @@ var redis = require('../../db/redis/index');
 
 const logger = require('../../utils/logger/index')
 var file = require('../../middleware/files');
+const Sentry = require('@sentry/node');
+
 
 const useAuth = require('../../middleware/auth')
 
@@ -28,15 +30,16 @@ module.exports = function userRouter() {
         .delete('/unfollow', useAuth(), unfollowWriter)
         .get('/following', useAuth(), getFollowing)
         .get('/followers', useAuth(), getFollowers)
-
         .get('/name', getNameByUsername)
 
 
-        .post('/bookmark/add', useAuth(), checkDb(true), bookmarkArticle)
-        .delete('/bookmark/remove', useAuth(), checkDb(true), removeBookmark)
+        .post('/bookmark', useAuth(), checkDb(true), bookmarkArticle)
+        .delete('/bookmark', useAuth(), checkDb(true), removeBookmark)
         .get('/bookmarks', useAuth(), getBookmarksForUser)
 
-        .put('/profile/edit', useAuth(), file.single('image'), editProfile)
+        .put('/profile', useAuth(), file.single('image'), editProfile)
+
+        .get('/profile/my', useAuth(), getWriterProfile)
         .get('/profile', getProfile)
 
         .get('/homepage', useAuth(), getHomePage)
@@ -51,6 +54,22 @@ module.exports = function userRouter() {
 
     */
 
+    async function getWriterProfile(req, res) {
+        const routeName = 'get writer profile';
+        const username = req.username;
+
+        try {
+            var writer = await mongo.writers.getWriterProfile(username, true);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+
+        return res.status(200).send({
+            writer
+        })
+    }
+
 
     async function getNameByUsername(req, res) {
         let routeName = 'getNameByUsername';
@@ -59,6 +78,7 @@ module.exports = function userRouter() {
         let {
             username
         } = req.query;
+
 
         let name;
 
@@ -86,6 +106,8 @@ module.exports = function userRouter() {
                     await redis.name.setName(username, name);
 
                 } catch (e) {
+                    Sentry.captureException('Redis DB not working to set name: ' + name + 'for username' + username);
+
                     logger.fatal("Redis db not working in set username " + e.toString());
                 }
             }
@@ -109,6 +131,10 @@ module.exports = function userRouter() {
             name
         } = req.query;
 
+        if (!buffer && !name && !place && !about) {
+            throw new MissingParamError('Nothing to update', routeName);
+        }
+
 
 
         if (buffer) {
@@ -130,6 +156,16 @@ module.exports = function userRouter() {
 
             }
             throw new DatabaseError(routeName, e);
+        }
+
+        if (name) {
+
+            try {
+                await redis.name.setName(username, name);
+            } catch (e) {
+                Sentry.captureException('Redis DB not working to set name: ' + name + 'for username' + username);
+            }
+
         }
 
         let profilePic = resLink ? resLink.url : resLink;
@@ -206,6 +242,9 @@ module.exports = function userRouter() {
             skip
         } = req.query;
 
+        if (!limit) limit = 8;
+        if (!skip) skip = 0;
+
         limit = parseInt(limit);
         skip = parseInt(skip);
 
@@ -255,6 +294,8 @@ module.exports = function userRouter() {
         let follows = req.query.follows;
         let username = req.username;
 
+        if (!follows) throw new MissingParamError('Missing parameter: follows', routeName);
+
         if (username == follows) throw new NotAuthenticatedError('You can not follow yourself', routeName);
 
 
@@ -267,7 +308,7 @@ module.exports = function userRouter() {
 
         if (!x) throw new NotFoundError('User to be followed does not exist', routeName);
 
-        let isWriter = x.isWriter;
+        let isWriter = x.isWriter ? true : false;
 
         try {
             await mongo.followers.follow(username, follows, isWriter);
@@ -286,6 +327,8 @@ module.exports = function userRouter() {
 
         let follows = req.query.follows;
         let username = req.username;
+
+        if (!follows) throw new MissingParamError('Missing parameter: follows', routeName);
 
         try {
             await mongo.followers.unfollow(username, follows);
@@ -307,6 +350,11 @@ module.exports = function userRouter() {
             limit,
             skip
         } = req.query;
+
+        if (!username) throw new MissingParamError('Username not present')
+
+        if (!limit) limit = 10;
+        if (!skip) skip = 0;
 
         limit = parseInt(limit);
         skip = parseInt(skip);
@@ -332,6 +380,11 @@ module.exports = function userRouter() {
             skip
         } = req.query;
 
+        if (!username) throw new MissingParamError('Username is undefined', routeName);
+
+        if (!limit) limit = 10;
+        if (!skip) skip = 0;
+
         limit = parseInt(limit);
         skip = parseInt(skip);
 
@@ -340,7 +393,7 @@ module.exports = function userRouter() {
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
-
+        logger.info(followers);
         res.status(200).send({
             followers
         });

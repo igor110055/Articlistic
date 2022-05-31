@@ -1,71 +1,14 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_ANALYTICS
+} = require('../../../../constants');
 const dbName = config.mongo.db;
 const MDB = require('../client').MDB;
 
 const logger = require('../../../utils/logger/index')
 
-const collection = 'analytics';
-// TODO: Add mongo db url here -> In config and .env file
+const collection = MDB_COLLECTION_ANALYTICS;
 
-
-
-async function getUserAnalytics(username) {
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-
-        let res = await db.findOne({
-            'username': username
-        });
-
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("getUserAnalytics mongo response time: " + timeTaken.toString());
-
-        return res;
-
-    } catch (e) {
-        throw e;
-    }
-}
-
-async function newUser(username) {
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-
-        let res = await db.insertOne({
-            'username': username,
-            'writers': [],
-            'articles': []
-        })
-
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("newUser mongo response time: " + timeTaken.toString());
-
-
-        return res;
-
-
-    } catch (e) {
-        throw e;
-    }
-}
 
 
 async function createUniquenessIndex() {
@@ -99,6 +42,38 @@ async function createUniquenessIndex() {
     }
 }
 
+
+/*
+
+async function getUserAnalytics(username) {
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+
+        let res = await db.findOne({
+            'username': username
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("getUserAnalytics mongo response time: " + timeTaken.toString());
+
+        return res;
+
+    } catch (e) {
+        throw e;
+    }
+}
+
+
 async function updateAnalyticsForArticleFetch(username, articleId, writer) {
     let client;
 
@@ -109,15 +84,15 @@ async function updateAnalyticsForArticleFetch(username, articleId, writer) {
 
         let startTime = Date.now();
 
-        /*
-        Review required here. 
+        
+        // Review required here. 
 
-        What's happening here? 
-        The first query just adds 1 to each writer.article_visit and no of visits on article. 
-        In case there is no such existence of either writer or article. 
-        See next query: It creates a new element with articleId and writerId
+        // What's happening here? 
+        // The first query just adds 1 to each writer.article_visit and no of visits on article. 
+        // In case there is no such existence of either writer or article. 
+        // See next query: It creates a new element with articleId and writerId
 
-        */
+        
         let res = await db.updateOne({
             'username': username,
             'writers.name': writer,
@@ -180,10 +155,8 @@ async function updateAnalyticsForWriterFetch(username, writer) {
 
         let startTime = Date.now();
 
-        /*
-        What's happening here? 
-        Check last query - It's similar you'll get the hang of it. 
-        */
+        // What's happening here? 
+        // Check last query - It's similar you'll get the hang of it. 
 
         let res = await db.updateOne({
             'username': username,
@@ -226,10 +199,10 @@ async function updateAnalyticsForWriterFetch(username, writer) {
 
 }
 
+
+
+*/
+
 module.exports = {
-    getUserAnalytics,
-    updateAnalyticsForArticleFetch,
-    updateAnalyticsForWriterFetch,
-    createUniquenessIndex,
-    newUser
+    createUniquenessIndex
 }

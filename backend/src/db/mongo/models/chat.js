@@ -1,9 +1,10 @@
-const config = require('../../../../config')
-const MongoClient = require('mongodb').MongoClient;
+const config = require('../../../../config');
+const {
+    MDB_COLLECTION_CHATS
+} = require('../../../../constants');
 
 const dbName = config.mongo.db;
-const collection = 'chats';
-const mongodbUri = config.mongo.uri; // TODO: Add mongo db url here -> In config and .env file
+const collection = MDB_COLLECTION_CHATS;
 const MDB = require('../client').MDB;
 
 const logger = require('../../../utils/logger/index')
@@ -31,7 +32,7 @@ async function createUniquenessIndex2() {
 
         logger.info("chats: createUniquenessIndex2 mongo response time: " + timeTaken.toString());
 
-        
+
 
 
     } catch (e) {
@@ -82,7 +83,7 @@ async function fetchChatsForUser(username, limit, skip) {
 
         logger.info("fetchChatsForUser mongo response time: " + timeTaken.toString());
 
-        
+
         return allChats;
 
 
@@ -134,7 +135,7 @@ async function createNewResponse(chatId, articleId, selection, user, writer, cha
 
         logger.info("createNewResponse mongo response time: " + timeTaken.toString());
 
-        
+
         return res;
 
 
@@ -171,7 +172,7 @@ async function createUniquenessIndex() {
 
         logger.info("createUniquenessIndex mongo response time: " + timeTaken.toString());
 
-        
+
         return res;
 
 
@@ -208,7 +209,7 @@ async function addNewChat(chatId, chatObj) {
 
         logger.info("addNewChat mongo response time: " + timeTaken.toString());
 
-        
+
         return res;
 
 

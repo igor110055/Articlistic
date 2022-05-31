@@ -1,10 +1,13 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_FOLLOWERS
+} = require('../../../../constants');
 const dbName = config.mongo.db;
 const MDB = require('../client').MDB;
 
 const logger = require('../../../utils/logger/index')
 
-const collection = 'followers';
+const collection = MDB_COLLECTION_FOLLOWERS;
 
 async function createUniqueIndex() {
     let client;
@@ -37,7 +40,32 @@ async function createUniqueIndex() {
 
 }
 
+async function followMultiple(followArray = []) {
 
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+
+        let startTime = Date.now();
+
+        const res = await db.insertMany(followArray)
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("follow multiple mongo response time: " + timeTaken.toString());
+
+        return res.insertedCount;
+
+    } catch (e) {
+        throw e;
+    }
+
+}
 
 async function follow(username, follows, isWriter) {
     let client;
@@ -52,7 +80,6 @@ async function follow(username, follows, isWriter) {
         await db.insertOne({
             username: username,
             follows: follows,
-            isWriter: isWriter ? true : false,
             timestamp: Date.now()
         })
 
@@ -226,5 +253,6 @@ module.exports = {
     getFollowedWriters,
     createUniqueIndex,
     getFollowing,
-    getFollowers
+    getFollowers,
+    followMultiple
 }

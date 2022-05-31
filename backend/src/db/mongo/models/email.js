@@ -1,12 +1,15 @@
 var config = require('../../../../config');
-const MongoClient = require('mongodb').MongoClient;
+const {
+    MDB_COLLECTION_EMAIL
+} = require('../../../../constants');
 
 const logger = require('../../../utils/logger/index')
 const MDB = require('../client').MDB;
 
 const dbName = config.mongo.db;
-const collection = 'email';
-const mongodbUri = config.mongo.uri;
+const collection = MDB_COLLECTION_EMAIL;
+
+
 async function createTTLIndex() {
 
     let client;
@@ -31,7 +34,7 @@ async function createTTLIndex() {
 
         logger.info("createTTLIndex - email - mongo response time: " + timeTaken.toString());
 
-        
+
         return res;
 
 
@@ -64,7 +67,7 @@ async function createOTP(email, otp) {
 
         logger.info("CreateOTP - email - mongo response time: " + timeTaken.toString());
 
-        
+
         return res;
 
 
@@ -72,12 +75,113 @@ async function createOTP(email, otp) {
         throw e;
     }
 }
+
+
+async function getEmailDoc(email) {
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+
+        let res = await db.findOne({
+            email: email
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Get email doc - email - mongo response time: " + timeTaken.toString());
+
+
+        return res;
+
+
+    } catch (e) {
+        throw e;
+    }
+
+}
+
+
+async function createWalletOTP(email, otp, type) {
+
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+
+        let res = await db.insertOne({
+            created_at: new Date(),
+            email,
+            otp,
+            type
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Create wallet otp - email - mongo response " + `Type: ${type}` + "  time: " + timeTaken.toString());
+
+        return res;
+
+
+    } catch (e) {
+        throw e;
+    }
+
+}
+
+
+async function checkWalletOTP(email, otp, type) {
+
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+
+        let res = await db.findOne({
+            email,
+            otp,
+            type
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Check wallet otp - email - mongo response - " + `Type: ${type}` + "  time: " + timeTaken.toString());
+
+        return res;
+
+
+    } catch (e) {
+        throw e;
+    }
+
+}
+
+
 async function checkOTP(email, otp) {
     let client;
 
     try {
-        logger.debug(email);
-        logger.debug(otp);
 
         client = await MDB.getClient();
         let db = client.db(dbName).collection(collection);
@@ -96,7 +200,7 @@ async function checkOTP(email, otp) {
 
         logger.info("checkOTP - email - mongo response time: " + timeTaken.toString());
 
-        
+
         return res;
 
 
@@ -127,7 +231,7 @@ async function deleteOTP(otp) {
 
         logger.info("deleteOTP - email - mongo response time: " + timeTaken.toString());
 
-        
+
 
         return res;
 
@@ -159,7 +263,7 @@ async function deleteAllOTPsWithEmail(email) {
 
         logger.info("deleteOTP - email - mongo response time: " + timeTaken.toString());
 
-        
+
 
         return res;
 
@@ -169,10 +273,47 @@ async function deleteAllOTPsWithEmail(email) {
     }
 }
 
+
+async function deleteAllWalletOTPsWithEmail(email, type) {
+    let client;
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+
+        let res = await db.deleteMany({
+            email: email,
+            type
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("deleteOTP - email - mongo response time: " + timeTaken.toString());
+
+
+
+        return res;
+
+
+    } catch (e) {
+        throw e;
+    }
+}
+
+
 module.exports = {
     createOTP,
     checkOTP,
     deleteOTP,
     createTTLIndex,
-    deleteAllOTPsWithEmail
+    deleteAllOTPsWithEmail,
+    deleteAllWalletOTPsWithEmail,
+    getEmailDoc,
+    createWalletOTP,
+    checkWalletOTP
 }

@@ -82,6 +82,7 @@ const WriterPublication = () => {
   };
 
   useEffect(() => {
+    // console.log(publicationsData);
     if (!publicationsData) {
       const token = getAuthToken();
       dispatch(

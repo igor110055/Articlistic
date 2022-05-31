@@ -8,7 +8,7 @@ function sign(username) {
     let accessToken = jwt.sign({
         username: username
     }, config.jwt.tokenSecret, {
-        expiresIn: '1 year'
+        expiresIn: '7 days'
     });
     let encryptedAccessToken = encryption.encryptForFrontend({
         token: accessToken

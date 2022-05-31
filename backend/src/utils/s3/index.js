@@ -12,8 +12,13 @@ let dirForArticles = "articles/"
 let dirForProfile = "/profile/"
 let dirForPublication = "/publications/"
 
+const dirForWithdrawReverseTransaction = "reverseTransaction/";
+const dirForWithdrawMarkAsSuccess = "markSuccess/";
+
+
 const articlesBucket = config.aws.s3BucketArticles;
 const profileBucket = config.aws.s3BucketProfile;
+const errorBucket = "dev-attentioun-error-data";
 
 
 
@@ -34,6 +39,7 @@ function __init() {
             },
             signatureVersion: 'v4'
         });
+
     }
 
     return {
@@ -41,18 +47,47 @@ function __init() {
         uploadImage: uploadImage,
         uploadArticleImageEmbed: uploadImageEmbed,
         uploadPublicationArticle: uploadPublicationArticle,
-        deleteFile: deleteFile
+        deleteFile: deleteFile,
+        deleteAllImagesRelatedToArticle: deleteAllImagesRelatedToArticle,
+        deleteArticle: deleteArticle,
+        fullDeletePublication: fullDeletePublication,
+        fullDeleteArticle: fullDeleteArticle,
+        withdrawTransactionReverseFailure,
+        withdrawMarkAsSuccessFailure,
+        deleteMultipleFilesFromErrorData
+
     }
 }
+
+
+async function deleteMultipleFilesFromErrorData(files = []) {
+    await deleteMultipleFiles(files, errorBucket);
+}
+
+async function withdrawTransactionReverseFailure(username, transactionId, amount) {
+    const fileName = dirForWithdrawReverseTransaction + username + "_" + transactionId + ".json";
+    const fileContent = JSON.stringify({
+        username,
+        transactionId,
+        amount
+    });
+    await uploadFileFromStream(fileContent, fileName, errorBucket);
+}
+
+async function withdrawMarkAsSuccessFailure(username, transactionId) {
+    const fileName = dirForWithdrawMarkAsSuccess + username + "_" + transactionId + ".txt";
+    const fileContent = `${transactionId}`;
+    await uploadFileFromStream(fileContent, fileName, errorBucket);
+
+}
+
 
 
 async function uploadPublicationArticle(buffer, username, publicationId) {
     let fileName = username + dirForPublication + 'articles/' + publicationId + '.gzip';
 
     /*
-
     yash-dxt/publications/articles/publicationId
-
     */
     try {
         var compressedFile = await gzip(buffer);
@@ -78,15 +113,15 @@ async function uploadPublicationArticle(buffer, username, publicationId) {
 
 */
 
-async function uploadImage(buffer, username, publicationId, publicationImage = false) {
+async function uploadImage(buffer, username, publicationId, publicationArticleImage = false) {
     let startTime = new Date();
     let fileName;
 
     if (publicationId) {
 
-        if (publicationImage) {
+        if (publicationArticleImage) {
 
-            fileName = username + dirForPublication + 'articleImages/' + Date.now().toString() + '.png'
+            fileName = username + dirForPublication + 'articleImages/' + publicationId + '.png'
 
         } else {
 
@@ -121,6 +156,30 @@ async function uploadImage(buffer, username, publicationId, publicationImage = f
 
 }
 
+async function del(fileName, bucket) {
+    let startTime = new Date();
+
+    let uploadParams = {
+        Bucket: bucket,
+        Key: fileName
+    }
+
+    let res = await s3.deleteObject(uploadParams).promise();
+
+    let endTime = new Date();
+
+    logger.info(`AWS S3 del time taken for file - ${fileName} = ${endTime - startTime} `);
+
+    return res;
+}
+
+async function deleteArticleImage() {
+
+}
+
+async function deleteAllArticleImages() {
+
+}
 
 
 async function deleteFile(fileName, profile) {
@@ -167,6 +226,120 @@ async function uploadImageEmbed(buffer, username, articleId) {
     return `${urlForArticles}${fileName}`;
 }
 
+async function deleteAllImagesRelatedToArticle(articleId) {
+    let fileName = dirForImages + `${articleId}/`;
+    try {
+        await del(fileName, articlesBucket);
+    } catch (e) {
+        throw e;
+    }
+    return 'success';
+}
+
+async function deleteArticle(username, articleId) {
+    let fileName = dirForArticles + username + "/" + articleId + '.gzip';
+    try {
+        await del(fileName, articlesBucket);
+    } catch (e) {
+        throw e;
+    }
+    return 'success';
+
+}
+
+
+
+
+async function deleteMultipleFiles(files = [], bucket) {
+
+    let startTime = new Date();
+
+    const uploadParams = {
+        Bucket: bucket,
+        Delete: {
+            Objects: files
+        }
+    };
+
+
+    let res = await s3.deleteObjects(uploadParams).promise();
+
+    let endTime = new Date();
+
+    logger.info(`AWS S3 delete multiple files time taken for file ${endTime - startTime}ms `);
+
+    return res;
+
+}
+
+async function fullDeletePublication(username, publicationId) {
+    const publicationArticleDir = username + dirForPublication + 'articles/' + publicationId + '.gzip';
+    const publicationImagesDir = username + dirForPublication + 'images/' + publicationId + '.png';
+    const publicationArticleImagesDir = username + dirForPublication + 'articleImages/' + publicationId + '.png';
+
+
+    const files = [{
+        Key: publicationArticleDir
+    }, {
+        Key: publicationImagesDir
+    }, {
+        Key: publicationArticleImagesDir
+    }];
+
+    try {
+        await deleteMultipleFiles(files, profileBucket);
+    } catch (e) {
+        logger.debug(e);
+        throw e;
+    }
+}
+
+
+
+
+
+
+async function fullDeleteArticle(username, articleId) {
+    const articleDir = dirForArticles + username + "/" + articleId + '.gzip';;
+
+    const files = [{
+        Key: articleDir
+    }];
+
+
+    const imagesDir = dirForImages + articleId + '/';
+    const listParams = {
+        Bucket: articlesBucket,
+        Prefix: imagesDir
+    };
+
+    const listedObjects = await s3.listObjectsV2(listParams).promise();
+
+    if (listedObjects.Contents.length != 0) {
+
+        /**
+         * Some slick JS code to extract Key from List of maps & then add array 
+         * with name file as {Key: 'file Name'}
+         */
+
+        listedObjects.Contents.forEach(({
+            Key
+        }) => {
+            files.push({
+                Key
+            });
+        });
+
+
+    }
+
+
+    try {
+        await deleteMultipleFiles(files, articlesBucket);
+    } catch (e) {
+        throw e;
+    }
+}
 
 
 async function uploadFileFromStream(buffer, fileName, bucket) {

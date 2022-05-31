@@ -16,7 +16,6 @@ import {
   UPDATE_PUBLICATIONS_SUCCESS,
   DELETE_PUBLICATION,
   DELETE_PUBLICATION_SUCCESS
-
 } from "./../../utils/actionTypes";
 
 export const getPublications = data => {

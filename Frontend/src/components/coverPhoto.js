@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-
+// import Cookie from "js-cookie";
+// import crypto from "crypto-js";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import backgroundSVG from "./../Images/banner-background.svg";
@@ -10,8 +11,10 @@ import "./Image.svg";
 import userImage from "./../Images/user-image.png";
 import "./../index.css";
 import WriterEditorCoverPhotoUnsplash from "./writerEditorCoverPhotoUnsplash";
+// import SVG from "./../Images/background.svg";
 import { Button, Dialog, TextareaAutosize } from "@mui/material";
-
+// import $ from "jquery";
+// import { uploadArticle } from "../containers/writerEditor/writerEditorActions";
 import { showSnackbar } from "../containers/common/commonActions";
 import { baseURL, endPoints } from "../utils/apiEndPoints";
 import { getAuthToken } from "../containers/common/commonFunctions";
@@ -35,6 +38,7 @@ const CoverPhoto = ({
   const [progress, setProgress] = useState(0);
   const [unsplashSelected, setUnsplashSelected] = useState(false);
   const [openImageDialog, setOpenImageDialog] = useState(false);
+  // const [getArticleInitiate, setGetArticleInitiate] = useState(false);
   const [titleLength, setTitleLength] = useState(articleTitle.length || 0);
   const [subtitleLength, setSubtitleLength] = useState(articleDes.length || 0);
   const titleRef = useRef(null);
@@ -69,7 +73,21 @@ const CoverPhoto = ({
     }
   }, [selectedFile]);
 
-  const { getArticleResp, isUploadingArticle } = useSelector(state => ({
+  const {
+    // user,
+    // createNewArticleResp,
+    // isUploadingImage,
+    // uploadImageError,
+    // uploadImageResp,
+    // isGettingAllArticles,
+    // getAllArticlesError,
+    // isGettingArticle,
+    // getArticleError,
+    getArticleResp,
+    // uploadArticleError,
+    isUploadingArticle
+    // uploadArticleResp
+  } = useSelector(state => ({
     user: state.user,
     createNewArticleResp: state.writerEditor.createNewArticleResp,
     isuploadingImage: state.writerEditor.isUploadingImage,
@@ -164,7 +182,9 @@ const CoverPhoto = ({
         setArticleCover(resp.data.image);
         setOpenImageDialog(false);
       })
-      .catch(error => {});
+      .catch(error => {
+        // console.log(error);
+      });
   };
 
   const calculateHeight = () => {
@@ -202,7 +222,9 @@ const CoverPhoto = ({
   useEffect(() => {
     setTitleLength(articleTitle?.length);
   }, [articleTitle]);
-
+  // console.log(articleCover);
+  // console.log(articleTitle);
+  // console.log(articleDes);
   const readingTime = parseInt(
     readingTimeLive ||
       JSON.parse(localStorage.getItem("article"))?.article?.public.readingTime

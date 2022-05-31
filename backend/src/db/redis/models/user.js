@@ -3,10 +3,6 @@
 // } from 'redis';
 
 
-var mongo = require('../../mongo/index');
-var {
-    createClient
-} = require('redis');
 const config = require('../../../../config');
 const logger = require('../../../utils/logger');
 

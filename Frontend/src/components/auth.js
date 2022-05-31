@@ -64,7 +64,7 @@ const Auth = ({ setAlreadySignedIn }) => {
       logout(
         {
           accessToken: temp,
-          username: user.userUserName,
+          username: user.userUserName
         },
         temp
       )
@@ -94,13 +94,13 @@ const Auth = ({ setAlreadySignedIn }) => {
       <Dialog
         open={true}
         classes={{
-          paper: classes.dialogPaper,
+          paper: classes.dialogPaper
         }}
         sx={{
           "& .MuiPaper-root": {
             borderRadius: "10px",
-            height: "max-content",
-          },
+            height: "max-content"
+          }
         }}
       >
         <p className={classes.title}>Stay signed in? 💁‍♀️</p>
@@ -116,7 +116,7 @@ const Auth = ({ setAlreadySignedIn }) => {
               textTransform: "capitalize",
               background:
                 "linear-gradient(128.16deg, #0B3BDB 0%, #0016B1 90.57%)",
-              borderRadius: "10px",
+              borderRadius: "10px"
             }}
             disabled={isGettingRefreshToken || isLoggingOut}
             onClick={handleSignout}
@@ -138,7 +138,7 @@ const Auth = ({ setAlreadySignedIn }) => {
               textTransform: "capitalize",
               background:
                 "linear-gradient(128.16deg, #0B3BDB 0%, #0016B1 90.57%)",
-              borderRadius: "10px",
+              borderRadius: "10px"
             }}
             disabled={isGettingRefreshToken || isLoggingOut}
             onClick={handleKeepSignedIn}
@@ -163,17 +163,17 @@ const useStyles = makeStyles({
     minHeight: "(100vh - 4.4rem)",
     backgroundColor: "white",
     width: "100%",
-    marginTop: "4.2rem",
+    marginTop: "4.2rem"
   },
   title: {
     textAlign: "center",
-    fontSize: "1.8em",
+    fontSize: "1.8em"
   },
 
   signedInDialog: {
     display: "flex",
     justifyContent: "space-between",
-    padding: "3%",
+    padding: "3%"
   },
   dialogPaper: {
     // minHeight: "40vh",
@@ -182,8 +182,8 @@ const useStyles = makeStyles({
     // maxWidth: "30vw",
     height: "30em",
     width: "30em",
-    padding: "1%",
-  },
+    padding: "1%"
+  }
 });
 
 export default Auth;

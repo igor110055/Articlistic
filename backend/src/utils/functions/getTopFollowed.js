@@ -1,13 +1,11 @@
+/**
+
 const logger = require("../logger");
 
 module.exports =
     function getTopFollowed(analytics, user) {
 
-        /*
-        ATT005
-        optimise the next two lines - O(N*N);
-        convert user.following to set. 
-        */
+    
 
         let startTime = Date.now();
         const sortedFollowing = [];
@@ -31,3 +29,6 @@ module.exports =
         logger.info("getTopFollowed took: " + (finishTime - startTime).toString());
         return sortedFollowing;
     }
+
+
+ */

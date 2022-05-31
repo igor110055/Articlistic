@@ -11,19 +11,6 @@ const phone = '9315859952'
 const password = 'Default@123'
 
 
-beforeEach(async () => {
-    await request(app).post('/onboarding/createUser').send({
-        username,
-        email,
-        password,
-        phone,
-        name,
-        international
-    }).expect(201);
-
-})
-
-
 test('Returns session Id on international (American) & national users', async () => {
 
     /*
@@ -116,6 +103,7 @@ test('Verification of OTP in case correct parameters', async () => {
     await request(app).post('/onboarding/phone/verifyOTP').send({
             phone: '9315859951',
             international: false,
+            code: 123456,
             sessionId: 'temp'
         })
         .expect(200);
@@ -129,6 +117,8 @@ test('Verification of OTP in case correct parameters', async () => {
     await request(app).post('/onboarding/phone/verifyOTP').send({
             phone: '+15742137586',
             international: true,
+            code: 123456,
+
             sessionId: 'temp'
         })
         .expect(200);
@@ -142,7 +132,9 @@ test('Verification of OTP in case correct parameters', async () => {
 
     await request(app).post('/onboarding/phone/verifyOTP').send({
             phone: '+31291808923',
-            international: true
+            international: true,
+            code: 123456,
+
         })
         .expect(200);
 

@@ -1,0 +1,90 @@
+version: 0.2
+
+env:
+  variables:
+     PORT: "3000"
+     HOST: "0.0.0.0"
+     NODE_OPTIONS: "--openssl-legacy-provider"
+     # key: "value"
+     # key: "value"
+  #parameter-store:
+     # key: "value"
+     # key: "value"
+  #secrets-manager:
+     # key: secret-id:json-key:version-stage:version-id
+     # key: secret-id:json-key:version-stage:version-id
+  #exported-variables:
+     # - variable
+     # - variable
+  #git-credential-helper: yes
+#batch:
+  #fast-fail: true
+  #build-list:
+  #build-matrix:
+  #build-graph:
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - n 17
+  #install:
+    #If you use the Ubuntu standard image 2.0 or later, you must specify runtime-versions.
+    #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
+    #runtime-versions:
+      # name: version
+      # name: version
+    #commands:
+      # - command
+      # - command
+  pre_build:
+    commands:
+      - aws codeartifact login --tool npm --repository attentioun-web-app --domain attentioun --domain-owner 605567701750
+      - cd Frontend/
+      - ls
+      - node --version
+      - npm install --legacy-peer-deps
+      - cd ../backend/
+      - npm install
+      # - command
+      # - command
+  build:
+    commands:
+      - cd ../Frontend/
+      - npm run build
+      - ls
+      - cd ..
+      - ls
+      - pwd
+      # - command
+      # - command
+  #post_build:
+    #commands:
+      # - command
+      # - command
+#reports:
+  #report-name-or-arn:
+    #files:
+      # - location
+      # - location
+    #base-directory: location
+    #discard-paths: yes
+    #file-format: JunitXml | CucumberJson
+artifacts:
+  files:
+    - Frontend/build/**/*
+    - Frontend/node_modules/**/*
+    - Frontend/RunFrontendScript.sh
+    - Frontend/FrontendStopScript.sh
+    - backend/**/*
+    - appspec.yml
+  name: artifact-1.0.2
+  #-$(date +%Y-%m-%d)-$(date +%H:%M:%S:%N)
+    #- node_modules/**/*
+    # - location
+  #name: $(date +%Y-%m-%d)
+  #discard-paths: yes
+  #base-directory: location
+#cache:
+  #paths:
+    # - paths

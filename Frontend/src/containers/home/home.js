@@ -7,33 +7,37 @@ import { getFollowedWriters } from "./homeActions";
 import WritersWithCards from "../../components/home/writersWithCards";
 import MiniDrawer from "../../components/home/writerDrawer";
 import WritersList from "../../components/home/writersList";
-import Cookie from "js-cookie";
-import r1 from "./../../Images/dummy/r1.jpg";
-import r2 from "./../../Images/dummy/r2.jpg";
-import r3 from "./../../Images/dummy/r3.jpg";
+// import { userUsername } from "../user/userActions";
+// import { Button, Dialog, DialogTitle, CircularProgress } from '@mui/material';
+import Cookie from 'js-cookie';
+// import crypto from 'crypto-js';
+// import Auth from "../../components/auth";
+import r1 from './../../Images/dummy/r1.jpg';
+import r2 from './../../Images/dummy/r2.jpg';
+import r3 from './../../Images/dummy/r3.jpg';
 import { getAuthToken } from "../common/commonFunctions";
 
 const Home = () => {
-  const cs = [r1, r2, r3];
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const [alreadySignedIn, setAlreadySignedIn] = useState(false);
-  const [getFollowedInitiate, setGetFollowedInitiate] = useState(false);
-  const [dataReceived, setDataReceived] = useState(false);
-  // const [bookmarkDialog, setBookmarkDialog] = useState(false);
-  const {
-    isGettingFollowedWriters,
-    getFollowedWritersError,
-    // getFollowedWritersErrorMsg,
-    // getFollowedWritersResp,
-    userUserName
-  } = useSelector(state => ({
-    isGettingFollowedWriters: state.home.isGettingFollowedWriters,
-    getFollowedWritersError: state.home.getFollowedWritersError,
-    getFollowedWritersErrorMsg: state.home.getFollowedWritersErrorMsg,
-    getFollowedWritersResp: state.home.getFollowedWritersResp,
-    userUserName: state.user.userUserName
-  }));
+    const cs = [r1, r2, r3];
+    const classes = useStyles();
+    const dispatch = useDispatch();
+    const [alreadySignedIn, setAlreadySignedIn] = useState(false);
+    const [getFollowedInitiate, setGetFollowedInitiate] = useState(false);
+    const [dataReceived, setDataReceived] = useState(false);
+    // const [bookmarkDialog, setBookmarkDialog] = useState(false);
+    const {
+        isGettingFollowedWriters,
+        getFollowedWritersError,
+        // getFollowedWritersErrorMsg,
+        // getFollowedWritersResp,
+        userUserName,
+    } = useSelector((state) => ({
+        isGettingFollowedWriters: state.home.isGettingFollowedWriters,
+        getFollowedWritersError: state.home.getFollowedWritersError,
+        getFollowedWritersErrorMsg: state.home.getFollowedWritersErrorMsg,
+        getFollowedWritersResp: state.home.getFollowedWritersResp,
+        userUserName: state.user.userUserName,
+    }));
 
   useEffect(() => {
     if (getFollowedWritersError) {

@@ -1,5 +1,7 @@
 'use strict';
 
+const config = require('../../config');
+
 var express = require('express');
 require('express-async-errors');
 var bodyParser = require('body-parser');
@@ -12,31 +14,34 @@ var articlesRouter = require('./routes/articles');
 var writerRouter = require('./routes/writers');
 var userRouter = require('./routes/users');
 var publicationRouter = require('./routes/publication');
+var walletRouter = require('./routes/wallet');
 
 var errorHandlingMiddleware = require('../middleware/errors');
-const config = require('../../config');
 
 let app = express();
 
 
-Sentry.init({
-    dsn: config.sentry.uri,
-    integrations: [
-        // enable HTTP calls tracing
-        new Sentry.Integrations.Http({
-            tracing: true
-        }),
-        // enable Express.js middleware tracing
-        new Tracing.Integrations.Express({
-            app
-        }),
-    ],
+if (config.environment != 'test') {
+    Sentry.init({
+        dsn: config.sentry.uri,
+        integrations: [
+            // enable HTTP calls tracing
+            new Sentry.Integrations.Http({
+                tracing: true
+            }),
+            // enable Express.js middleware tracing
+            new Tracing.Integrations.Express({
+                app
+            }),
+        ],
 
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-});
+        // Set tracesSampleRate to 1.0 to capture 100%
+        // of transactions for performance monitoring.
+        // We recommend adjusting this value in production
+        tracesSampleRate: 1.0,
+    });
+}
+
 
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
@@ -55,8 +60,9 @@ app.use('/onboarding', onboardingRouter());
 app.use('/utils', utilitiesRouter());
 app.use('/articles', articlesRouter());
 app.use('/users', userRouter());
-app.use('/writer', writerRouter());
+// app.use('/writer', writerRouter());
 app.use('/publication', publicationRouter())
+app.use('/wallet', walletRouter())
 
 app.use(errorHandlingMiddleware());
 

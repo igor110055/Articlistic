@@ -1,14 +1,18 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_PUBLICATIONS,
+    MDB_COLLECTION_WRITERS
+} = require('../../../../constants');
 const logger = require('../../../utils/logger/index')
 
 const dbName = config.mongo.db;
-const wc = 'writers';
-const pc = 'publications';
+const wc = MDB_COLLECTION_WRITERS;
+const pc = MDB_COLLECTION_PUBLICATIONS;
 const {
     MDB
 } = require('../client')
 
-async function createPublication(publicationId, publicationName, publicationPic, username) {
+async function createPublication(publicationId, publicationName, publicationPic, username, publicationOneLiner) {
 
     let client;
 
@@ -20,6 +24,10 @@ async function createPublication(publicationId, publicationName, publicationPic,
 
     if (publicationPic) {
         publication.publicationPic = publicationPic;
+    }
+
+    if (publicationOneLiner) {
+        publication.publicationOneLiner = publicationOneLiner;
     }
 
     try {
@@ -72,7 +80,8 @@ async function createPublication(publicationId, publicationName, publicationPic,
                         publications: {
                             publicationId,
                             publicationName,
-                            publicationPic
+                            publicationPic,
+                            publicationOneLiner
                         }
                     }
                 }, {
@@ -110,7 +119,7 @@ async function createPublication(publicationId, publicationName, publicationPic,
 
 
 
-async function updatePublication(publicationId, publicationName, publicationPic, username) {
+async function updatePublication(publicationId, publicationName, publicationPic, username, publicationOneLiner) {
 
     let client;
 
@@ -126,6 +135,11 @@ async function updatePublication(publicationId, publicationName, publicationPic,
     if (publicationPic) {
         writerUpdate['publications.$.publicationPic'] = publicationPic;
         pubUpdate.publicationPic = publicationPic;
+    }
+
+    if (publicationOneLiner) {
+        writerUpdate['publications.$.publicationOneLiner'] = publicationOneLiner;
+        pubUpdate.publicationOneLiner = publicationOneLiner;
     }
 
     try {

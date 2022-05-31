@@ -2,12 +2,25 @@ var config = require('../../../config');
 var crypto = require('crypto-js');
 var jwt = require('jsonwebtoken');
 const logger = require('../logger');
+/**
+ * Encrypts the object using RC4 with the encryption salt
+ * @param object - The object to be encrypted.
+ * @returns The encrypted string.
+ */
 
 function encryptForFrontend(object) {
     let objToBeEncrypted = JSON.stringify(object);
     let encrypted = crypto.RC4.encrypt(objToBeEncrypted, config.utils.encryptionSalt);
     return encrypted.toString();
 }
+
+
+/**
+ * Decrypt the encrypted information using the RC4 algorithm and the encryption salt. 
+ * Used to decrypt the token when is sent to the frontend from backend. 
+ * @param encryptedInfo - The encrypted information that you want to decrypt.
+ * @returns The decrypted object is being returned.
+ */
 
 function decryptForFrontend(encryptedInfo) {
     let decrypted = crypto.RC4.decrypt(encryptedInfo, config.utils.encryptionSalt); //A decrypted version, although you can't read this. 
@@ -16,7 +29,11 @@ function decryptForFrontend(encryptedInfo) {
     return sensibleObj;
 }
 
-// decryptForFrontend('U2FsdGVkX1/3Zby6lhJ90kXV8d6Um9xuko4vVVMTTxw8xYpNRCVCKwLu44zqXOy4woFujgIRaIu9KPEAiGqqdiIP5We/kV8nidRjcO1pXD94wm11hIsEG5/WtjYHj+nT8S9RRvLF9wNROt+vTEm/KRAM586dxORcKUxnOMwR/b/6/JXXWnl7ISicaG448ydagcjJ/qPCs2C4avVy3skKkAIiGjJuJH5yTORqkCheQ8U8F6UCgdBW3SJNHi4=');
+/**
+ * Encrypts a string using the encryption salt - used while sending it to the backend.
+ * @param object - The object to be encrypted.
+ * @returns The encrypted string.
+ */
 
 function encrypt(object) {
     let objToBeEncrypted = JSON.stringify(object);
@@ -25,6 +42,11 @@ function encrypt(object) {
     return encrypted.toString();
 }
 
+/**
+ * Decrypts the encrypted information using the encryption salt. Used in middleware.
+ * @param encryptedInfo - The encrypted information that you want to decrypt.
+ * @returns The decrypted object.
+ */
 
 function decrypt(encryptedInfo) {
     let decrypted = crypto.AES.decrypt(encryptedInfo, config.utils.encryptionSalt); //A decrypted version, although you can't read this. 
@@ -32,16 +54,28 @@ function decrypt(encryptedInfo) {
     return sensibleObj; //This is the parsed object. 
 }
 
+
+/**
+ * Encrypt a string using the encryption salt
+ * @param string - The string you want to encrypt.
+ * @returns The encrypted string.
+ */
+
 function staticEncrypt(string) {
     let encrypted = jwt.sign(string, config.utils.encryptionSalt);
     return encrypted;
 }
 
+function staticDecrypt(string) {
+    let decrypted = jwt.decode(string);
+    return decrypted;
+}
 
 module.exports = {
     encrypt,
     decrypt,
     encryptForFrontend,
     decryptForFrontend,
-    staticEncrypt
+    staticEncrypt,
+    staticDecrypt
 }

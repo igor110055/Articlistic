@@ -1,11 +1,13 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_USERS
+} = require('../../../../constants');
 const MongoClient = require('mongodb').MongoClient;
 const logger = require('../../../utils/logger/index')
 const MDB = require('../client').MDB;
 
 const dbName = config.mongo.db;
-const collection = 'users';
-const mongodbUri = config.mongo.uri;
+const collection = MDB_COLLECTION_USERS;
 
 async function createUniquenessIndex() {
     let client;
@@ -54,7 +56,335 @@ async function createUniquenessIndex() {
 }
 
 
-async function updatePrivateField(username, private) {
+async function checkIfDocumentsExist(usernames = []) {
+    try {
+
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        const count = await db.find({
+            username: {
+                $in: usernames
+            }
+        }).count();
+
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Check document existence: " + timeTaken.toString());
+
+        return count;
+
+
+    } catch (e) {
+        throw e;
+    }
+
+}
+
+
+async function setContactId(username, contactId) {
+    if (!username || !contactId) {
+        throw "Contact ID & username is required";
+    }
+
+    try {
+
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        await db.updateOne({
+            username: username
+        }, {
+            $set: {
+                'wallet.contactId': contactId
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Set contact id mongoDB: " + timeTaken.toString());
+
+        return 'success';
+
+
+    } catch (e) {
+        throw e;
+    }
+
+
+}
+
+async function resetPIN(username, newPin) {
+    if (!username || !newPin) {
+        throw "newPin & username is required";
+    }
+
+    try {
+
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        await db.updateOne({
+            username: username
+        }, {
+            $set: {
+                'wallet.pin': newPin,
+                'wallet.pinRetries': 0,
+                'wallet.cooldown': 0,
+                'wallet.ban': false
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Set new PIN mongoDB: " + timeTaken.toString());
+
+        return 'success';
+
+
+    } catch (e) {
+        throw e;
+    }
+}
+
+
+async function setFundAccount(username, faId, faDetails) {
+
+    if (!username || !faId || !faDetails) {
+        throw "Fund account id & details & username is required";
+    }
+
+    try {
+
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        await db.updateOne({
+            username: username
+        }, {
+            $set: {
+                'wallet.faId': faId,
+                'wallet.faDetails': [faDetails]
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Set fund account mongoDB: " + timeTaken.toString());
+
+        return 'success';
+
+
+    } catch (e) {
+        throw e;
+    }
+
+
+}
+
+async function activateWallet(username, pin) {
+
+    if (!username || !pin) {
+        throw "Username & Pin Required for activating wallet";
+    }
+
+    const walletObj = {
+        credits: 0,
+        pin: pin,
+        status: 'activated',
+        locked: false,
+        lastUpdated: Date.now()
+    }
+
+    try {
+
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        await db.updateOne({
+            username: username
+        }, {
+            $set: {
+                'wallet': walletObj
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Activate wallet mongo response time: " + timeTaken.toString());
+
+        return 'success';
+
+    } catch (e) {
+        throw e;
+    }
+
+}
+
+async function banAccount(username) {
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        let response = await db.updateOne({
+            username: username
+        }, {
+            $set: {
+                'wallet.ban': true
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("banAccount mongo response time: " + timeTaken.toString());
+
+
+
+        return response;
+
+    } catch (e) {
+        throw e;
+    }
+}
+
+async function setCooldown(username, cooldownTill) {
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        let response = await db.updateOne({
+            username: username
+        }, {
+            $set: {
+                'wallet.cooldown': cooldownTill
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("setCooldown mongo response time: " + timeTaken.toString());
+
+
+
+        return response;
+
+    } catch (e) {
+        throw e;
+    }
+}
+
+
+async function incrementPinRetry(username) {
+    let client;
+
+    logger.debug(username);
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        let response = await db.updateOne({
+            username: username
+        }, {
+            $inc: {
+                'wallet.pinRetries': 1
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("incrementPinRetry mongo response time: " + timeTaken.toString());
+
+
+
+        return response;
+
+    } catch (e) {
+        throw e;
+    }
+}
+
+
+async function makeRetriesDefault(username) {
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        let response = await db.updateOne({
+            username: username
+        }, {
+            $set: {
+                'wallet.pinRetries': 0
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("makeRetriesDefault mongo response time: " + timeTaken.toString());
+
+
+
+        return response;
+
+    } catch (e) {
+        throw e;
+    }
+}
+
+
+async function updatePrivateField(username, p) {
 
     let client;
 
@@ -69,7 +399,7 @@ async function updatePrivateField(username, private) {
             username: username
         }, {
             $set: {
-                'private': private
+                'private': p
             }
         });
 
@@ -168,124 +498,6 @@ async function updateUserProfile(username, profilePic, about, name, place) {
 }
 
 
-async function updateMeaningfulForUser(username, articleId, selection) {
-
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-        let response = await db.updateOne({
-            'username': username,
-            'meaningful.articleId': articleId
-        }, {
-            $addToSet: {
-                'meaningful.$.selections': selection
-            }
-        });
-
-
-        let res2 = await db.updateOne({
-            'username': username,
-            'meaningful.articleId': {
-                $ne: articleId
-            },
-        }, {
-            $addToSet: {
-                'meaningful': {
-                    'articleId': articleId,
-                    'selections': [selection]
-                }
-            }
-        })
-
-
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("updateMeaningfulForUser mongo response time: " + timeTaken.toString());
-
-
-
-        return response;
-
-    } catch (e) {
-        throw e;
-    }
-}
-
-
-async function deleteMeaningfulForUser(username, articleId, selection) {
-
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-        let response = await db.updateOne({
-            'username': username,
-            'meaningful.articleId': articleId
-        }, {
-            $pull: {
-                'meaningful.$.selections': selection
-            }
-        });
-
-
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("createUser mongo response time: " + timeTaken.toString());
-
-
-
-        return response;
-
-    } catch (e) {
-        throw e;
-    }
-}
-
-// async function deleteUser(username) {
-
-//     let client;
-
-//     try {
-
-//         client = await MDB.getClient();
-//         let db = client.db(dbName).collection(collection);
-
-//         let startTime = Date.now();
-
-//         let response = await db.deleteOne({
-//             'username': username
-//         });
-
-//         let endTime = Date.now();
-
-//         let timeTaken = endTime - startTime;
-
-//         logger.info("deleteuser mongo response time: " + timeTaken.toString());
-
-//         
-
-//         return response;
-
-//     } catch (e) {
-//         throw e;
-//     }
-// }
-
 
 async function findUserUsingRefreshToken(refreshToken) {
 
@@ -322,68 +534,68 @@ async function findUserUsingRefreshToken(refreshToken) {
 
 
 
-async function updateUserMapInterest(username, categories, following) {
+// async function updateUserMapInterest(username, categories, following) {
 
-    /* Onboarding Info -> 
+//     /* Onboarding Info -> 
 
-    {
-        _id: ObjectID("some_object_id_created_by_mongo"),
-        "id_hashed_using_username" : {
-        "profile_picture": "url of profile pic"   
+//     {
+//         _id: ObjectID("some_object_id_created_by_mongo"),
+//         "id_hashed_using_username" : {
+//         "profile_picture": "url of profile pic"   
 
-        "public": {
-        "username": "dxt",
-        "name": "Yas Dixit",
-        "image": "img@s3.jpg",
-        "following": [username1, ...]
-        "categories": ["#write", "#now"]
-                            }
+//         "public": {
+//         "username": "dxt",
+//         "name": "Yas Dixit",
+//         "image": "img@s3.jpg",
+//         "following": [username1, ...]
+//         "categories": ["#write", "#now"]
+//                             }
 
-        "private": {
-        "email": "yash@attentioun.com",
-        "phone": "9315859952",
-        "password": "hashed_password",
-        }
-    }
-    }
-
-
-    */
-
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
+//         "private": {
+//         "email": "yash@attentioun.com",
+//         "phone": "9315859952",
+//         "password": "hashed_password",
+//         }
+//     }
+//     }
 
 
-        let response = await db.updateOne({
-            "username": username
-        }, {
-            $set: {
-                "public.categories": categories,
-                "public.following": following
-            }
-        });
+//     */
+
+//     let client;
+
+//     try {
+
+//         client = await MDB.getClient();
+//         let db = client.db(dbName).collection(collection);
+
+//         let startTime = Date.now();
 
 
-        let endTime = Date.now();
+//         let response = await db.updateOne({
+//             "username": username
+//         }, {
+//             $set: {
+//                 "public.categories": categories,
+//                 "public.following": following
+//             }
+//         });
 
-        let timeTaken = endTime - startTime;
 
-        logger.info("updateUserMapInterest mongo response time: " + timeTaken.toString());
+//         let endTime = Date.now();
+
+//         let timeTaken = endTime - startTime;
+
+//         logger.info("updateUserMapInterest mongo response time: " + timeTaken.toString());
 
 
-        return response;
+//         return response;
 
 
-    } catch (e) {
-        throw e;
-    }
-}
+//     } catch (e) {
+//         throw e;
+//     }
+// }
 
 
 /*
@@ -452,11 +664,7 @@ async function getUserByUsername(username) {
         response = await db.findOne({
             username
         }, {
-            projection: {
-                username: 1,
-                isWriter: 1,
-                name: 1
-            }
+
         });
 
 
@@ -519,166 +727,23 @@ async function getUserProfile(username) {
 }
 
 
-async function addBookmark(articleId, username) {
-
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-
-        let response = await db.updateOne({
-            "username": username
-        }, {
-            $addToSet: {
-                'bookmarks': articleId
-            }
-        });
-
-
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("addBookmark mongo response time: " + timeTaken.toString());
-
-
-        return response;
-
-
-    } catch (e) {
-        throw e;
-    }
-}
-
-
-async function removeBookmark(articleId, username) {
-
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-
-        let response = await db.updateOne({
-            "username": username
-        }, {
-            $pull: {
-                'bookmarks': articleId
-            }
-        });
-
-
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("removeBookmark mongo response time: " + timeTaken.toString());
-
-
-        return response;
-
-
-    } catch (e) {
-        throw e;
-    }
-}
-
-
-async function addFollowedWriter(writer, username) {
-
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-
-        let response = await db.updateOne({
-            "username": username
-        }, {
-            $addToSet: {
-                'public.following': writer
-            }
-        });
-
-
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("addFollowedWriter mongo response time: " + timeTaken.toString());
-
-
-        return response;
-
-
-    } catch (e) {
-        throw e;
-    }
-}
-
-
-async function unfollowWriter(writer, username) {
-
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-
-        let response = await db.updateOne({
-            "username": username
-        }, {
-            $pull: {
-                'public.following': writer
-            }
-        });
-
-
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("unfollowWriter mongo response time: " + timeTaken.toString());
-
-
-        return response;
-
-
-    } catch (e) {
-        throw e;
-    }
-}
 
 module.exports = {
     getUser,
-    updateUserMapInterest,
     createUser,
     findUserUsingRefreshToken,
     createUniquenessIndex,
     updatePrivateField,
-    addBookmark,
-    addFollowedWriter,
-    updateMeaningfulForUser,
-    unfollowWriter,
-    deleteMeaningfulForUser,
     getUserProfile,
+    resetPIN,
     getUserByUsername,
-    updateUserProfile
+    updateUserProfile,
+    activateWallet,
+    setContactId,
+    setFundAccount,
+    banAccount,
+    setCooldown,
+    incrementPinRetry,
+    makeRetriesDefault,
+    checkIfDocumentsExist
 }

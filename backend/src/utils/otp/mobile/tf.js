@@ -6,7 +6,9 @@ var axios = require('axios').default;
 
 async function sendOTP(number) {
 
-
+    if (config.environment != 'prod') {
+        return "attentioun";
+    }
 
     var code = Math.floor(100000 + Math.random() * 900000);
 
@@ -39,6 +41,16 @@ async function sendOTPToUSA(number) {
 
 async function verifyOTP(sessionId, code) {
 
+    if (config.environment != 'prod') {
+
+        if (code == 123456) {
+
+            return "Verified";
+
+        } else {
+            throw "Wrong OTP"
+        }
+    }
 
     let res = await TwoFactor.verifyOTP(sessionId, code);
 

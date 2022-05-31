@@ -1,7 +1,7 @@
 var express = require('express');
 
 // require('../../errors/customError');
-
+/*
 var mongo = require('../../db/mongo/index');
 const logger = require('../../utils/logger/index')
 
@@ -94,3 +94,4 @@ module.exports = function writerRouter() {
     }
 
 }
+*/

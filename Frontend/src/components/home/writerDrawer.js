@@ -170,6 +170,7 @@ const useStyles = makeStyles(theme => ({
     height: "400px",
     width: "5px"
   },
+<<<<<<< HEAD
 
   writersWithCardsProfile: {
     display: "flex",
@@ -202,6 +203,40 @@ const useStyles = makeStyles(theme => ({
     fontFamily: "Poppins"
   },
 
+=======
+
+  writersWithCardsProfile: {
+    display: "flex",
+    alignItems: "center",
+    padding: "4%"
+  },
+
+  writersWithCardsProfileImageContainer: {
+    minWidth: "45px",
+    maxHeight: "45px",
+    // minWidth: '45px',
+    // maxHeight: '45px',
+    borderRadius: "50%",
+    overflow: "hidden"
+  },
+
+  writersWithCardsProfileImage: {
+    minWidth: "45px",
+    maxWidth: "45px",
+    minHeight: "45px",
+    maxHeight: "45px",
+    objectFit: "cover"
+  },
+
+  writersWithCardsProfileName: {
+    fontSize: "0.9rem",
+    paddingLeft: "10%",
+    color: "rgba(99, 99, 99, 1)",
+    fontWeight: "600",
+    fontFamily: "Poppins"
+  },
+
+>>>>>>> 5e65d1dd2ac2061834f9f73c0cf9381369b854d3
   smallName: {
     fontSize: "0.7em",
     maxWidth: "45px",

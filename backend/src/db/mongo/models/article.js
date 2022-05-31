@@ -1,21 +1,15 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_ARTICLES
+} = require('../../../../constants');
 const MongoClient = require('mongodb').MongoClient;
 
 const logger = require('../../../utils/logger/index')
 const MDB = require('../client').MDB;
 
 
-const {
-    gzip,
-    ungzip
-} = require('node-gzip');
-
-const zlib = require('zlib');
-
-
 const dbName = config.mongo.db;
-const collection = 'articles';
-const mongodbUri = config.mongo.uri; // TODO: Add mongo db url here -> In config and .env file
+const collection = MDB_COLLECTION_ARTICLES;
 
 async function createUniquenessIndex() {
     let client;
@@ -344,7 +338,7 @@ async function getAllArticlesForUser(username, filters, limit, skip) {
 
 
 
-async function updateArticle(articleId, status, writeup, storySetting, earlyAccess = false, public) {
+async function updateArticle(articleId, status, writeup, storySetting, earlyAccess = false, pub) {
 
     let updateParam = {};
     updateParam.earlyAccess = earlyAccess;
@@ -358,8 +352,8 @@ async function updateArticle(articleId, status, writeup, storySetting, earlyAcce
         updateParam.storySetting = storySetting;
     }
 
-    if (public) {
-        updateParam.public = public
+    if (pub) {
+        updateParam.public = pub
     }
 
     updateParam.lastUpdated = Date.now()
@@ -399,7 +393,7 @@ async function updateArticle(articleId, status, writeup, storySetting, earlyAcce
 
 
 
-async function createNewArticle(username, articleId, status, writeup, storySetting, earlyAccess = false, public) {
+async function createNewArticle(username, articleId, status, writeup, storySetting, earlyAccess = false, pub, origin, originUrl) {
 
     let updateParam = {};
     updateParam.earlyAccess = earlyAccess;
@@ -416,8 +410,14 @@ async function createNewArticle(username, articleId, status, writeup, storySetti
         updateParam.storySetting = storySetting;
     }
 
-    if (public) {
-        updateParam.public = public
+    if (pub) {
+        updateParam.public = pub
+    }
+    if (origin) {
+        updateParam.origin = origin
+    }
+    if (originUrl) {
+        updateParam.originUrl = originUrl
     }
 
     updateParam.createdAt = Date.now()
@@ -452,7 +452,6 @@ async function createNewArticle(username, articleId, status, writeup, storySetti
 
 
 
-
 async function getArticleById(articleId) {
     let client;
 
@@ -476,7 +475,11 @@ async function getArticleById(articleId) {
         let timeTaken = endTime - startTime;
 
         logger.info("getArticleById mongo response time: " + timeTaken.toString());
+        if (articleId == 'some-random-articleId') {
+            logger.info('article Found: ');
+            logger.info(res);
 
+        }
         return res;
 
 
@@ -536,6 +539,41 @@ async function getArticleForWriters(writers, limit, skip) {
     }
 }
 
+async function markForDeletion(articleId, deleteAt) {
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        let res = await db.updateOne({
+            articleId: articleId
+        }, {
+            $set: {
+                deleteAt: deleteAt
+            }
+        });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("mark for deletion mongo response time: " + timeTaken.toString());
+
+        return res;
+
+
+    } catch (e) {
+        throw e;
+    }
+
+}
+
+
 async function getArticlesForPublication(publicationId, limit, skip) {
 
 
@@ -554,10 +592,11 @@ async function getArticlesForPublication(publicationId, limit, skip) {
         let res = [];
 
         await db.find({
-            publicationId: publicationId
-        }).limit(limit).skip(skip).forEach((x) => {
-            res.push(x);
-        })
+                publicationId: publicationId
+            })
+            .limit(limit).skip(skip).forEach((x) => {
+                res.push(x);
+            })
 
 
         let endTime = Date.now();
@@ -589,5 +628,6 @@ module.exports = {
     getArticleForWriters,
     createUniquenessIndex,
     createNewArticle,
-    getArticlesForPublication
+    getArticlesForPublication,
+    markForDeletion
 }

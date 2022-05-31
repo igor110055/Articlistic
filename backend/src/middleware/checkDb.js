@@ -1,14 +1,16 @@
 const mongo = require('../db/mongo/index');
 const DatabaseError = require('../errors/DatabaseError');
 const MissingParamError = require('../errors/MissingParamError');
+const NotAuthenticatedError = require('../errors/NotAuthenticatedError');
 const logger = require('../utils/logger');
 
-module.exports = function (checkArticleId, checkWriterUsername) {
+module.exports = function (checkArticleId, checkWriterUsername, checkArticleOwnerShip, checkPublication, checkPublicationOwnership) {
 
     return async function asyncMiddleware(req, res, next) {
         let {
             articleId,
-            writer
+            writer,
+            publicationId
         } = req.query;
 
         if (checkArticleId) {
@@ -28,6 +30,15 @@ module.exports = function (checkArticleId, checkWriterUsername) {
 
                 return next(new MissingParamError('Article Id not found', 'middleware-rejection-article'));
             }
+
+            if (checkArticleOwnerShip) {
+
+                if (article.username != req.username) {
+                    return next(new NotAuthenticatedError('Article ownership is not authorized', 'middleware-article-ownership'));
+                }
+
+            }
+
             req.articleId = articleId;
         }
 
@@ -51,7 +62,30 @@ module.exports = function (checkArticleId, checkWriterUsername) {
             }
             req.writer = writer;
         }
-        logger.debug("hi")
+
+        if (checkPublication) {
+
+            try {
+                var publication = await mongo.publications.getPublication(publicationId);
+            } catch (e) {
+                return next(new DatabaseError('middleware-rejection-pub-db', e));
+            }
+
+            if (!publication) {
+                return next(new NotAuthenticatedError('No publication with Id exists', 'middleware-publication'));
+            }
+
+            if (checkPublicationOwnership) {
+
+                if (publication.username != req.username) {
+                    return next(new NotAuthenticatedError('Publication ownership is not authorized', 'middleware-publication-ownership'));
+
+                }
+            }
+
+            req.publicationId = publicationId;
+
+        }
 
         next();
 

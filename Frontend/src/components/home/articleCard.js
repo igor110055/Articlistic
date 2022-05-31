@@ -2,7 +2,6 @@ import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bookmarkArticle } from "../../containers/home/homeActions";
-
 import { Button, Dialog, DialogTitle, CircularProgress } from "@mui/material";
 import { getAuthToken } from "../../containers/common/commonFunctions";
 

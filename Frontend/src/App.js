@@ -28,9 +28,10 @@ import SignIn from "./containers/authentication/signin";
 //   getAuthToken,
 //   getRefreshToken,
 // } from "./containers/common/commonFunctions";
-
+import getEnvVariables from "./config";
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
+  const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
   const [mulitpleTabs, setMultipleTabs] = useState(false);
   const { variant, message, open } = useSelector((state) => ({
     // thisState: state,
@@ -45,8 +46,11 @@ function App() {
   //   console.log(thisState);
   // }, [thisState]);
   useEffect(() => {
-    // console.log(getAuthToken());
-    // console.log(thisState);
+    getEnvVariables(
+      ["REACT_APP_ENCRYPTION_SALT", "REACT_APP_SERVER_LINK"],
+      setEnvVariablesSuccess
+    );
+
     window.addEventListener("online", updateOnlineStatus);
     window.addEventListener("offline", updateOnlineStatus);
 
@@ -77,87 +81,85 @@ function App() {
 
   return (
     //for writers
-    <div className="App">
-      {!mulitpleTabs && (
-        <Router>
-          {/* <Auth> */}
-          <Routes>
-            {/* <Route
-            exact
-            path="/"
-            element={
-              <PrivateRoute>
-                <TempNavbar />
-                <Home />
-              </PrivateRoute>
-            }
-          /> */}
-            <Route
-              exact
-              path="/writerDashboard/*"
-              element={
-                <PrivateRoute>
-                  {/* <Home /> */}
-                  <WriterContentContainer />
-                </PrivateRoute>
-              }
-            />
-            {/* <Route exact path="/login" element={<LandingPage />} /> */}
-            {/* <Route exact path="/signup" element={<OnBoarding />} /> */}
-            <Route exact path="/signup" element={<SignUp />} />
-            <Route exact path="/login" element={<SignIn />} />
-            {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
-            <Route
-              exact
-              path="/story"
-              element={
-                <PrivateRoute>
-                  <WriterEditor />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              exact
-              path="/publication/:username/:publicationName"
-              element={
-                <PrivateRoute>
-                  <AboutPublication />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              exact
-              path="/publication/edit"
-              element={
-                <PrivateRoute>
-                  <WriterPublicationEditor />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              exact
-              path="/writersettings"
-              element={
-                <PrivateRoute>
-                  <WriterSetting />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <NotFound />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-          {/* </Auth> */}
-        </Router>
+    <div>
+      {getEnvVariablesSuccess && (
+        <div className="App">
+          {!mulitpleTabs && (
+            <Router>
+              {/* <Auth> */}
+              <Routes>
+                <Route
+                  exact
+                  path="/writerDashboard/*"
+                  element={
+                    <PrivateRoute>
+                      {/* <Home /> */}
+                      <WriterContentContainer />
+                    </PrivateRoute>
+                  }
+                />
+                {/* <Route exact path="/login" element={<LandingPage />} /> */}
+                {/* <Route exact path="/signup" element={<OnBoarding />} /> */}
+                <Route exact path="/signup" element={<SignUp />} />
+                <Route exact path="/login" element={<SignIn />} />
+                {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
+                <Route
+                  exact
+                  path="/story"
+                  element={
+                    <PrivateRoute>
+                      <WriterEditor />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
+                  path="/publication/:username/:publicationName"
+                  element={
+                    <PrivateRoute>
+                      <AboutPublication />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
+                  path="/publication/edit"
+                  element={
+                    <PrivateRoute>
+                      <WriterPublicationEditor />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
+                  path="/writersettings"
+                  element={
+                    <PrivateRoute>
+                      <WriterSetting />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/"
+                  element={
+                    <PrivateRoute>
+                      <NotFound />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+              {/* </Auth> */}
+            </Router>
+          )}
+          {mulitpleTabs && <MultipleTab />}
+          <CustomizedSnackbars
+            variant={variant}
+            message={message}
+            openS={open}
+          />
+          {/* <Navbar /> */}
+        </div>
       )}
-      {mulitpleTabs && <MultipleTab />}
-      <CustomizedSnackbars variant={variant} message={message} openS={open} />
-      {/* <Navbar /> */}
     </div>
   );
 }

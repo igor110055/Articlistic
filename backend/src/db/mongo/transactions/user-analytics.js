@@ -1,10 +1,15 @@
 var config = require('../../../../config');
+const {
+    MDB_COLLECTION_USERS,
+    MDB_COLLECTION_WRITERS,
+    MDB_COLLECTION_ANALYTICS
+} = require('../../../../constants');
 const logger = require('../../../utils/logger/index')
 
 const dbName = config.mongo.db;
-const uc = 'users';
-const ac = 'analytics';
-const wc = 'writers';
+const uc = MDB_COLLECTION_USERS;
+const ac = MDB_COLLECTION_ANALYTICS;
+const wc = MDB_COLLECTION_WRITERS;
 const {
     MDB
 } = require('../client')
@@ -13,6 +18,7 @@ async function createUser(user) {
 
     let client;
     let username = user.username;
+    let isWriter = user.isWriter;
 
     try {
 
@@ -78,24 +84,29 @@ async function createUser(user) {
                 throw "Transaction error";
             }
 
-            try {
-                var writerInsert = await writersCollection.insertOne({
-                    'username': username,
-                    'publications': [],
-                    'categories': [],
-                }, {
-                    session: session
-                })
-            } catch (e) {
-                await session.abortTransaction();
-                logger.error("CreateUser: DB: New Writer");
-                throw e;
+            if (isWriter) {
+
+                try {
+                    var writerInsert = await writersCollection.insertOne({
+                        'username': username,
+                        'publications': [],
+                        'categories': [],
+                    }, {
+                        session: session
+                    })
+                } catch (e) {
+                    await session.abortTransaction();
+                    logger.error("CreateUser: DB: New Writer");
+                    throw e;
+                }
+
+                if (!writerInsert.insertedId) {
+                    await session.abortTransaction();
+                    throw "createUser: DB: New Writer Not Inserted"
+                }
+
             }
 
-            if (!writerInsert.insertedId) {
-                await session.abortTransaction();
-                throw "createUser: DB: New Writer Not Inserted"
-            }
 
         }, transactionOptions);
 

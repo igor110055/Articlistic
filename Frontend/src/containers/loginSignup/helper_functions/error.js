@@ -8,6 +8,14 @@ export const Error = ({ message }) => {
   if (message === "Incorrect Username or Password") {
     message = "Incorrect username or password";
   }
+  // if (message == "Please enter a valid verification code.") {
+  //   message = "Account with this email doesn't exist.";
+  // }
+
+  // if (error == "Please enter a valid verification code.") {
+  //   error = "Account with this phone number doesn't exist.";
+  // }
+
   const classes = useStyles();
   return (
     <div className={classes.error}>

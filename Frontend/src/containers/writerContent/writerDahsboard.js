@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import WriterDashboardCard from "../../components/writerDashboardCard";
 import { useSelector, useDispatch } from "react-redux";
-
+import {
+  createNewArticle,
+  discardArticle,
+  getAllArticles
+} from "../writerEditor/writerEditorActions";
 import graph from "./../../Images/graph.png";
 import progress from "./../../Images/progress.png";
 import { useNavigate } from "react-router";

@@ -21,6 +21,7 @@ const DatabaseError = require('../../errors/DatabaseError');
 const ServiceError = require('../../errors/ServiceError');
 const NotAuthenticatedError = require('../../errors/NotAuthenticatedError');
 const BadRequestError = require('../../errors/BadRequestError');
+const verifyGoogleIdToken = require('../../utils/auth/verifyGoogleIdToken');
 
 /*
 
@@ -37,19 +38,179 @@ let eStatusCode = 400;
         }
 */
 
+
+
+
+
 module.exports = function onboardingRouter() {
 
     return new express.Router()
-        .get('/getCategoriesAndWriters', useAuth(), getCategoriesAndWriters)
-        .get('/checkUsername', checkUsername)
-        .post('/updateStatus', useAuth(), updateOnboardingStatus)
-        .post('/phone/sendOTP', sendPhoneOTP)
-        .post('/phone/verifyOTP', verifyPhoneOTP)
+
+
         .post('/email/sendOTP', sendEmailOTP)
         .post('/email/verifyOTP', verifyEmailOTP)
         .post('/login', login)
-        .post('/createUser', createUser);
+        .post('/createUser', createUser)
+        .post('/google/signup', signupUsingGoogle)
 
+        .get('/getCategoriesAndWriters', useAuth(), getCategoriesAndWriters)
+        .get('/checkUsername', checkUsername)
+        .post('/updateStatus', useAuth(), updateOnboardingStatus)
+        .get('/writers', useAuth(), getListOfWriters)
+
+        .post('/followMultiple', useAuth(), bulkFollow);
+
+
+    async function bulkFollow(req, res) {
+        const routeName = 'onboarding bulk follow';
+
+        var {
+            usernames
+        } = req.body;
+        const username = req.username;
+
+        if (usernames.includes(username)) {
+            throw new BadRequestError("Cannot follow yourself", routeName)
+        }
+        /**
+         * Check if all the usernames exist in the database. 
+         * If count of usernames is not equal to the result
+         * Return an error. 
+         */
+
+
+        try {
+            var verificationCount = await mongo.users.checkIfDocumentsExist(usernames);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+        if (verificationCount !== usernames.length) {
+            throw new BadRequestError('Followers list not valid', routeName);
+        }
+
+
+        const multipleFollowerAdd = [];
+
+        /**
+         * Iterate over the usernames that are to be followed array. 
+         * Make an array of follower document.
+         * Use this array in the mongoDB query.  
+         */
+
+
+        for (let i = 0; i < usernames.length; i++) {
+            const follows = usernames[i];
+
+            multipleFollowerAdd.push({
+                username,
+                follows,
+                timestamp: Date.now()
+            })
+
+        }
+
+
+        try {
+            var insertedCount = await mongo.followers.followMultiple(multipleFollowerAdd);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        res.status(200).send({
+            message: 'success',
+            followedCount: insertedCount
+        });
+    }
+
+    async function getListOfWriters(req, res) {
+        const routeName = 'get onboarding writers';
+
+        try {
+            var writers = await mongo.writers.getWriters();
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+
+        return res.status(200).send({
+            writers
+        })
+
+    }
+
+    async function getListOfWriters(req, res) {
+        const routeName = 'get onboarding writers';
+
+        try {
+            var writers = await mongo.writers.getWriters();
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+
+        return res.status(200).send({
+            writers
+        })
+
+    }
+    async function signupUsingGoogle(req, res) {
+        const routeName = 'signup using google';
+
+        const {
+            token
+        } = req.query;
+
+        const userInfo = await verifyGoogleIdToken(token);
+
+        const email = encryption.staticEncrypt(userInfo.email);
+
+        try {
+            var user = await mongo.users.getUser(email, false, true);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        if (user) {
+            delete user.private;
+            delete user.refreshToken;
+
+            const accessToken = encryption.jwt.sign(user.username);
+            const refreshToken = encryption.encryptForFrontend(user.refreshToken);
+
+            /**
+             * Check if user already exists
+             * If he does - sign in 
+             */
+
+            return res.status(200).send({
+                ...user,
+                email,
+                accessToken,
+                refreshToken
+            });
+
+
+
+        } else {
+
+
+            try {
+                var id = await mongo.security.createUserAddEmail(userInfo.email);
+            } catch (e) {
+                throw new DatabaseError(routeName, e);
+            }
+
+            return res.status(200).send({
+                id
+            });
+
+        }
+
+
+
+
+
+    }
 
     async function getCategoriesAndWriters(req, res) {
 
@@ -111,27 +272,6 @@ module.exports = function onboardingRouter() {
             throw new MissingParamError('Categories, Following are missing parameters.', routeName);
         }
 
-        //ATT005 - Caching Database - Redis
-        // try {
-
-        //     var allCategories = await mongo.categories.getCategories();
-        //     var allFollowing = await mongo.writers.getWriters();
-
-        // } catch (e) {
-
-        //     throw new DatabaseError(routeName, e);
-        // }
-
-        //ATT005 - O(N*N) - WORK ON THIS
-        // const isCategoriesSubset = categories.every(val => allCategories.includes(val));
-        // const isFollowingSubset = following.every(val => allFollowing.includes(val));
-
-        // if (!isCategoriesSubset || true) {
-        //     logger.debug(isCategoriesSubset);
-        //     logger.debug(isFollowingSubset);
-        //     throw new MissingParamError('Some writers or categories are not present in db', routeName)
-        // }
-
         try {
 
             await mongo.transactionWriterUser.onboardingUpdate(categories, following, username);
@@ -148,221 +288,66 @@ module.exports = function onboardingRouter() {
 
     }
 
-    async function sendPhoneOTP(req, res) {
-        let routeName = "POST /onboarding/sendOTP"
 
-        // let phone = req.query.phone;
-        // let international = req.query.international;
 
-        let {
-            phone,
-            international
-        } = req.body;
 
-        logger.info(routeName + `for phone: ${phone}`);
-
-        if (!phone) {
-            throw new MissingParamError('Phone number is missing', routeName);
-        }
-
-        let phoneInMongo = encryption.staticEncrypt(phone);
-
-        let user;
-
-        try {
-
-            user = await mongo.users.getUser(phoneInMongo, false, false, true);
-
-        } catch (e) {
-
-            throw new DatabaseError(routeName, e);
-        }
-
-
-        if (user) {
-            throw new NetworkError('User already present', 409, routeName, 'User with this phone number already present!');
-        }
-
-        var sessionId;
-        if (international) {
-            if (phone.startsWith('+1')) {
-                try {
-
-                    sessionId = await otp.sms.tf.sendOTPToUSA(phone);
-
-                } catch (e) {
-                    throw new ServiceError('Sending Phone OTP- tf - USA with phone ' + phone.toString(), routeName, e);
-                }
-            } else {
-
-                try {
-
-                    await otp.sms.aws.sendOTP(phone);
-
-                } catch (e) {
-                    throw new ServiceError('Sending Phone OTP- aws', routeName, e);
-                }
-
-
-
-            }
-
-
-        } else {
-            try {
-
-                sessionId = await otp.sms.tf.sendOTP(phone);
-
-            } catch (e) {
-                throw new ServiceError('Sending Phone OTP- aws', routeName, e);
-            }
-        }
-
-
-        return res.status(200).send({
-            'message': 'OTP sent successfully.',
-            sessionId
-        })
-
-    }
-
-    async function verifyPhoneOTP(req, res) {
-
-
-        // let phone = req.query.phone;
-        // let code = req.query.otp;
-        // let international = req.query.international;
-        // let sessionId = req.query.sessionId;
-
-        let {
-            phone,
-            code,
-            international,
-            sessionId
-        } = req.body;
-
-        // let code = otp;
-
-
-        let routeName = "POST /onboarding/sendOTP";
-
-
-
-        if (!phone || !code || phone.length < 10) {
-
-            throw new MissingParamError('Phone or OTP is missing.', routeName);
-
-        }
-
-        if (!sessionId && !international) {
-
-            throw new MissingParamError('Session id should be there in case local.', routeName);
-
-        }
-
-        if (!sessionId && international && phone.startsWith('+1')) {
-
-            throw new MissingParamError('Session id should be there in case USA Phone number.', routeName);
-
-        }
-
-
-
-
-        if (international) {
-
-            if (phone.startsWith('+1')) {
-
-                try {
-
-                    await otp.sms.tf.verifyOTP(sessionId, code);
-
-                } catch (e) {
-
-                    throw new ServiceError('Verify Phone OTP- tf - USA with phone ' + phone.toString(), routeName, e);
-
-                }
-
-            } else {
-
-                try {
-
-                    await otp.sms.aws.verifyOTP(code, phone);
-
-                } catch (error) {
-
-                    throw new ServiceError('OTP verify Error - aws', routeName, error)
-                }
-            }
-
-
-        } else {
-
-            try {
-
-                await otp.sms.tf.verifyOTP(sessionId, code)
-
-            } catch (e) {
-                throw new ServiceError('OTP verify Error - tf', routeName, e)
-
-            }
-        }
-
-        return res.status(200).send({
-            'message': "Verified. You're in!"
-        })
-
-
-    }
+    /**
+     * Given an entity (email, username) and a password, it will return the corresponding user object
+     * @param req - The request object.
+     * @param res - response object
+     * @returns The user object is being returned with the accessToken and refreshToken.
+     */
 
     async function login(req, res) {
 
         let routeName = "POST /onboarding/login";
 
+        /* The above code is validating the request body. */
         let {
             entity,
             password,
             type
         } = req.body;
 
-        entity = entity.trim();
-
-        if (!(type && (type == 'username' || type == 'email' || type == 'phone'))) {
-            throw new MissingParamError('Type does not exist', routeName);
-        }
-
-        if (!entity || !password) {
+        if (!entity || !password || !type) {
             throw new MissingParamError('Some of the param is not provided', routeName);
         }
 
-        let email, username, phone;
+        entity = entity.trim();
+
+
+        if (!(type == 'username' || type == 'email')) {
+            throw new MissingParamError('Type does not exist', routeName);
+        }
 
 
 
-        logger.info(`${routeName} with email: ${email}`);
+        /* The above code is checking if the type is email, username . If it is email, it will
+        encrypt the email using the static encrypt method. If it is username, it will do nothing. If
+ */
+
+        let email, username;
 
         if (type == 'email') {
             email = true;
             entity = encryption.staticEncrypt(entity);
-        } else if (type == 'username') {
-            username = true;
         } else {
-            phone = true;
-            entity = encryption.staticEncrypt(entity.toString());
+            username = true;
         }
 
 
+        /* The above code is retrieving a user from the database. */
 
         let user;
         try {
-            user = await mongo.users.getUser(entity, username, email, phone);
+            user = await mongo.users.getUser(entity, username, email);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
 
 
-        if (!user) {
-            throw new NetworkError("No user corresponding to entity found", 400, routeName, "User undefined");
+        if (!user || user.googleUser) {
+            throw new NotAuthenticatedError('Wrong password!', routeName);
         }
 
 
@@ -372,14 +357,13 @@ module.exports = function onboardingRouter() {
         let decryptedPrivateInfo = encryption.decrypt(encryptedPrivateInfo);
 
         if (decryptedPrivateInfo.password != password) {
-            throw new NotAuthenticatedError('Wrong password!', routeName);
+            throw new NotAuthenticatedError('Wrong credentials!', routeName);
         }
 
         user.private = decryptedPrivateInfo;
 
         delete user.private.password;
         delete user.email;
-        delete user.phone;
 
 
         let accessToken = encryption.jwt.sign(user.username);
@@ -394,6 +378,12 @@ module.exports = function onboardingRouter() {
 
     }
 
+    /**
+     * Check if a username is available
+     * @param req - The request object.
+     * @param res - The response object.
+     */
+
     async function checkUsername(req, res) {
 
 
@@ -401,7 +391,6 @@ module.exports = function onboardingRouter() {
 
         let username = req.query.username;
 
-        logger.info(`${routeName} - for username: ${username}`);
 
         if (!username) {
             throw new NetworkError("No username found", 400, routeName, "Not available");
@@ -431,45 +420,78 @@ module.exports = function onboardingRouter() {
 
     }
 
+    /**
+     * Create a new user
+     * @param req - The request object.
+     * @param res - response object
+     * @returns The user object is being returned with the access token, refresh token, and message.
+     */
+
     async function createUser(req, res) {
 
 
         let routeName = "POST /onboarding/createUser";
         let user = {};
+        let international = true;
+
+        /* The below code is checking if the parameters are missing. If they are missing, it throws an error. */
 
         let {
             username,
+            id,
             email,
             password,
-            phone,
             name,
-            international
+            country,
+            isWriter,
+            googleUser
         } = req.body;
 
-        logger.info(routeName + ' for - ' + username);
-
-        if (!username || !email || !password || !phone || !name || international == undefined) {
+        if (!username || !email || !password || !name || !id || !country || isWriter === undefined) {
             throw new MissingParamError('Some parameters are missing.', routeName);
         }
 
+        if (!googleUser) {
+            googleUser = false;
+        }
 
-        phone = phone.trim();
+        if (country === "India") {
+            international = false;
+        }
+
+
         email = email.trim();
+        /* The above code is removing any leading and trailing spaces from email . */
 
-        if ((!international && phone.length > 10) || phone.startsWith('+91')) {
-            throw new BadRequestError('Indian numbers to be sent without code', routeName);
+
+
+        /* The above code is validating that the user can be created. Check security revamp in Notion */
+        try {
+            await mongo.security.verifyCreateUser(id, email);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
         }
 
-        let privateField = {
-            phone,
-            email,
-            password
+
+        /* The above code is encrypting the private fields of the user object. 
+         * This won't be there while creating a user using google user.
+         */
+
+        if (!googleUser) {
+
+            var privateField = {
+                email,
+                password
+            }
+            var encryptedPrivateField = encryption.encrypt(privateField);
         }
 
-        let encryptedPrivateField = encryption.encrypt(privateField);
+        var emailEncrypted = encryption.staticEncrypt(email);
 
-        let emailEncrypted = encryption.staticEncrypt(email);
-        let phoneEncrypted = encryption.staticEncrypt(phone);
+
+        /*
+        Creating the user object properly. 
+        */
 
         let refreshToken = uuidv4();
 
@@ -479,14 +501,25 @@ module.exports = function onboardingRouter() {
         // user.public.username = username;
         user.name = name;
 
-        user.private = encryptedPrivateField;
-        user.email = emailEncrypted;
-        user.phone = phoneEncrypted;
-        user.refreshToken = refreshToken;
-        user.isWriter = true;
-        user.international = international ? true : false;
 
-        //Store in db. 
+        if (!googleUser) {
+            user.private = encryptedPrivateField;
+        }
+
+        user.email = emailEncrypted;
+        user.refreshToken = refreshToken;
+        user.isWriter = isWriter;
+        user.international = international;
+        user.googleUser = googleUser;
+
+        /*
+
+        Creates a transaction in the database which inserts a value of the user
+        in the analytics + writers + user collection.
+
+        */
+
+
         try {
             await mongo.transactionsUserAnalytics.createUser(user);
         } catch (e) {
@@ -494,13 +527,16 @@ module.exports = function onboardingRouter() {
         }
 
 
+        /* The above code is creating a JWT token and encrypting the refresh token. 
+        After this deletes not required fields and then sends out the response */
+
         let accessToken = encryption.jwt.sign(user.username);
         let rt = encryption.encryptForFrontend(refreshToken);
 
 
+
         delete user.private;
         delete user.email;
-        delete user.phone;
         delete user.public;
         delete user.refreshToken;
 
@@ -542,7 +578,7 @@ module.exports = function onboardingRouter() {
         }
 
 
-        //Store this OTP in monogdb. 
+        //Store this OTP in MongoDB. 
 
         let code = Math.floor(100000 + Math.random() * 900000); //Creates a 4 digit number that doesn't contain 0 at the starting.
 
@@ -555,7 +591,7 @@ module.exports = function onboardingRouter() {
         //Send OTP to Email. 
         try {
 
-            await otp.email.sendEmail(email, code);
+            await otp.email.sendVerificationOTP(email, code);
         } catch (e) {
 
 
@@ -579,16 +615,14 @@ module.exports = function onboardingRouter() {
     async function verifyEmailOTP(req, res) {
 
         let routeName = 'POST /onboarding/email/verifyOTP';
-
-        let email = req.query.email;
-        let otp = req.query.otp;
+        let {
+            email,
+            otp
+        } = req.query;
 
         if (!otp || !email) {
-            throw new MissingParamError("Please enter otp and email", routeName);
+            throw new MissingParamError("Please enter otp, email & id", routeName);
         }
-
-        logger.info(`${routeName} for Email: ${email}`);
-
 
         let mongoRes;
         try {
@@ -598,7 +632,6 @@ module.exports = function onboardingRouter() {
         }
 
         if (!mongoRes) {
-            // eStatusCode = 403;
             throw new NotAuthenticatedError('Could not verify OTP', routeName);
         } else {
 
@@ -607,15 +640,30 @@ module.exports = function onboardingRouter() {
 
             } catch (e) {
                 logger.fatal("Could not delete OTP from verified for some duration.");
-                // throw e;
             }
         }
 
+        try {
+            var mon = await mongo.security.createUserAddEmail(email);
+
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+        const id = mon;
+        logger.debug(id);
+
         return res.status(200).send({
-            'message': 'You are verified!'
+            'message': 'You are verified!',
+            id
         });
 
 
     }
+
+
+
+
+
+
 
 }

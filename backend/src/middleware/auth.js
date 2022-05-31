@@ -71,9 +71,11 @@ module.exports = function (isSocketMiddleware, logout, checkIfWriter) {
                 if (checkIfWriter) {
                     var user = await mongo.users.getUserByUsername(check.payload.username);
 
-                    if (!user.isWriter) {
+                    if (!user || !user.isWriter) {
                         throw "It is required to be a writer for this operation."
                     }
+
+                    req.user = user;
 
                 } else {
 
@@ -82,8 +84,8 @@ module.exports = function (isSocketMiddleware, logout, checkIfWriter) {
                     if (!userCheckInRedis) {
 
                         logger.info("User not found in cache, checking in mongodb");
-                        var user = await mongo.users.getUserByUsername(check.payload.username);
-                        if (!user) {
+                        var userInMongo = await mongo.users.getUserByUsername(check.payload.username);
+                        if (!userInMongo) {
                             throw 'No user found';
                         } else {
                             await redis.users.push(check.payload.username.toString());
@@ -93,6 +95,7 @@ module.exports = function (isSocketMiddleware, logout, checkIfWriter) {
 
             } catch (e) {
                 logger.fatal('Intruder alert with jwt: ' + token);
+                logger.error(e);
                 next(new NotAuthenticatedError('Could not authenticate.', 'middleware-rejection-u'));
                 return;
             }
