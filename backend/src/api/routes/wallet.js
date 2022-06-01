@@ -52,16 +52,17 @@ module.exports = function walletRouter() {
          * Withdrawing Earnings APIs. 
          */
 
-        .post('/activate/otp', auth(false, false, true), sendOTPForWalletActivation)
-        .post('/activate', auth(false, false, true), activateWallet)
+        .post('/activate/otp', auth(false, false, false, true), sendOTPForWalletActivation)
+        .post('/activate', auth(false, false, false, true), activateWallet)
 
-        .post('/resetPIN/otp', auth(false, false, true), sendResetPinOTP)
-        .post('/resetPIN', auth(false, false, true), resetPIN)
+        .post('/resetPIN/otp', auth(false, false, false, true), sendResetPinOTP)
+        .post('/resetPIN', auth(false, false, false, true), resetPIN)
 
-        .post('/funds/order', auth(false, false, true), createOrder)
+        .post('/funds/order', auth(false, false, false, true), createOrder)
         .post('/funds/confirm', auth(), confirmOrder)
 
-        .post('/tip/selection', auth(false, false, true), articleCheck(true), checkPin(), tipPassage)
+        .post('/tip/selection', auth(false, false, false, true), articleCheck(true), checkPin(), tipPassage)
+
 
         .post('/contact', auth(false, false, true), createContact)
         .patch('/earnings/fa', auth(false, false, true), createFundAccount)
