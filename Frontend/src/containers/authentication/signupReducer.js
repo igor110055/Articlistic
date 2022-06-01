@@ -26,12 +26,16 @@ import {
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
   RESET_PASSWORD_INIT,
+  RESET_PASSWORD_STATE,
   LOGOUT_INIT,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
   GET_REFRESH_TOKEN_INIT,
   GET_REFRESH_TOKEN_SUCCESS,
   GET_REFRESH_TOKEN_FAILURE,
+  FOLLOW_MULTIPLE_WRITERS_INIT,
+  FOLLOW_MULTIPLE_WRITERS_SUCCESS,
+  FOLLOW_MULTIPLE_WRITERS_FAILURE,
 } from "../../utils/actionTypes";
 
 const initialState = {
@@ -97,9 +101,16 @@ const initialState = {
   getRefreshTokenError: false,
   getRefreshTokenErrorMsg: "",
   getRefreshTokenResp: {},
+
+  isFollowingMultipleWriters: false,
+  followedMultipleWritersSuccess: false,
+  followMultipleWritersFailure: false,
+  followMultipleWriterssData: {},
+  followMultipleWritersErrorMsg: {},
 };
 
 const signupReducer = (state = initialState, action) => {
+  // console.log(action);
   switch (action.type) {
     case GET_EMAIL_OTP_INIT:
       return {
@@ -255,6 +266,34 @@ const signupReducer = (state = initialState, action) => {
         // pickFavWritersDataSuccess: false,
         pickFavWritersData: {},
       };
+    case FOLLOW_MULTIPLE_WRITERS_INIT:
+      return {
+        ...state,
+        isFollowingMultipleWriters: true,
+        followMultipleWritersFailure: false,
+        followMultipleWritersErrorMsg: {},
+        followedMultipleWritersSuccess: false,
+        followMultipleWriterssData: {},
+      };
+    case FOLLOW_MULTIPLE_WRITERS_FAILURE:
+      return {
+        ...state,
+        isFollowingMultipleWriters: false,
+        followMultipleWritersFailure: true,
+        followMultipleWritersErrorMsg: action.data,
+        followedMultipleWritersSuccess: false,
+        followMultipleWriterssData: {},
+      };
+    case FOLLOW_MULTIPLE_WRITERS_SUCCESS:
+      return {
+        ...state,
+        isFollowingMultipleWriters: false,
+        followMultipleWritersFailure: false,
+        followMultipleWritersErrorMsg: {},
+        followedMultipleWritersSuccess: true,
+        followMultipleWriterssData: action.data,
+      };
+
     case FORGOT_GET_EMAIL_OTP_INIT:
       return {
         ...state,
@@ -277,7 +316,7 @@ const signupReducer = (state = initialState, action) => {
         ...state,
         isGettingForgotEmailOTP: false,
         getForgotEmailOTPError: true,
-        getForgotEmailOTPErrorMsg: action.message,
+        getForgotEmailOTPErrorMsg: action.error,
       };
 
     case FORGOT_VERIFY_EMAIL_OTP_INIT:
@@ -328,6 +367,15 @@ const signupReducer = (state = initialState, action) => {
         isResettingPassword: false,
         resetPasswordError: true,
         resetPasswordErrorMsg: action.error,
+      };
+    case RESET_PASSWORD_STATE:
+      return {
+        ...state,
+        isResettingPassword: false,
+        resetPasswordError: false,
+        resetPasswordErrorMsg: "",
+        resetPasswordResp: {},
+        resetPasswordSuccess: false,
       };
     case LOGOUT_INIT:
       return {

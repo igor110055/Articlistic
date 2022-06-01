@@ -14,7 +14,6 @@ import { userEmail, userUsername, userPName } from "../user/userActions";
 import VerifyOTP from "./components/forgot-password/verifyOTP";
 import "./signin.css";
 import OnboardingNavbar from "../navbar/onBoardingNavbar";
-
 import SetNewPassword from "./components/forgot-password/setNewPassword";
 import Cookie from "js-cookie";
 
@@ -25,14 +24,14 @@ function SignIn() {
     loginErrorMsg,
     isLoggedIn,
     loginResp,
-    user
-  } = useSelector(state => ({
+    user,
+  } = useSelector((state) => ({
     isSendingLoginCred: state.signupReducer.isSendingLoginCred,
     loginError: state.signupReducer.loginError,
     loginErrorMsg: state.signupReducer.loginErrorMsg,
     isLoggedIn: state.signupReducer.isLoggedIn,
     loginResp: state.signupReducer.loginResp,
-    user: state.user
+    user: state.user,
   }));
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -75,7 +74,7 @@ function SignIn() {
         JSON.stringify({
           userEmailID: loginResp.private.email,
           userProfileName: loginResp.name,
-          userUserName: loginResp.username
+          userUserName: loginResp.username,
         })
       );
 
@@ -114,7 +113,11 @@ function SignIn() {
                 </p>
               )} */}
               {!validCred && (
-                <PrimaryError message={"Check your credentials"} />
+                <PrimaryError
+                  message={
+                    "We couldn't find an account matching the username and password."
+                  }
+                />
               )}
               {/* <input
                 type="email"
@@ -132,7 +135,13 @@ function SignIn() {
                 placeholder="Password"
                 onChange={setPassword}
               />
-              <Button text="Sign In" blue callback={() => handleSignIn()} />
+              <Button
+                text="Sign In"
+                blue
+                callback={() => handleSignIn()}
+                isDisabled={isSendingLoginCred}
+              />
+
               <p className="forgot-password" onClick={gotoForgot}>
                 Forgot Password?
               </p>
@@ -151,7 +160,7 @@ function SignIn() {
       {displayPage === "verifyOTP" && (
         <VerifyOTP setDisplayPage={setDisplayPage} />
       )}
-      {displayPage === "setNewPassword" && (
+      {displayPage === "set-new-password" && (
         <SetNewPassword setDisplayPage={setDisplayPage} />
       )}
     </div>

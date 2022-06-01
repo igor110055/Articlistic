@@ -20,6 +20,9 @@ export { encryptionSalt };
 
 // export { config, baseURL, encryptionSalt };
 
+// export const baseURL = process.env.REACT_APP_SERVER_LINK;
+// export const encryptionSalt = process.env.REACT_APP_ENCYPTION_SALT;
+
 export const endPoints = {
   categoriesAndWriters: "onboarding/getCategoriesAndWriters",
   status: "onboarding/getStatus",
@@ -58,4 +61,5 @@ export const endPoints = {
   deletePublication: "publication",
   followWriter: "users/followWriter",
   followMultipleWriters: "onboarding/followMultiple",
+  googleSignup: "onboarding/google/signup",
 };

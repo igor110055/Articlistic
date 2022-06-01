@@ -8,30 +8,52 @@ import "./forgot-password.css";
 import PrimaryError from "../primary-error/primaryError";
 import { getForgotEmailOTP } from "../../signupActions";
 function ForgotPassword({ setDisplayPage }) {
-  const { getForgotEmailOTPError, getForgotEmailSuccess } = useSelector(
-    (state) => ({
-      getForgotEmailOTPError: state.signupReducer.getForgotEmailOTPError,
-      getForgotEmailSuccess: state.signupReducer.getForgotEmailSuccess,
-    })
-  );
+  const {
+    isGettingForgotEmailOTP,
+    getForgotEmailOTPError,
+    getForgotEmailSuccess,
+    getForgotEmailOTPResp,
+    getForgotEmailOTPErrorMsg,
+  } = useSelector((state) => ({
+    getForgotEmailOTPError: state.signupReducer.getForgotEmailOTPError,
+    getForgotEmailSuccess: state.signupReducer.getForgotEmailSuccess,
+    isGettingForgotEmailOTP: state.signupReducer.isGettingForgotEmailOTP,
+    getForgotEmailOTPResp: state.signupReducer.isGettingForgotEmailOTP,
+    getForgotEmailOTPErrorMsg: state.signupReducer.getForgotEmailOTPErrorMsg,
+  }));
   const [email, setEmail] = useState("");
   const [validClick, setValidClick] = useState(true);
+  const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const gotoSignIn = () => {
     setDisplayPage("sign-in");
   };
 
+  // useEffect(() => {
+  //   const forgotPasswordEmail = localStorage.getItem("forgotPasswordEmail");
+  //   const forgotPasswordUserId = localStorage.getItem("forgotPasswordUserId");
+  //   console.log(forgotPasswordEmail, forgotPasswordUserId);
+  //   console.log(forgotPasswordEmail === null);
+  //   console.log(forgotPasswordUserId === null);
+  //   // console.log(forgotPasswordUserId === undefined);
+  //   // console.log(forgotPasswordEmail === undefined);
+  //   if (forgotPasswordEmail === null || forgotPasswordUserId === null) {
+  //     // setDisplayPage("setNewPassword");
+  //   } else {
+  //     setDisplayPage("setNewPassword");
+  //   }
+  // }, []);
+
   useEffect(() => {
-    if (
-      localStorage.getItem("forgotPasswordUserId") &&
-      localStorage.getItem("forgotPasswordEmail")
-    )
-      setDisplayPage("setNewPassword");
-  }, []);
-  
-  useEffect(() => {
-    if (!getForgotEmailOTPError && getForgotEmailSuccess)
+    if (getForgotEmailSuccess) {
+      setValidClick(true);
+      setError(false);
       setDisplayPage("verifyOTP");
+    } else if (getForgotEmailOTPError) {
+      console.log(getForgotEmailOTPErrorMsg);
+      setError(true);
+      setValidClick(true);
+    }
   }, [getForgotEmailOTPError, getForgotEmailSuccess]);
 
   const handleSendOTP = () => {
@@ -57,7 +79,13 @@ function ForgotPassword({ setDisplayPage }) {
           onChange={setEmail}
         />
         {!validClick && <PrimaryError message={"Enter Valid Email address"} />}
-        <Button blue text={"Send OTP"} callback={handleSendOTP} />
+        {error && <PrimaryError message={getForgotEmailOTPErrorMsg} />}
+        <Button
+          blue
+          text={"Send OTP"}
+          callback={handleSendOTP}
+          isDisabled={isGettingForgotEmailOTP}
+        />
       </div>
       <div className="back-sign-in" onClick={gotoSignIn}>
         <OtherOptions className="other-options-svg" />

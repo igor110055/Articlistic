@@ -85,10 +85,12 @@
 }
 
 .writer-card-container .writer-card-writer-img {
-  height: fit-content;
+  height: 100%;
   max-height: 143px;
   max-width: 103px;
-  object-fit: fill;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
 .writer-card-container .writer-details .writer-name {

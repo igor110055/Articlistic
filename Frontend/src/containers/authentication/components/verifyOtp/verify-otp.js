@@ -85,10 +85,16 @@ function VerifyOtp({ setDisplayPage, email }) {
           <ErrorSvg /> <span>Invalid code. Please try again.</span>
         </p>
       )}
-      <Button text="Verify" blue callback={handleVerify} />
+      <Button
+        text="Verify"
+        blue
+        callback={handleVerify}
+        isDisabled={isVerifyingEmailOTP}
+      />
       {!sentAgain ? (
         <p
           className="get-code-text"
+          style={{ color: "gray" }}
           onClick={() => {
             resendEmail(email);
             setSentAgain(true);

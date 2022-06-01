@@ -62,31 +62,6 @@ function EmailVerification({ setDisplayPage }) {
         <div className="sign-up-with-email-container">
           <h3 className="sign-up-with-email-header">Sign up with your email</h3>
           <div className="email-input-div">
-            {/* <label
-              htmlFor="email"
-              style={
-                !validClick
-                  ? {
-                      color: "#EB4335",
-                    }
-                  : {}
-              }
-            >
-              Email address
-            </label>
-            <input
-              type="email"
-              required
-              placeholder="Enter your email address"
-              style={
-                !validClick
-                  ? {
-                      borderColor: "#EB4335",
-                    }
-                  : {}
-              }
-              onChange={(e) => setEmail(e.target.value)}
-            /> */}
             <Input
               placeholder={"Enter your email address"}
               type={"email"}
@@ -101,7 +76,12 @@ function EmailVerification({ setDisplayPage }) {
             {usedEmail && (
               <PrimaryError message={"This email is already in use"} />
             )}
-            <Button text="Continue" blue callback={handleContinue} />
+            <Button
+              text="Continue"
+              blue
+              callback={handleContinue}
+              isDisabled={isGettingEmailOTP}
+            />
           </div>
           <div className="other-options" onClick={() => setDisplayPage("")}>
             <OtherOptions className="other-options-svg" />

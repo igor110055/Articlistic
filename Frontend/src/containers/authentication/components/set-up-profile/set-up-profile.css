@@ -96,6 +96,12 @@
   outline: none;
 }
 
+.set-up-profile-container .user-inputs .password-constraints {
+  margin: -8px 0 8px 0;
+  color: #b5a3a3;
+  font-size: 12px;
+}
+
 @media (min-width: 720px) {
   .set-up-profile-container {
     margin-top: 5rem;

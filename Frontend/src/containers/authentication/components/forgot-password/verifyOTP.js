@@ -50,7 +50,7 @@ function VerifyOTP({ setDisplayPage }) {
         );
         // console.log(verifyEmailOTPResp.id);
         // dispatch(userEmail(email));
-        setDisplayPage("setNewPassword");
+        setDisplayPage("set-new-password");
       }
     } else if (verifyForgotEmailOTPError) setValidOtp(false);
   }, [
@@ -86,7 +86,12 @@ function VerifyOTP({ setDisplayPage }) {
           <ErrorSvg /> <span>Invalid code. Please try again.</span>
         </p>
       )}
-      <Button text="Verify" blue callback={handleVerify} />
+      <Button
+        text="Verify"
+        blue
+        callback={handleVerify}
+        isDisabled={isVerifyingForgotEmailOTP}
+      />
       {!sentAgain ? (
         <p
           className="get-code-text"

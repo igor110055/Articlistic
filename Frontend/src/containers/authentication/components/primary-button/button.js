@@ -1,7 +1,8 @@
 import "./button.css";
-import React from "react";
+import { CircularProgress } from "@mui/material";
+// import React from "react";
 
-function Button({ text, blue, isSvg, Svg, callback }) {
+function Button({ text, blue, isSvg, Svg, callback, isDisabled }) {
   return (
     <button
       className="primary-button"
@@ -12,25 +13,30 @@ function Button({ text, blue, isSvg, Svg, callback }) {
               background:
                 "linear-gradient(183.89deg, #365FFE -61.88%, #59B5FF 124.42%)",
               transform: "rotate(-180deg)",
-              border: "none"
+              border: "none",
             }
           : {}
       }
+      disabled={isDisabled}
     >
       {isSvg && <div className="svg-container">{isSvg && <Svg />}</div>}
-      <span
-        className="button-text"
-        style={
-          blue
-            ? {
-                color: "#fff",
-                transform: "rotate(180deg)"
-              }
-            : {}
-        }
-      >
-        {text}
-      </span>
+      {isDisabled ? (
+        <CircularProgress size={20} style={{ color: "white" }} />
+      ) : (
+        <span
+          className="button-text"
+          style={
+            blue
+              ? {
+                  color: "#fff",
+                  transform: "rotate(180deg)",
+                }
+              : {}
+          }
+        >
+          {text}
+        </span>
+      )}
     </button>
   );
 }

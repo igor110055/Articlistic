@@ -5,12 +5,13 @@ import {
   CHECK_USERNAME_INIT,
   LOGIN_INIT,
   GET_PICK_FAV_DATA_INIT,
-  FOLLOW_WRITER_INIT,
+  FOLLOW_MULTIPLE_WRITERS_INIT,
   RESET_PASSWORD_INIT,
   FORGOT_VERIFY_EMAIL_OTP_INIT,
   FORGOT_GET_EMAIL_OTP_INIT,
   LOGOUT_INIT,
   GET_REFRESH_TOKEN_INIT,
+  GOOGLE_SIGN_UP_INIT,
 } from "../../utils/actionTypes";
 import Cookie from "js-cookie";
 import { baseURL, endPoints } from "../../utils/apiEndPoints";
@@ -34,8 +35,8 @@ import {
   loginSuccess,
   getPickFavDataFailure,
   getPickFavDataSuccess,
-  followWriterSuccess,
-  followWriterFailure,
+  followMultipleWritersSuccess,
+  followMultipleWritersFailure,
   getForgotEmailOTPSuccess,
   getForgotEmailOTPFailure,
   resetPasswordFailure,
@@ -46,6 +47,9 @@ import {
   logoutSuccess,
   getRefreshTokenFailure,
   getRefreshTokenSuccess,
+  signupWithGoogleSuccess,
+  signupWithGoogleFailure,
+  // followultipleWritersFailure,
 } from "./signupActions";
 function* getEmailOTP(action) {
   try {
@@ -191,32 +195,27 @@ export function* getPickFavDataSaga() {
   yield takeLatest(GET_PICK_FAV_DATA_INIT, getPickFavData);
 }
 
-function* followWriter(action) {
+function* followMultipleWriters(action) {
   try {
     // console.log(action);
     const headers = {
       Authorization: action.data.token,
     };
     const url = `${baseURL}/${endPoints.followMultipleWriters}`;
-    const data = yield call(
-      authPostRequest,
-      url,
-      action.data.usernames,
-      headers
-    );
+    const data = yield call(authPostRequest, url, action.data, headers);
 
     if (!data.error) {
-      yield put(followWriterSuccess(data));
+      yield put(followMultipleWritersSuccess(data));
     } else {
-      yield put(followWriterFailure(data.message));
+      yield put(followMultipleWritersFailure(data.message));
     }
   } catch (err) {
-    yield put(followWriterFailure(err.message));
+    yield put(followMultipleWritersFailure(err.message));
   }
 }
 
 export function* followWriterInit() {
-  yield takeEvery(FOLLOW_WRITER_INIT, followWriter);
+  yield takeEvery(FOLLOW_MULTIPLE_WRITERS_INIT, followMultipleWriters);
 }
 
 function* getForgotEmailOTP(action) {
@@ -227,6 +226,8 @@ function* getForgotEmailOTP(action) {
     // console.log(headers);
     const url = `${baseURL}/${endPoints.forgotSendEmailOTP}?${params}`;
     const data = yield call(postRequest, url);
+    console.log("saga", data);
+    data.message = `A user with this email does not exist.`;
     if (!data.error) {
       yield put(getForgotEmailOTPSuccess(data));
     } else {
@@ -268,7 +269,7 @@ function* resetPassword(action) {
   try {
     // const { headers } = action.payload;
     const headers = action.payload;
-    // console.log(headers);
+    console.log(headers);
     const url = `${baseURL}/${endPoints.resetPassword}`;
     const data = yield call(postRequest, url, headers);
     if (!data.error) {
@@ -333,4 +334,22 @@ function* getRefreshToken(action) {
 
 export function* getRefreshTokenSaga() {
   yield takeLatest(GET_REFRESH_TOKEN_INIT, getRefreshToken);
+}
+
+export function* googleSignup(action) {
+  try {
+    const tokenId = action.payload;
+    const url = `${baseURL}/${endPoints.googleSignup}?token=${tokenId}`;
+    const data = yield call(postRequest, url, {}, {});
+
+    if (!data.error) {
+      yield put(signupWithGoogleSuccess(data));
+    } else yield put(signupWithGoogleFailure(data.message));
+  } catch (e) {
+    yield put(signupWithGoogleFailure(e.message));
+  }
+}
+
+export function* googleSignupSaga() {
+  yield takeLatest(GOOGLE_SIGN_UP_INIT, googleSignup);
 }

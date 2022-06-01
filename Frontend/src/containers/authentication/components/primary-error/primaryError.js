@@ -4,7 +4,10 @@ import "./primaryError.css";
 function PrimaryError({ message }) {
   return (
     <p className="wrong-email">
-      <ErrorSvg /> <span>{message}</span>
+      <span>
+        <ErrorSvg />
+      </span>
+      <span>{message}</span>
     </p>
   );
 }

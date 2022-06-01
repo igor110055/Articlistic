@@ -17,9 +17,9 @@ import {
   GET_PICK_FAV_DATA_FAILURE,
   GET_PICK_FAV_DATA_SUCCESS,
   GET_PICK_FAV_DATA_INIT,
-  FOLLOW_WRITER_FAILURE,
-  FOLLOW_WRITER_SUCCESS,
-  FOLLOW_WRITER_INIT,
+  FOLLOW_MULTIPLE_WRITERS_FAILURE,
+  FOLLOW_MULTIPLE_WRITERS_SUCCESS,
+  FOLLOW_MULTIPLE_WRITERS_INIT,
   FORGOT_GET_EMAIL_OTP_SUCCESS,
   FORGOT_GET_EMAIL_OTP_FAILURE,
   FORGOT_GET_EMAIL_OTP_INIT,
@@ -35,6 +35,10 @@ import {
   GET_REFRESH_TOKEN_FAILURE,
   GET_REFRESH_TOKEN_SUCCESS,
   GET_REFRESH_TOKEN_INIT,
+  GOOGLE_SIGN_UP_INIT,
+  GOOGLE_SIGN_UP_SUCCESS,
+  GOOGLE_SIGN_UP_FAILURE,
+  RESET_PASSWORD_STATE,
 } from "../../utils/actionTypes";
 
 export function getEmailOTPInit(payload) {
@@ -158,21 +162,21 @@ export const getPickFavDataFailure = (data) => {
   };
 };
 
-export const followWriterInit = (data) => {
+export const followMultipleWritersInit = (data) => {
   return {
-    type: FOLLOW_WRITER_INIT,
+    type: FOLLOW_MULTIPLE_WRITERS_INIT,
     data,
   };
 };
-export const followWriterFailure = (data) => {
+export const followMultipleWritersFailure = (data) => {
   return {
-    type: FOLLOW_WRITER_FAILURE,
+    type: FOLLOW_MULTIPLE_WRITERS_FAILURE,
     data,
   };
 };
-export const followWriterSuccess = (data) => {
+export const followMultipleWritersSuccess = (data) => {
   return {
-    type: FOLLOW_WRITER_SUCCESS,
+    type: FOLLOW_MULTIPLE_WRITERS_SUCCESS,
     data,
   };
 };
@@ -243,6 +247,13 @@ export const resetPassword = (params) => {
   };
 };
 
+export const resetPasswordState = (data) => {
+  return {
+    type: RESET_PASSWORD_STATE,
+    payload: data,
+  };
+};
+
 export const logoutSuccess = (data) => {
   return {
     type: LOGOUT_SUCCESS,
@@ -284,5 +295,24 @@ export const getRefreshToken = (params, headers) => {
   return {
     type: GET_REFRESH_TOKEN_INIT,
     payload,
+  };
+};
+
+export const signupWithGoogleInit = (data) => {
+  return {
+    type: GOOGLE_SIGN_UP_INIT,
+    payload: data,
+  };
+};
+export const signupWithGoogleSuccess = (data) => {
+  return {
+    type: GOOGLE_SIGN_UP_SUCCESS,
+    payload: data,
+  };
+};
+export const signupWithGoogleFailure = (data) => {
+  return {
+    type: GOOGLE_SIGN_UP_FAILURE,
+    payload: data,
   };
 };

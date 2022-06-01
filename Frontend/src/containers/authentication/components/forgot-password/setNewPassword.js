@@ -4,17 +4,45 @@ import Button from "../primary-button/button";
 import Input from "../primary-input/input";
 import PrimaryError from "../primary-error/primaryError";
 import { validatePassword } from "../../../../utils/common";
-import { resetPassword } from "../../signupActions";
+import { resetPassword, resetPasswordState } from "../../signupActions";
+import { showSnackbar } from "../../../common/commonActions";
+import CustomizedSnackbars from "../../../../components/materialuiSnackbar";
+
 function SetNewPassword({ setDisplayPage }) {
   const dispatch = useDispatch();
   const [newPass, setNewPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [validPass, setValidPass] = useState(true);
   const [samePass, setSamePass] = useState(true);
-  const { resetPasswordSuccess, resetPasswordError } = useSelector((state) => ({
+  const {
+    resetPasswordSuccess,
+    isResettingPassword,
+    resetPasswordError,
+    open,
+    variant,
+    message,
+  } = useSelector((state) => ({
     resetPasswordSuccess: state.signupReducer.resetPasswordSuccess,
+    isResettingPassword: state.signupReducer.isResettingPassword,
     resetPasswordError: state.signupReducer.resetPasswordError,
+    variant: state.common.snackbar.variant,
+    message: state.common.snackbar.message,
+    open: state.common.snackbar.open,
   }));
+
+  useEffect(() => {
+    const email = localStorage.getItem("forgotPasswordEmail");
+    const id = localStorage.getItem("forgotPasswordUserId");
+    // if (
+    //   email === undefined ||
+    //   email === null ||
+    //   id === undefined ||
+    //   id === null
+    // ) {
+    //   localStorage.clear();
+    //   setDisplayPage("forgot-password");
+    // }
+  });
 
   const handleReset = () => {
     if (!validatePassword(newPass)) {
@@ -32,19 +60,55 @@ function SetNewPassword({ setDisplayPage }) {
     }
   };
 
+  //   useEffect(() => {
+  //     if (resetPasswordSuccess && !resetPasswordError) {
+  //       localStorage.removeItem("forgotPasswordEmail");
+  //       localStorage.removeItem("forgotPasswordUserId");
+  //       setTimeout(() => {
+  //         setDisplayPage("sign-in");
+  //       }, 1000);
+  //     } else if (resetPasswordError) {
+  //       localStorage.removeItem("forgotPasswordUserId");
+  //       localStorage.removeItem("forgotPasswordEmail");
+  //
+  //       setDisplayPage("sign-in");
+  //     }
+  //   }, [resetPasswordSuccess, resetPasswordError]);
+
   useEffect(() => {
-    if (resetPasswordSuccess && !resetPasswordError) {
-      localStorage.removeItem("forgotPasswordEmail");
-      localStorage.removeItem("forgotPasswordUserId");
+    if (resetPasswordSuccess) {
+      dispatch(showSnackbar("Password updated successfully", "success"));
+      setTimeout(() => {
+        setDisplayPage("sign-in");
+      }, 1000);
 
-      setDisplayPage("sign-in");
-    } else if (resetPasswordError) {
       localStorage.removeItem("forgotPasswordUserId");
       localStorage.removeItem("forgotPasswordEmail");
-
-      setDisplayPage("sign-in");
+      // localStorage.clear();
+      dispatch(resetPasswordState());
+      setTimeout(() => {
+        setDisplayPage("sign-in");
+      }, 1000);
     }
-  }, [resetPasswordSuccess, resetPasswordError]);
+  }, [resetPasswordSuccess]);
+
+  useEffect(() => {
+    if (resetPasswordError) {
+      // dispatch(
+      //   showSnackbar(
+      //     "Error occurred while updating password. Please try resetting passowrd again",
+      //     "error"
+      //   )
+      // );
+      localStorage.removeItem("forgotPasswordUserId");
+      localStorage.removeItem("forgotPasswordEmail");
+      // localStorage.clear();
+      dispatch(resetPasswordState());
+      setTimeout(() => {
+        setDisplayPage("sign-in");
+      }, 1000);
+    }
+  }, [resetPasswordError]);
 
   return (
     <div
@@ -67,6 +131,10 @@ function SetNewPassword({ setDisplayPage }) {
           onChange={setNewPass}
         />
         {!validPass && <PrimaryError message={"Use a strong password"} />}
+        <p className="password-constraints">
+          Password should contain 1 uppercase letter, 1 lowercase letter, 1
+          special character and 1 number. Minimum 8 characters.
+        </p>
         <Input
           type={"password"}
           inputBorderColor={!samePass ? "#EB4335" : "#777983"}
@@ -75,8 +143,14 @@ function SetNewPassword({ setDisplayPage }) {
           onChange={setConfirmPass}
         />
         {!samePass && <PrimaryError message={"passwords do not match"} />}
-        <Button blue text={"Reset Password"} callback={() => handleReset()} />
+        <Button
+          blue
+          text={"Reset Password"}
+          callback={() => handleReset()}
+          isDisabled={isResettingPassword}
+        />
       </div>
+      <CustomizedSnackbars variant={variant} message={message} openS={open} />
     </div>
   );
 }
