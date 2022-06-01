@@ -2,7 +2,6 @@ var sgMail = require("@sendgrid/mail");
 var config = require("../../../config");
 const logger = require('../logger');
 
-logger.info("-->", config.sendgrid.key);
 const from = 'info@attentioun.com';
 
 

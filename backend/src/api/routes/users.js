@@ -27,7 +27,7 @@ const { followNotificationMail } = require('../../utils/mailer/email');
 module.exports = function userRouter() {
 
     return new express.Router()
-        .post('/follow', useAuth(false, false, true), followWriter)
+        .post('/follow', useAuth(false, false, false, true), followWriter)
         .delete('/unfollow', useAuth(), unfollowWriter)
         .get('/following', useAuth(), getFollowing)
         .get('/followers', useAuth(), getFollowers)
