@@ -41,7 +41,7 @@ phases:
     commands:
       - aws codeartifact login --tool npm --repository attentioun-web-app --domain attentioun --domain-owner 605567701750
       - cd Frontend/
-      - ll
+      - ls
       - node --version
       - npm install --legacy-peer-deps
       - cd ../backend/
