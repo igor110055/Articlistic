@@ -14,7 +14,7 @@ const {
     MDB
 } = require('../client')
 
-async function createUser(user) {
+async function createUser(user, listId) {
 
     let client;
     let username = user.username;
@@ -91,6 +91,7 @@ async function createUser(user) {
                         'username': username,
                         'publications': [],
                         'categories': [],
+                        'mailing_list_id': listId
                     }, {
                         session: session
                     })

@@ -34,6 +34,7 @@ const {
     IMAGE_SIZE_LIMIT,
     DELETE_AFTER_ARTICLE_TIMING
 } = require('../../../constants');
+const { createSingleSend, deleteSingleSend } = require('../../utils/mailer/client');
 
 
 module.exports = function articlesRouter() {
@@ -508,7 +509,15 @@ module.exports = function articlesRouter() {
         let routeName = '/articles/upload';
         let username = req.username;
         let articleId = req.query.articleId;
-
+        let listId;
+        try {
+            const writerData = await mongo.writers.getWriterByName(username);
+            logger.info(writerData);
+            listId = writerData.mailing_list_id;
+        }
+        catch (e) {
+            logger.debug(e, "Unable to fetch writer's detail at", routeName);
+        }
 
         let {
             readingTime,
@@ -618,9 +627,6 @@ module.exports = function articlesRouter() {
                 if (!originUrl) {
                     throw new BadRequestError('Origin url should be sent for newly imported articles', routeName)
                 }
-
-
-
 
             } else {
 
@@ -742,8 +748,14 @@ module.exports = function articlesRouter() {
 
                     await mongo.articles.createNewArticle(username, articleId, status, writeupUpload, false, false, publicData, origin, originUrl);
                 } else {
-
-                    await mongo.transactionArticleCategory.publishNewArticle(username, articleId, status, writeupUpload, storySetting, false, publicData, categories, publicationId);
+                    try {
+                        await mongo.transactionArticleCategory.publishNewArticle(username, articleId, status, writeupUpload, storySetting, false, publicData, categories, publicationId);
+                        await createSingleSend(username, listId);
+                    }
+                    catch (e) {
+                        logger.info(e)
+                        //await deleteSingleSend(listId);
+                    }
                 }
             } catch (e) {
                 // await s3.init().deleteFile(fn);

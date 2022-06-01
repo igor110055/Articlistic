@@ -13,8 +13,10 @@ const logger = require('../../utils/logger/index')
 const useAuth = require('../../middleware/auth')
 
 const otp = require('../../utils/otp/index')
+const mailer = require("../../utils/mailer/email")
 
 var encryption = require('../../utils/encryption/index');
+const { createMailingList } = require("../../utils/mailer/client")
 const NetworkError = require('../../errors/NetworkError');
 const MissingParamError = require('../../errors/MissingParamError');
 const DatabaseError = require('../../errors/DatabaseError');
@@ -331,7 +333,7 @@ module.exports = function onboardingRouter() {
         let routeName = "POST /onboarding/createUser";
         let user = {};
         let international = true;
-
+        var listId;
         /* The below code is checking if the parameters are missing. If they are missing, it throws an error. */
 
         let {
@@ -418,8 +420,17 @@ module.exports = function onboardingRouter() {
         */
 
 
+        if (isWriter) {
+            try {
+                listId = await createMailingList(username);
+            }
+            catch (e) {
+                logger.info(e, "Mailing List creation Failed");
+            }
+        }
+
         try {
-            await mongo.transactionsUserAnalytics.createUser(user);
+            await mongo.transactionsUserAnalytics.createUser(user, listId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -432,12 +443,11 @@ module.exports = function onboardingRouter() {
         let rt = encryption.encryptForFrontend(refreshToken);
 
 
-
         delete user.private;
         delete user.email;
         delete user.public;
         delete user.refreshToken;
-
+        await mailer.WelcomeMail(email, name);
         return res.status(201).send({
             ...user,
             accessToken,

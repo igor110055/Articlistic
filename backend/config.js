@@ -114,10 +114,11 @@ const local = {
     },
     ip: {
         apiKey: process.env.IP_API_KEY
+    },
+    mailmodo: {
+        apiKey: process.env.MAIL_MODO_API_KEY
     }
-}
-
-
+};
 
 const prod = {
     environment: process.env.NODE_ENV,
@@ -171,9 +172,6 @@ const prod = {
     }
 
 }
-
-
-
 
 const test = {
     environment: process.env.NODE_ENV,

@@ -29,6 +29,7 @@ const {
     IMAGE_SIZE_LIMIT,
     DELETE_AFTER_PUBLICATION_TIMING
 } = require('../../../constants');
+const { createSingleSend } = require('../../utils/mailer/client');
 
 
 module.exports = function publicationRouter() {
@@ -37,7 +38,7 @@ module.exports = function publicationRouter() {
         .get('/', useAuth(), getPublication)
         .get('/all', useAuth(), getAllPublications)
 
-        .post('/', useAuth(false, false, true), file.single('image'), newPublication)
+        .post('/new', useAuth(false, false, true), file.single('image'), newPublication)
         .put('/', useAuth(false, false, true), file.single('image'), updatePublication)
         .delete('/', useAuth(false, false, true), checkDb(false, false, false, true, true), markForDeletion)
 
@@ -238,6 +239,19 @@ module.exports = function publicationRouter() {
             throw new DatabaseError(routeName, e);
         }
 
+
+        /*
+         SENDING THE UPDATE TO MAIL ON SUCCESSFULL ARTICLE PUBLISHING
+
+        try {
+            const writerData = await mongo.writers.getWriterByName(username);
+            const mailingId = writerData.mailing_list_id;
+            await createSingleSend(username, mailingId);
+        }
+        catch (e) {
+            logger.debug(e, "Failed to send mail", routeName);
+        }
+        */
         res.status(200).send({
             message: 'Updated Successfully.',
             'articleLink': resLink.url

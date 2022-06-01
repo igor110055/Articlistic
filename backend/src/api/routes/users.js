@@ -8,10 +8,10 @@ var redis = require('../../db/redis/index');
 const logger = require('../../utils/logger/index')
 var file = require('../../middleware/files');
 const Sentry = require('@sentry/node');
-
+const mailClient = require("../../utils/mailer/client");
 
 const useAuth = require('../../middleware/auth')
-
+const { staticDecrypt } = require("../../utils/encryption/encryption")
 const NetworkError = require('../../errors/NetworkError');
 const MissingParamError = require('../../errors/MissingParamError');
 const DatabaseError = require('../../errors/DatabaseError');
@@ -22,11 +22,12 @@ const checkDb = require('../../middleware/checkDb');
 
 const getTopFollowed = require('../../utils/functions/getTopFollowed');
 const s3 = require('../../utils/s3');
+const { followNotificationMail } = require('../../utils/mailer/email');
 
 module.exports = function userRouter() {
 
     return new express.Router()
-        .post('/follow', useAuth(), followWriter)
+        .post('/follow', useAuth(false, false, true), followWriter)
         .delete('/unfollow', useAuth(), unfollowWriter)
         .get('/following', useAuth(), getFollowing)
         .get('/followers', useAuth(), getFollowers)
@@ -289,11 +290,13 @@ module.exports = function userRouter() {
     */
 
     async function followWriter(req, res) {
-        let routeName = '/users/followWriter'
+        let routeName = 'POST /users/follow'
 
         let follows = req.query.follows;
         let username = req.username;
-
+        let email = staticDecrypt(req.user.email);
+        let name = req.user.name;
+        // logger.info(req.user)
         if (!follows) throw new MissingParamError('Missing parameter: follows', routeName);
 
         if (username == follows) throw new NotAuthenticatedError('You can not follow yourself', routeName);
@@ -316,6 +319,32 @@ module.exports = function userRouter() {
             throw new DatabaseError(routeName, e);
         }
 
+        //CHECKING THE FOLLOWING OF USER AND SENDING THE MAIL IF ITS FIRST FOLLOWING
+        try {
+            const userfollowing = await mongo.followers.getFollowing(username);
+            logger.info(userfollowing, userfollowing.length);
+            if (userfollowing.length == 1) {
+                try {
+                    await followNotificationMail(email, follows);
+                } catch (e) {
+                    logger.debug(e, "Error in sending the follow notification mail")
+                }
+            }
+        }
+        catch (e) {
+            logger.debug(e, "First following check failed");
+        }
+
+        //Adding the follower to Writer's Mailing List
+        try {
+            const writerData = await mongo.writers.getWriterByName(follows);
+            // logger.info(writerData);
+            const mailListId = writerData.mailing_list_id;
+            await mailClient.addFollowerToList(email, mailListId, name);
+        }
+        catch (e) {
+            logger.info(e, "Failed to add to mailing List");
+        }
         return res.status(201).send({
             'message': 'Followed the writer'
         })
