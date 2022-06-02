@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ReactComponent as Logo } from "../../Images/logo.svg";
-import { ReactComponent as GoogleLogo } from "../../Images/GoogleLogo.svg";
+// import { ReactComponent as GoogleLogo } from "../../Images/GoogleLogo.svg";
 import { ReactComponent as EmailLogo } from "../../Images/VectorEmail.svg";
 import Button from "./components/primary-button/button";
 import EmailVerification from "./components/emailVerification/emailVerification";
@@ -9,8 +9,8 @@ import PickFavWriters from "./components/pick-fav-writers/pick-fav-writers";
 // import TempNavbar from "../navbar/tempNavbar";
 import OnboardingNavbar from "../navbar/onBoardingNavbar";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from "react-google-login";
 import GoogleAuth from "./components/google-auth/googleAuth";
+import Cookie from "js-cookie";
 // import left_img from "../../Images/background-left.svg";
 // import right_img from "../../Images/background-right.svg";
 import "./signup.css";
@@ -41,6 +41,10 @@ function SignUp() {
   useEffect(() => {
     const id = localStorage.getItem("createUserId");
     if (id) setDisplayPage("setUpProfile");
+  }, []);
+
+  useEffect(() => {
+    if (Cookie.get("accessToken")) navigate("/writerDashboard");
   }, []);
 
   return (

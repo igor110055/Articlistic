@@ -18,6 +18,16 @@ setTimeout(() => {
 }, 3000);
 export { encryptionSalt };
 
+let GOOGLE_CLIENT_ID;
+
+setTimeout(() => {
+  GOOGLE_CLIENT_ID = config["GOOGLE_CLIENT_ID"];
+  // console.log(encryptionSalt);
+}, 3000);
+export { GOOGLE_CLIENT_ID };
+// export const baseURL = process.env.REACT_APP_SERVER_LINK;
+// export const encryptionSalt = process.env.REACT_APP_ENCYPTION_SALT;
+
 // export const baseURL = process.env.REACT_APP_SERVER_LINK;
 // export const encryptionSalt = process.env.REACT_APP_ENCYPTION_SALT;
 

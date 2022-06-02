@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { ReactComponent as GoogleLogo } from "../../../../Images/GoogleLogo.svg";
 import Button from "../primary-button/button";
 import { signupWithGoogleInit } from "../../signupActions";
-
+import { GOOGLE_CLIENT_ID } from "../../../../utils/apiEndPoints";
 function GoogleAuth({ isSignIn }) {
   const dispatch = useDispatch();
 
@@ -20,7 +20,7 @@ function GoogleAuth({ isSignIn }) {
   return (
     <>
       <GoogleLogin
-        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+        clientId={GOOGLE_CLIENT_ID}
         // buttonText="Log in with Google"
         render={(renderProps) => (
           <Button
