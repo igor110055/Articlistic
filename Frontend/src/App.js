@@ -48,7 +48,11 @@ function App() {
   // }, [thisState]);
   useEffect(() => {
     getEnvVariables(
-      ["REACT_APP_ENCRYPTION_SALT", "REACT_APP_SERVER_LINK"],
+      [
+        "REACT_APP_ENCRYPTION_SALT",
+        "REACT_APP_SERVER_LINK",
+        "GOOGLE_CLIENT_ID",
+      ],
       setEnvVariablesSuccess
     );
 
