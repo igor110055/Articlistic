@@ -51,7 +51,6 @@ const Unsplash = ({ onDataChange, data, readOnly }) => {
 
   const classes = useStyles();
   const imageHandler = (url, caption, userName, link) => {
-    // console.log(caption);
     setSelectedImageURL(url);
     setImageSelected(true);
     onDataChange(url, caption);

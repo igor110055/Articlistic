@@ -98,7 +98,6 @@ const WriterPublicationEditor = () => {
   }, []);
 
   const startEditor = () => {
-    // console.log('ajs');
     const editor = new EditorJS({
       inlineToolbar: true,
       onReady: () => {

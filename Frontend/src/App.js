@@ -1,8 +1,7 @@
-import { getEnvVariables } from "./config";
-import LandingPage from "./containers/loginSignup/landingPage";
+// import LandingPage from "./containers/loginSignup/landingPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import TempNavbar from "./containers/navbar/tempNavbar";
-import OnBoarding from "./containers/loginSignup/onBoarding";
+// import OnBoarding from "./containers/loginSignup/onBoarding";
 import PrivateRoute from "./components/privateRoute";
 // import Home from "./containers/home/home";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,27 +19,32 @@ import WriterPublicationEditor from "./containers/writerContent/writerPublicatio
 import AboutPublication from "./containers/writerContent/aboutPublication";
 import "./App.css";
 import MultipleTab from "./utils/MultipleTab";
-import MainLoader from "./components/mainLoader";
+import SignUp from "./containers/authentication/signup";
+import SignIn from "./containers/authentication/signin";
+// import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 
+// import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 // import {
 //   getAuthToken,
-//   getRefreshToken
+//   getRefreshToken,
 // } from "./containers/common/commonFunctions";
-
+import getEnvVariables from "./config";
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
-  const [mulitpleTabs, setMultipleTabs] = useState(false);
   const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
-  const { variant, message, open } = useSelector(state => ({
+  const [mulitpleTabs, setMultipleTabs] = useState(false);
+  const { variant, message, open } = useSelector((state) => ({
     // thisState: state,
-    loginError: state.loginSignup.isLoggedIn,
+    loginError: state.signupReducer.isLoggedIn,
     variant: state.common.snackbar.variant,
     message: state.common.snackbar.message,
-    open: state.common.snackbar.open
+    open: state.common.snackbar.open,
   }));
 
   const dispatch = useDispatch();
-
+  // useEffect(() => {
+  //   console.log(thisState);
+  // }, [thisState]);
   useEffect(() => {
     getEnvVariables(
       ["REACT_APP_ENCRYPTION_SALT", "REACT_APP_SERVER_LINK"],
@@ -63,7 +67,7 @@ function App() {
   }, []);
 
   localStorage.openpages = Date.now();
-  var onLocalStorageEvent = function(e) {
+  var onLocalStorageEvent = function (e) {
     if (e.key === "openpages") {
       // Listen if anybody else is opening the same page!
       localStorage.page_available = Date.now();
@@ -78,22 +82,12 @@ function App() {
   return (
     //for writers
     <div>
-      {getEnvVariablesSuccess ? (
+      {getEnvVariablesSuccess && (
         <div className="App">
           {!mulitpleTabs && (
             <Router>
               {/* <Auth> */}
               <Routes>
-                {/* <Route
-            exact
-            path="/"
-            element={
-              <PrivateRoute>
-                <TempNavbar />
-                <Home />
-              </PrivateRoute>
-            }
-          /> */}
                 <Route
                   exact
                   path="/writerDashboard/*"
@@ -104,8 +98,11 @@ function App() {
                     </PrivateRoute>
                   }
                 />
-                <Route exact path="/login" element={<LandingPage />} />
-                <Route exact path="/signup" element={<OnBoarding />} />
+                {/* <Route exact path="/login" element={<LandingPage />} /> */}
+                {/* <Route exact path="/signup" element={<OnBoarding />} /> */}
+                <Route exact path="/signup" element={<SignUp />} />
+                <Route exact path="/login" element={<SignIn />} />
+                {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
                 <Route
                   exact
                   path="/story"
@@ -162,8 +159,6 @@ function App() {
           />
           {/* <Navbar /> */}
         </div>
-      ) : (
-        <MainLoader />
       )}
     </div>
   );

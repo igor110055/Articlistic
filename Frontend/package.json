@@ -26,9 +26,11 @@
     "@mui/styles": "^5.1.1",
     "@sentry/react": "^6.19.7",
     "@sentry/tracing": "^6.19.7",
+    "@soywod/pin-field": "^0.2.2",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/user-event": "^12.8.3",
     "amplify": "0.0.11",
+    "aws-sdk": "^2.1145.0",
     "axios": "^0.24.0",
     "crypto-js": "^4.1.1",
     "dotenv": "^15.0.0",
@@ -49,10 +51,12 @@
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^3.0.2",
     "react-dom": "^17.0.2",
+    "react-google-login": "^5.2.2",
     "react-infinite-scroll-component": "^6.1.0",
     "react-material-ui-carousel": "^3.1.1",
     "react-materialui-tags": "^1.0.4",
     "react-phone-number-input": "^3.1.44",
+    "react-pin-field": "^2.0.0-beta.3",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
@@ -63,8 +67,7 @@
     "shuji": "^0.7.0",
     "styled-components": "^5.3.3",
     "typescript": "^4.5.5",
-    "web-vitals": "^1.1.2",
-    "aws-sdk": "latest"
+    "web-vitals": "^1.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -95,7 +98,10 @@
     "@testing-library/react": "^12.1.2",
     "@types/crypto-js": "^4.1.0",
     "@types/js-cookie": "^3.0.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest-dom": "^4.0.0",
+    "prettier": "^2.6.2",
     "react-test-renderer": "^17.0.2"
   }
 }

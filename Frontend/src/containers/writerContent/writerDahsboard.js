@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { Button, CircularProgress } from "@mui/material";
-import iconOnly from "./../../Images/icon_only.png";
 import WriterDashboardCard from "../../components/writerDashboardCard";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -11,8 +9,6 @@ import {
 } from "../writerEditor/writerEditorActions";
 import graph from "./../../Images/graph.png";
 import progress from "./../../Images/progress.png";
-import Cookie from "js-cookie";
-import crypto from "crypto-js";
 import { useNavigate } from "react-router";
 import { userUsername } from "../user/userActions";
 import Loader from "../../components/home/loader";
@@ -51,13 +47,10 @@ const WriterDashboard = () => {
 
   useEffect(() => {
     if (createNewArticleError) {
-      // console.log('kaejg');
       setCreateClicked(false);
     } else {
       if (!isCreatingNewArticle && createClicked) {
-        // console.log('akhf');
         setCreateClicked(false);
-        // console.log(createNewArticleResp);
         localStorage.setItem("articleId", createNewArticleResp?.articleId);
         navigate("/story");
       }
@@ -76,7 +69,6 @@ const WriterDashboard = () => {
 
   const fetchArticles = skip => {
     const temp = getAuthToken();
-    // // console.log(temp);
     // dispatch(userUsername(JSON.parse(localStorage.getItem('user')).userUserName));
     // dispatch(getAllArticles({
     //     skip: 0,
@@ -84,7 +76,6 @@ const WriterDashboard = () => {
     //     filters: 'PUBLISHED',
     // }, temp));
     // setGetAllArticlesI(true);
-    // console.log('thayu');
     const params = new URLSearchParams({
       skip: skip,
       limit: 10

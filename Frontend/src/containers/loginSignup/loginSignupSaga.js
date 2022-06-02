@@ -360,13 +360,11 @@ function* getRefreshToken(action) {
     const headers = {
       Authorization: payload.headers,
     };
-    // console.log(headers);
     const url = `${baseURL}/${endPoints.refreshToken}`;
     const data = yield call(authPostRequest, url, {}, headers);
     if (!data.error) {
       yield put(getRefreshTokenSuccess(data));
     } else {
-      // console.log(data);
       yield put(getRefreshTokenFailure(data.message));
     }
   } catch (err) {

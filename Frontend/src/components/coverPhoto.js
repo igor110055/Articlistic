@@ -32,12 +32,9 @@ const CoverPhoto = ({
   getArticleSuccess,
   readingTimeLive
 }) => {
-  // console.log(articleTitle);
   const classes = useStyles();
   const [selectedFile, setSelectedFile] = useState(null);
-  // const [url, setUrl] = useState(data?.url ? data?.url : '');
-  // const [caption, setCaption] = useState(data?.caption ? data?.caption : '');
-  // const [description, setDescription] = useState(data?.description ? data?.description : '');
+
   const [progress, setProgress] = useState(0);
   const [unsplashSelected, setUnsplashSelected] = useState(false);
   const [openImageDialog, setOpenImageDialog] = useState(false);
@@ -54,8 +51,7 @@ const CoverPhoto = ({
     img.src = window.URL.createObjectURL(
       new Blob(bData, { type: "application/zip" })
     );
-    // img.src = window?.URL?.createObjectURL(e.target.files[0]);
-    // console.log(e.target.files[0].size / 1024);
+
     img.onload = () => {
       if (
         img.width / img.height >= 4 / 3 &&
@@ -69,7 +65,6 @@ const CoverPhoto = ({
         );
       }
     };
-    // console.log(e.target.files[0]);
   };
 
   useEffect(() => {
@@ -158,24 +153,10 @@ const CoverPhoto = ({
 
     const temp = getAuthToken();
     if (localStorage.getItem("articleId") === null) {
-      // console.log(localStorage.getItem('articleId'));
-      // dispatch(uploadArticle({
-      //     main: {
-      //         writeup: '{}',
-      //         status: "DRAFT",
-      //         title: '',
-      //         body: '',
-      //         articlePic: '',
-      //         readingTime: '',
-      //     },
-      // }, temp));
-      // console.log(twoClicked);
-      // setTwoClicked(true);
       dispatch(showSnackbar("Kindly add story title and subtitle.", "warning"));
     } else {
       hiddenInputTwo.current.click();
     }
-    // hiddenInputTwo.current.click();
   };
 
   const fileUploadHandler = e => {
@@ -200,7 +181,6 @@ const CoverPhoto = ({
         // console.log(resp);
         setArticleCover(resp.data.image);
         setOpenImageDialog(false);
-        // onDataChange(resp.data.link, caption);
       })
       .catch(error => {
         // console.log(error);
@@ -261,29 +241,6 @@ const CoverPhoto = ({
 
   return (
     <div className={classes.imageUploadSection}>
-      {/* {articleCover === '' ? (< div >
-                < input type="file" accept="image/*" onChange={handleChange} style={{ display: 'none' }} ref={hiddenInput} />
-                {progress === 0 ? (<div className={classes.input} onClick={handleInputClicked}>Select Cover Photo</div>)
-                    : (
-                        <div className={classes.progress}>{progress}% Uploaded</div>
-                    )}
-            </div>) : < div >
-                <div onClick={handleInputTwoClicked}>
-                    < input type="file" accept="image/*" onChange={handleChange} style={{ display: 'none' }} ref={hiddenInputTwo} />
-                    < img src={articleCover} className={classes.imageStyle} />
-                </div>
-                <div className={classes.captionContainer}>
-                    <img src={backgroundSVG} style={{ position: 'absolute' }} />
-                    <input className={classes.captionStyle} value={articleTitle} onChange={(e) => {
-                        setArticleTitle(e.target.value);
-                        // onDataChange(url, e.target.value);
-                    }} placeholder="Title" />
-                    <input className={classes.desCaptionStyle} value={articleDes} onChange={(e) => {
-                        setArticleDes(e.target.value);
-                        // onDataChange(url, e.target.value);
-                    }} placeholder="Subtitle" />
-                </div>
-            </div>} */}
       {
         <div>
           <div>
@@ -433,17 +390,10 @@ const CoverPhoto = ({
             className={classes.captionContainer}
             style={{ backgroundImage: `url(${backgroundSVG})` }}
           >
-            {/* <img src={backgroundSVG} style={{ position: 'absolute', width: '100%', height:'100%'}} /> */}
-            {/* <div className={classes.caption}> */}
             <div
               className={classes.captionAndDescription}
               style={{ padding: "1rem" }}
             >
-              {/* <div contentEditable={true} id="test" maxLength="58" className={classes.captionStyle} value={articleTitle} onChange={(e) => {
-                            let text = e.target.value;
-                            if (2) text = text.split('\n').slice(0, 2 ?? undefined)
-                            setArticleTitle(text);
-                        }} id="test" /> */}
               <TextareaAutosize
                 maxLength="200"
                 ref={titleRef}
@@ -478,12 +428,6 @@ const CoverPhoto = ({
                 }}
                 placeholder="Enter Subtitle"
               />
-              {/* <div contentEditable={true} id="testD" maxLength="95" className={classes.desCaptionStyle} value={articleDes} onChange={(e) => {
-                            let text = e.target.value;
-                            if (2) text = text.split('\n').slice(0, 2 ?? undefined)
-                            setArticleDes(text);
-                        }} placeholder="Enter a subtitle" /> */}
-              {/* </div> */}
             </div>
           </div>
           <div className={classes.writerInfoContainer}>

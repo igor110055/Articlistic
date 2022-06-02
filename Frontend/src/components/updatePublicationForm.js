@@ -3,12 +3,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { makeStyles } from "@mui/styles";
-// import { Alert } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { PublicationTextField } from "../utils/common";
 import { getAuthToken } from "../containers/common/commonFunctions";
-// import axios from "axios";
-// import { baseURL, endPoints } from "../utils/apiEndPoints";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updatePublication,

@@ -14,10 +14,8 @@ import {
   GET_ABOUT_PUBLICATION_INIT,
   GET_ABOUT_PUBLICATION_SUCCESS,
   GET_ABOUT_PUBLICATION_FAILURE,
-  // DELETE_ARTICLE_INIT,
   DELETE_PUBLICATION,
   DELETE_PUBLICATION_SUCCESS
-  // DELETE_ARTICLE_SUCCESS
 } from "../../utils/actionTypes";
 import { publicationAboutDefault } from "../../utils/common";
 
@@ -48,7 +46,6 @@ const initialState = {
 const writerContent = (state = initialState, action) => {
   const { data } = action;
   // const articleId = data?.articleId;
-  // console.log("data", data);
   switch (action.type) {
     case GET_PUBLICATIONS_INIT:
       return {

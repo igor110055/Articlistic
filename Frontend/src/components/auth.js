@@ -2,17 +2,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { Button, CircularProgress, Dialog } from "@mui/material";
-// import { userUsername } from "../containers/user/userActions";
 import {
   getRefreshToken,
-  logout
-} from "../containers/loginSignup/loginSignupAction";
+  logout,
+} from "../containers/authentication/signupActions";
 import { useNavigate } from "react-router-dom";
 import Cookie from "js-cookie";
-// import crypto from "crypto-js";
 import {
   getAuthToken,
-  getRefreshToken as getRefreshTok
+  getRefreshToken as getRefreshTok,
 } from "../containers/common/commonFunctions";
 
 const Auth = ({ setAlreadySignedIn }) => {
@@ -29,34 +27,39 @@ const Auth = ({ setAlreadySignedIn }) => {
     isGettingRefreshToken,
     getRefreshTokenError,
     getRefreshTokenErrorMsg,
-    getRefreshTokenResp
-  } = useSelector(state => ({
-    isLoggingOut: state.loginSignup.isLoggingOut,
-    logoutError: state.loginSignup.logoutError,
+    getRefreshTokenResp,
+  } = useSelector((state) => ({
+    isLoggingOut: state.signupReducer.isLoggingOut,
+    logoutError: state.signupReducer.logoutError,
     user: state.user,
-    isGettingRefreshToken: state.loginSignup.isGettingRefreshToken,
-    getRefreshTokenError: state.loginSignup.getRefreshTokenError,
-    getRefreshTokenErrorMsg: state.loginSignup.getRefreshTokenErrorMsg,
-    getRefreshTokenResp: state.loginSignup.getRefreshTokenResp
+    isGettingRefreshToken: state.signupReducer.isGettingRefreshToken,
+    getRefreshTokenError: state.signupReducer.getRefreshTokenError,
+    getRefreshTokenErrorMsg: state.signupReducer.getRefreshTokenErrorMsg,
+    getRefreshTokenResp: state.signupReducer.getRefreshTokenResp,
   }));
 
   useEffect(() => {
     if (logoutError) {
+      // console.log("Logout Error");
     } else {
+      // console.log("Logout auth");
       if (!isLoggingOut && submitClicked) {
         Cookie.remove("accessToken");
         Cookie.remove("refreshToken");
         Cookie.remove("oneDayBeforeAccessToken");
+        // localStorage.removeItem("user");
         localStorage.removeItem("categories");
         localStorage.clear();
         navigate("/login");
+      } else {
+        // console.log(isLoggingOut, submitClicked);
       }
     }
   }, [isLoggingOut]);
   // console.log(process.env);
   const handleSignout = () => {
     const temp = getRefreshTok();
-    // console.log(Cookie.get('accessToken'), encryptedAccessToken, temp);
+    setSubmitClicked(true);
     dispatch(
       logout(
         {
@@ -66,7 +69,6 @@ const Auth = ({ setAlreadySignedIn }) => {
         temp
       )
     );
-    setSubmitClicked(true);
   };
 
   useEffect(() => {
@@ -74,7 +76,6 @@ const Auth = ({ setAlreadySignedIn }) => {
       setKeepSignedIn(false);
     } else {
       if (!isGettingRefreshToken && keepSignedIn) {
-        // const encAccessToken = CryptoJS.AES.encrypt(getRefreshTokenResp.accessToken, 'secretKeyNotToBeShared').toString();
         const encAccessToken = getRefreshTokenResp.accessToken;
         Cookie.set("accessToken", encAccessToken, { expires: 7 });
         Cookie.set("oneDayBeforeAccessToken", encAccessToken, { expires: 6 });

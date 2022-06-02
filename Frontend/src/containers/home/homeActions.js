@@ -9,7 +9,6 @@ import {
 
 export const getFollowedWriters = (params, headers) => {
     const payload = { params, headers };
-    // console.log(payload);
     return {
         type: GET_FOLLOWED_WRITERS_INIT,
         data: payload,
@@ -32,7 +31,6 @@ export const getFollowedWritersFailure = (error) => {
 
 export const bookmarkArticle = (params, headers) => {
     const payload = { params, headers };
-    // console.log(payload);
     return {
         type: BOOKMARK_ARTICLE_INIT,
         data: payload,

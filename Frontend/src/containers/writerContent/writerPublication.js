@@ -5,21 +5,15 @@ import { getPublications } from "./writerActions";
 import { makeStyles } from "@mui/styles";
 import defaultPublicationImg from "./../../Images/defaultPublication.jpg";
 import {
-  // Alert,
   Avatar,
   Button,
   CircularProgress,
-  // Divider,
-  // Grid,
   Modal
-  // Paper,
-  // Snackbar
 } from "@mui/material";
 import { Box } from "@mui/system";
 import WriterPublicationForm from "../../components/writerPublicationForm";
 import UpdatePublicationForm from "../../components/updatePublicationForm";
 import { useNavigate } from "react-router-dom";
-// import user from "../user/userReducer";
 import "./writerPublication.css";
 
 //  Displays all publication related to user
@@ -28,8 +22,6 @@ const WriterPublication = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [publicationSelected, setPublicationSelected] = useState();
   const [isManagePublicationOpen, setIsManagePublicationOpen] = useState(false);
-  // let [deletedArticle, setDeletedArticle] = useState(null);
-  // let [deletedTime, setDeletedTime] = useState(null);
 
   const navigate = useNavigate();
 
@@ -86,7 +78,6 @@ const WriterPublication = () => {
       if (res === "") res = "Deleting Soon";
     }
 
-    // console.log(res);
     return res;
   };
 

@@ -1,7 +1,8 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import writers from "./containers/writersAndCategories/writersAndCategoriesReducer";
-import loginSignup from "./containers/loginSignup/loginSignupReducer";
+// import loginSignup from "./containers/loginSignup/loginSignupReducer";
+import signupReducer from "./containers/authentication/signupReducer";
 import user from "./containers/user/userReducer";
 import writerEditor from "./containers/writerEditor/writerEditorReducer";
 import unsplash from "./containers/unsplash/unsplashReducer";
@@ -14,7 +15,8 @@ import ArticleData from "./containers/writerContent/components/articleReducer";
 
 const reducer = combineReducers({
   writers,
-  loginSignup,
+  // loginSignup,
+  signupReducer,
   user,
   writerEditor,
   unsplash,
@@ -22,7 +24,7 @@ const reducer = combineReducers({
   home,
   common,
   writerContent,
-  ArticleData
+  ArticleData,
 });
 const sagaMiddleware = createSagaMiddleware();
 

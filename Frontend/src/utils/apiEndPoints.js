@@ -20,6 +20,9 @@ export { encryptionSalt };
 
 // export { config, baseURL, encryptionSalt };
 
+// export const baseURL = process.env.REACT_APP_SERVER_LINK;
+// export const encryptionSalt = process.env.REACT_APP_ENCYPTION_SALT;
+
 export const endPoints = {
   categoriesAndWriters: "onboarding/getCategoriesAndWriters",
   status: "onboarding/getStatus",
@@ -31,6 +34,7 @@ export const endPoints = {
   sendEmailOTP: "onboarding/email/sendOTP",
   verifyEmailOTP: "onboarding/email/verifyOTP",
   createUser: "onboarding/createUser",
+  getPickFavData: "onboarding/writers",
   forgotSendOTP: "utils/phone/sendOTP",
   forgotVerifyOTP: "utils/phone/verifyOTP",
   forgotSendEmailOTP: "utils/email/sendOTP",
@@ -54,5 +58,8 @@ export const endPoints = {
   updateAboutPublication: "publication/article",
   publicationUploadImage: "publication/article/image",
   deleteArticleComplete: "articles/markForDeletion",
-  deletePublication: "publication"
+  deletePublication: "publication",
+  followWriter: "users/followWriter",
+  followMultipleWriters: "onboarding/followMultiple",
+  googleSignup: "onboarding/google/signup",
 };
