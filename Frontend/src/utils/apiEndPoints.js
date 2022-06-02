@@ -18,8 +18,6 @@ setTimeout(() => {
 }, 3000);
 export { encryptionSalt };
 
-// export { config, baseURL, encryptionSalt };
-
 // export const baseURL = process.env.REACT_APP_SERVER_LINK;
 // export const encryptionSalt = process.env.REACT_APP_ENCYPTION_SALT;
 

@@ -1,3 +1,4 @@
+import { getEnvVariables } from "./config";
 // import LandingPage from "./containers/loginSignup/landingPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import TempNavbar from "./containers/navbar/tempNavbar";
@@ -19,20 +20,19 @@ import WriterPublicationEditor from "./containers/writerContent/writerPublicatio
 import AboutPublication from "./containers/writerContent/aboutPublication";
 import "./App.css";
 import MultipleTab from "./utils/MultipleTab";
+import MainLoader from "./components/mainLoader";
 import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
-// import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 
-// import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 // import {
 //   getAuthToken,
-//   getRefreshToken,
+//   getRefreshToken
 // } from "./containers/common/commonFunctions";
-import getEnvVariables from "./config";
+
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
-  const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
   const [mulitpleTabs, setMultipleTabs] = useState(false);
+  const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
   const { variant, message, open } = useSelector((state) => ({
     // thisState: state,
     loginError: state.signupReducer.isLoggedIn,
@@ -42,9 +42,7 @@ function App() {
   }));
 
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   console.log(thisState);
-  // }, [thisState]);
+
   useEffect(() => {
     getEnvVariables(
       ["REACT_APP_ENCRYPTION_SALT", "REACT_APP_SERVER_LINK"],
@@ -82,12 +80,22 @@ function App() {
   return (
     //for writers
     <div>
-      {getEnvVariablesSuccess && (
+      {getEnvVariablesSuccess ? (
         <div className="App">
           {!mulitpleTabs && (
             <Router>
               {/* <Auth> */}
               <Routes>
+                {/* <Route
+            exact
+            path="/"
+            element={
+              <PrivateRoute>
+                <TempNavbar />
+                <Home />
+              </PrivateRoute>
+            }
+          /> */}
                 <Route
                   exact
                   path="/writerDashboard/*"
@@ -98,11 +106,8 @@ function App() {
                     </PrivateRoute>
                   }
                 />
-                {/* <Route exact path="/login" element={<LandingPage />} /> */}
-                {/* <Route exact path="/signup" element={<OnBoarding />} /> */}
-                <Route exact path="/signup" element={<SignUp />} />
                 <Route exact path="/login" element={<SignIn />} />
-                {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
+                <Route exact path="/signup" element={<SignUp />} />
                 <Route
                   exact
                   path="/story"
@@ -159,6 +164,8 @@ function App() {
           />
           {/* <Navbar /> */}
         </div>
+      ) : (
+        <MainLoader />
       )}
     </div>
   );

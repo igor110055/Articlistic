@@ -9,21 +9,21 @@ const getFromParamStore = async (envArrayElem) => {
   //ssmClient = new AWS.SSM({
   //  region: "ap-south-1",
   //  apiVersion: "latest"
-  //  
+  //
   //});
-   if (!ssmClient) {
-     ssmClient = new AWS.SSM({
-       region: "ap-south-1",
-       apiVersion: "latest",
-       accessKeyId: "AKIAYZ7VF2L3EXEKVYER",
-       secretAccessKey: "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"
-     });
-   }
+  if (!ssmClient) {
+    ssmClient = new AWS.SSM({
+      region: "ap-south-1",
+      apiVersion: "latest",
+      accessKeyId: "AKIAYZ7VF2L3EXEKVYER",
+      secretAccessKey: "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",
+    });
+  }
   try {
     let decryptedParameter = await ssmClient
       .getParameter({
         Name: envArrayElem,
-        WithDecryption: true
+        WithDecryption: true,
       })
       .promise();
     return decryptedParameter.Parameter.Value;
@@ -36,7 +36,7 @@ export function getEnvVariables(envs, setEnvVariablesSuccess) {
   //   let credentials = new AWS.CognitoIdentityCredentials({
   //     profile: "default",
   //     IdentityPoolId: "ap-south-1",
-  // 
+  //
   //   });
 
   // let credentials = new AWS.CognitoIdentityCredentials({
@@ -47,7 +47,7 @@ export function getEnvVariables(envs, setEnvVariablesSuccess) {
 
   // let ssmClient;
 
-  envs.forEach(async env => {
+  envs.forEach(async (env) => {
     config[env] = await getFromParamStore(env);
   });
   // console.log(config);
