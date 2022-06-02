@@ -672,10 +672,4 @@ module.exports = function onboardingRouter() {
 
     }
 
-
-
-
-
-
-
 }

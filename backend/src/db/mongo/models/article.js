@@ -39,6 +39,7 @@ async function createUniquenessIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -74,6 +75,7 @@ async function createArticleBluePrint(username, articleId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -112,6 +114,7 @@ async function selectionNewChat(selection, chatId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -168,6 +171,7 @@ async function updateSelectionMeaningful(articleId, selection, increment) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -204,6 +208,7 @@ async function addChatToArticle(articleId, chatId, selection) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -242,6 +247,7 @@ async function updateSelectionShareCount(articleId, selection, facebook, twitter
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -272,6 +278,7 @@ async function discardArticle(articleId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -329,6 +336,7 @@ async function getAllArticlesForUser(username, filters, limit, skip) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -385,6 +393,7 @@ async function updateArticle(articleId, status, writeup, storySetting, earlyAcce
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -445,6 +454,7 @@ async function createNewArticle(username, articleId, status, writeup, storySetti
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -484,6 +494,7 @@ async function getArticleById(articleId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -535,6 +546,7 @@ async function getArticleForWriters(writers, limit, skip) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -568,6 +580,7 @@ async function markForDeletion(articleId, deleteAt) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -592,8 +605,8 @@ async function getArticlesForPublication(publicationId, limit, skip) {
         let res = [];
 
         await db.find({
-                publicationId: publicationId
-            })
+            publicationId: publicationId
+        })
             .limit(limit).skip(skip).forEach((x) => {
                 res.push(x);
             })
@@ -610,6 +623,7 @@ async function getArticlesForPublication(publicationId, limit, skip) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
