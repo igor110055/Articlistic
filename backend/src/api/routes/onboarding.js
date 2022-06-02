@@ -429,6 +429,7 @@ module.exports = function onboardingRouter() {
             }
         }
 
+        //Adding mailing_list_id to writer's collection
         try {
             await mongo.transactionsUserAnalytics.createUser(user, listId);
         } catch (e) {
@@ -447,7 +448,12 @@ module.exports = function onboardingRouter() {
         delete user.email;
         delete user.public;
         delete user.refreshToken;
-        await mailer.WelcomeMail(email, name);
+        try {
+            await mailer.WelcomeMail(email, name);
+        }
+        catch (e) {
+            logger.debug(e, "Failed to send Welcome mail", routeName)
+        }
         return res.status(201).send({
             ...user,
             accessToken,

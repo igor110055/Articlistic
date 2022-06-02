@@ -23,12 +23,13 @@ const checkDb = require('../../middleware/checkDb');
 const getTopFollowed = require('../../utils/functions/getTopFollowed');
 const s3 = require('../../utils/s3');
 const { followNotificationMail } = require('../../utils/mailer/email');
+const { email } = require('../../utils/otp');
 
 module.exports = function userRouter() {
 
     return new express.Router()
         .post('/follow', useAuth(false, false, false, true), followWriter)
-        .delete('/unfollow', useAuth(), unfollowWriter)
+        .delete('/unfollow', useAuth(false, false, false, true), unfollowWriter)
         .get('/following', useAuth(), getFollowing)
         .get('/followers', useAuth(), getFollowers)
         .get('/name', getNameByUsername)
@@ -338,9 +339,14 @@ module.exports = function userRouter() {
         //Adding the follower to Writer's Mailing List
         try {
             const writerData = await mongo.writers.getWriterByName(follows);
-            // logger.info(writerData);
             const mailListId = writerData.mailing_list_id;
-            await mailClient.addFollowerToList(email, mailListId, name);
+            if (mailListId) {
+                await mailClient.addFollowerToList(email, mailListId, name);
+            }
+            else {
+                logger.info("Mailing list id does not exist! Signup again to get your email notification working")
+            }
+
         }
         catch (e) {
             logger.info(e, "Failed to add to mailing List");
@@ -352,11 +358,11 @@ module.exports = function userRouter() {
     }
 
     async function unfollowWriter(req, res) {
-        let routeName = '/users/followWriter'
+        let routeName = '/users/unfollow'
 
         let follows = req.query.follows;
         let username = req.username;
-
+        let email = staticDecrypt(req.user.email)
         if (!follows) throw new MissingParamError('Missing parameter: follows', routeName);
 
         try {
@@ -364,7 +370,24 @@ module.exports = function userRouter() {
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
-
+        try {
+            const writerData = await mongo.writers.getWriterByName(follows)
+            const mailListId = writerData.mailing_list_id;
+            if (mailListId) {
+                try {
+                    await mailClient.removeFromList(mailListId, email)
+                }
+                catch (e) {
+                    logger.debug(e, "Failed to remove writer from mailing list--", routeName)
+                }
+            }
+            else {
+                logger.info(`Mailing list is doesn't exist for Writer-${follows}!`)
+            }
+        }
+        catch (e) {
+            logger.debug(e, "--Unable to fetch writers Detail--", routeName)
+        }
         return res.status(201).send({
             'message': 'Unfollow successful.'
         })

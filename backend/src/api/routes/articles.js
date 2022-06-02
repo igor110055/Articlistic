@@ -512,7 +512,6 @@ module.exports = function articlesRouter() {
         let listId;
         try {
             const writerData = await mongo.writers.getWriterByName(username);
-            logger.info(writerData);
             listId = writerData.mailing_list_id;
         }
         catch (e) {

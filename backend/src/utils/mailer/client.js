@@ -45,15 +45,64 @@ async function addFollowerToList(email, listId, username) {
         body: data
     }
     try {
-        const response = await client.request(request);
-        logger.info("Job Id of adding to mailing list", response[0].body.job_id);
+        await client.request(request);
     }
     catch (e) {
         logger.debug(e);
     }
 
 }
-//addFollowerToList("tusharsk@attentioun.com", "f71b2172-57b6-4915-8de4-f5d6ca5b74fa", "Tushar");
+
+
+
+//This Function fetches the contact id of the email
+async function getContactIdbyEmail(email) {
+    client.setApiKey(config.sendgrid.key)
+    const body = {
+        "emails": [email]
+    }
+    const request = {
+        url: `/v3/marketing/contacts/search/emails`,
+        method: 'POST',
+        body: body
+    }
+    try {
+        const res = await client.request(request);
+        const contactId = res[0].body.result[email].contact.id
+        return contactId;
+    }
+    catch (e) {
+        logger.info(e, "unable to fetch the contact id");
+    }
+}
+
+
+
+//This function removes a contacct from the list using contact id
+async function removeFromList(listId, email) {
+    try {
+        var contactId = await getContactIdbyEmail(email)
+    } catch (e) {
+        logger.debug(e, "Error in removeFromList function");
+    }
+    client.setApiKey(config.sendgrid.key)
+    const queryString = {
+        "contact_ids": contactId
+    }
+    const request = {
+        url: `/v3/marketing/lists/${listId}/contacts`,
+        method: 'DELETE',
+        qs: queryString
+    }
+    try {
+        await client.request(request);
+
+    }
+    catch (e) {
+        logger.info(e, "Failed to remove the contact from the List")
+    }
+}
+
 
 
 
@@ -80,17 +129,15 @@ async function createSingleSend(writers_name, list_id) {
     try {
         const res = await client.request(request);
         const id = res[0].body.id;
-        logger.debug(id, "<====SingleSend Draft's Id");
         await scheduleSingleSend(id);
     } catch (e) {
         logger.debug(e, "<==ERRR in Creation and Scheduling Single Send");
     }
 }
-//createSingleSend("Cookie", "f71b2172-57b6-4915-8de4-f5d6ca5b74fa")
+
 
 //This function will schedule the singlesend draft for Delivery
 async function scheduleSingleSend(id) {
-    logger.info(id, "<===SS ScheduleID")
     const data = {
         "send_at": "now"
     };
@@ -101,7 +148,7 @@ async function scheduleSingleSend(id) {
     }
     try {
         const res = await client.request(request);
-        logger.info(res);
+        logger.info(res[0].body.status);
     }
     catch (e) {
         logger.debug(e);
@@ -128,6 +175,7 @@ async function deleteSingleSend(id) {
 module.exports = {
     createMailingList,
     addFollowerToList,
+    removeFromList,
     createSingleSend,
     deleteSingleSend
 }
