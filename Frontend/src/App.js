@@ -1,3 +1,4 @@
+import { getEnvVariables } from "./config";
 // import LandingPage from "./containers/loginSignup/landingPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import TempNavbar from "./containers/navbar/tempNavbar";
@@ -19,16 +20,16 @@ import WriterPublicationEditor from "./containers/writerContent/writerPublicatio
 import AboutPublication from "./containers/writerContent/aboutPublication";
 import "./App.css";
 import MultipleTab from "./utils/MultipleTab";
+import MainLoader from "./components/mainLoader";
 import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
-// import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 
 // import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 // import {
 //   getAuthToken,
 //   getRefreshToken,
 // } from "./containers/common/commonFunctions";
-import getEnvVariables from "./config";
+// import getEnvVariables from "./config";
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
   const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
