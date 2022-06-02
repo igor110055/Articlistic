@@ -36,6 +36,9 @@ import {
   FOLLOW_MULTIPLE_WRITERS_INIT,
   FOLLOW_MULTIPLE_WRITERS_SUCCESS,
   FOLLOW_MULTIPLE_WRITERS_FAILURE,
+  GOOGLE_SIGN_UP_INIT,
+  GOOGLE_SIGN_UP_SUCCESS,
+  GOOGLE_SIGN_UP_FAILURE,
 } from "../../utils/actionTypes";
 
 const initialState = {
@@ -107,6 +110,10 @@ const initialState = {
   followMultipleWritersFailure: false,
   followMultipleWriterssData: {},
   followMultipleWritersErrorMsg: {},
+
+  googleSignUpInit: false,
+  googleSignupFailure: false,
+  googleSignupSuccess: false,
 };
 
 const signupReducer = (state = initialState, action) => {
@@ -243,6 +250,16 @@ const signupReducer = (state = initialState, action) => {
         loginErrorMsg: action.error,
         isLoggedIn: false,
       };
+
+    case GOOGLE_SIGN_UP_INIT: {
+      return {
+        ...state,
+        googleSignUpInit: true,
+        googleSignupSuccess: false,
+        googleSignupFailure: false,
+      };
+    }
+
     case GET_PICK_FAV_DATA_INIT:
       return {
         ...state,
@@ -371,6 +388,18 @@ const signupReducer = (state = initialState, action) => {
     case RESET_PASSWORD_STATE:
       return {
         ...state,
+        isGettingForgotEmailOTP: false,
+        getForgotEmailOTPError: false,
+        getForgotEmailOTPErrorMsg: "",
+        getForgotEmailOTPResp: {},
+        getForgotEmailSuccess: false,
+
+        isVerifyingForgotEmailOTP: false,
+        verifyForgotEmailOTPError: false,
+        verifyForgotEmailOTPErrorMsg: "",
+        verifyForgotEmailOTPResp: {},
+        verifyForgotEmailOTPSuccess: false,
+
         isResettingPassword: false,
         resetPasswordError: false,
         resetPasswordErrorMsg: "",

@@ -29,28 +29,21 @@ function ForgotPassword({ setDisplayPage }) {
     setDisplayPage("sign-in");
   };
 
-  // useEffect(() => {
-  //   const forgotPasswordEmail = localStorage.getItem("forgotPasswordEmail");
-  //   const forgotPasswordUserId = localStorage.getItem("forgotPasswordUserId");
-  //   console.log(forgotPasswordEmail, forgotPasswordUserId);
-  //   console.log(forgotPasswordEmail === null);
-  //   console.log(forgotPasswordUserId === null);
-  //   // console.log(forgotPasswordUserId === undefined);
-  //   // console.log(forgotPasswordEmail === undefined);
-  //   if (forgotPasswordEmail === null || forgotPasswordUserId === null) {
-  //     // setDisplayPage("setNewPassword");
-  //   } else {
-  //     setDisplayPage("setNewPassword");
-  //   }
-  // }, []);
+  useEffect(() => {
+    const forgotPasswordEmail = localStorage.getItem("forgotPasswordEmail");
+    const forgotPasswordUserId = localStorage.getItem("forgotPasswordUserId");
+    if (forgotPasswordUserId !== null && forgotPasswordEmail !== null)
+      setDisplayPage("set-new-password");
+  }, []);
 
   useEffect(() => {
     if (getForgotEmailSuccess) {
       setValidClick(true);
       setError(false);
-      setDisplayPage("verifyOTP");
+      if (localStorage.getItem("forgotPasswordEmail") !== null)
+        setDisplayPage("verifyOTP");
     } else if (getForgotEmailOTPError) {
-      console.log(getForgotEmailOTPErrorMsg);
+      // console.log(getForgotEmailOTPErrorMsg);
       setError(true);
       setValidClick(true);
     }

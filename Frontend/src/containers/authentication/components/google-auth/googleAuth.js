@@ -11,20 +11,10 @@ function GoogleAuth({ isSignIn }) {
   const handleGoogleLogin = async (googleData) => {
     console.log(googleData);
     dispatch(signupWithGoogleInit(googleData.tokenId));
-    //   const res = await fetch("/api/v1/auth/google", {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       token: googleData.tokenId,
-    //     }),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    //   const data = await res.json();
   };
 
   const handleGoogleFailure = (error) => {
-    alert(JSON.stringify(error));
+    // alert(JSON.stringify(error));
   };
 
   return (
@@ -32,12 +22,12 @@ function GoogleAuth({ isSignIn }) {
       <GoogleLogin
         clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
         // buttonText="Log in with Google"
-        render={({ onClick }) => (
+        render={(renderProps) => (
           <Button
+            callback={renderProps.onClick}
             text={isSignIn ? "Sign in with Google" : "Sign up with Google"}
             isSvg
             Svg={GoogleLogo}
-            // callback={onClick}
           />
         )}
         onSuccess={handleGoogleLogin}

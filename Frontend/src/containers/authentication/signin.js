@@ -7,13 +7,14 @@ import ForgotPassword from "./components/forgot-password/forgot-password";
 import { validateEmail, validatePassword } from "../../utils/common";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "./signupActions";
+import { login, resetPasswordState } from "./signupActions";
 import Input from "./components/primary-input/input";
 import PrimaryError from "./components/primary-error/primaryError";
 import { userEmail, userUsername, userPName } from "../user/userActions";
 import VerifyOTP from "./components/forgot-password/verifyOTP";
 import "./signin.css";
 import OnboardingNavbar from "../navbar/onBoardingNavbar";
+import GoogleAuth from "./components/google-auth/googleAuth";
 import SetNewPassword from "./components/forgot-password/setNewPassword";
 import Cookie from "js-cookie";
 
@@ -43,6 +44,7 @@ function SignIn() {
   const [displayPage, setDisplayPage] = useState("sign-in");
   const signInWithGoogle = () => {};
   const gotoForgot = () => {
+    dispatch(resetPasswordState());
     setDisplayPage("forgot-password");
   };
   const handleSignIn = () => {
@@ -84,7 +86,9 @@ function SignIn() {
 
   return (
     <div>
-      <OnboardingNavbar />
+      <div className="signin-navbar">
+        <OnboardingNavbar />
+      </div>
       {displayPage === "sign-in" && (
         <div className="sign-in-container">
           <div className="sign-in-section">
@@ -93,12 +97,7 @@ function SignIn() {
             <h3 className="attentioun-header">Attentioun</h3>
           </div>
           <div className="sign-in-buttons">
-            <Button
-              text={"Sign in with Google"}
-              isSvg
-              Svg={GoogleLogo}
-              callback={signInWithGoogle}
-            />
+            <GoogleAuth isSignIn />
             <p className="or-div"> &nbsp; OR &nbsp; &nbsp;</p>
             <div className="email-sign-in">
               {/* {!validCred && (

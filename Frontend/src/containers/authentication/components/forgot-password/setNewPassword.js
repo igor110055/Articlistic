@@ -85,7 +85,6 @@ function SetNewPassword({ setDisplayPage }) {
       localStorage.removeItem("forgotPasswordUserId");
       localStorage.removeItem("forgotPasswordEmail");
       // localStorage.clear();
-      dispatch(resetPasswordState());
       setTimeout(() => {
         setDisplayPage("sign-in");
       }, 1000);
@@ -94,12 +93,12 @@ function SetNewPassword({ setDisplayPage }) {
 
   useEffect(() => {
     if (resetPasswordError) {
-      // dispatch(
-      //   showSnackbar(
-      //     "Error occurred while updating password. Please try resetting passowrd again",
-      //     "error"
-      //   )
-      // );
+      dispatch(
+        showSnackbar(
+          "Error occurred while updating password. Please try resetting passowrd again",
+          "error"
+        )
+      );
       localStorage.removeItem("forgotPasswordUserId");
       localStorage.removeItem("forgotPasswordEmail");
       // localStorage.clear();

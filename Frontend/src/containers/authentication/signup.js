@@ -10,6 +10,7 @@ import PickFavWriters from "./components/pick-fav-writers/pick-fav-writers";
 import OnboardingNavbar from "../navbar/onBoardingNavbar";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
+import GoogleAuth from "./components/google-auth/googleAuth";
 // import left_img from "../../Images/background-left.svg";
 // import right_img from "../../Images/background-right.svg";
 import "./signup.css";
@@ -42,33 +43,8 @@ function SignUp() {
     if (id) setDisplayPage("setUpProfile");
   }, []);
 
-  const handleGoogleLogin = async (googleData) => {
-    console.log(googleData);
-    const res = await fetch("/api/v1/auth/google", {
-      method: "POST",
-      body: JSON.stringify({
-        token: googleData.tokenId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-  };
-
-  const handleGoogleFailure = (error) => {
-    alert(JSON.stringify(error));
-  };
-
   return (
-    <div
-    // style={{
-    //   display: "flex",
-    //   justifyContent: "space-between",
-    //   alignItems: "center",
-    //   overflow: "hidden",
-    // }}
-    >
+    <div>
       <div className="onboarding-navbar">
         <OnboardingNavbar />
       </div>
@@ -87,21 +63,8 @@ function SignUp() {
               Svg={GoogleLogo}
               callback={signUpWithGoogle}
             /> */}
-            <GoogleLogin
-              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-              // buttonText="Log in with Google"
-              render={({ onClick }) => (
-                <Button
-                  text={"Sign up with Google"}
-                  isSvg
-                  Svg={GoogleLogo}
-                  // callback={onClick}
-                />
-              )}
-              onSuccess={handleGoogleLogin}
-              onFailure={handleGoogleFailure}
-              cookiePolicy={"single_host_origin"}
-            />
+            <GoogleAuth />
+
             <Button
               text={"Sign up with email"}
               isSvg

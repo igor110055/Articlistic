@@ -50,7 +50,10 @@ function VerifyOTP({ setDisplayPage }) {
         );
         // console.log(verifyEmailOTPResp.id);
         // dispatch(userEmail(email));
-        setDisplayPage("set-new-password");
+        const forgotUserEmail = localStorage.getItem("forgotPasswordEmail");
+        const id = localStorage.getItem("forgotPasswordUserId");
+        if (forgotUserEmail !== null && id !== null)
+          setDisplayPage("set-new-password");
       }
     } else if (verifyForgotEmailOTPError) setValidOtp(false);
   }, [
