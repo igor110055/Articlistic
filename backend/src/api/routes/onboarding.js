@@ -542,10 +542,6 @@ module.exports = function onboardingRouter() {
         let accessToken = encryption.jwt.sign(user.username);
         let rt = encryption.encryptForFrontend(refreshToken);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> c0afee2539197f55976eb658f861ddb1592834a2
 
         delete user.private;
         delete user.email;
