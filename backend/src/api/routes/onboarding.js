@@ -13,8 +13,10 @@ const logger = require('../../utils/logger/index')
 const useAuth = require('../../middleware/auth')
 
 const otp = require('../../utils/otp/index')
+const mailer = require("../../utils/mailer/email")
 
 var encryption = require('../../utils/encryption/index');
+const { createMailingList } = require("../../utils/mailer/client")
 const NetworkError = require('../../errors/NetworkError');
 const MissingParamError = require('../../errors/MissingParamError');
 const DatabaseError = require('../../errors/DatabaseError');
@@ -288,9 +290,6 @@ module.exports = function onboardingRouter() {
 
     }
 
-
-
-
     /**
      * Given an entity (email, username) and a password, it will return the corresponding user object
      * @param req - The request object.
@@ -387,7 +386,7 @@ module.exports = function onboardingRouter() {
     async function checkUsername(req, res) {
 
 
-        let routeName = "POST /onboarding/checkUsername";
+        let routeName = "GET /onboarding/checkUsername";
 
         let username = req.query.username;
 
@@ -433,7 +432,7 @@ module.exports = function onboardingRouter() {
         let routeName = "POST /onboarding/createUser";
         let user = {};
         let international = true;
-
+        var listId;
         /* The below code is checking if the parameters are missing. If they are missing, it throws an error. */
 
         let {
@@ -520,8 +519,18 @@ module.exports = function onboardingRouter() {
         */
 
 
+        if (isWriter) {
+            try {
+                listId = await createMailingList(username);
+            }
+            catch (e) {
+                logger.info(e, "Mailing List creation Failed");
+            }
+        }
+
+        //Adding mailing_list_id to writer's collection
         try {
-            await mongo.transactionsUserAnalytics.createUser(user);
+            await mongo.transactionsUserAnalytics.createUser(user, listId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -534,12 +543,16 @@ module.exports = function onboardingRouter() {
         let rt = encryption.encryptForFrontend(refreshToken);
 
 
-
         delete user.private;
         delete user.email;
         delete user.public;
         delete user.refreshToken;
-
+        try {
+            await mailer.WelcomeMail(email, name);
+        }
+        catch (e) {
+            logger.debug(e, "Failed to send Welcome mail", routeName)
+        }
         return res.status(201).send({
             ...user,
             accessToken,
@@ -592,9 +605,8 @@ module.exports = function onboardingRouter() {
         try {
 
             await otp.email.sendVerificationOTP(email, code);
-        } catch (e) {
-
-
+        }
+        catch (e) {
             try {
                 await mongo.email.deleteOTP(code);
             } catch (e) {
@@ -659,11 +671,5 @@ module.exports = function onboardingRouter() {
 
 
     }
-
-
-
-
-
-
 
 }

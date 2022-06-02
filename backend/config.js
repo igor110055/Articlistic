@@ -119,9 +119,7 @@ const local = {
     ip: {
         apiKey: process.env.IP_API_KEY
     }
-}
-
-
+};
 
 const prod = {
     environment: process.env.NODE_ENV,
@@ -176,9 +174,6 @@ const prod = {
     }
 
 }
-
-
-
 
 const test = {
     environment: process.env.NODE_ENV,

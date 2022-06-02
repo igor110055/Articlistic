@@ -56,16 +56,17 @@ module.exports = function walletRouter() {
          * Withdrawing Earnings APIs. 
          */
 
-        .post('/activate/otp', auth(false, false, true), sendOTPForWalletActivation)
-        .post('/activate', auth(false, false, true), activateWallet)
+        .post('/activate/otp', auth(false, false, false, true), sendOTPForWalletActivation)
+        .post('/activate', auth(false, false, false, true), activateWallet)
 
-        .post('/resetPIN/otp', auth(false, false, true), sendResetPinOTP)
-        .post('/resetPIN', auth(false, false, true), resetPIN)
+        .post('/resetPIN/otp', auth(false, false, false, true), sendResetPinOTP)
+        .post('/resetPIN', auth(false, false, false, true), resetPIN)
 
-        .post('/funds/order', auth(false, false, true), createOrder)
+        .post('/funds/order', auth(false, false, false, true), createOrder)
         .post('/funds/confirm', auth(), confirmOrder)
 
-        .post('/tip/selection', auth(false, false, true), articleCheck(true), checkPin(), tipPassage)
+        .post('/tip/selection', auth(false, false, false, true), articleCheck(true), checkPin(), tipPassage)
+
 
         .post('/contact', auth(false, false, true), createContact)
         .patch('/earnings/fa', auth(false, false, true), createFundAccount)
@@ -104,9 +105,9 @@ module.exports = function walletRouter() {
         /**
          * Database query to transfer from one wallet to another. 
          */
-
+        var mres
         try {
-            var mres = await mongo.transactionWalletEarnings.convertEarningsToWalletCredits(amount, username);
+            mres = await mongo.transactionWalletEarnings.convertEarningsToWalletCredits(amount, username);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -148,9 +149,9 @@ module.exports = function walletRouter() {
          */
         var credits;
         if (user.international) {
-
+            var dollarValue
             try {
-                var dollarValue = await mongo.dollarValue.getDollarValue();
+                dollarValue = await mongo.dollarValue.getDollarValue();
             } catch (e) {
                 throw new DatabaseError(routeName, e);
             }
@@ -186,8 +187,9 @@ module.exports = function walletRouter() {
          */
 
         const tipId = uuidv4();
+        var tipRes
         try {
-            var tipRes = await mongo.transactionWalletTip.tip(tipId, user.username, writer, article.articleId, selection, earnings, attTax, 0, credits, message)
+            tipRes = await mongo.transactionWalletTip.tip(tipId, user.username, writer, article.articleId, selection, earnings, attTax, 0, credits, message)
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -280,9 +282,9 @@ module.exports = function walletRouter() {
             currency: currency
         };
 
-
+        var order
         try {
-            var order = await instance.orders.create(options);
+            order = await instance.orders.create(options);
         } catch (e) {
             throw new ServiceError('razorpay-create-order', routeName, e);
         }
@@ -565,9 +567,9 @@ module.exports = function walletRouter() {
         /**
          * Checks otp here. 
          */
-
+        var mres
         try {
-            var mres = await mongo.email.checkWalletOTP(email, otp.toString(), TYPE_WALLET_FUND_ACCOUNT)
+            mres = await mongo.email.checkWalletOTP(email, otp.toString(), TYPE_WALLET_FUND_ACCOUNT)
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -699,9 +701,9 @@ module.exports = function walletRouter() {
         /**
          * Withdraw OTP check. 
          */
-
+        var otpRes
         try {
-            var otpRes = mongo.email.checkWalletOTP(email, code, TYPE_WALLET_WITHDRAW);
+            otpRes = mongo.email.checkWalletOTP(email, code, TYPE_WALLET_WITHDRAW);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -776,7 +778,7 @@ module.exports = function walletRouter() {
 
                     await s3.init().withdrawTransactionReverseFailure(username, payoutId, amount);
 
-                } catch (e) {
+                } catch (err) {
                     /**
                      * Store in Sentry. 
                      */
@@ -787,7 +789,7 @@ module.exports = function walletRouter() {
                         type: 'reverse-txn-failure'
                     }));
 
-                    throw new ServiceError('s3-reverse-transaction-failure', routeName, e);
+                    throw new ServiceError('s3-reverse-transaction-failure', routeName, err);
 
                 }
 
@@ -818,7 +820,7 @@ module.exports = function walletRouter() {
 
                 await s3.init().withdrawMarkAsSuccessFailure(username, payoutId);
 
-            } catch (e) {
+            } catch (err) {
 
                 Sentry.captureMessage(JSON.stringify({
                     username,
@@ -826,7 +828,7 @@ module.exports = function walletRouter() {
                     type: 'reverse-txn-mark-success'
                 }));
 
-                throw new ServiceError('s3-mark-success-failure', routeName, e);
+                throw new ServiceError('s3-mark-success-failure', routeName, err);
             }
         }
 
