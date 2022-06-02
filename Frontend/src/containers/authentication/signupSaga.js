@@ -341,10 +341,18 @@ export function* googleSignup(action) {
     const tokenId = action.payload;
     const url = `${baseURL}/${endPoints.googleSignup}?token=${tokenId}`;
     const data = yield call(postRequest, url, {}, {});
-    console.log(data);
-    if (!data.error) {
-      yield put(signupWithGoogleSuccess(data));
-    } else yield put(signupWithGoogleFailure(data.message));
+    if (data.error) {
+      yield put(signupWithGoogleFailure(data.message));
+    } else {
+      if (data.accessToken) {
+        Cookie.set("refreshToken", data.refreshToken, { expires: 30 });
+        Cookie.set("accessToken", data.accessToken, { expires: 7 });
+        Cookie.set("oneDayBeforeAccessToken", true, { expires: 6 });
+        yield put(loginSuccess(data));
+      } else {
+        yield put(signupWithGoogleSuccess(data));
+      }
+    }
   } catch (e) {
     yield put(signupWithGoogleFailure(e.message));
   }

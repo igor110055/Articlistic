@@ -67,7 +67,7 @@ function SignUp() {
               Svg={GoogleLogo}
               callback={signUpWithGoogle}
             /> */}
-            <GoogleAuth />
+            <GoogleAuth setDisplayPage={ setDisplayPage }/>
 
             <Button
               text={"Sign up with email"}

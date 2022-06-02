@@ -259,7 +259,23 @@ const signupReducer = (state = initialState, action) => {
         googleSignupFailure: false,
       };
     }
-
+    case GOOGLE_SIGN_UP_SUCCESS: {
+      return {
+        ...state,
+        googleSignUpInit: false,
+        googleSignupSuccess: true,
+        googleSignupData: action.payload,
+        googleSignupFailure: false,
+      };
+    }
+    case GOOGLE_SIGN_UP_FAILURE: {
+      return {
+        ...state,
+        googleSignUpInit: false,
+        googleSignupSuccess: false,
+        googleSignupFailure: true,
+      };
+    }
     case GET_PICK_FAV_DATA_INIT:
       return {
         ...state,
