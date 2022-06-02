@@ -2,10 +2,6 @@ import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bookmarkArticle } from "../../containers/home/homeActions";
-// import graphPNG from "./../../Images/graph.png";
-// import Cookie from "js-cookie";
-// import crypto from "crypto-js";
-// import { Button, Dialog, DialogTitle, CircularProgress } from "@mui/material";
 import { getAuthToken } from "../common/commonFunctions";
 
 const TopStoriesCard = ({ article, writer }) => {

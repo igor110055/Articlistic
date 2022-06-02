@@ -1,6 +1,7 @@
 var config = require('../../../../config');
 const {
-    MDB_COLLECTION_WALLET_PAYOUT
+    MDB_COLLECTION_WALLET_PAYOUT,
+    PAYOUT_STATUS_SUCCESS
 } = require('../../../../constants');
 const logger = require('../../../utils/logger/index')
 const MDB = require('../client').MDB;
@@ -8,10 +9,10 @@ const MDB = require('../client').MDB;
 const dbName = config.mongo.db;
 const collection = MDB_COLLECTION_WALLET_PAYOUT;
 
-async function payoutInitiated(orderId) {
+async function payoutSuccess(payoutId) {
 
 
-    if (!orderId) {
+    if (!payoutId) {
         throw "Some required parameters missing for updating order"
     }
 
@@ -25,10 +26,10 @@ async function payoutInitiated(orderId) {
         let startTime = Date.now();
 
         let response = await db.updateOne({
-            orderId: orderId
+            payoutId
         }, {
             $set: {
-                status: 'paid'
+                status: PAYOUT_STATUS_SUCCESS
             }
         });
 
@@ -36,11 +37,15 @@ async function payoutInitiated(orderId) {
 
         let timeTaken = endTime - startTime;
 
-        logger.info("update order - wallet-add - mongo response time: " + timeTaken.toString());
+        logger.info("payout success - mongo response time: " + timeTaken.toString());
 
         return response;
 
     } catch (e) {
         throw e;
     }
+}
+
+module.exports = {
+    payoutSuccess
 }

@@ -1,0 +1,1 @@
+module.exports.payoutDbError = require('./dbFailures/payout');

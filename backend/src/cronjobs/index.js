@@ -3,6 +3,7 @@ const convertISTtoCronUTC = require('../utils/functions/convertISTtoCronUTC');
 const logger = require('../utils/logger/index');
 const deleteArticles = require('./deleteArticles');
 const deletePublications = require('./deletePublications');
+const insertDollarValue = require('./insertDollarValue');
 
 function scheduler() {
 
@@ -27,6 +28,18 @@ function scheduler() {
             logger.info('Scheduler running now for publications');
 
             deletePublications();
+
+        })
+
+
+        /**
+         * This runs everyday at 8:15pm UTC
+         * US markets close every day at 8:00pm UTC
+         */
+
+        cron.schedule("15 20 * * *", () => {
+
+            insertDollarValue();
 
         })
 

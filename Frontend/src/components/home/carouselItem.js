@@ -1,5 +1,4 @@
 import { makeStyles } from "@mui/styles";
-// import carouselPNG from './../../Images/carouselPNG.png';
 
 const CarouselItem = ({ dummyImage }) => {
   const classes = useStyles();

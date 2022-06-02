@@ -5,7 +5,6 @@ import searchLogo from "./../../Images/search.png";
 const Navbar = () => {
   function myFunction() {
     var x = document.getElementById("topNav");
-    // console.log(x);
     if (x.className === "navbar") {
       x.className += " responsive";
     } else {

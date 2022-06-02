@@ -8,6 +8,7 @@ class MDB {
         if (this.client) {
             return this.client
         }
+
         logger.info("Cache miss - Connecting to MongoDB client now.")
 
         let startTime = Date.now();

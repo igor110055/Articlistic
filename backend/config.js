@@ -5,7 +5,8 @@ var environVarArray = ['SENTRY_URI', 'ATT_AWS_ACCESS_ID', 'ATT_AWS_REGION', 'ATT
     'DEV_MONGO_DB_URI', 'DEV_SALT_ENC', 'DEV_host', 'DEV_port', 'EXCHANGE_API_RATE_ACCESS_CODE',
     'GOOGLE_CLIENT_ID', 'IP_API_KEY', 'REACT_APP_ENCRYPTION_SALT',
     'REACT_APP_SERVER_LINK', 'REDIS_URI', 'RP_KEY_ID', 'RP_SECRET_KEY',
-    'SENDGRID_KEY', 'TF_API_KEY', 'TOKEN_SECRET', 'URL_FOR_ARTICLES', 'URL_FOR_PROFILE']
+    'SENDGRID_KEY', 'TF_API_KEY', 'TOKEN_SECRET', 'URL_FOR_ARTICLES', 'URL_FOR_PROFILE'
+]
 
 const env = process.env.NODE_ENV;
 
@@ -58,7 +59,8 @@ const dev = {
         clientId: process.env.GOOGLE_CLIENT_ID
     },
     dollar: {
-        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE
+        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE,
+        avApiKey: process.env.ALPHAVANTAGE_API_KEY
     },
     ip: {
         apiKey: process.env.IP_API_KEY
@@ -91,7 +93,8 @@ const local = {
         s3BucketProfile: process.env.AWS_S3_BUCKET_PROFILE,
         region: process.env.AWS_REGION,
         urlForArticles: process.env.URL_FOR_ARTICLES,
-        urlForProfile: process.env.URL_FOR_PROFILE
+        urlForProfile: process.env.URL_FOR_PROFILE,
+        s3BucketErrors: process.env.AWS_S3_BUCKET_ERRORS
     },
     redis: {
         uri: process.env.REDIS_URI
@@ -110,7 +113,8 @@ const local = {
         clientId: process.env.GOOGLE_CLIENT_ID
     },
     dollar: {
-        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE
+        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE,
+        avApiKey: process.env.ALPHAVANTAGE_API_KEY
     },
     ip: {
         apiKey: process.env.IP_API_KEY
@@ -162,7 +166,8 @@ const prod = {
         clientId: process.env.GOOGLE_CLIENT_ID
     },
     dollar: {
-        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE
+        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE,
+        avApiKey: process.env.ALPHAVANTAGE_API_KEY
     },
     ip: {
         apiKey: process.env.IP_API_KEY
@@ -211,7 +216,8 @@ const test = {
         clientId: process.env.GOOGLE_CLIENT_ID
     },
     dollar: {
-        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE
+        accessCode: process.env.EXCHANGE_API_RATE_ACCESS_CODE,
+        avApiKey: process.env.ALPHAVANTAGE_API_KEY
     },
     ip: {
         apiKey: process.env.IP_API_KEY

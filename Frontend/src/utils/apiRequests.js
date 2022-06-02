@@ -99,15 +99,15 @@ export const authDeleteRequest = async (url, headers) => {
   try {
     const data = await axios
       .delete(url, { headers: headers })
-      .then(resp => resp.data)
-      .catch(err => getErrorResponse(err));
+      .then((resp) => resp.data)
+      .catch((err) => getErrorResponse(err));
     return data;
   } catch (e) {
     return e;
   }
 };
 
-const getErrorResponse = err => {
+const getErrorResponse = (err) => {
   let errorMsg = err.response.data.error.toString() || "Something Went Wrong";
   if (err.response) {
     if (err.response.status === 401) {

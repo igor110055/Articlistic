@@ -1,12 +1,9 @@
 import { Button, CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-// import { Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
 import { PublicationTextField } from "../utils/common";
 import { getAuthToken } from "../containers/common/commonFunctions";
-// import axios from "axios";
-// import { baseURL, endPoints } from "../utils/apiEndPoints";
 import { useDispatch, useSelector } from "react-redux";
 import { createPublications } from "../containers/writerContent/writerActions";
 

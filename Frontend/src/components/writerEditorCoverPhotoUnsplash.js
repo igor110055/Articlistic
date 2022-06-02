@@ -124,7 +124,6 @@ const WriterEditorCoverPhotoUnsplash = ({
           )}
         </Dialog>
       )}
-      {/* <Button onClick={handleSearch}>Search</Button> */}
     </div>
   );
 };

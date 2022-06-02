@@ -12,8 +12,13 @@ let dirForArticles = "articles/"
 let dirForProfile = "/profile/"
 let dirForPublication = "/publications/"
 
+const dirForWithdrawReverseTransaction = "reverseTransaction/";
+const dirForWithdrawMarkAsSuccess = "markSuccess/";
+
+
 const articlesBucket = config.aws.s3BucketArticles;
 const profileBucket = config.aws.s3BucketProfile;
+const errorBucket = "dev-attentioun-error-data";
 
 
 
@@ -34,6 +39,7 @@ function __init() {
             },
             signatureVersion: 'v4'
         });
+
     }
 
     return {
@@ -45,18 +51,43 @@ function __init() {
         deleteAllImagesRelatedToArticle: deleteAllImagesRelatedToArticle,
         deleteArticle: deleteArticle,
         fullDeletePublication: fullDeletePublication,
-        fullDeleteArticle: fullDeleteArticle
+        fullDeleteArticle: fullDeleteArticle,
+        withdrawTransactionReverseFailure,
+        withdrawMarkAsSuccessFailure,
+        deleteMultipleFilesFromErrorData
+
     }
 }
+
+
+async function deleteMultipleFilesFromErrorData(files = []) {
+    await deleteMultipleFiles(files, errorBucket);
+}
+
+async function withdrawTransactionReverseFailure(username, transactionId, amount) {
+    const fileName = dirForWithdrawReverseTransaction + username + "_" + transactionId + ".json";
+    const fileContent = JSON.stringify({
+        username,
+        transactionId,
+        amount
+    });
+    await uploadFileFromStream(fileContent, fileName, errorBucket);
+}
+
+async function withdrawMarkAsSuccessFailure(username, transactionId) {
+    const fileName = dirForWithdrawMarkAsSuccess + username + "_" + transactionId + ".txt";
+    const fileContent = `${transactionId}`;
+    await uploadFileFromStream(fileContent, fileName, errorBucket);
+
+}
+
 
 
 async function uploadPublicationArticle(buffer, username, publicationId) {
     let fileName = username + dirForPublication + 'articles/' + publicationId + '.gzip';
 
     /*
-
     yash-dxt/publications/articles/publicationId
-
     */
     try {
         var compressedFile = await gzip(buffer);

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { baseURL } from "../../utils/apiEndPoints";
 import { getAuthToken } from "../common/commonFunctions";
-// import ArticleCard from "../../components/home/articleCard";
 import TopStoriesCard from "./topStoriesCard";
 import { Box, Button, CircularProgress, Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";

@@ -70,7 +70,7 @@ const CreateProfile = ({ setDisplayPage }) => {
     }
     // console.log('ashgfajsgf');
     if (!isSendingProfileInfo && !sendProfileInfoError && upload) {
-      // console.log(sendProfileInfoResp.accessToken);
+      
       // const encAccessToken = CryptoJS.AES.encrypt(sendProfileInfoResp.accessToken, 'secretKeyNotToBeShared').toString();
       // const encRefreshToken = CryptoJS.AES.encrypt(sendProfileInfoResp.refreshToken, 'secretKeyNotToBeShared').toString();
       Cookie.set("accessToken", sendProfileInfoResp.accessToken, {

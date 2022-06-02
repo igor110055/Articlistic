@@ -3,7 +3,6 @@ import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { baseURL } from "../../utils/apiEndPoints";
 import defaultPublication from "./../../Images/defaultPublication.jpg";

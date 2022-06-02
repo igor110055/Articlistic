@@ -85,9 +85,6 @@ const useStyles = makeStyles({
   },
 
   coverFooter: {
-    // background: 'rgba(255, 255, 255, .3)',
-    // webkitBackdropFilter: 'blur(10px)',
-    // backdropFilter: 'blur(10px)',
     backgroundColor: "black",
     color: "white",
     bottom: "0rem",

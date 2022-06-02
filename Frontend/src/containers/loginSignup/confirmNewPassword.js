@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { ATextField } from "../../utils/common";
-// import { Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { validatePassword } from "../../utils/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -68,10 +67,6 @@ const ConfirmNewPassword = ({
 
   const handleUpdatePassword = (e) => {
     e.preventDefault();
-    // var entity = entityForDialog;
-    // if(typeForDialog =="phone"){
-    //   entity = entity.slice(3)
-    // }
     dispatch(
       resetPassword({
         type: typeForDialog,

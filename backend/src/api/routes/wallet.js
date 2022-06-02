@@ -12,6 +12,9 @@ const NotAuthenticatedError = require('../../errors/NotAuthenticatedError');
 const NetworkError = require('../../errors/NetworkError');
 const ServiceError = require('../../errors/ServiceError');
 const api = require('../../utils/api');
+var s3 = require('../../utils/s3/index')
+
+const fileSystem = require('../../utils/fs/index')
 
 var {
     createHmac
@@ -40,6 +43,7 @@ const {
     TYPE_WALLET_FUND_ACCOUNT,
     TYPE_RESET_PIN
 } = require('../../../constants');
+const Joi = require('joi');
 
 
 module.exports = function walletRouter() {
@@ -647,29 +651,56 @@ module.exports = function walletRouter() {
     }
 
     async function withdrawEarnings(req, res) {
-
         const routeName = 'withdraw earnings';
+
+
+        /**
+         * Input the amount. Validate and check amount. Verify OTP. 
+         */
+
+
         const user = req.user;
-        const username = user.username;
-        const fundAccount = user.fundAccount;
         const email = staticDecrypt(req.user.email);
+        const username = user.username;
+
+        if (!user.wallet || !user.wallet.faDetails || !user.wallet.faDetails.id) {
+            throw new BadRequestError('Wallet/Fund Account Not Created');
+        }
+
+
+        const fundAccountDetails = user.wallet.faDetails[0];
+        const faId = fundAccountDetails.id;
+
+        const schema = Joi.object({
+            amount: Joi.number().min(500).max(10000),
+            code: Joi.number().min(100000)
+        })
+
+        try {
+
+            schema.validate(req.query);
+
+        } catch (e) {
+
+            throw new BadRequestError('Bad parameters', routeName);
+        }
+
 
         const {
             code,
             amount
         } = req.query;
 
+
         if (user.international) {
             throw new BadRequestError('International users not allowed to payout', routeName);
         }
 
-        if (amount < 500) {
-            throw new BadRequestError('Amount required should be >500');
-        }
 
         /**
          * Withdraw OTP check. 
          */
+
         try {
             var otpRes = mongo.email.checkWalletOTP(email, code, TYPE_WALLET_WITHDRAW);
         } catch (e) {
@@ -681,43 +712,140 @@ module.exports = function walletRouter() {
             throw new NotAuthenticatedError('Bad OTP', routeName);
         }
 
-        deleteAllOTPs(email, TYPE_WALLET_WITHDRAW);
+        try {
 
+            deleteAllOTPs(email, TYPE_WALLET_WITHDRAW);
+
+        } catch (e) {
+
+        }
 
         /**
-         * Database query for Withdrawal of money
-         * Create entry for withdraw & deduct from earnings. 
-         * Get the reference ID from here. 
+         * Create payout Id. 
          */
 
         const payoutId = uuidv4();
+
+        /**
+         * A.
+         * Database query which debits money from the account of person. 
+         * It also creates an entity in payouts collection with status = PENDING
+         * If this query fails - return 500 error. 
+         */
+
+
+
         try {
-            var payoutRes = await mongo.transactionUserPayout.payout(amount, username, payoutId);
+            await mongo.transactionUserPayout.payout(amount, username, payoutId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
 
 
-        if (!payoutRes) {
-            throw new BadRequestError('Sufficient Earnings not available', routeName);
-        }
+        /**
+         * B.
+         * Create an API request with an amount to Razorpay X API for money debit.
+         */
 
 
         try {
-            await api.razorpay.createPayout(amount, fundAccount, payoutId);
+            await api.razorpay.createPayout(amount, faId, payoutId);
         } catch (e) {
 
-            /**
-             * If we try to return the transaction here.
-             * There are two problems: 
-             * 1. If that error goes into errors - we anyway would have to check all the records. 
-             * 2.  
+            /**C.
+             * If the previous API Fails do the following: 
+             * 1. Database query to mark the txn as failed and also add money back to user.
+             * This database query should have multiple(4) retries. 
+             * 2. Return 500 - something went wrong please try again.
              */
-            throw new ServiceError('razorpay-payout', routeName, e);
+
+
+
+            /**
+             * Reversing the transaction. 
+             */
+
+            try {
+                await mongo.transactionUserPayout.reversePayout(amount, username, payoutId);
+            } catch (e) {
+
+                /**
+                 * Handle using s3. - Reversing transaction. 
+                 */
+
+                try {
+
+                    await s3.init().withdrawTransactionReverseFailure(username, payoutId, amount);
+
+                } catch (e) {
+                    /**
+                     * Store in Sentry. 
+                     */
+                    Sentry.captureMessage(JSON.stringify({
+                        username,
+                        payoutId,
+                        amount,
+                        type: 'reverse-txn-failure'
+                    }));
+
+                    throw new ServiceError('s3-reverse-transaction-failure', routeName, e);
+
+                }
+
+            }
+
+
         }
 
-        //Database Query. 
-        //
+
+
+
+
+        /**
+         * D.
+         * If API Succeeds do the following: 
+         * Database query to confirm payout - also do multiple retries.
+         * Return 200. 
+         */
+
+        try {
+            await mongo.payouts.payoutSuccess(payoutId);
+        } catch (e) {
+            /**
+             * Handling database failure by saving in s3.  
+             */
+
+            try {
+
+                await s3.init().withdrawMarkAsSuccessFailure(username, payoutId);
+
+            } catch (e) {
+
+                Sentry.captureMessage(JSON.stringify({
+                    username,
+                    payoutId,
+                    type: 'reverse-txn-mark-success'
+                }));
+
+                throw new ServiceError('s3-mark-success-failure', routeName, e);
+            }
+        }
+
+        /**
+         * E. 
+         * If any one of the Database query in STEP C & D fail: 
+         * Do the following: 
+         * 1. Store in local storage - in the server (file system) the Transaction related info
+         * Return pending on frontend. 
+         * 
+         * There will be a cronjob - that will be fixing up these things. 
+         */
+
+
+
+
+
+
 
 
         return res.status(200).send({

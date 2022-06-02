@@ -3,7 +3,6 @@ import image from "./../Images/icon_only.png";
 import { useNavigate } from "react-router";
 import placeholderImage from "../Images/placeholder_image.png";
 const WriterDashboardCard = ({ status, title, subtitle, pic, articleId }) => {
-  // console.log(pic);
   const classes = useStyles();
   const navigate = useNavigate();
   const handleClickArticle = () => {
@@ -42,7 +41,6 @@ const WriterDashboardCard = ({ status, title, subtitle, pic, articleId }) => {
             >
               {title.substring(0, 50)}...
             </div>
-            {/* <div className={classes.cardDescription}>{subtitle}</div> */}
           </div>
         )}
       </div>

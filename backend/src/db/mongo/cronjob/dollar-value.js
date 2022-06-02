@@ -1,17 +1,21 @@
 const config = require('../../../../config');
+const {
+    MDB_COLLECTION_DOLLAR_VALUE
+} = require('../../../../constants');
 const logger = require('../../../utils/logger');
 
 const dbName = config.mongo.db;
-const collection = 'dollar-value';
+const collection = MDB_COLLECTION_DOLLAR_VALUE
 const MDB = require('../client').MDB;
 
-async function insertDollarValue(dollarValue) {
-    if (!dollarValue) {
+async function insertDollarValue(dollarValue, date) {
+    if (!dollarValue || !date) {
         throw "Dollar value required";
     }
 
     const obj = {
         value: dollarValue,
+        date: date,
         timestamp: Date.now()
     };
 

@@ -3,11 +3,9 @@ import { makeStyles } from "@mui/styles";
 import { Button, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { userUsername } from "../user/userActions";
-// import WriterDashboard from "./writerDahsboard";
-// import WriterCommunity from "./writerCommunity";
+
 import { useLocation, useNavigate } from "react-router-dom";
-// import WriterStories from "./writerStories";
-// import WriterPublication from "./writerPublication";
+
 import { getPublications } from "./writerActions";
 import { getAuthToken } from "../common/commonFunctions";
 import { PublicationTextField, validateURL } from "../../utils/common";

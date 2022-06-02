@@ -17,9 +17,7 @@ import {
 } from './homeActions';
 
 function* getFollowedWriters(action) {
-    // console.log(action);
     try {
-        // const payload = action.data.params;
         const headers = {
             "Authorization": action.data.headers
         }

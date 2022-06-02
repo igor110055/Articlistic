@@ -16,8 +16,6 @@ import {
   UPDATE_PUBLICATIONS_SUCCESS,
   DELETE_PUBLICATION,
   DELETE_PUBLICATION_SUCCESS
-  // DELETE_ARTICLE,
-  // DELETE_ARTICLE_SUCCESS
 } from "./../../utils/actionTypes";
 
 export const getPublications = data => {
@@ -82,20 +80,6 @@ export const createAboutPublicationFailure = data => {
     data
   };
 };
-
-// export const deleteArticleInit = data => {
-//   return {
-//     type: DELETE_ARTICLE,
-//     data
-//   };
-// };
-//
-// export const deleteArticleSuccess = data => {
-//   return {
-//     type: DELETE_ARTICLE_SUCCESS,
-//     data
-//   };
-// };
 
 export const updatePublication = data => {
   return {

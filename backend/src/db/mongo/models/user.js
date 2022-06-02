@@ -55,6 +55,39 @@ async function createUniquenessIndex() {
     }
 }
 
+
+async function checkIfDocumentsExist(usernames = []) {
+    try {
+
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        const count = await db.find({
+            username: {
+                $in: usernames
+            }
+        }).count();
+
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("Check document existence: " + timeTaken.toString());
+
+        return count;
+
+
+    } catch (e) {
+        throw e;
+    }
+
+}
+
+
 async function setContactId(username, contactId) {
     if (!username || !contactId) {
         throw "Contact ID & username is required";
@@ -711,5 +744,6 @@ module.exports = {
     banAccount,
     setCooldown,
     incrementPinRetry,
-    makeRetriesDefault
+    makeRetriesDefault,
+    checkIfDocumentsExist
 }

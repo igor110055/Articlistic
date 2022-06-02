@@ -1,5 +1,4 @@
 import "./landingPage.css";
-// import backgroundSVG from "./../../Images/background.svg";
 import LoginSignupLanding from "./loginSignupLanding";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";

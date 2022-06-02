@@ -3,24 +3,31 @@ var axios = require('axios').default;
 const config = require('../../../config');
 const logger = require('../logger');
 
-const accessCode = config.dollar.accessCode;
+const accessCode = config.dollar.avApiKey;
+const timeSeriesKey = "Time Series FX (Daily)";
+const closeKey = "4. close";
 
 async function getDollarValue() {
 
-    const uri = "http://api.exchangeratesapi.io/v1/latest?access_key=" + accessCode;
+    const uri = "https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=USD&to_symbol=INR&apikey=" + accessCode;
     const {
         data
     } = await axios.get(uri);
-    //Change dollar value thing. 
 
-    const rates = data.rates;
-    const eurToUsd = rates["USD"];
-    const eurToInr = rates["INR"];
 
-    const usdToInr = eurToInr / eurToUsd;
-    logger.debug(usdToInr);
-    return usdToInr;
+    const timeSeriesObject = data[timeSeriesKey];
+    const date = Object.keys(timeSeriesObject)[0];
+
+
+    const dollarValue = timeSeriesObject[date][closeKey];
+
+    return {
+        date,
+        dollarValue
+    }
+
 }
+
 
 
 

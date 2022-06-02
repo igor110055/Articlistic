@@ -15,7 +15,7 @@ const ForgotPasswordNumber = ({
   setOpenDialog,
   setOpenNewPassword,
   setEntityForDialog,
-  setTypeForDialog,
+  setTypeForDialog
 }) => {
   const [isValidNumber, setIsValidNumber] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -34,8 +34,8 @@ const ForgotPasswordNumber = ({
     verifyForgotOTPError,
     verifyForgotOTPErrorMsg,
     user,
-    userPhoneNumber,
-  } = useSelector((state) => ({
+    userPhoneNumber
+  } = useSelector(state => ({
     isGettingForgotOTP: state.loginSignup.isGettingForgotOTP,
     getForgotOTPError: state.loginSignup.getForgotOTPError,
     getForgotOTPErrorMsg: state.loginSignup.getForgotOTPErrorMsg,
@@ -44,7 +44,7 @@ const ForgotPasswordNumber = ({
     verifyForgotOTPError: state.loginSignup.verifyForgotOTPError,
     verifyForgotOTPErrorMsg: state.loginSignup.verifyForgotOTPErrorMsg,
     user: state.user,
-    userPhoneNumber: state.user.userPhoneNumber,
+    userPhoneNumber: state.user.userPhoneNumber
   }));
 
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const ForgotPasswordNumber = ({
     isValidNumber ? setPhoneInputColor("primary") : setPhoneInputColor("error");
   }, [isValidNumber]);
 
-  const handlegetForgotOTP = (number) => {
+  const handlegetForgotOTP = number => {
     setOTPSent(false);
     number = number.replace("-", "");
     number = number.replace(" ", "");
@@ -65,14 +65,14 @@ const ForgotPasswordNumber = ({
         dispatch(
           getForgotOTP({
             phone: number.slice(3), //Slicing this because in case of Indian Users we only need to send the number without the country code
-            international: false,
+            international: false
           })
         );
       } else {
         dispatch(
           getForgotOTP({
             phone: number,
-            international: true,
+            international: true
           })
         );
       }
@@ -103,20 +103,23 @@ const ForgotPasswordNumber = ({
     }
   }, [isGettingForgotOTP]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     //async
     e.preventDefault();
     if (OTP.length > 2) {
-      let number = phoneNumber.replace("(","")
-      number = number.replace(")","")
-      if (phoneNumber.slice(0, 3) === "+91" || phoneNumber.slice(0,3) === "+1(") {
+      let number = phoneNumber.replace("(", "");
+      number = number.replace(")", "");
+      if (
+        phoneNumber.slice(0, 3) === "+91" ||
+        phoneNumber.slice(0, 3) === "+1("
+      ) {
         setEntityForDialog(resendNumber.slice(3));
         dispatch(
           verifyForgotOTP({
-            phone:  phoneNumber.slice(0, 3) === "+91" ? phoneNumber : number,
+            phone: phoneNumber.slice(0, 3) === "+91" ? phoneNumber : number,
             code: OTP,
-            international: phoneNumber.slice(0, 3) === "+91" ?  false : true,
-            sessionId: getForgotOTPResp.sessionId,
+            international: phoneNumber.slice(0, 3) === "+91" ? false : true,
+            sessionId: getForgotOTPResp.sessionId
           })
         );
       } else {
@@ -125,7 +128,7 @@ const ForgotPasswordNumber = ({
           verifyForgotOTP({
             phone: number,
             code: OTP,
-            international: true,
+            international: true
           })
         );
       }
@@ -161,17 +164,20 @@ const ForgotPasswordNumber = ({
       <div className={classes.mobileVerififcationTitle}>
         Mobile Verification
       </div>
-      <div style={{marginTop: '1.3rem'}}>
-      {!isValidNumber && (
-        <WrongNumberError
-          message={getForgotOTPErrorMsg || `A user with this phone number does not exist.`}
-        />
-      )}
-      {isValidOTP === false && (
-        <WrongNumberError message={verifyForgotOTPErrorMsg} />
-      )}
+      <div style={{ marginTop: "1.3rem" }}>
+        {!isValidNumber && (
+          <WrongNumberError
+            message={
+              getForgotOTPErrorMsg ||
+              `A user with this phone number does not exist.`
+            }
+          />
+        )}
+        {isValidOTP === false && (
+          <WrongNumberError message={verifyForgotOTPErrorMsg} />
+        )}
       </div>
-      
+
       {OTPSent && (
         <SuccessfullOTPSent
           number={resendNumber}
@@ -187,14 +193,14 @@ const ForgotPasswordNumber = ({
               variant="outlined"
               sx={{
                 "& .MuiInputBase-root": {
-                  borderRadius: "10px",
-                },
+                  borderRadius: "10px"
+                }
               }}
               color={phoneInputColor}
               className={classes.numberClass}
               defaultCountry={"in"}
               enableLongNumbers={true}
-              onChange={(val) => {
+              onChange={val => {
                 setDisableButton(false);
                 val = val.includes(" ") ? val.replaceAll(" ", "") : val;
                 val = val.includes("-") ? val.replaceAll("-", "") : val;
@@ -203,7 +209,7 @@ const ForgotPasswordNumber = ({
               countryCodeEditable={true}
               disableAreaCodes={true}
               autoFormat={true}
-              onKeyPress={(e) => {
+              onKeyPress={e => {
                 if (e.key === "Enter") {
                   handlegetForgotOTP(phoneNumber);
                 }
@@ -223,7 +229,7 @@ const ForgotPasswordNumber = ({
                 textTransform: "capitalize",
                 borderRadius: "10px",
                 background:
-                  "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)",
+                  "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)"
               }}
               onClick={() => {
                 handlegetForgotOTP(phoneNumber);
@@ -250,7 +256,7 @@ const ForgotPasswordNumber = ({
                 filter: "opacity(0.5)",
 
                 background:
-                  "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)",
+                  "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)"
               }}
               disabled={true}
             >
@@ -265,7 +271,7 @@ const ForgotPasswordNumber = ({
           fullWidth
           type="number"
           required
-          onChange={(e) => {
+          onChange={e => {
             if (e.target.value.length > 6) {
               e.target.value = e.target.value.slice(0, 6);
             }
@@ -293,12 +299,10 @@ const ForgotPasswordNumber = ({
   );
 };
 
-
-
 const SuccessfullOTPSent = ({
   number,
   handlegetForgotOTP,
-  disableResendButton,
+  disableResendButton
 }) => {
   const classes = useStyles();
   return (
@@ -319,7 +323,7 @@ const SuccessfullOTPSent = ({
               fontSize: "0.9em",
               textTransform: "capitalize",
               textDecoration: "underline",
-              borderRadius: "0px",
+              borderRadius: "0px"
             }}
             disabled={disableResendButton}
           >
@@ -332,7 +336,6 @@ const SuccessfullOTPSent = ({
     </div>
   );
 };
-
 
 const useStyles = makeStyles({
   mobileVerificationCard: {
@@ -350,8 +353,8 @@ const useStyles = makeStyles({
       alignItems: "center",
       flexDirection: "column",
       marginTop: "0",
-      minWidth: "0px",
-    },
+      minWidth: "0px"
+    }
   },
   nextButton: {
     // border: "2px black solid",
@@ -369,8 +372,8 @@ const useStyles = makeStyles({
     textDecoration: "bold",
     "&:hover": {
       backgroundColor: "#ffffff",
-      color: "#6B6B6B",
-    },
+      color: "#6B6B6B"
+    }
   },
   nextButtonDisabled: {
     backgroundColor: "white",
@@ -384,7 +387,7 @@ const useStyles = makeStyles({
     color: "#D3D3D3",
     fontSize: "0.9em",
     textTransform: "capitalize",
-    textDecoration: "bold",
+    textDecoration: "bold"
   },
   mobileVerififcationTitle: {
     fontFamily: "Merriweather",
@@ -396,12 +399,12 @@ const useStyles = makeStyles({
       // eslint-disable-line no-useless-computed-key
       width: "100%",
       display: "flex",
-      alignItems: "flex-start",
-    },
+      alignItems: "flex-start"
+    }
   },
   numberClass: {
     width: "100%",
-    marginRight: "1em",
+    marginRight: "1em"
   },
 
   mobileVerififcationOTPSection: {
@@ -410,15 +413,15 @@ const useStyles = makeStyles({
     alignItems: "center",
     marginTop: "5%",
     marginBottom: "5%",
-    ["@media (max-width:720px)"]: {
+    "@media (max-width:720px)": {
       // eslint-disable-line no-useless-computed-key
-      width: "100%",
-    },
+      width: "100%"
+    }
   },
 
   mobileVerificationInput: {
     width: "20em",
-    borderRadius: "15px",
+    borderRadius: "15px"
   },
 
   successfullOTPSent: {
@@ -429,13 +432,13 @@ const useStyles = makeStyles({
     fontSize: "0.8em",
     padding: "0.6em 0.2em 0.6em 0.2em",
 
-    marginTop: "1em",
+    marginTop: "1em"
   },
 
   successfullOTPSentMsg: {
     width: "fit-content",
     marginLeft: "1.1em",
-    padding: "0.2em 0 0.2em 0",
+    padding: "0.2em 0 0.2em 0"
   },
 
   successfullOTPSentResend: {
@@ -443,7 +446,7 @@ const useStyles = makeStyles({
     borderBottom: "1px solid black",
     cursor: "pointer",
 
-    padding: "0.2em 0 0.2em 0",
+    padding: "0.2em 0 0.2em 0"
   },
 
   wrongOTP: {
@@ -454,18 +457,18 @@ const useStyles = makeStyles({
     fontSize: "0.8em",
     padding: "0.5em 0em 0.5em 0em",
     justifyContent: "space-around",
-    alignItems: "center",
+    alignItems: "center"
   },
 
   wrongOTPMsg: {
-    width: "80%",
+    width: "80%"
   },
   resendText: {
     width: "max-content",
     marginLeft: "0.9em",
 
-    padding: "0.2em 0 0.2em 0",
-  },
+    padding: "0.2em 0 0.2em 0"
+  }
 });
 
 export default ForgotPasswordNumber;

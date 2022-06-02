@@ -2,7 +2,7 @@ import "./tempNavbar.css";
 import hlogo from "./../../Images/horizontal (1).svg";
 import userImage from "./../../Images/user-image.png";
 import { useEffect, useState } from "react";
-import { logout } from "./../loginSignup/loginSignupAction";
+import { logout } from "../authentication/signupActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Cookie from "js-cookie";
@@ -45,9 +45,10 @@ const TempNavbar = () => {
 
   const [submitClicked, setSubmitClicked] = useState(false);
 
-  const { isLoggingOut, logoutError } = useSelector(state => ({
-    isLoggingOut: state.loginSignup.isLoggingOut,
-    logoutError: state.loginSignup.logoutError
+  const { isLoggingOut, logoutError } = useSelector((state) => ({
+    isLoggingOut: state.signupReducer.isLoggingOut,
+    logoutError: state.signupReducer.logoutError,
+    logoutSuccess: state.signupReducer.logoutSuccess,
   }));
 
   const dispatch = useDispatch();
@@ -58,23 +59,24 @@ const TempNavbar = () => {
       setSubmitClicked(false);
     } else {
       if (!isLoggingOut && submitClicked) {
+        // console.log("logging out");
         Cookie.remove("oneDayBeforeAccessToken");
         Cookie.remove("accessToken");
         Cookie.remove("refreshToken");
+        localStorage.removeItem("user");
         localStorage.clear();
-        navigate("/");
+        navigate("/login");
       }
     }
   }, [isLoggingOut]);
 
   const handleSignout = () => {
     const temp = getAuthToken();
-    // console.log(Cookie.get('accessToken'), encryptedAccessToken, temp);
     dispatch(
       logout(
         {
           accessToken: temp,
-          username: JSON.parse(localStorage.getItem("user")).userUserName
+          username: JSON.parse(localStorage.getItem("user")).userUserName,
         },
         temp
       )

@@ -11,7 +11,7 @@ const collection = MDB_COLLECTION_WRITERS;
 const MDB = require('../client').MDB;
 
 
-async function getWriters(skip, limit) {
+async function getWriters() {
     let client;
 
     try {
@@ -21,21 +21,34 @@ async function getWriters(skip, limit) {
 
         let startTime = Date.now();
 
-        let allWriters = [];
+        const allWriters = [];
 
-
-        let cursor = db.find({}, {
-            projection: {
-                _id: 0,
-                categories: 0
+        await db.aggregate([{
+                $limit: 15
+            }, {
+                $lookup: {
+                    from: "users",
+                    localField: "username",
+                    foreignField: "username",
+                    as: "details",
+                    "pipeline": [{
+                        "$project": {
+                            _id: 0,
+                            email: 0,
+                            phone: 0,
+                            refreshToken: 0,
+                            wallet: 0,
+                            public: 0,
+                            private: 0
+                        }
+                    }]
+                }
             }
-        }).limit(limit).skip(skip);
 
-        await cursor.forEach((x) => {
-            allWriters.push(x)
-        });
 
-        let count = await db.countDocuments();
+        ]).forEach((x) => {
+            allWriters.push(x);
+        })
 
         let endTime = Date.now();
 
@@ -44,16 +57,14 @@ async function getWriters(skip, limit) {
         logger.info("getWriters mongo response time: " + timeTaken.toString());
 
 
-        return {
-            count: count,
-            writers: allWriters
-        };
+        return allWriters;
 
 
     } catch (e) {
         throw e;
     }
 }
+
 
 async function getWriterByName(username) {
     let client;

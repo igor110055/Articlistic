@@ -1,0 +1,29 @@
+.primary-input-div {
+  width: 100%;
+}
+.primary-input-div input {
+  box-sizing: border-box;
+  padding: 0;
+  font-family: "Poppins";
+  width: 100%;
+  border-radius: 10px;
+  margin-right: 10%;
+  height: 3rem;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 18px;
+  color: #777983;
+  border: 1px solid #c4c4c4;
+  margin-bottom: 16px;
+  outline: none;
+}
+
+.primary-input-div label {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  margin-bottom: 4px;
+  /* identical to box height */
+  color: #777983;
+}
+

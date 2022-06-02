@@ -2,7 +2,11 @@ const config = require('../../../../config');
 const {
     MDB_COLLECTION_USERS,
     MDB_COLLECTION_WALLET_PAYOUT,
-    EARNING_MINIMUM_BALANCE
+    EARNING_MINIMUM_BALANCE,
+    PAYOUT_TIMEOUT_TIMESTAMP,
+    PAYOUT_STATUS_PENDING,
+    PAYOUT_STATUS_FAILED,
+    PAYOUT_TIMEOUT_REVERSE_TIMESTAMP
 } = require('../../../../constants');
 const logger = require('../../../utils/logger');
 
@@ -15,17 +19,20 @@ const MDB = require('../client').MDB;
 async function payout(amount, username, payoutId) {
     var suffBalance = true;
 
+    const timestamp = Date.now();
+
     const objToBeInsert = {
         payoutId,
         username,
         amount,
-        timestamp: Date.now()
+        timestamp,
+        status: PAYOUT_STATUS_PENDING
     }
 
     client = await MDB.getClient();
 
     let usersCollection = client.db(dbName).collection(uc);
-    let payoutCollection = client.db(dbName).collection(po);
+    let walletToEarningsCollection = client.db(dbName).collection(po);
 
     let startTime = Date.now();
 
@@ -73,9 +80,15 @@ async function payout(amount, username, payoutId) {
                 "wallet.earnings": {
                     $gte: amount + EARNING_MINIMUM_BALANCE
                 },
+                "wallet.payoutTimeout": {
+                    $gte: timestamp
+                }
             }, {
                 $inc: {
-                    "wallet.earnings": -amount
+                    "wallet.earnings": -amount,
+                },
+                $set: {
+                    "wallet.payoutTimeout": Date.now() + PAYOUT_TIMEOUT_TIMESTAMP
                 }
             });
 
@@ -108,6 +121,96 @@ async function payout(amount, username, payoutId) {
 }
 
 
+async function reversePayout(amount, username, payoutId) {
+
+
+
+    client = await MDB.getClient();
+
+    let usersCollection = client.db(dbName).collection(uc);
+    let walletToEarningsCollection = client.db(dbName).collection(po);
+
+    let startTime = Date.now();
+
+    const session = client.startSession();
+
+    const transactionOptions = {
+        readPreference: 'primary',
+        readConcern: {
+            level: 'local'
+        },
+        writeConcern: {
+            w: 'majority'
+        }
+    }
+
+
+    await session.withTransaction(async () => {
+
+
+        /**
+         * For entering a record of the transaction 
+         * that is gonna happen. 
+         */
+
+        try {
+            await walletToEarningsCollection.updateOne({
+                payoutId
+            }, {
+                status: PAYOUT_STATUS_FAILED
+            }, {
+                session: session
+            });
+        } catch (e) {
+            await session.abortTransaction();
+            logger.error(e);
+            throw e;
+        }
+
+
+
+        /**
+         * Query for taking out money from 
+         * earnings & putting them in wallet.
+         */
+        try {
+
+            await usersCollection.updateOne({
+                username: username
+            }, {
+                $inc: {
+                    "wallet.earnings": amount
+                },
+                $set: {
+                    "wallet.payoutTimeout": Date.now() + PAYOUT_TIMEOUT_REVERSE_TIMESTAMP
+                }
+            });
+
+
+
+        } catch (e) {
+            await session.abortTransaction();
+            logger.error(e);
+            throw e;
+        }
+
+
+
+
+    }, transactionOptions);
+
+    let endTime = Date.now();
+
+    let timeTaken = endTime - startTime;
+
+    logger.info("reverse payout - mongo response time: " + timeTaken.toString());
+
+    return;
+
+}
+
+
 module.exports = {
-    payout
+    payout,
+    reversePayout
 }
