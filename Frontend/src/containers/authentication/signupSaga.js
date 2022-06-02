@@ -341,11 +341,7 @@ export function* googleSignup(action) {
     const tokenId = action.payload;
     const url = `${baseURL}/${endPoints.googleSignup}?token=${tokenId}`;
     const data = yield call(postRequest, url, {}, {});
-
-    if (data.accessToken) {
-      
-    }
-
+    console.log(data);
     if (!data.error) {
       yield put(signupWithGoogleSuccess(data));
     } else yield put(signupWithGoogleFailure(data.message));
