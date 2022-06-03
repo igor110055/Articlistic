@@ -6,6 +6,7 @@ import { ReactComponent as GoogleLogo } from "../../../../Images/GoogleLogo.svg"
 import Button from "../primary-button/button";
 import { signupWithGoogleInit } from "../../signupActions";
 import { GOOGLE_CLIENT_ID } from "../../../../utils/apiEndPoints";
+import { userEmail, userPName, userUsername } from "../../../user/userActions";
 function GoogleAuth({ isSignIn, setDisplayPage }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,11 +32,15 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
 
   const handleGoogleLogin = async (googleData) => {
     console.log(googleData);
+    localStorage.setItem("userEmail", googleData.profileObj.email);
     dispatch(signupWithGoogleInit(googleData.tokenId));
   };
 
   useEffect(() => {
     if (isLoggedIn && !isSendingLoginCred) {
+      dispatch(userEmail(googleSignInData.private.email));
+      dispatch(userPName(googleSignInData.name));
+      dispatch(userUsername(googleSignInData.username));
       localStorage.setItem(
         "user",
         JSON.stringify({
