@@ -17,6 +17,7 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
     googleSignupSuccess,
     googleSignupData,
     googleSignupFailure,
+    googleSignInData,
   } = useSelector((state) => ({
     isLoggedIn: state.signupReducer.isLoggedin,
     isSendingLoginCred: state.signupReducer.isSendingLoginCred,
@@ -25,10 +26,11 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
     googleSignupSuccess: state.signupReducer.googleSignupSuccess,
     googleSignupData: state.signupReducer.googleSignupData,
     googleSignupFailure: state.signupReducer.googleSignupFailure,
+    googleSignInData: state.signupReducer.googleSignInData,
   }));
 
   const handleGoogleLogin = async (googleData) => {
-    // console.log(googleData);
+    console.log(googleData);
     dispatch(signupWithGoogleInit(googleData.tokenId));
   };
 
@@ -37,9 +39,9 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
       localStorage.setItem(
         "user",
         JSON.stringify({
-          userEmailID: loginResp.private.email,
-          userProfileName: loginResp.name,
-          userUserName: loginResp.username,
+          userEmailID: googleSignInData.private.email,
+          userProfileName: googleSignInData.name,
+          userUserName: googleSignInData.username,
         })
       );
       navigate("/writerDashboard");

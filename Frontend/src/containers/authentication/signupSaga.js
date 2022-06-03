@@ -48,6 +48,7 @@ import {
   getRefreshTokenFailure,
   getRefreshTokenSuccess,
   signupWithGoogleSuccess,
+  signinWithGoogleSuccess,
   signupWithGoogleFailure,
   // followultipleWritersFailure,
 } from "./signupActions";
@@ -348,7 +349,8 @@ export function* googleSignup(action) {
         Cookie.set("refreshToken", data.refreshToken, { expires: 30 });
         Cookie.set("accessToken", data.accessToken, { expires: 7 });
         Cookie.set("oneDayBeforeAccessToken", true, { expires: 6 });
-        yield put(loginSuccess(data));
+        console.log("Google user login data", data);
+        yield put(signinWithGoogleSuccess(data));
       } else {
         yield put(signupWithGoogleSuccess(data));
       }
