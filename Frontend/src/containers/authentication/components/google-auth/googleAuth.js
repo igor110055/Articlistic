@@ -21,7 +21,7 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
     googleSignUpInit: state.signupReducer.googleSignUpInit,
     googleSignupFailure: state.signupReducer.googleSignupFailure,
     googleSignupSuccess: state.signupReducer.googleSignupSuccess,
-    googleSignUpData: state.signupReducer.googleSignupData,
+    googleSignUpData: state.signupReducer.googleSignUpData,
     googleSignInData: state.signupReducer.googleSignInData,
     googleSignInSuccess: state.signupReducer.googleSignInSuccess,
   }));
