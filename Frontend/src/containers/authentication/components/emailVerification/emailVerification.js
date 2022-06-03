@@ -69,6 +69,7 @@ function EmailVerification({ setDisplayPage }) {
               inputBorderColor={!validClick ? "#EB4335" : "#c4c4c4"}
               labelColor={!validClick ? "#EB4335" : "#777983"}
               onChange={setEmail}
+              onfocus={() => {}}
             />
             {!validClick && (
               <PrimaryError message={"Please enter a valid email address"} />

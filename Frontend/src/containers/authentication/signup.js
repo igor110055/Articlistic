@@ -12,8 +12,8 @@ import OnboardingNavbar from "../navbar/onBoardingNavbar";
 import { useNavigate } from "react-router-dom";
 import GoogleAuth from "./components/google-auth/googleAuth";
 import Cookie from "js-cookie";
-// import left_img from "../../Images/background-left.svg";
-// import right_img from "../../Images/background-right.svg";
+import left_img from "../../Images/background-left.svg";
+import right_img from "../../Images/background-right.svg";
 import "./signup.css";
 function SignUp() {
   const { googleSignInSuccess } = useSelector((state) => ({
@@ -56,11 +56,18 @@ function SignUp() {
   }, []);
 
   return (
-    <div>
+    <div
+      // style={{
+      //   display: "flex",
+      //   justifyContent: "center",
+      //   alignItems: "center",
+      //   width: "100%",
+      // }}
+    >
       <div className="onboarding-navbar">
         <OnboardingNavbar />
       </div>
-      {/* <img src={left_img} alt="left-img" className="signup-bubble_img" /> */}
+      {/* <img src={left_img} className="onboarding-bubble-image" alt="left-img" /> */}
       {displayPage === "" && (
         <div className="signup-container">
           <div className="get-started-section">
@@ -104,7 +111,7 @@ function SignUp() {
       )}
 
       {displayPage === "pickFavouriteWriters" && <PickFavWriters />}
-      {/* <img src={right_img} alt="left-img" className="signup-bubble_img" /> */}
+      {/* <img src={right_img} className="onboarding-bubble-image" alt="left-img" /> */}
     </div>
   );
 }

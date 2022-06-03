@@ -453,6 +453,7 @@ const signupReducer = (state = initialState, action) => {
         logoutResp: data,
         isLoggedIn: false,
         googleSignInSuccess: false,
+        googleSignupSuccess: false,
       };
     }
 

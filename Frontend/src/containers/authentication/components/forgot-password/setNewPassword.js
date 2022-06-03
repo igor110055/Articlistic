@@ -128,6 +128,7 @@ function SetNewPassword({ setDisplayPage }) {
           inputBorderColor={!validPass ? "#EB4335" : "#777983"}
           labelColor={!validPass ? "#EB4335" : "#777983"}
           onChange={setNewPass}
+          onfocus={() => {}}
         />
         {!validPass && <PrimaryError message={"Use a strong password"} />}
         <p className="password-constraints">
@@ -140,6 +141,7 @@ function SetNewPassword({ setDisplayPage }) {
           labelColor={!samePass ? "#EB4335" : "#777983"}
           labelName={"Confirm password"}
           onChange={setConfirmPass}
+          onfocus={() => {}}
         />
         {!samePass && <PrimaryError message={"passwords do not match"} />}
         <Button

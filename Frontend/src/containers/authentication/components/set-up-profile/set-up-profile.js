@@ -40,13 +40,15 @@ function SetUpProfile({ setDisplayPage }) {
   const [password, setPassword] = useState("");
   const [validPassword, setValidPassword] = useState(true);
   const [validUserName, setValidUserName] = useState(true);
-
+  const [hasFocus, setFocus] = useState(false);
   const [once, setOnce] = useState(false);
   useEffect(() => {
-    if (userName !== "") {
-      dispatch(checkUsername(userName));
+    if (!hasFocus) {
+      if (userName !== "") {
+        dispatch(checkUsername(userName));
+      }
     }
-  }, [userName]);
+  }, [hasFocus]);
 
   useEffect(() => {
     if (!setValidUserName || checkUsernameError) setValidUserName(false);
@@ -98,6 +100,7 @@ function SetUpProfile({ setDisplayPage }) {
   const handleCreateAccount = () => {
     setOnce(true);
 
+    if (!validUserName) return;
     if (!validateUserName(userName)) {
       setValidUserName(false);
       return;
@@ -179,12 +182,14 @@ function SetUpProfile({ setDisplayPage }) {
           placeholder={"Enter your name"}
           labelColor={"#777983"}
           onChange={setName}
+          onfocus={() => {}}
         />
         <Input
           labelName={"Username"}
           placeholder={"Create a username"}
           labelColor={"#777983"}
           onChange={setUserName}
+          onfocus={setFocus}
         />
         {!validUserName && (
           <PrimaryError message={"This username is already in use."} />
@@ -195,6 +200,7 @@ function SetUpProfile({ setDisplayPage }) {
           labelColor={"#777983"}
           type={"password"}
           onChange={setPassword}
+          onfocus={() => {}}
         />
         {!validPassword && (
           <PrimaryError message={"create a strong password"} />
@@ -232,8 +238,13 @@ function SetUpProfile({ setDisplayPage }) {
           </Select>
         </label>
       </form>
-
-      <Button text={"Create Account"} blue callback={handleCreateAccount} isDisabled={isSendingProfileInfo}/>
+      <Button
+        text={"Create Account"}
+        blue
+        callback={handleCreateAccount}
+        isDisabled={isSendingProfileInfo}
+        type={"submit"}
+      />
     </div>
   );
 }

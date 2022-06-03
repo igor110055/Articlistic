@@ -166,6 +166,7 @@
   cursor: pointer;
 }
 
+
 @media (max-width: 480px) {
   .signin-navbar {
     display: none;
@@ -181,5 +182,11 @@
     border-radius: 32px;
     padding: 47px 80px;
     max-height: 608px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .onboarding-bubble-image {
+    display: none;
   }
 }

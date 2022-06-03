@@ -70,6 +70,7 @@ function ForgotPassword({ setDisplayPage }) {
         <PrimaryInput
           placeholder={"Enter your email address"}
           onChange={setEmail}
+          onfocus={() => {}}
         />
         {!validClick && <PrimaryError message={"Enter Valid Email address"} />}
         {error && <PrimaryError message={getForgotEmailOTPErrorMsg} />}

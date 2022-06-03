@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { ReactComponent as Logo } from "../../Images/logo.svg";
-import { ReactComponent as GoogleLogo } from "../../Images/GoogleLogo.svg";
+import BackgroundRight from "../../Images/background-right.svg";
+import BackgorundLeft from "../../Images/background-left.svg";
 import Button from "./components/primary-button/button";
-import { ReactComponent as ErrorSvg } from "../../Images/VectorErrorAlert.svg";
 import ForgotPassword from "./components/forgot-password/forgot-password";
 import { validateEmail, validatePassword } from "../../utils/common";
 import { useNavigate } from "react-router-dom";
@@ -42,7 +42,6 @@ function SignIn() {
   const [type, setType] = useState("username");
   // const [validPassword, setValidPassword] = useState("");
   const [displayPage, setDisplayPage] = useState("sign-in");
-  const signInWithGoogle = () => {};
   const gotoForgot = () => {
     dispatch(resetPasswordState());
     setDisplayPage("forgot-password");
@@ -89,18 +88,30 @@ function SignIn() {
       <div className="signin-navbar">
         <OnboardingNavbar />
       </div>
-      {displayPage === "sign-in" && (
-        <div className="sign-in-container">
-          <div className="sign-in-section">
-            <Logo className="attentioun-logo" />
-            <p className="sign-in-text">Sign in to</p>
-            <h3 className="attentioun-header">Attentioun</h3>
-          </div>
-          <div className="sign-in-buttons">
-            <GoogleAuth isSignIn />
-            <p className="or-div"> &nbsp; OR &nbsp; &nbsp;</p>
-            <div className="email-sign-in">
-              {/* {!validCred && (
+      <div
+      // style={{
+      //   display: "flex",
+      //   justifyContent: "center",
+      //   alignItems: "center",
+      // }}
+      >
+        {/* <img
+          src={BackgorundLeft}
+          alt="left-background"
+          className="onboarding-bubble-image"
+        /> */}
+        {displayPage === "sign-in" && (
+          <div className="sign-in-container">
+            <div className="sign-in-section">
+              <Logo className="attentioun-logo" />
+              <p className="sign-in-text">Sign in to</p>
+              <h3 className="attentioun-header">Attentioun</h3>
+            </div>
+            <div className="sign-in-buttons">
+              <GoogleAuth isSignIn />
+              <p className="or-div"> &nbsp; OR &nbsp; &nbsp;</p>
+              <div className="email-sign-in">
+                {/* {!validCred && (
                 <p className="wrong-email">
                   <div className="error-svg">
                     <ErrorSvg />{" "}
@@ -111,57 +122,65 @@ function SignIn() {
                   </span>
                 </p>
               )} */}
-              {!validCred && (
-                <PrimaryError
-                  message={
-                    "We couldn't find an account matching the username and password."
-                  }
-                />
-              )}
-              {/* <input
+                {!validCred && (
+                  <PrimaryError
+                    message={
+                      "We couldn't find an account matching the username and password."
+                    }
+                  />
+                )}
+                {/* <input
                 type="email"
                 placeholder="Email"
                 onChange={(e) => setEmail(e.target.value)}
               />
               <input type="password" placeholder="Password" /> */}
-              <Input
-                type={"email"}
-                placeholder={"Email or username"}
-                onChange={setEmail}
-              />
-              <Input
-                type="password"
-                placeholder="Password"
-                onChange={setPassword}
-              />
-              <Button
-                text="Sign In"
-                blue
-                callback={() => handleSignIn()}
-                isDisabled={isSendingLoginCred}
-              />
+                <Input
+                  type={"email"}
+                  placeholder={"Email or username"}
+                  onChange={setEmail}
+                  onfocus={() => {}}
+                />
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  onChange={setPassword}
+                  onfocus={() => {}}
+                />
+                <Button
+                  text="Sign In"
+                  blue
+                  callback={() => handleSignIn()}
+                  isDisabled={isSendingLoginCred}
+                />
 
-              <p className="forgot-password" onClick={gotoForgot}>
-                Forgot Password?
-              </p>
+                <p className="forgot-password" onClick={gotoForgot}>
+                  Forgot Password?
+                </p>
+              </div>
             </div>
+            <p className="sign-up">
+              Don't have an account yet?{" "}
+              <span onClick={() => navigate("/signup")}>Sign up</span>
+            </p>
           </div>
-          <p className="sign-up">
-            Don't have an account yet?{" "}
-            <span onClick={() => navigate("/signup")}>Sign up</span>
-          </p>
-        </div>
-      )}
+        )}
 
-      {displayPage === "forgot-password" && (
-        <ForgotPassword setDisplayPage={setDisplayPage} />
-      )}
-      {displayPage === "verifyOTP" && (
-        <VerifyOTP setDisplayPage={setDisplayPage} />
-      )}
-      {displayPage === "set-new-password" && (
-        <SetNewPassword setDisplayPage={setDisplayPage} />
-      )}
+        {displayPage === "forgot-password" && (
+          <ForgotPassword setDisplayPage={setDisplayPage} />
+        )}
+        {displayPage === "verifyOTP" && (
+          <VerifyOTP setDisplayPage={setDisplayPage} />
+        )}
+        {displayPage === "set-new-password" && (
+          <SetNewPassword setDisplayPage={setDisplayPage} />
+        )}
+        {/* <img
+          src={BackgroundRight}
+          className="onboarding-bubble-image"
+          alt="left-background"
+        /> */}
+      </div>
     </div>
   );
 }
