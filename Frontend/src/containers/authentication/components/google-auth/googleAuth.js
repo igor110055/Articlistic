@@ -34,13 +34,14 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
 
   useEffect(() => {
     if (googleSignInSuccess) {
-      dispatch(userEmail(googleSignInData.private.email));
+      const email = localStorage.getItem("userEmail");
+      dispatch(userEmail(email));
       dispatch(userPName(googleSignInData.name));
       dispatch(userUsername(googleSignInData.username));
       localStorage.setItem(
         "user",
         JSON.stringify({
-          userEmailID: googleSignInData.private.email,
+          userEmailID: email,
           userProfileName: googleSignInData.name,
           userUserName: googleSignInData.username,
         })

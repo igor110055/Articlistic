@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   height: 100vh;
 }
 img {
@@ -65,8 +65,6 @@ img {
   width: 25vw;
   max-width: 344px;
 }
-
-
 
 .writer-information-dark {
   display: flex;
@@ -179,7 +177,7 @@ img {
 .writer-selection {
   /* background-color: cornflowerblue; */
   font-size: 14px;
-  font-family: 'Merriweather','Poppins','sans-serif';
+  font-family: "Merriweather", "Poppins", "sans-serif";
   width: 70vw;
   background-color: white;
   border-radius: 10px;
@@ -322,7 +320,7 @@ select {
   border: none;
   outline: none;
   font-size: 15px;
-  font-family: 'Roboto','Poppins';
+  font-family: "Roboto", "Poppins";
   width: 100% !important;
 }
 
@@ -345,7 +343,7 @@ select {
   font-size: 14px;
   height: 20px;
   letter-spacing: 0.2px;
-  font-family: Roboto,Poppins;
+  font-family: Roboto, Poppins;
   margin-right: 1%;
 }
 
