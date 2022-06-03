@@ -39,7 +39,7 @@ export const ATextField = styled(TextField)`
     }
   }
   & .MuiFormHelperText-root {
-    font-family: Poppins;
+    /*font-family: Poppins;*/
   }
 `;
 
@@ -47,20 +47,20 @@ export const ATextField = styled(TextField)`
 export const BlueTextField = styled(TextField)`
   fieldset {
     border-radius: 10px;
-    font-family: Poppins;
+    /*font-family: Poppins;*/
   }
   & label.Mui-focused {
     color: #0fc7fc;
-    font-family: Poppins;
+    /*font-family: Poppins;*/
   }
   & .MuiOutlinedInput-root {
     &.Mui-focused fieldset {
       border-color: #0fc7fc;
-      font-family: Poppins;
+      /*font-family: Poppins;*/
     }
   }
   & .MuiFormHelperText-root {
-    font-family: Poppins;
+    /*font-family: Poppins;*/
   }
 `;
 

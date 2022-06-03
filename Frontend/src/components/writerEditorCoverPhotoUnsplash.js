@@ -6,18 +6,18 @@ import { makeStyles } from "@mui/styles";
 
 const WriterEditorCoverPhotoUnsplash = ({
   setUnsplashURL,
-  setAddPhotoClicked,
-  setSelectedPhoto,
+  // setAddPhotoClicked,
+  // setSelectedPhoto,
   setOpenImageDialog,
   setUnsplashSelected
 }) => {
   const [searchVal, setSearchVal] = useState("");
   const [submited, setSubmited] = useState(false);
   const [openPhotosDialog, setOpenPhotosDialog] = useState(false);
-  const [searchClicked, setSearchClicked] = useState(false);
-  const [selectedImageURL, setSelectedImageURL] = useState(
-    "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png"
-  );
+  // const [searchClicked, setSearchClicked] = useState(false);
+  // const [selectedImageURL, setSelectedImageURL] = useState(
+  //   "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png"
+  // );
   const [imageSelected, setImageSelected] = useState(false);
   const dispatch = useDispatch();
 
@@ -39,7 +39,7 @@ const WriterEditorCoverPhotoUnsplash = ({
     } else {
       if (!isGettingUnsplash && submited) {
         setOpenPhotosDialog(true);
-        setSearchClicked(true);
+        // setSearchClicked(true);
       }
     }
   }, [isGettingUnsplash]);
@@ -104,7 +104,9 @@ const WriterEditorCoverPhotoUnsplash = ({
                     src={eachImage.urls.small}
                     className={classes.imageStyle}
                     onClick={() =>
-                      imageHandler(eachImage.urls.full, eachImage.description)
+                      imageHandler(eachImage.urls.full
+                        // , eachImage.description
+                        )
                     }
                     alt="url"
                   />

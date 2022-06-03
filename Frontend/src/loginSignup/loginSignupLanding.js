@@ -11,7 +11,7 @@ import {
   validatePhoneNumber,
   validateEmail,
   BlueTextField,
-} from "../../utils/common";
+} from "../utils/common";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./loginSignupAction";
@@ -19,8 +19,8 @@ import ForgotPassword from "./forgotPassword";
 import logo from "../../Images/logo.svg";
 import text from "../../Images/attentioun_text.svg";
 import ConfirmNewPassword from "./confirmNewPassword";
-import { userEmail, userPhone, userUsername } from "../user/userActions";
-import CustomizedSnackbars from "../../components/materialuiSnackbar";
+import { userEmail, userPhone, userUsername } from "../containers/user/userActions";
+import CustomizedSnackbars from "../components/materialuiSnackbar";
 import {Error as LoginError } from "./helper_functions/error";
 
 const LoginSignupLanding = () => {

@@ -43,7 +43,7 @@ const initialState = {
   deletedArticles: {}
 };
 
-const writerContent = (state = initialState, action) => {
+const writerContent = (state , action) => {
   const { data } = action;
   // const articleId = data?.articleId;
   switch (action.type) {
@@ -111,9 +111,10 @@ const writerContent = (state = initialState, action) => {
           if (publication.publicationId === data.publicationId) {
             if (!data.publicationPic) {
               data.publicationPic = publication.publicationPic;
-            } else {
-              data.publicationPic = data.publicationPic;
-            }
+            } 
+            // else {
+            //   data.publicationPic = data.publicationPic;
+            // }
             return { ...publication, ...data };
           }
           return publication;
@@ -199,7 +200,7 @@ const writerContent = (state = initialState, action) => {
     }
 
     default:
-      return state;
+      return initialState;
   }
 };
 

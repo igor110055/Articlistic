@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { ATextField } from "../../utils/common";
+import { ATextField } from "../utils/common";
 import { makeStyles } from "@mui/styles";
-import { validatePassword } from "../../utils/common";
+import { validatePassword } from "../utils/common";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "./loginSignupAction";
 import { CircularProgress } from "@mui/material";
-import { showSnackbar } from "../common/commonActions";
+import { showSnackbar } from "../containers/common/commonActions";
 
 const ConfirmNewPassword = ({
   setOpenNewPassword,

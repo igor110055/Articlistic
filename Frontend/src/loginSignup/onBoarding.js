@@ -7,7 +7,7 @@ import MobileVerification from "./mobileVerification";
 import EmailVerification from "./emailVerification";
 
 import left_img from "../../Images/background-left.svg";
-import WritersAndCategories from "../writersAndCategories/writersAndCategories";
+import WritersAndCategories from "../containers/writersAndCategories/writersAndCategories";
 
 import rocket from "../../Images/rocket.png";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,7 +17,7 @@ import {
   userPhone,
   userPName,
   userUsername
-} from "../user/userActions";
+} from "../containers/user/userActions";
 import { useNavigate } from "react-router-dom";
 import Cookie from "js-cookie";
 const OnBoarding = () => {

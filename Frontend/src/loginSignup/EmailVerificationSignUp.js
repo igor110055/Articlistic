@@ -1,217 +1,180 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { CircularProgress } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getForgotOTP, verifyForgotOTP } from "./loginSignupAction";
-import { userPhone } from "../user/userActions";
-import MuiPhoneNumber from "material-ui-phone-number";
+import { getOTP, verifyOTP } from "./loginSignupAction";
+import { userPhone } from "../containers/user/userActions";
 import "./../../index.css";
 import { Timer } from "./Timer";
 import { Error as WrongNumberError } from "./helper_functions/error";
-import { BlueTextField } from "../../utils/common";
 
-const ForgotPasswordNumber = ({
-  setOpenDialog,
-  setOpenNewPassword,
-  setEntityForDialog,
-  setTypeForDialog
-}) => {
+const EmailVerificationSignUp = ({ setDisplayPage, displayPage }) => {
   const [isValidNumber, setIsValidNumber] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [OTP, setOTP] = useState("");
   const [isValidOTP, setIsValidOTP] = useState("");
   const [OTPSent, setOTPSent] = useState(false);
+  // const [errorOccured, setErrorOccured] = useState(false);
+  // const [country, setCountry] = useState("91");
+  const [finalCountry, setFinalCountry] = useState("91");
   const [disableButton, setDisableButton] = useState(false);
-  const [disableResendButton, setDisableResendButton] = useState(false);
+  const [disableResetbutton, setDisableResendButton] = useState(false);
+  const [inputBorderColor, setBorderColor] = useState("primary");
+  const [otpInputColor, setOtpInput] = useState("primary");
 
   const {
-    isGettingForgotOTP,
-    getForgotOTPError,
-    getForgotOTPErrorMsg,
-    getForgotOTPResp,
-    isVerifyingForgotOTP,
-    verifyForgotOTPError,
-    verifyForgotOTPErrorMsg,
+    isGettingOTP,
+    getOTPError,
+    getOTPErrorMsg,
+    // getOTPResp,
+    isVerifyingOTP,
+    verifyOTPError,
+    verifyOTPErrorMsg,
     user,
     userPhoneNumber
   } = useSelector(state => ({
-    isGettingForgotOTP: state.loginSignup.isGettingForgotOTP,
-    getForgotOTPError: state.loginSignup.getForgotOTPError,
-    getForgotOTPErrorMsg: state.loginSignup.getForgotOTPErrorMsg,
-    getForgotOTPResp: state.loginSignup.getForgotOTPResp,
-    isVerifyingForgotOTP: state.loginSignup.isVerifyingForgotOTP,
-    verifyForgotOTPError: state.loginSignup.verifyForgotOTPError,
-    verifyForgotOTPErrorMsg: state.loginSignup.verifyForgotOTPErrorMsg,
+    isGettingOTP: state.loginSignup.isGettingOTP,
+    getOTPError: state.loginSignup.getOTPError,
+    getOTPErrorMsg: state.loginSignup.getOTPErrorMsg,
+    getOTPResp: state.loginSignup.getOTPResp,
+    isVerifyingOTP: state.loginSignup.isVerifyingOTP,
+    verifyOTPError: state.loginSignup.verifyOTPError,
+    verifyOTPErrorMsg: state.loginSignup.verifyOTPErrorMsg,
     user: state.user,
     userPhoneNumber: state.user.userPhoneNumber
   }));
 
   const dispatch = useDispatch();
   const [resendNumber, setResendNumber] = useState("");
-  const [phoneInputColor, setPhoneInputColor] = useState("primary");
-  const [otpInputColor, setOtpInputColor] = useState("primary");
-  useEffect(() => {
-    isValidNumber ? setPhoneInputColor("primary") : setPhoneInputColor("error");
-  }, [isValidNumber]);
-
-  const handlegetForgotOTP = number => {
+  const handleGetOTP = number => {
     setOTPSent(false);
-    number = number.replace("-", "");
-    number = number.replace(" ", "");
-    setIsValidOTP("");
+    setFinalCountry("91");
     if (number.length >= 10) {
-      if (phoneNumber.slice(0, 3) === "+91") {
-        dispatch(
-          getForgotOTP({
-            phone: number.slice(3), //Slicing this because in case of Indian Users we only need to send the number without the country code
-            international: false
-          })
-        );
-      } else {
-        dispatch(
-          getForgotOTP({
-            phone: number,
-            international: true
-          })
-        );
-      }
       setIsValidNumber(true);
       setResendNumber(number);
+      // if (true) {
+        dispatch(
+          getOTP({
+            email: number
+          })
+        );
+      // }
     } else {
-      setResendNumber(number);
+      // setResendNumber(number);
+      // dispatch(getOTP(number));
       setIsValidNumber(false);
     }
   };
+  useEffect(() => {
+    if (isValidOTP === false) setOtpInput("error");
+  }, [isValidOTP]);
 
   useEffect(() => {
-    if (getForgotOTPError) {
-      setIsValidNumber(false); //false
+    if (isValidNumber) {
+      setBorderColor("primary");
+    } else {
+      setBorderColor("error");
+    }
+  }, [isValidNumber]);
 
+  useEffect(() => {
+    if (getOTPError) {
+      setIsValidNumber(false); //false
       setOTPSent(false); //false
       // This both should come below
     } else {
       setIsValidNumber(true);
-      if (!isGettingForgotOTP && isValidNumber) {
+      if (isValidNumber && !isGettingOTP) {
         setOTPSent(true);
         setDisableButton(true);
         setDisableResendButton(true);
         setTimeout(() => {
           setDisableResendButton(false);
-        }, 15000);
+        }, [30000]);
       }
     }
-  }, [isGettingForgotOTP]);
+  }, [isGettingOTP]);
 
   const handleSubmit = e => {
     //async
+    setErrorOccured(false);
     e.preventDefault();
     if (OTP.length > 2) {
-      let number = phoneNumber.replace("(", "");
-      number = number.replace(")", "");
-      if (
-        phoneNumber.slice(0, 3) === "+91" ||
-        phoneNumber.slice(0, 3) === "+1("
-      ) {
-        setEntityForDialog(resendNumber.slice(3));
+      if (phoneNumber.slice(0, 3) === "+91") {
         dispatch(
-          verifyForgotOTP({
-            phone: phoneNumber.slice(0, 3) === "+91" ? phoneNumber : number,
-            code: OTP,
-            international: phoneNumber.slice(0, 3) === "+91" ? false : true,
-            sessionId: getForgotOTPResp.sessionId
+          verifyOTP({
+            phone: phoneNumber,
+            code: OTP
           })
         );
-      } else {
-        setEntityForDialog(resendNumber);
-        dispatch(
-          verifyForgotOTP({
-            phone: number,
-            code: OTP,
-            international: true
-          })
-        );
-      }
+      // } else {
+      //   dispatch(
+      //     verifyOTP({
+      //       phone: phoneNumber,
+      //       code: OTP
+      //     })
+      //   );
+      // }
     } else {
       setIsValidOTP(false);
-      setOtpInputColor("error");
+      setOtpInput("error");
     }
   };
-
+  }
   useEffect(() => {
-    if (isValidOTP) {
-      setOpenDialog(false);
-      setTypeForDialog("phone");
-      setOpenNewPassword(true);
+    if (isValidOTP && displayPage === "emailVerification") {
+      localStorage.setItem("user", JSON.stringify(user));
+      setDisplayPage("createProfile");
     }
   }, [userPhoneNumber, isValidOTP]);
 
   useEffect(() => {
-    if (verifyForgotOTPError) {
+    if (verifyOTPError) {
+      setOtpInput("error");
       setIsValidOTP(false); //false
-      setOtpInputColor("error");
+      setErrorOccured(false);
     } else {
       dispatch(userPhone(resendNumber));
-      if (!isVerifyingForgotOTP && OTPSent) {
+      if (!isVerifyingOTP && OTPSent) {
         setIsValidOTP(true);
       }
+      setErrorOccured(false);
     }
-  }, [isVerifyingForgotOTP]);
+  }, [isVerifyingOTP]);
 
   const classes = useStyles();
   return (
     <div className={classes.mobileVerificationCard}>
-      <div className={classes.mobileVerififcationTitle}>
-        Mobile Verification
-      </div>
-      <div style={{ marginTop: "1.3rem" }}>
-        {!isValidNumber && (
-          <WrongNumberError
-            message={
-              getForgotOTPErrorMsg ||
-              `A user with this phone number does not exist.`
-            }
-          />
-        )}
-        {isValidOTP === false && (
-          <WrongNumberError message={verifyForgotOTPErrorMsg} />
-        )}
-      </div>
-
+      <div className={classes.mobileVerififcationTitle}>Email Verification</div>
+      {!isValidNumber && (
+        <WrongNumberError message={getOTPErrorMsg || "Not a valid email"} />
+      )}
+      {isValidOTP === false && <WrongNumberError message={verifyOTPErrorMsg} />}
       {OTPSent && (
         <SuccessfullOTPSent
           number={resendNumber}
-          handlegetForgotOTP={handlegetForgotOTP}
-          disableResendButton={disableResendButton}
+          handleGetOTP={handleGetOTP}
+          finalCountry={finalCountry}
+          disableResendButton={disableResetbutton}
         />
       )}
       <form onSubmit={handleSubmit} style={{ width: "100%" }}>
         <div className={classes.mobileVerififcationOTPSection}>
           <div className={classes.mobileVerificationInput}>
-            <MuiPhoneNumber
-              fullWidth
+            <TextField
+              label="Enter Email Address"
               variant="outlined"
-              sx={{
-                "& .MuiInputBase-root": {
-                  borderRadius: "10px"
-                }
-              }}
-              color={phoneInputColor}
-              className={classes.numberClass}
-              defaultCountry={"in"}
               enableLongNumbers={true}
+              color={inputBorderColor}
+              className={classes.mobileNumber}
               onChange={val => {
                 setDisableButton(false);
-                val = val.includes(" ") ? val.replaceAll(" ", "") : val;
-                val = val.includes("-") ? val.replaceAll("-", "") : val;
                 setPhoneNumber(val);
               }}
-              countryCodeEditable={true}
-              disableAreaCodes={true}
-              autoFormat={true}
-              onKeyPress={e => {
+              onKeyDown={e => {
                 if (e.key === "Enter") {
-                  handlegetForgotOTP(phoneNumber);
+                  handleGetOTP(phoneNumber);
                 }
               }}
             />
@@ -220,100 +183,88 @@ const ForgotPasswordNumber = ({
             <Button
               sx={{
                 "&.MuiButton-text": { color: "white" },
-                height: "3.4em",
-                width: "7.9375em",
+                height: "4em",
+                width: "25%",
                 fontFamily: "Poppins",
                 fontWeight: "700",
                 backgroundColor: "primary",
-                fontSize: "1em",
+                fontSize: "0.9em",
                 textTransform: "capitalize",
-                borderRadius: "10px",
                 background:
                   "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)"
               }}
-              onClick={() => {
-                handlegetForgotOTP(phoneNumber);
-              }}
-              disabled={isGettingForgotOTP}
+              onClick={() => handleGetOTP(phoneNumber)}
+              disabled={isGettingOTP}
             >
-              {isGettingForgotOTP && (
+              {isGettingOTP && (
                 <CircularProgress size={20} style={{ color: "white" }} />
               )}
-              {!isGettingForgotOTP && "Get OTP"}
+              {!isGettingOTP && "get OTP"}
             </Button>
           ) : (
             <Button
               sx={{
-                "&.MuiButton-text": { color: "white" },
-                height: "3.4em",
-                width: "7.9375em",
+                "&.MuiButton-text": { color: "black" },
+                height: "3.5em",
+                width: "10em",
                 marginLeft: "0.9em",
                 fontFamily: "Poppins",
                 fontWeight: "700",
-                fontSize: "1em",
+                fontSize: "0.9em",
                 textTransform: "capitalize",
-                borderRadius: "10px",
-                filter: "opacity(0.5)",
-
-                background:
-                  "linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%)"
+                backgroundColor: "lightgrey"
               }}
-              disabled={true}
+              onClick={() => handleGetOTP(phoneNumber)}
+              disabled={isGettingOTP || disableButton}
             >
               Get OTP
             </Button>
           )}
         </div>
-        <BlueTextField
-          label="Enter Verification Code"
+        <TextField
+          label="Enter OTP"
+          fullWidth
           variant="outlined"
           color={otpInputColor}
-          fullWidth
           type="number"
-          required
-          onChange={e => {
-            if (e.target.value.length > 6) {
-              e.target.value = e.target.value.slice(0, 6);
-            }
-            setOTP(e.target.value);
-          }}
-          disabled={!OTPSent}
-          className={classes.numberClass}
+          onChange={e => setOTP(e.target.value)}
+          disabled={!OTPSent || isGettingOTP || isVerifyingOTP}
         />
         <button
           className={
-            !OTPSent || isVerifyingForgotOTP
+            !OTPSent || isVerifyingOTP
               ? classes.nextButtonDisabled
               : classes.nextButton
           }
           type="submit"
-          disabled={!OTPSent || isVerifyingForgotOTP}
+          disabled={!OTPSent || isVerifyingOTP}
         >
-          {isVerifyingForgotOTP && (
+          {isVerifyingOTP && (
             <CircularProgress size={20} style={{ color: "black" }} />
           )}
-          {!isVerifyingForgotOTP && "Next"}
+          {!isVerifyingOTP && "Next"}
         </button>
       </form>
     </div>
   );
 };
 
+  // 
 const SuccessfullOTPSent = ({
   number,
-  handlegetForgotOTP,
+  handleGetOTP,finalCountry,
   disableResendButton
 }) => {
   const classes = useStyles();
   return (
     <div className={classes.successfullOTPSent}>
-      <div className={classes.successfullOTPSentMsg}>
-        We have sent a verification code to <b>{number}</b>
-      </div>
-      <div className={classes.resendText}>
+      <span className={classes.successfullOTPSentMsg}>
+        We have sent a code to this email.
+      </span>
+      <span>
         {!disableResendButton ? (
           <Button
-            onClick={() => handlegetForgotOTP(number)}
+            onClick={() => handleGetOTP(number)}
             sx={{
               "&.MuiButton-text": { color: "black" },
               height: "1.5em",
@@ -321,6 +272,8 @@ const SuccessfullOTPSent = ({
               fontFamily: "Poppins",
               fontWeight: "700",
               fontSize: "0.9em",
+              paddingRight: "4em",
+              marginLeft: "1em",
               textTransform: "capitalize",
               textDecoration: "underline",
               borderRadius: "0px"
@@ -330,9 +283,9 @@ const SuccessfullOTPSent = ({
             Resend
           </Button>
         ) : (
-          <Timer time={15} />
+          <Timer time={30} />
         )}
-      </div>
+      </span>
     </div>
   );
 };
@@ -340,28 +293,35 @@ const SuccessfullOTPSent = ({
 const useStyles = makeStyles({
   mobileVerificationCard: {
     backgroundColor: "white",
+    width: "29em",
     borderRadius: "20px",
-    width: "30em",
-    padding: "1em",
-    // minWidth: '300px',
+    zIndex: 1,
+    padding: "3em",
+    minWidth: "300px",
     "@media (max-width:720px)": {
       // eslint-disable-line no-useless-computed-key
-      width: "30em",
+      width: "100%",
       height: "calc(100% - 4vh)",
+      borderRadius: "0px 0px 0px 0px",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
       marginTop: "0",
       minWidth: "0px"
-    }
+    },
+    marginTop: "4rem",
+    boxShadow: "20px 32px 64px 0px rgba(214, 230, 255, 0.5)"
+  },
+  mobileNumber: {
+    width: "20em"
   },
   nextButton: {
     // border: "2px black solid",
     backgroundColor: "white",
     fontFamily: "Poppins",
     padding: "2%",
-    marginTop: "2.5em",
+    marginTop: "2em",
     border: "3px solid #6B6B6B",
     fontWeight: "700",
     width: "100%",
@@ -379,7 +339,7 @@ const useStyles = makeStyles({
     backgroundColor: "white",
     fontFamily: "Poppins",
     padding: "2%",
-    marginTop: "2.5em",
+    marginTop: "2em",
     border: "3px solid #D3D3D3",
     fontWeight: "700",
     width: "100%",
@@ -389,6 +349,7 @@ const useStyles = makeStyles({
     textTransform: "capitalize",
     textDecoration: "bold"
   },
+
   mobileVerififcationTitle: {
     fontFamily: "Merriweather",
     color: "#0A2B98",
@@ -401,10 +362,6 @@ const useStyles = makeStyles({
       display: "flex",
       alignItems: "flex-start"
     }
-  },
-  numberClass: {
-    width: "100%",
-    marginRight: "1em"
   },
 
   mobileVerififcationOTPSection: {
@@ -420,8 +377,13 @@ const useStyles = makeStyles({
   },
 
   mobileVerificationInput: {
-    width: "20em",
-    borderRadius: "15px"
+    width: "70%"
+  },
+  enterOtpInput: {
+    color: "primary"
+  },
+  enterOtpInputError: {
+    color: "error"
   },
 
   successfullOTPSent: {
@@ -430,23 +392,23 @@ const useStyles = makeStyles({
     width: "100%",
     borderRadius: "10px",
     fontSize: "0.8em",
-    padding: "0.6em 0.2em 0.6em 0.2em",
-
+    padding: "2% 0% 2% 0%",
+    justifyContent: "space-between",
     marginTop: "1em"
   },
 
   successfullOTPSentMsg: {
     width: "fit-content",
-    marginLeft: "1.1em",
-    padding: "0.2em 0 0.2em 0"
+    paddingLeft: "2em"
   },
 
   successfullOTPSentResend: {
     color: "black",
-    borderBottom: "1px solid black",
-    cursor: "pointer",
-
-    padding: "0.2em 0 0.2em 0"
+    outline: "none",
+    border: "none",
+    backgroundColor: "transparent",
+    textDecoration: "underline"
+    // cursor: 'pointer',
   },
 
   wrongOTP: {
@@ -455,20 +417,14 @@ const useStyles = makeStyles({
     width: "100%",
     borderRadius: "10px",
     fontSize: "0.8em",
-    padding: "0.5em 0em 0.5em 0em",
+    padding: "2% 0% 2% 0%",
     justifyContent: "space-around",
     alignItems: "center"
   },
 
   wrongOTPMsg: {
     width: "80%"
-  },
-  resendText: {
-    width: "max-content",
-    marginLeft: "0.9em",
-
-    padding: "0.2em 0 0.2em 0"
   }
 });
 
-export default ForgotPasswordNumber;
+export default EmailVerificationSignUp;

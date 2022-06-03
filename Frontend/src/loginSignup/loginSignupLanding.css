@@ -80,7 +80,7 @@
   color: white;
   font-size: 0.8em;
   text-align: left;
-  font-family: Poppins;
+  /*font-family: Poppins;*/
   padding-left: 1.9em;
 }
 
@@ -148,7 +148,7 @@
   margin-bottom: 1.7em;
   width: 11.9em;
   cursor: pointer;
-  font-family: Poppins;
+  /*font-family: Poppins;*/
 }
 .verify-email-text {
   font-size: 0.9em;
@@ -161,9 +161,7 @@
   background-color: white;
   margin-bottom: 1.7em;
   cursor: pointer;
-
-  font-weight: 500;
-  font-family: Poppins;
+  /*font-family: Poppins;*/
 }
 
 .login-text-fields {
@@ -223,10 +221,10 @@
   margin-top: 2%;
   font-weight: 700;
   cursor: pointer;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 .not-supported-text {
-  font-family: Poppins;
+  /*font-family: Poppins;*/
   font-size: 1.5em;
   text-align: center;
 }

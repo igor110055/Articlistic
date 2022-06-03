@@ -1,6 +1,6 @@
 .main-container {
   background-color: #ffffff;
-  margin-right: 3em;
+  /* margin-right: 3em; */
   border-radius: 0px 20px 20px 20px;
   padding: 36px 18px 0px 26px;
   /* width: 85%; */
@@ -13,8 +13,8 @@
 }
 .divider-line {
   width: 97.5%;
-  margin-left: 1em; 
-  padding-right: 1em;
+  /* margin-left: 1em;  */
+  /* padding-right: 1em; */
   /* width: 100%; */
   padding-bottom: 0.6em;
   padding-top: 0.6em;

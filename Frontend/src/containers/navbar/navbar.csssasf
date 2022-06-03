@@ -8,7 +8,7 @@
     top: 0;
     background-color: white;
     box-shadow: -10px 0px 30px rgba(0, 0, 0, 0.2);
-    font-family: Poppins;
+    /*font-family: Poppins;*/;
     font-size: 16px;
     color: #636363;
     border-bottom: 2px solid #0FC7FC;
@@ -73,7 +73,7 @@
     width: 80%;
     color: #636363;
     font-size: 16px;
-    font-family: Poppins;
+    /*font-family: Poppins;*/;
 }
 
 .nav-search input:focus{

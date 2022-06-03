@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ErrorMessage } from "../containers/loginSignup/helper_functions/errorMessageFunction";
+import { ErrorMessage } from "../loginSignup/helper_functions/errorMessageFunction";
 
 export const getRequest = async url => {
   try {

@@ -27,7 +27,7 @@ body {
 .signup-container .get-started-section .get-started-text {
   margin-top: 20px;
   margin-bottom: 4px;
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-style: normal;
   font-weight: 700;
   font-size: 27px;
@@ -38,7 +38,7 @@ body {
 
 .signup-container .get-started-section .join-attentioun-text {
   margin: 0;
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-style: normal;
   font-weight: 500;
   font-size: 15px;

@@ -1,11 +1,11 @@
-import { BlueTextField, validatePassword } from "../../utils/common";
+import { BlueTextField, validatePassword } from "../utils/common";
 import { makeStyles } from "@mui/styles";
 import { CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { checkUsername, sendProfileInfo } from "./loginSignupAction";
 import { useSelector } from "react-redux";
-import { userPassword, userPName, userUsername } from "../user/userActions";
+import { userPassword, userPName, userUsername } from "../containers/user/userActions";
 import { useNavigate } from "react-router-dom";
 import Cookie from "js-cookie";
 import { Error as ServerError } from "./helper_functions/error";

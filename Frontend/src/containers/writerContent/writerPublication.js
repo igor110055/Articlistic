@@ -444,7 +444,7 @@ const useStyles = makeStyles({
     // width: "2px",
     // backgroundColor: "#2B56FF",
     borderLeft: "3px dashed #2B56FF",
-    height: "100px",
+    // height: "100px",
     height: "5rem"
   },
 

@@ -44,7 +44,7 @@ import {
   GOOGLE_SIGN_UP_INIT,
   GOOGLE_SIGN_UP_FAILURE,
   GOOGLE_SIGN_UP_SUCCESS,
-} from "../../utils/actionTypes";
+} from "../utils/actionTypes";
 
 export const sendProfileInfoSuccess = (data) => {
   return {
