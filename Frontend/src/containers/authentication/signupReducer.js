@@ -39,6 +39,7 @@ import {
   GOOGLE_SIGN_UP_INIT,
   GOOGLE_SIGN_UP_SUCCESS,
   GOOGLE_SIGN_UP_FAILURE,
+  GOOGLE_SIGN_IN_SUCCESS,
 } from "../../utils/actionTypes";
 
 const initialState = {
@@ -114,6 +115,9 @@ const initialState = {
   googleSignUpInit: false,
   googleSignupFailure: false,
   googleSignupSuccess: false,
+  googleSignInSuccess: false,
+  googleSignUpData: {},
+  googleSignInData: {},
 };
 
 const signupReducer = (state = initialState, action) => {
@@ -257,6 +261,7 @@ const signupReducer = (state = initialState, action) => {
         googleSignUpInit: true,
         googleSignupSuccess: false,
         googleSignupFailure: false,
+        googleSignInSuccess: false,
       };
     }
     case GOOGLE_SIGN_UP_SUCCESS: {
@@ -266,14 +271,25 @@ const signupReducer = (state = initialState, action) => {
         googleSignupSuccess: true,
         googleSignupData: action.payload,
         googleSignupFailure: false,
+        googleSignInSuccess: false,
       };
     }
+    case GOOGLE_SIGN_IN_SUCCESS:
+      return {
+        googleSignUpInit: false,
+        googleSignupSuccess: false,
+        googleSignupData: action.payload,
+        googleSignupFailure: false,
+        googleSignInSuccess: true,
+      };
+
     case GOOGLE_SIGN_UP_FAILURE: {
       return {
         ...state,
         googleSignUpInit: false,
         googleSignupSuccess: false,
         googleSignupFailure: true,
+        googleSignInSuccess: false,
       };
     }
     case GET_PICK_FAV_DATA_INIT:
