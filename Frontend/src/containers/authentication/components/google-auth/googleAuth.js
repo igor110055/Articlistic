@@ -73,7 +73,6 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
             text={isSignIn ? "Sign in with Google" : "Sign up with Google"}
             isSvg
             Svg={GoogleLogo}
-            isDisabled={googleSignUpInit}
           />
         )}
         onSuccess={handleGoogleLogin}
