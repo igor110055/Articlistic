@@ -6,6 +6,7 @@ import Button from "./components/primary-button/button";
 import EmailVerification from "./components/emailVerification/emailVerification";
 import SetUpProfile from "./components/set-up-profile/set-up-profile";
 import PickFavWriters from "./components/pick-fav-writers/pick-fav-writers";
+import { useSelector } from "react-redux";
 // import TempNavbar from "../navbar/tempNavbar";
 import OnboardingNavbar from "../navbar/onBoardingNavbar";
 import { useNavigate } from "react-router-dom";
@@ -15,12 +16,19 @@ import Cookie from "js-cookie";
 // import right_img from "../../Images/background-right.svg";
 import "./signup.css";
 function SignUp() {
+  const { googleSignInSuccess } = useSelector((state) => ({
+    googleSignInSuccess: state.signupReducer.googleSignInSuccess,
+  }));
   const navigate = useNavigate();
   const [emailSignUp, setEmailSignUp] = useState(false);
   const [displayPage, setDisplayPage] = useState("");
   useEffect(() => {
     // console.log(emailSignUp);
   }, [emailSignUp]);
+
+  useEffect(() => {
+    navigate("/writerDashboard");
+  }, [googleSignInSuccess]);
 
   const customStyle = {
     minWidth: "100%",
