@@ -269,7 +269,7 @@ const signupReducer = (state = initialState, action) => {
         ...state,
         googleSignUpInit: false,
         googleSignupSuccess: true,
-        googleSignupData: action.payload,
+        googleSignUpData: action.payload,
         googleSignupFailure: false,
         googleSignInSuccess: false,
       };
@@ -278,7 +278,7 @@ const signupReducer = (state = initialState, action) => {
       return {
         googleSignUpInit: false,
         googleSignupSuccess: false,
-        googleSignupData: action.payload,
+        googleSignInData: action.payload,
         googleSignupFailure: false,
         googleSignInSuccess: true,
       };

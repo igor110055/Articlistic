@@ -11,23 +11,19 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
-    isSendingLoginCred,
-    isLoggedIn,
-    loginResp,
     googleSignUpInit,
-    googleSignupSuccess,
-    googleSignupData,
     googleSignupFailure,
+    googleSignupSuccess,
+    googleSignInSuccess,
+    googleSignUpData,
     googleSignInData,
   } = useSelector((state) => ({
-    isLoggedIn: state.signupReducer.isLoggedin,
-    isSendingLoginCred: state.signupReducer.isSendingLoginCred,
-    loginResp: state.signupReducer.loginResp,
     googleSignUpInit: state.signupReducer.googleSignUpInit,
-    googleSignupSuccess: state.signupReducer.googleSignupSuccess,
-    googleSignupData: state.signupReducer.googleSignupData,
     googleSignupFailure: state.signupReducer.googleSignupFailure,
+    googleSignupSuccess: state.signupReducer.googleSignupSuccess,
+    googleSignUpData: state.signupReducer.googleSignupData,
     googleSignInData: state.signupReducer.googleSignInData,
+    googleSignInSuccess: state.signupReducer.googleSignInSuccess,
   }));
 
   const handleGoogleLogin = async (googleData) => {
@@ -37,7 +33,7 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
   };
 
   useEffect(() => {
-    if (isLoggedIn && !isSendingLoginCred) {
+    if (googleSignInSuccess) {
       dispatch(userEmail(googleSignInData.private.email));
       dispatch(userPName(googleSignInData.name));
       dispatch(userUsername(googleSignInData.username));
@@ -51,11 +47,11 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
       );
       navigate("/writerDashboard");
     }
-  }, [isLoggedIn, isSendingLoginCred]);
+  }, [googleSignInSuccess]);
 
   useEffect(() => {
     if (googleSignupSuccess) {
-      localStorage.setItem("createUserId", googleSignupData.id);
+      localStorage.setItem("createUserId", googleSignUpData.id);
       // dispatch(userEmail(email));
       setDisplayPage("setUpProfile");
     }
