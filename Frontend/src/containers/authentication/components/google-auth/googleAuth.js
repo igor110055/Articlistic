@@ -38,9 +38,9 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
 
   useEffect(() => {
     if (isLoggedIn && !isSendingLoginCred) {
-      dispatch(userEmail(loginResp.private.email));
-      dispatch(userPName(loginResp.name));
-      dispatch(userUsername(loginResp.username));
+      dispatch(userEmail(googleSignInData.private.email));
+      dispatch(userPName(googleSignInData.name));
+      dispatch(userUsername(googleSignInData.username));
       localStorage.setItem(
         "user",
         JSON.stringify({
