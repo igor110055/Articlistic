@@ -27,7 +27,7 @@ function SignUp() {
   }, [emailSignUp]);
 
   useEffect(() => {
-    navigate("/writerDashboard");
+    if (googleSignInSuccess) navigate("/writerDashboard");
   }, [googleSignInSuccess]);
 
   const customStyle = {

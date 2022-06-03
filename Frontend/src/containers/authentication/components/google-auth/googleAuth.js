@@ -27,7 +27,6 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
   }));
 
   const handleGoogleLogin = async (googleData) => {
-    console.log(googleData);
     localStorage.setItem("userEmail", googleData.profileObj.email);
     dispatch(signupWithGoogleInit(googleData.tokenId));
   };
@@ -59,7 +58,7 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
   }, [googleSignupSuccess]);
 
   const handleGoogleFailure = (error) => {
-    alert(JSON.stringify(error));
+    console.error(error);
   };
 
   return (

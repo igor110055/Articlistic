@@ -227,7 +227,7 @@ function* getForgotEmailOTP(action) {
     // console.log(headers);
     const url = `${baseURL}/${endPoints.forgotSendEmailOTP}?${params}`;
     const data = yield call(postRequest, url);
-    console.log("saga", data);
+    // console.log("saga", data);
     data.message = `A user with this email does not exist.`;
     if (!data.error) {
       yield put(getForgotEmailOTPSuccess(data));
@@ -270,7 +270,7 @@ function* resetPassword(action) {
   try {
     // const { headers } = action.payload;
     const headers = action.payload;
-    console.log(headers);
+    // console.log(headers);
     const url = `${baseURL}/${endPoints.resetPassword}`;
     const data = yield call(postRequest, url, headers);
     if (!data.error) {
@@ -342,6 +342,7 @@ export function* googleSignup(action) {
     const tokenId = action.payload;
     const url = `${baseURL}/${endPoints.googleSignup}?token=${tokenId}`;
     const data = yield call(postRequest, url, {}, {});
+    console.log("Google user login data", data);
     if (data.error) {
       yield put(signupWithGoogleFailure(data.message));
     } else {
@@ -349,7 +350,6 @@ export function* googleSignup(action) {
         Cookie.set("refreshToken", data.refreshToken, { expires: 30 });
         Cookie.set("accessToken", data.accessToken, { expires: 7 });
         Cookie.set("oneDayBeforeAccessToken", true, { expires: 6 });
-        console.log("Google user login data", data);
         yield put(signinWithGoogleSuccess(data));
       } else {
         yield put(signupWithGoogleSuccess(data));
