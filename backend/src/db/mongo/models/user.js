@@ -51,15 +51,15 @@ async function createUniquenessIndex() {
         return 'done';
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
 
 
 async function checkIfDocumentsExist(usernames = []) {
+    let client;
     try {
-
-
         client = await MDB.getClient();
         let db = client.db(dbName).collection(collection);
 
@@ -82,6 +82,7 @@ async function checkIfDocumentsExist(usernames = []) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -90,12 +91,10 @@ async function checkIfDocumentsExist(usernames = []) {
 
 async function setContactId(username, contactId) {
     if (!username || !contactId) {
-        throw "Contact ID & username is required";
+        throw new Error("Contact ID & username is required");
     }
-
+    let client;
     try {
-
-
         client = await MDB.getClient();
         let db = client.db(dbName).collection(collection);
 
@@ -119,6 +118,7 @@ async function setContactId(username, contactId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -127,12 +127,10 @@ async function setContactId(username, contactId) {
 
 async function resetPIN(username, newPin) {
     if (!username || !newPin) {
-        throw "newPin & username is required";
+        throw new Error("newPin & username is required");
     }
-
+    let client;
     try {
-
-
         client = await MDB.getClient();
         let db = client.db(dbName).collection(collection);
 
@@ -159,6 +157,7 @@ async function resetPIN(username, newPin) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -167,12 +166,10 @@ async function resetPIN(username, newPin) {
 async function setFundAccount(username, faId, faDetails) {
 
     if (!username || !faId || !faDetails) {
-        throw "Fund account id & details & username is required";
+        throw new Error("Fund account id & details & username is required");
     }
-
+    let client;
     try {
-
-
         client = await MDB.getClient();
         let db = client.db(dbName).collection(collection);
 
@@ -197,6 +194,7 @@ async function setFundAccount(username, faId, faDetails) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -206,7 +204,7 @@ async function setFundAccount(username, faId, faDetails) {
 async function activateWallet(username, pin) {
 
     if (!username || !pin) {
-        throw "Username & Pin Required for activating wallet";
+        throw new Error("Username & Pin Required for activating wallet");
     }
 
     const walletObj = {
@@ -216,10 +214,8 @@ async function activateWallet(username, pin) {
         locked: false,
         lastUpdated: Date.now()
     }
-
+    let client;
     try {
-
-
         client = await MDB.getClient();
         let db = client.db(dbName).collection(collection);
 
@@ -242,6 +238,7 @@ async function activateWallet(username, pin) {
         return 'success';
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -276,6 +273,7 @@ async function banAccount(username) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -309,6 +307,7 @@ async function setCooldown(username, cooldownTill) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -345,6 +344,7 @@ async function incrementPinRetry(username) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -379,6 +379,7 @@ async function makeRetriesDefault(username) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -414,6 +415,7 @@ async function updatePrivateField(username, p) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -444,6 +446,7 @@ async function createUser(user) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -451,7 +454,7 @@ async function createUser(user) {
 async function updateUserProfile(username, profilePic, about, name, place) {
     let client;
 
-    if (!username) throw "updateUserProfile: no username";
+    if (!username) throw new Error("updateUserProfile: no username");
     let update = {};
 
     if (profilePic) {
@@ -493,6 +496,7 @@ async function updateUserProfile(username, profilePic, about, name, place) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -525,6 +529,7 @@ async function findUserUsingRefreshToken(refreshToken) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -533,69 +538,6 @@ async function findUserUsingRefreshToken(refreshToken) {
 }
 
 
-
-// async function updateUserMapInterest(username, categories, following) {
-
-//     /* Onboarding Info -> 
-
-//     {
-//         _id: ObjectID("some_object_id_created_by_mongo"),
-//         "id_hashed_using_username" : {
-//         "profile_picture": "url of profile pic"   
-
-//         "public": {
-//         "username": "dxt",
-//         "name": "Yas Dixit",
-//         "image": "img@s3.jpg",
-//         "following": [username1, ...]
-//         "categories": ["#write", "#now"]
-//                             }
-
-//         "private": {
-//         "email": "yash@attentioun.com",
-//         "phone": "9315859952",
-//         "password": "hashed_password",
-//         }
-//     }
-//     }
-
-
-//     */
-
-//     let client;
-
-//     try {
-
-//         client = await MDB.getClient();
-//         let db = client.db(dbName).collection(collection);
-
-//         let startTime = Date.now();
-
-
-//         let response = await db.updateOne({
-//             "username": username
-//         }, {
-//             $set: {
-//                 "public.categories": categories,
-//                 "public.following": following
-//             }
-//         });
-
-
-//         let endTime = Date.now();
-
-//         let timeTaken = endTime - startTime;
-
-//         logger.info("updateUserMapInterest mongo response time: " + timeTaken.toString());
-
-
-//         return response;
-
-
-//     } catch (e) {
-//         throw e;
-//     }
-// }
 
 
 /*
@@ -645,6 +587,7 @@ async function getUser(entity, username, email, phone) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -680,6 +623,7 @@ async function getUserByUsername(username) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -722,6 +666,7 @@ async function getUserProfile(username) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

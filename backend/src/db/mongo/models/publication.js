@@ -37,6 +37,7 @@ async function getPublication(publicationId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -80,6 +81,7 @@ async function getAllPublicationsForWriter(username) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -116,6 +118,7 @@ async function markForDelete(publicationId, deleteAt) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -147,6 +150,7 @@ async function getPublicationForCheck(publicationId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -179,6 +183,7 @@ async function createUniquenessIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -212,6 +217,7 @@ async function createUniquenessIndex2() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -247,6 +253,7 @@ async function getPublicationArticle(publicationId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -284,6 +291,7 @@ async function updateArticleInPublication(publicationId, writeupLink, intro) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

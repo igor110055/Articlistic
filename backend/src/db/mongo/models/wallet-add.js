@@ -14,7 +14,7 @@ async function createOrder(username, amount, orderId, credits, currency) {
 
 
     if (!amount || !orderId || !username || !credits) {
-        throw "Some required parameters missing for creating order"
+        throw new Error("Some required parameters missing for creating order");
     }
     let client;
 
@@ -45,6 +45,7 @@ async function createOrder(username, amount, orderId, credits, currency) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

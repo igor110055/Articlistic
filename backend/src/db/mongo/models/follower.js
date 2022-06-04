@@ -34,6 +34,7 @@ async function createUniqueIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -62,6 +63,7 @@ async function followMultiple(followArray = []) {
         return res.insertedCount;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -91,6 +93,7 @@ async function follow(username, follows, isWriter) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -121,6 +124,7 @@ async function unfollow(username, follows) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -159,6 +163,7 @@ async function getFollowedWriters(username, limit, skip) {
         logger.debug(followed);
         return followed;
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -202,6 +207,7 @@ async function getFollowing(username, limit, skip) {
         return following;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -240,6 +246,7 @@ async function getFollowers(username, limit, skip) {
         return followers;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 

@@ -12,7 +12,7 @@ const collection = MDB_COLLECTION_SELECTION;
 async function markMeaningful(username, articleId, selection) {
 
     if (!username || !articleId || !selection) {
-        throw "Required parameters while marking meaningful: username, articleId, selection"
+        throw new Error("Required parameters while marking meaningful: username, articleId, selection");
     }
 
     let client;
@@ -51,6 +51,7 @@ async function markMeaningful(username, articleId, selection) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -62,7 +63,7 @@ async function markMeaningful(username, articleId, selection) {
 async function unmarkMeaningful(username, articleId, selection) {
 
     if (!username || !articleId || !selection) {
-        throw "Required parameters while unmarking meaningful: username, articleId, selection"
+        throw new Error("Required parameters while unmarking meaningful: username, articleId, selection");
     }
 
     let client;
@@ -102,6 +103,7 @@ async function unmarkMeaningful(username, articleId, selection) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -110,7 +112,7 @@ async function unmarkMeaningful(username, articleId, selection) {
 
 async function getArticleSelections(articleId) {
     if (!articleId) {
-        throw "Required: articleId"
+        throw new Error("Required: articleId");
     }
 
     let client;
@@ -140,6 +142,7 @@ async function getArticleSelections(articleId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -147,7 +150,7 @@ async function getArticleSelections(articleId) {
 
 async function findSelection(articleId, selection) {
     if (!articleId || !selection) {
-        throw "Required: articleId, selection - find Selection"
+        throw new Error("Required: articleId, selection - find Selection");
     }
 
     let client;
@@ -181,6 +184,7 @@ async function findSelection(articleId, selection) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -230,6 +234,7 @@ async function createCollationIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

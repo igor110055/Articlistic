@@ -53,6 +53,7 @@ async function createTTLIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -72,7 +73,7 @@ async function createUserAddPhone(phone) {
     let client;
 
 
-    if (!phone) throw "phone sent was undefined"
+    if (!phone) throw new Error("phone sent was undefined");
 
     try {
 
@@ -98,6 +99,7 @@ async function createUserAddPhone(phone) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -110,7 +112,7 @@ async function createUserAddEmail(email) {
     let client;
 
 
-    if (!email) throw "Email sent was undefined"
+    if (!email) throw new Error("Email sent was undefined");
 
     try {
 
@@ -136,6 +138,7 @@ async function createUserAddEmail(email) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -147,7 +150,7 @@ async function verifyCreateUser(id, email) {
 
     id = ObjectId(id);
 
-    if (!email) throw "Email was undefined"
+    if (!email) throw new Error("Email was undefined");
 
     try {
 
@@ -162,7 +165,7 @@ async function verifyCreateUser(id, email) {
             email: email
         });
 
-        if (!res.deletedCount) throw "Something went wrong - please try verifying email  again."
+        if (!res.deletedCount) throw new Error("Something went wrong - please try verifying email  again.");
 
         let endTime = Date.now();
 
@@ -175,6 +178,7 @@ async function verifyCreateUser(id, email) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -193,7 +197,7 @@ async function forgotPasswordUsingEmail(email) {
     let client;
 
 
-    if (!email) throw "Email sent was undefined"
+    if (!email) throw new Error("Email sent was undefined");
 
     try {
 
@@ -219,6 +223,7 @@ async function forgotPasswordUsingEmail(email) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -229,7 +234,7 @@ async function forgotPasswordUsingPhone(phone) {
 
     let client;
 
-    if (!phone) throw "Phone sent was undefined"
+    if (!phone) throw new Error("Phone sent was undefined");
 
     try {
 
@@ -255,6 +260,7 @@ async function forgotPasswordUsingPhone(phone) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -264,7 +270,7 @@ async function forgotPasswordUsingPhone(phone) {
 async function verifyEmailCode(id, email) {
     let client;
 
-    if (!email) throw "Email sent was undefined"
+    if (!email) throw new Error("Email sent was undefined");
     id = ObjectId(id);
 
 
@@ -284,7 +290,7 @@ async function verifyEmailCode(id, email) {
 
 
         if (!res.deletedCount) {
-            throw "Could not verify the email - reset password."
+            throw new Error("Could not verify the email - reset password.");
         }
 
         let endTime = Date.now();
@@ -298,6 +304,7 @@ async function verifyEmailCode(id, email) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -307,7 +314,7 @@ async function verifyEmailCode(id, email) {
 async function verifyPhoneCode(id, phone) {
     let client;
 
-    if (!phone) throw "Phone sent was undefined"
+    if (!phone) throw new Error("Phone sent was undefined");
     id = ObjectId(id);
 
 
@@ -327,7 +334,7 @@ async function verifyPhoneCode(id, phone) {
 
 
         if (!res.deletedCount) {
-            throw "Could not verify the phone - reset password."
+            throw new Error("Could not verify the phone - reset password.");
         }
 
         let endTime = Date.now();
@@ -341,6 +348,7 @@ async function verifyPhoneCode(id, phone) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
