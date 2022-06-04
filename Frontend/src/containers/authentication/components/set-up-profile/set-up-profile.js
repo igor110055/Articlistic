@@ -37,13 +37,17 @@ function SetUpProfile({ setDisplayPage }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [validPassword, setValidPassword] = useState(true);
+  const [localCheckUsername, setLocalCheckUsername] = useState(true);
   const [validUserName, setValidUserName] = useState(true);
   const [hasFocus, setFocus] = useState(false);
   const [once, setOnce] = useState(false);
   useEffect(() => {
     if (!hasFocus) {
       if (userName !== "") {
-        dispatch(checkUsername(userName));
+        if (validateUserName(userName)) {
+          setLocalCheckUsername(true);
+          dispatch(checkUsername(userName));
+        } else setLocalCheckUsername(false);
       }
     }
   }, [hasFocus]);
@@ -56,7 +60,9 @@ function SetUpProfile({ setDisplayPage }) {
   useEffect(() => {
     if (once) {
       if (validatePassword(password)) setValidPassword(true);
-      else setValidPassword(false);
+      else {
+        setValidPassword(false);
+      }
     }
   }, [password]);
 
@@ -93,7 +99,7 @@ function SetUpProfile({ setDisplayPage }) {
   const handleCreateAccount = () => {
     setOnce(true);
 
-    if (!validUserName) return;
+    if (!validUserName || !localCheckUsername) return;
     if (!validateUserName(userName)) {
       setValidUserName(false);
       return;
@@ -177,48 +183,60 @@ function SetUpProfile({ setDisplayPage }) {
         <p className="set-up-profile-subtitle">
           Almost there! finish creating your account to experience attentioun.
         </p>
-        <form className="user-inputs">
-          {/* <label>
+        <form>
+          <div className="user-inputs">
+            {/* <label>
           Name
           <input placeholder="Enter your name" />
         </label> */}
-          <Input
-            labelName={"Name"}
-            placeholder={"Enter your name"}
-            labelColor={"#777983"}
-            onChange={setName}
-            onfocus={() => {
-              return;
-            }}
-          />
-          <Input
-            labelName={"Username"}
-            placeholder={"Create a username"}
-            labelColor={"#777983"}
-            onChange={setUserName}
-            onfocus={setFocus}
-          />
-          {!validUserName && (
-            <PrimaryError message={"This username is already in use."} />
-          )}
-          <Input
-            labelName={"Password"}
-            placeholder={"Create a Password"}
-            labelColor={"#777983"}
-            type={"password"}
-            onChange={setPassword}
-            onfocus={() => {
-              return;
-            }}
-          />
-          {!validPassword && (
-            <PrimaryError message={"create a strong password"} />
-          )}
-          <p className="password-constraints">
-            Password should contain 1 uppercase letter, 1 lowercase letter, 1
-            special character and 1 number. Minimum 8 characters.
-          </p>
-          {/* <label>
+            <Input
+              labelName={"Name"}
+              placeholder={"Enter your name"}
+              labelColor={"#777983"}
+              onChange={setName}
+              onfocus={() => {
+                return;
+              }}
+            />
+            <Input
+              labelName={"Username"}
+              placeholder={"Create a username"}
+              labelColor={"#777983"}
+              onChange={setUserName}
+              onfocus={setFocus}
+            />
+            <p className="password-constraints">
+              Username can only have capital, small english alphabets and dash
+              in between. Maximum 25 characters
+            </p>
+            {localCheckUsername ? (
+              !validUserName && (
+                <PrimaryError message={"This username is already in use."} />
+              )
+            ) : (
+              <></>
+            )}
+            {!localCheckUsername && (
+              <PrimaryError message={"Invalid Username"} />
+            )}
+            <Input
+              labelName={"Password"}
+              placeholder={"Create a Password"}
+              labelColor={"#777983"}
+              type={"password"}
+              onChange={setPassword}
+              onfocus={() => {
+                return;
+              }}
+            />
+            {!validPassword && (
+              <PrimaryError message={"create a strong password"} />
+            )}
+            <p className="password-constraints">
+              Password should contain 1 uppercase letter, 1 lowercase letter, 1
+              special character and 1 number. Minimum 8 characters.
+            </p>
+            {/* <label>
           Username
           <input placeholder="Create a username" />
         </label>
@@ -226,33 +244,35 @@ function SetUpProfile({ setDisplayPage }) {
           Password
           <input type="password" placeholder="Create a password" />
         </label> */}
-          <label>
-            Country
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={country}
-              label="country"
-              input={<BootstrapInput />}
-              onChange={(e) => {
-                setCountry(e.target.value);
-              }}
-            >
-              {countries.map((curCountry, idx) => (
-                <MenuItem key={idx} value={curCountry.name}>
-                  {country.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </label>
+            <label>
+              Country
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={country}
+                label="country"
+                input={<BootstrapInput />}
+                onChange={(e) => {
+                  setCountry(e.target.value);
+                }}
+              >
+                {countries.map((curCountry, idx) => (
+                  <MenuItem key={idx} value={curCountry.name}>
+                    {curCountry.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </label>
+          </div>
+
+          <Button
+            text={"Create Account"}
+            blue
+            callback={handleCreateAccount}
+            isDisabled={isSendingProfileInfo}
+            type={"submit"}
+          />
         </form>
-        <Button
-          text={"Create Account"}
-          blue
-          callback={handleCreateAccount}
-          isDisabled={isSendingProfileInfo}
-          type={"submit"}
-        />
       </div>
       <div className="bubble_background_container">
         <img

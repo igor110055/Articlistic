@@ -75,6 +75,10 @@ function SignIn() {
     } else if (loginError) setValidCred(false);
   }, [loginError, isLoggedIn]);
 
+  useEffect(() => {
+    setValidCred(true);
+  }, [displayPage]);
+
   return (
     <div>
       <div className="signin-navbar">
@@ -112,28 +116,31 @@ function SignIn() {
                     }
                   />
                 )}
-                <Input
-                  type={"email"}
-                  placeholder={"Email or username"}
-                  onChange={setEmail}
-                  onfocus={() => {
-                    return;
-                  }}
-                />
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  onChange={setPassword}
-                  onfocus={() => {
-                    return;
-                  }}
-                />
-                <Button
-                  text="Sign In"
-                  blue
-                  callback={() => handleSignIn()}
-                  isDisabled={isSendingLoginCred}
-                />
+                <form>
+                  <Input
+                    type={"email"}
+                    placeholder={"Email or username"}
+                    onChange={setEmail}
+                    onfocus={() => {
+                      return;
+                    }}
+                  />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    onChange={setPassword}
+                    onfocus={() => {
+                      return;
+                    }}
+                  />
+                  <Button
+                    text="Sign In"
+                    blue
+                    callback={() => handleSignIn()}
+                    isDisabled={isSendingLoginCred}
+                    type={"submit"}
+                  />
+                </form>
 
                 <p className="forgot-password" onClick={gotoForgot}>
                   Forgot Password?

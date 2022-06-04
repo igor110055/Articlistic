@@ -7,7 +7,7 @@ import Button from "../primary-button/button";
 import { signupWithGoogleInit } from "../../signupActions";
 import { GOOGLE_CLIENT_ID } from "../../../../utils/apiEndPoints";
 import { userEmail, userPName, userUsername } from "../../../user/userActions";
-function GoogleAuth({ isSignIn, setDisplayPage }) {
+function GoogleAuth({ isSignIn }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -50,7 +50,7 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
   useEffect(() => {
     if (googleSignupSuccess) {
       localStorage.setItem("createUserId", googleSignUpData.id);
-      setDisplayPage("setUpProfile");
+      navigate("/signup");
     }
   }, [googleSignupSuccess]);
 

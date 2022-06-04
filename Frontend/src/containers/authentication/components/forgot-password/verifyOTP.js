@@ -66,33 +66,36 @@ function VerifyOTP({ setDisplayPage }) {
       <p className="verify-otp-subtitle">
         {`We sent a 6-digit code to ${email} Please enter it below.`}
       </p>
-      <div className="pin-container">
-        <ReactPinField
-          className="pin-field"
-          length={6}
-          placeholder={"_"}
-          validate="0123456789"
-          onChange={setOtp}
-          style={
-            !validOtp
-              ? {
-                  borderColor: "#eb4335",
-                }
-              : {}
-          }
+      <form>
+        <div className="pin-container">
+          <ReactPinField
+            className="pin-field"
+            length={6}
+            placeholder={"_"}
+            validate="0123456789"
+            onChange={setOtp}
+            style={
+              !validOtp
+                ? {
+                    borderColor: "#eb4335",
+                  }
+                : {}
+            }
+          />
+        </div>
+        {!validOtp && (
+          <p className="wrong-code">
+            <ErrorSvg /> <span>Invalid code. Please try again.</span>
+          </p>
+        )}
+        <Button
+          text="Verify"
+          blue
+          callback={handleVerify}
+          isDisabled={isVerifyingForgotEmailOTP}
+          type={"submit"}
         />
-      </div>
-      {!validOtp && (
-        <p className="wrong-code">
-          <ErrorSvg /> <span>Invalid code. Please try again.</span>
-        </p>
-      )}
-      <Button
-        text="Verify"
-        blue
-        callback={handleVerify}
-        isDisabled={isVerifyingForgotEmailOTP}
-      />
+      </form>
       {!sentAgain ? (
         <p
           className="get-code-text"
