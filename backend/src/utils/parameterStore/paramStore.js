@@ -2,7 +2,6 @@ const AWS = require('aws-sdk');
 const logger = require("../logger/index");
 var config = require("../../../config");
 var result = {};
-// var test1 = { "name": "hamdi" }
 var ssmClient;
 
 // var credentials = new AWS.SharedIniFileCredentials({ profile: 'default' });
@@ -12,9 +11,8 @@ var ssmClient;
 
 async function parseArray(arrayOfEnvVariable) {
     try {
-        for (var i = 0; i < arrayOfEnvVariable.length; i++) {
-            const x = await arrayOfEnvVariable[i];
-            result[x] = await getFromParamStore(x);
+        for (let i of arrayOfEnvVariable) {
+            result[i] = await getFromParamStore(i);
         }
         await setConfig(result);
     }
@@ -32,15 +30,14 @@ async function mapValues(z) {
             const value = subService[subkey];   // value of each sub-service
             config[key][subkey] = value;
         });
-        // logger.info(subkey, value)
+
     })
 }
 
 
 async function setConfig(result) {
     try {
-        // logger.info("====>>>>", result);
-        config_var = {
+        var config_var = {
             environment: process.env["NODE_ENV"],
             hosting: {
                 host: result["DEV_host"],
@@ -112,7 +109,6 @@ const getFromParamStore = async (envArrayElem) => {
             WithDecryption: true,
         }).promise();
 
-        // logger.info("The decrypted param---", envArrayElem, "---", decryptedParameter.Parameter.Value);
         return (decryptedParameter.Parameter.Value);
     }
     catch (e) {

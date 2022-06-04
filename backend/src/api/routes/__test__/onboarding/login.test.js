@@ -18,57 +18,42 @@ const reusableObj = {
     The required inputs are: entity, password and type. 
 */
 
-describe("Tests for login", ()=>{
-    initBeforeEach(username, email, password, name, international, reusableObj); 
+describe("Tests for login", () => {
+    initBeforeEach(username, email, password, name, international, reusableObj);
 
-    test("Returns 200 in case of Correct credentials in email", async ()=>{
+    test("Returns 200 in case of Correct credentials in email", async () => {
         await request(app).post('/onboarding/login').send({
-            entity: email, 
-            password, 
+            entity: email,
+            password,
             type: "email"
         }).expect(200);
     })
 
-    test("Returns 200 in case of Correct Password", async ()=>{
-        await request(app).post('/onboarding/login').send({
-            entity: email, 
-            password, 
-            type: "email"
-        }).expect(200);
-    })
 
-    test("Returns 200 in case of valid type", async ()=>{
+    test("Returns 400 in case of missing entity", async () => {
         await request(app).post('/onboarding/login').send({
-            entity: email, 
-            password, 
-            type: "email"
-        }).expect(200);
-    })
-
-    test("Returns 400 in case of missing entity", async ()=>{
-        await request(app).post('/onboarding/login').send({
-            password, 
-            type: "email"
-        }).expect(400);
-    })
-    
-    test("Returns 400 in case of missing password", async ()=>{
-        await request(app).post('/onboarding/login').send({
-            entity:email, 
+            password,
             type: "email"
         }).expect(400);
     })
 
-    test("Returns 400 in case of missing type", async ()=>{
+    test("Returns 400 in case of missing password", async () => {
         await request(app).post('/onboarding/login').send({
-            entity:email, 
+            entity: email,
+            type: "email"
+        }).expect(400);
+    })
+
+    test("Returns 400 in case of missing type", async () => {
+        await request(app).post('/onboarding/login').send({
+            entity: email,
             password,
         }).expect(400);
     })
 
-    test("Returns 400 in case of inavlid type", async ()=>{
+    test("Returns 400 in case of inavlid type", async () => {
         await request(app).post('/onboarding/login').send({
-            entity:email, 
+            entity: email,
             password,
             type: "eaikey",
         }).expect(400);

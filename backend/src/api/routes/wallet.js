@@ -703,7 +703,7 @@ module.exports = function walletRouter() {
          */
         var otpRes
         try {
-            otpRes = mongo.email.checkWalletOTP(email, code, TYPE_WALLET_WITHDRAW);
+            otpRes = await mongo.email.checkWalletOTP(email, code, TYPE_WALLET_WITHDRAW);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -715,7 +715,7 @@ module.exports = function walletRouter() {
 
         try {
 
-            deleteAllOTPs(email, TYPE_WALLET_WITHDRAW);
+            await deleteAllOTPs(email, TYPE_WALLET_WITHDRAW);
 
         } catch (e) {
 
@@ -905,7 +905,7 @@ const createAndSendEmail = async (type, email, routeName) => {
 
 const deleteAllOTPs = async (email, type) => {
     try {
-        mongo.email.deleteAllWalletOTPsWithEmail(email, type);
+        await mongo.email.deleteAllWalletOTPsWithEmail(email, type);
     } catch (e) {
         logger.fatal('Some OTPs did not get deleted');
     }
