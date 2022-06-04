@@ -1,10 +1,10 @@
 import { Button, CircularProgress, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useState, useEffect } from "react";
-import { validateEmail } from "../../utils/common";
+import { validateEmail } from "../utils/common";
 import { useSelector, useDispatch } from "react-redux";
 import { getEmailOTP, verifyEmailOTP } from "./loginSignupAction";
-import { userEmail } from "../user/userActions";
+import { userEmail } from "../containers/user/userActions";
 import { Timer } from "./Timer";
 import { Error as ErrorInOTP } from "./helper_functions/error";
 

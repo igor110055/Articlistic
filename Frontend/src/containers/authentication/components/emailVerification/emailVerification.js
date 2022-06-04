@@ -2,19 +2,18 @@ import { useEffect, useState } from "react";
 import "./emailVerification.css";
 import { validateEmail } from "../../../../utils/common";
 import { ReactComponent as OtherOptions } from "../../../../Images/VectorOtherOptions.svg";
-import { ReactComponent as ErrorSvg } from "../../../../Images/VectorErrorAlert.svg";
 import Button from "../primary-button/button";
 import VerifyOtp from "../verifyOtp/verify-otp";
 import Input from "../primary-input/input";
 import { useDispatch, useSelector } from "react-redux";
 import { getEmailOTPInit } from "../../signupActions";
 import PrimaryError from "../primary-error/primaryError";
+import left_img from "../../../../Images/background-left.svg";
+import right_img from "../../../../Images/background-right.svg";
 function EmailVerification({ setDisplayPage }) {
   const {
     isGettingEmailOTP,
     getEmailOTPError,
-    getEmailOTPErrorMsg,
-    getEmailOTPResp,
     getEmailOTPSuccess,
   } = useSelector((state) => ({
     isGettingEmailOTP: state.signupReducer.isGettingEmailOTP,
@@ -33,7 +32,6 @@ function EmailVerification({ setDisplayPage }) {
   const handleContinue = () => {
     setUsedEmail(false);
     setOnce(true);
-    // console.log(email);
     if (validateEmail(email)) {
       setValidClick(true);
       setUsedEmail(false);
@@ -57,7 +55,20 @@ function EmailVerification({ setDisplayPage }) {
   }, [getEmailOTPSuccess, getEmailOTPError]);
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div className="bubble_background_container">
+        <img
+          src={left_img}
+          className="onboarding-bubble-image"
+          alt="left-img"
+        />
+      </div>
       {displaySection === "enterEmail" && (
         <div className="sign-up-with-email-container">
           <h3 className="sign-up-with-email-header">Sign up with your email</h3>
@@ -69,6 +80,7 @@ function EmailVerification({ setDisplayPage }) {
               inputBorderColor={!validClick ? "#EB4335" : "#c4c4c4"}
               labelColor={!validClick ? "#EB4335" : "#777983"}
               onChange={setEmail}
+              onfocus={() => {}}
             />
             {!validClick && (
               <PrimaryError message={"Please enter a valid email address"} />
@@ -95,6 +107,13 @@ function EmailVerification({ setDisplayPage }) {
           <VerifyOtp setDisplayPage={setDisplayPage} email={email} />
         </div>
       )}
+      <div className="bubble_background_container">
+        <img
+          src={right_img}
+          className="onboarding-bubble-image"
+          alt="left-img"
+        />
+      </div>
     </div>
   );
 }

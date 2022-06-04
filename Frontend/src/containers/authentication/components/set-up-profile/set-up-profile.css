@@ -9,7 +9,7 @@
 }
 
 .set-up-profile-container .set-up-profile-header {
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-style: normal;
   font-weight: 700;
   font-size: 27px;
@@ -21,7 +21,7 @@
 }
 .set-up-profile-container .set-up-profile-subtitle {
   margin: 0;
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
@@ -33,10 +33,6 @@
   color: #777983;
 
   /* or 133% */
-
-  text-align: center;
-
-  color: #777983;
 }
 
 .set-up-profile-container .user-inputs {
@@ -51,7 +47,7 @@
   justify-content: center;
   align-items: flex-start;
 
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
@@ -71,7 +67,7 @@
   margin-top: 4px;
   margin-bottom: 1.2rem;
 
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
@@ -82,7 +78,7 @@
 }
 
 .set-up-profile-container .user-inputs label input::placeholder {
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-style: normal;
   font-weight: 500;
   font-size: 15px;

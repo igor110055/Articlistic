@@ -13,7 +13,7 @@
 .pick-writers-container .pick-writers-header {
   margin: 0;
   width: 80%;
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-weight: 700;
   font-size: 27px;
   line-height: 32px;
@@ -94,7 +94,7 @@
 }
 
 .writer-card-container .writer-details .writer-name {
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-weight: bolder;
   font-size: 15px;
   line-height: 18px;
@@ -116,7 +116,7 @@
 }
 
 .writer-card-container .writer-details .writer-category {
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   margin: 0;
   font-weight: 500;
   font-size: 15px;

@@ -48,22 +48,19 @@ import {
   getRefreshTokenFailure,
   getRefreshTokenSuccess,
   signupWithGoogleSuccess,
+  signinWithGoogleSuccess,
   signupWithGoogleFailure,
   // followultipleWritersFailure,
 } from "./signupActions";
 function* getEmailOTP(action) {
   try {
-    // const { headers } = action.payload;
     const headers = action.data;
     const params = new URLSearchParams({ email: headers });
-    // console.log(headers);
     const url = `${baseURL}/${endPoints.sendEmailOTP}?${params}`;
     const data = yield call(postRequest, url);
-    // console.log(data);
     if (!data.error) {
       yield put(getEmailOTPSuccess(data));
     } else {
-      // console.log(data);
       yield put(getEmailOTPFailure(data.message));
     }
   } catch (err) {
@@ -77,16 +74,13 @@ export function* getEmailOTPSaga() {
 
 function* verifyEmailOTP(action) {
   try {
-    // const { headers } = action.payload;
     const headers = action.data;
     const params = new URLSearchParams(headers);
     const url = `${baseURL}/${endPoints.verifyEmailOTP}?${params}`;
     const data = yield call(postRequest, url);
-    // console.log(data);
     if (!data.error) {
       yield put(verifyEmailOTPSuccess(data));
     } else {
-      // console.log(data);
       yield put(verifyEmailOTPFailure(data.message));
     }
   } catch (err) {
@@ -100,14 +94,9 @@ export function* verifyEmailOTPSaga() {
 
 function* sendProfileInfo(action) {
   try {
-    // const { headers } = action.payload;
-    // console.log(action);
     const headers = action.data;
-    // console.log(headers);
     const url = `${baseURL}/${endPoints.createUser}`;
     const data = yield call(postRequest, url, headers);
-    // console.log(data);
-    // console.log(url);
     if (!data.error) {
       yield put(sendProfileInfoSuccess(data));
     } else {
@@ -124,16 +113,13 @@ export function* sendProfileInfoSaga() {
 
 function* checkUsername(action) {
   try {
-    // const { headers } = action.payload;
     const headers = action.data;
     const params = new URLSearchParams({ username: headers });
     const url = `${baseURL}/${endPoints.checkUsername}?${params}`;
-    // console.log(url);
     const data = yield call(getRequest, url);
     if (!data.error) {
       yield put(checkUsernameSuccess(data));
     } else {
-      // console.log(data);
       yield put(checkUsernameFailure(data.message));
     }
   } catch (err) {
@@ -148,16 +134,10 @@ export function* checkUsernameSaga() {
 function* login(action) {
   try {
     const headers = action.payload.params;
-    // const params = new URLSearchParams(headers);
-    // console.log(headers);
     const url = `${baseURL}/${endPoints.login}`;
     const data = yield call(postRequest, url, headers);
     if (!data.error && !data.status) {
       yield put(loginSuccess(data));
-      // console.log(data.accessToken);
-      // console.log(data.refreshToken);
-      // const encRefreshToken = CryptoJS.AES.encrypt(data.refreshToken, 'secretKeyNotToBeShared').toString();
-      // const encAccessToken = CryptoJS.AES.encrypt(data.accessToken, 'secretKeyNotToBeShared').toString();
       Cookie.set("refreshToken", data.refreshToken, { expires: 30 });
       Cookie.set("accessToken", data.accessToken, { expires: 7 });
       Cookie.set("oneDayBeforeAccessToken", true, { expires: 6 });
@@ -175,7 +155,6 @@ export function* loginSaga() {
 
 function* getPickFavData(action) {
   try {
-    // const { headers } = action.payload;
     const headers = {
       Authorization: action.data.token,
     };
@@ -197,7 +176,6 @@ export function* getPickFavDataSaga() {
 
 function* followMultipleWriters(action) {
   try {
-    // console.log(action);
     const headers = {
       Authorization: action.data.token,
     };
@@ -220,18 +198,14 @@ export function* followWriterInit() {
 
 function* getForgotEmailOTP(action) {
   try {
-    // const { headers } = action.payload;
     const headers = action.payload;
     const params = new URLSearchParams({ email: headers });
-    // console.log(headers);
     const url = `${baseURL}/${endPoints.forgotSendEmailOTP}?${params}`;
     const data = yield call(postRequest, url);
-    console.log("saga", data);
     data.message = `A user with this email does not exist.`;
     if (!data.error) {
       yield put(getForgotEmailOTPSuccess(data));
     } else {
-      // console.log(data);
       yield put(getForgotEmailOTPFailure(data.message));
     }
   } catch (err) {
@@ -245,7 +219,6 @@ export function* getForgotEmailOTPSaga() {
 
 function* verifyForgotEmailOTP(action) {
   try {
-    // const { headers } = action.payload;
     const headers = action.payload;
     const params = new URLSearchParams(headers);
     const url = `${baseURL}/${endPoints.forgotVerifyEmailOTP}?${params}`;
@@ -253,7 +226,6 @@ function* verifyForgotEmailOTP(action) {
     if (!data.error) {
       yield put(verifyForgotEmailOTPSuccess(data));
     } else {
-      // console.log(data);
       yield put(verifyForgotEmailOTPFailure(data.message));
     }
   } catch (err) {
@@ -267,15 +239,12 @@ export function* verifyForgotEmailOTPSaga() {
 
 function* resetPassword(action) {
   try {
-    // const { headers } = action.payload;
     const headers = action.payload;
-    console.log(headers);
     const url = `${baseURL}/${endPoints.resetPassword}`;
     const data = yield call(postRequest, url, headers);
     if (!data.error) {
       yield put(resetPasswordSuccess(data));
     } else {
-      // console.log(data);
       yield put(resetPasswordFailure(data.message));
     }
   } catch (err) {
@@ -289,19 +258,15 @@ export function* resetPasswordSaga() {
 
 function* logout(action) {
   try {
-    // const { headers } = action.payload;
     const payload = action.payload;
     const headers = {
       Authorization: payload.accessToken,
     };
-    // console.log(payload, headers);
-    // console.log(headers);
     const url = `${baseURL}/${endPoints.logout}`;
     const data = yield call(authPostRequest, url, payload, headers);
     if (!data.error) {
       yield put(logoutSuccess(data));
     } else {
-      // console.log(data);
       yield put(logoutFailure(data.message));
     }
   } catch (err) {
@@ -315,7 +280,6 @@ export function* logoutSaga() {
 
 function* getRefreshToken(action) {
   try {
-    // const { headers } = action.payload;
     const payload = action.payload;
     const headers = {
       Authorization: payload.headers,
@@ -341,10 +305,19 @@ export function* googleSignup(action) {
     const tokenId = action.payload;
     const url = `${baseURL}/${endPoints.googleSignup}?token=${tokenId}`;
     const data = yield call(postRequest, url, {}, {});
-    console.log(data);
-    if (!data.error) {
-      yield put(signupWithGoogleSuccess(data));
-    } else yield put(signupWithGoogleFailure(data.message));
+    console.log("Google user login data", data);
+    if (data.error) {
+      yield put(signupWithGoogleFailure(data.message));
+    } else {
+      if (data.accessToken) {
+        Cookie.set("refreshToken", data.refreshToken, { expires: 30 });
+        Cookie.set("accessToken", data.accessToken, { expires: 7 });
+        Cookie.set("oneDayBeforeAccessToken", true, { expires: 6 });
+        yield put(signinWithGoogleSuccess(data));
+      } else {
+        yield put(signupWithGoogleSuccess(data));
+      }
+    }
   } catch (e) {
     yield put(signupWithGoogleFailure(e.message));
   }

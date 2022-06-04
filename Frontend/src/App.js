@@ -34,8 +34,8 @@ function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
   const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
   const [mulitpleTabs, setMultipleTabs] = useState(false);
-  const { variant, message, open } = useSelector((state) => ({
-    // thisState: state,
+  const { variant, message, open, state } = useSelector((state) => ({
+    thisState: state,
     loginError: state.signupReducer.isLoggedIn,
     variant: state.common.snackbar.variant,
     message: state.common.snackbar.message,
@@ -70,6 +70,10 @@ function App() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   localStorage.openpages = Date.now();
   var onLocalStorageEvent = function (e) {

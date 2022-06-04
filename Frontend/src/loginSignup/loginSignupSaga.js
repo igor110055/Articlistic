@@ -1,10 +1,10 @@
 import { put, call, takeLatest } from "redux-saga/effects";
-import { baseURL, endPoints } from "../../utils/apiEndPoints";
+import { baseURL, endPoints } from "../utils/apiEndPoints";
 import {
   getRequest,
   postRequest,
   authPostRequest,
-} from "../../utils/apiRequests";
+} from "../utils/apiRequests";
 import {
   SEND_PROFILE_INFO_INIT,
   LOGIN_INIT,
@@ -20,7 +20,7 @@ import {
   RESET_PASSWORD_INIT,
   LOGOUT_INIT,
   GET_REFRESH_TOKEN_INIT,
-} from "../../utils/actionTypes";
+} from "../utils/actionTypes";
 import {
   sendProfileInfoSuccess,
   sendProfileInfoFailure,

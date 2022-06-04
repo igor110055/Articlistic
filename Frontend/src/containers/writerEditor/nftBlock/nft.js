@@ -9,15 +9,15 @@ const Nft = ({ onDataChange, data, readOnly }) => {
   const [search, setSearch] = useState(null);
   const [submited, setSubmited] = useState(false);
   const [dataReceived, setDataReceived] = useState(false);
-  const [already, setAlready] = useState(false);
+  // const [already, setAlready] = useState(false);
   const [respData, setRespData] = useState({});
   const [placeholder, setPlaceholder] = useState("Enter OpenSea URL");
   const [error, setError] = useState(false);
-  const dispatch = useDispatch();
-  const { isGettingNFT, getNFTError } = useSelector((state) => ({
-    isGettingNFT: state.nft.isGettingNFT,
-    getNFTError: state.nft.getNFTError,
-  }));
+  // const dispatch = useDispatch();
+  // const { isGettingNFT, getNFTError } = useSelector((state) => ({
+  //   isGettingNFT: state.nft.isGettingNFT,
+  //   getNFTError: state.nft.getNFTError,
+  // }));
 
   // useEffect(() => {
   //     dispatch(getNFT(data.url.slice(data.url.search('assets/') + 7,)));
@@ -40,7 +40,7 @@ const Nft = ({ onDataChange, data, readOnly }) => {
     const dataR = await axios
       .get(`https://api.opensea.io/api/v1/asset/${token}`)
       .then((resp) => resp.data)
-      .catch((err) => {
+      .catch(() => {
         // console.log(err)
       });
     setRespData(dataR);
@@ -54,8 +54,8 @@ const Nft = ({ onDataChange, data, readOnly }) => {
   }, [data]);
 
   const classes = useStyles();
-  const isValidNFTURL = () => {
-    const regex = /https?:\/\/(?:opensea\.io\/)(?:assets\/)(0)([a-zA-Z]+([0-9]+[a-zA-Z]+)+)\/([0-9]+)/;
+  const isValidNFTURL = (search) => {
+    const regex = /https?:\/\/(?:opensea\.io\/)(?:assets\/)(0)([a-zA-Z]+(\d+[a-zA-Z]+)+)\/(\d+)/;
     return regex.test(search);
   };
   const handleEnter = () => {

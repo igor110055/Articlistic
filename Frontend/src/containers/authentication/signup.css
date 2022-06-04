@@ -1,5 +1,6 @@
 body {
   background-color: #f6f6f7;
+  width: 100%;
 }
 
 .signup-container {
@@ -27,7 +28,7 @@ body {
 .signup-container .get-started-section .get-started-text {
   margin-top: 20px;
   margin-bottom: 4px;
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-style: normal;
   font-weight: 700;
   font-size: 27px;
@@ -38,7 +39,7 @@ body {
 
 .signup-container .get-started-section .join-attentioun-text {
   margin: 0;
-  font-family: "Poppins";
+  /*font-family: "poppins";*/
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
@@ -60,10 +61,6 @@ body {
   cursor: pointer;
 }
 
-.signup-bubble_img {
-  max-width: 300px;
-}
-
 @media (max-width: 480px) {
   .onboarding-navbar {
     display: none;
@@ -78,5 +75,11 @@ body {
     box-shadow: 0px 0px 70px -35px rgba(27, 115, 232, 0.43);
     border-radius: 32px;
     padding: 47px 80px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .onboarding-bubble-image {
+    display: none;
   }
 }

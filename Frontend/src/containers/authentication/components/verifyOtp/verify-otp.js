@@ -16,7 +16,6 @@ function VerifyOtp({ setDisplayPage, email }) {
   const {
     isVerifyingEmailOTP,
     verifyEmailOTPError,
-    verifyEmailOTPErrorMsg,
     verifyEmailOTPResp,
     emailOTPVerified,
   } = useSelector((state) => ({
@@ -28,7 +27,6 @@ function VerifyOtp({ setDisplayPage, email }) {
   }));
 
   const handleVerify = () => {
-    // console.log(otp);
     if (otp.length === 6) {
       setValidOtp(true);
       dispatch(verifyEmailOTPInit({ email, otp }));
@@ -51,7 +49,6 @@ function VerifyOtp({ setDisplayPage, email }) {
       if (emailOTPVerified) {
         setValidOtp(true);
         localStorage.setItem("createUserId", verifyEmailOTPResp.id);
-        // console.log(verifyEmailOTPResp.id);
         dispatch(userEmail(email));
         setDisplayPage("setUpProfile");
       }

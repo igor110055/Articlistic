@@ -38,6 +38,7 @@ import {
   GOOGLE_SIGN_UP_INIT,
   GOOGLE_SIGN_UP_SUCCESS,
   GOOGLE_SIGN_UP_FAILURE,
+  GOOGLE_SIGN_IN_SUCCESS,
   RESET_PASSWORD_STATE,
 } from "../../utils/actionTypes";
 
@@ -310,6 +311,13 @@ export const signupWithGoogleSuccess = (data) => {
     payload: data,
   };
 };
+export const signinWithGoogleSuccess = (data) => {
+  return {
+    type: GOOGLE_SIGN_IN_SUCCESS,
+    payload: data,
+  };
+};
+
 export const signupWithGoogleFailure = (data) => {
   return {
     type: GOOGLE_SIGN_UP_FAILURE,
