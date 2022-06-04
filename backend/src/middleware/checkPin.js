@@ -10,7 +10,7 @@ module.exports = function () {
     /**
      * Previous middleware should set req.user
      */
-    return async function asyncMiddleware(req, res, next) {
+    return async function asyncMiddleware(req, _res, next) {
         const {
             pin
         } = req.query;

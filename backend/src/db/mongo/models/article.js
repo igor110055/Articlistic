@@ -80,7 +80,7 @@ async function createArticleBluePrint(username, articleId) {
     }
 }
 
-async function selectionNewChat(selection, chatId) {
+async function selectionNewChat(selection, _chatId) {
     let client;
 
     try {

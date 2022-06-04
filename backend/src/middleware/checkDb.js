@@ -6,7 +6,7 @@ const logger = require('../utils/logger');
 
 module.exports = function (checkArticleId, checkWriterUsername, checkArticleOwnerShip, checkPublication, checkPublicationOwnership) {
 
-    return async function asyncMiddleware(req, res, next) {
+    return async function asyncMiddleware(req, _res, next) {
         let {
             articleId,
             writer,

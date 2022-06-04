@@ -8,7 +8,7 @@ const redis = require('../db/redis/index')
 
 
 module.exports = function (isSocketMiddleware, logout, checkIfWriter, attachUserWithRequest) {
-    return async function asyncMiddleware(req, res, next) {
+    return async function asyncMiddleware(req, _res, next) {
 
         let token = isSocketMiddleware ? req.handshake.auth.token : req.headers.authorization;
 

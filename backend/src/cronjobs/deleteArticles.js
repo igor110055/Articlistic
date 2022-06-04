@@ -15,10 +15,11 @@ module.exports = async function deleteArticles() {
     /**
      * Throwing error here because it can cause a severe error.
      */
+    var articles
     try {
 
 
-        var articles = await mongo.getArticlesMarkedForDeletion(time);
+        articles = await mongo.getArticlesMarkedForDeletion(time);
 
     } catch (e) {
         throw new DatabaseError('delete-articles-cronjob', e);
@@ -55,14 +56,14 @@ module.exports = async function deleteArticles() {
      * This can be severe and hence no throwing errors here. 
      */
 
-    for (let x = 0; x < articles.length; x++) {
+    for (const element of articles) {
 
         /**
          * Delete all the images from S3  
          */
 
-        const articleId = articles[x].articleId;
-        const username = articles[x].username;
+        const articleId = element.articleId;
+        const username = element.username;
 
         logger.info(`Deleting article: ${articleId} for ${username}`)
 
@@ -76,9 +77,9 @@ module.exports = async function deleteArticles() {
 
                 await mongo.deleteS3FileFailAlert(articleId, username);
 
-            } catch (e) {
+            } catch (err) {
 
-                Sentry.captureException(e);
+                Sentry.captureException(err);
 
             }
         }
