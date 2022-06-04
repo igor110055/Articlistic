@@ -29,7 +29,6 @@ function VerifyOTP({ setDisplayPage }) {
   }));
 
   const handleVerify = () => {
-    // console.log(otp);
     if (otp.length === 6) {
       dispatch(verifyForgotEmailOTP({ email, otp }));
       setValidOtp(true);
@@ -48,8 +47,7 @@ function VerifyOTP({ setDisplayPage }) {
           "forgotPasswordUserId",
           verifyForgotEmailOTPResp.id
         );
-        // console.log(verifyEmailOTPResp.id);
-        // dispatch(userEmail(email));
+
         const forgotUserEmail = localStorage.getItem("forgotPasswordEmail");
         const id = localStorage.getItem("forgotPasswordUserId");
         if (forgotUserEmail !== null && id !== null)

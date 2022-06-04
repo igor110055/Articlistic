@@ -19,28 +19,22 @@ import SetNewPassword from "./components/forgot-password/setNewPassword";
 import Cookie from "js-cookie";
 
 function SignIn() {
-  const {
-    isSendingLoginCred,
-    loginError,
-    loginErrorMsg,
-    isLoggedIn,
-    loginResp,
-    user,
-  } = useSelector((state) => ({
-    isSendingLoginCred: state.signupReducer.isSendingLoginCred,
-    loginError: state.signupReducer.loginError,
-    loginErrorMsg: state.signupReducer.loginErrorMsg,
-    isLoggedIn: state.signupReducer.isLoggedIn,
-    loginResp: state.signupReducer.loginResp,
-    user: state.user,
-  }));
+  const { isSendingLoginCred, loginError, isLoggedIn, loginResp } = useSelector(
+    (state) => ({
+      isSendingLoginCred: state.signupReducer.isSendingLoginCred,
+      loginError: state.signupReducer.loginError,
+      loginErrorMsg: state.signupReducer.loginErrorMsg,
+      isLoggedIn: state.signupReducer.isLoggedIn,
+      loginResp: state.signupReducer.loginResp,
+      user: state.user,
+    })
+  );
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [validCred, setValidCred] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("username");
-  // const [validPassword, setValidPassword] = useState("");
   const [displayPage, setDisplayPage] = useState("sign-in");
   const gotoForgot = () => {
     dispatch(resetPasswordState());
@@ -65,8 +59,6 @@ function SignIn() {
   useEffect(() => {
     if (!loginError && isLoggedIn) {
       setValidCred(true);
-      // console.log(loginResp);
-
       dispatch(userEmail(loginResp.private.email));
       dispatch(userPName(loginResp.name));
       dispatch(userUsername(loginResp.username));
@@ -89,17 +81,19 @@ function SignIn() {
         <OnboardingNavbar />
       </div>
       <div
-      // style={{
-      //   display: "flex",
-      //   justifyContent: "center",
-      //   alignItems: "center",
-      // }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        {/* <img
-          src={BackgorundLeft}
-          alt="left-background"
-          className="onboarding-bubble-image"
-        /> */}
+        <div className="bubble_background_container">
+          <img
+            src={BackgorundLeft}
+            alt="left-background"
+            className="onboarding-bubble-image"
+          />
+        </div>
         {displayPage === "sign-in" && (
           <div className="sign-in-container">
             <div className="sign-in-section">
@@ -111,17 +105,6 @@ function SignIn() {
               <GoogleAuth isSignIn />
               <p className="or-div"> &nbsp; OR &nbsp; &nbsp;</p>
               <div className="email-sign-in">
-                {/* {!validCred && (
-                <p className="wrong-email">
-                  <div className="error-svg">
-                    <ErrorSvg />{" "}
-                  </div>
-                  <span>
-                    We couldn’t find an account matching the email and password
-                    you entered.
-                  </span>
-                </p>
-              )} */}
                 {!validCred && (
                   <PrimaryError
                     message={
@@ -129,23 +112,21 @@ function SignIn() {
                     }
                   />
                 )}
-                {/* <input
-                type="email"
-                placeholder="Email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <input type="password" placeholder="Password" /> */}
                 <Input
                   type={"email"}
                   placeholder={"Email or username"}
                   onChange={setEmail}
-                  onfocus={() => {}}
+                  onfocus={() => {
+                    return;
+                  }}
                 />
                 <Input
                   type="password"
                   placeholder="Password"
                   onChange={setPassword}
-                  onfocus={() => {}}
+                  onfocus={() => {
+                    return;
+                  }}
                 />
                 <Button
                   text="Sign In"
@@ -175,11 +156,13 @@ function SignIn() {
         {displayPage === "set-new-password" && (
           <SetNewPassword setDisplayPage={setDisplayPage} />
         )}
-        {/* <img
-          src={BackgroundRight}
-          className="onboarding-bubble-image"
-          alt="left-background"
-        /> */}
+        <div className="bubble_background_container">
+          <img
+            src={BackgroundRight}
+            className="onboarding-bubble-image"
+            alt="left-background"
+          />
+        </div>
       </div>
     </div>
   );

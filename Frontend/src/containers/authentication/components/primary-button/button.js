@@ -1,6 +1,5 @@
 import "./button.css";
 import { CircularProgress } from "@mui/material";
-// import React from "react";
 
 function Button({ text, blue, isSvg, Svg, callback, isDisabled }) {
   return (

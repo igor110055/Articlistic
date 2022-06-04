@@ -121,7 +121,6 @@ const initialState = {
 };
 
 const signupReducer = (state = initialState, action) => {
-  // console.log(action);
   switch (action.type) {
     case GET_EMAIL_OTP_INIT:
       return {

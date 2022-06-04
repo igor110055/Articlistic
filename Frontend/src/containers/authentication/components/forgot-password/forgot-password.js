@@ -12,7 +12,6 @@ function ForgotPassword({ setDisplayPage }) {
     isGettingForgotEmailOTP,
     getForgotEmailOTPError,
     getForgotEmailSuccess,
-    getForgotEmailOTPResp,
     getForgotEmailOTPErrorMsg,
   } = useSelector((state) => ({
     getForgotEmailOTPError: state.signupReducer.getForgotEmailOTPError,
@@ -43,7 +42,6 @@ function ForgotPassword({ setDisplayPage }) {
       if (localStorage.getItem("forgotPasswordEmail") !== null)
         setDisplayPage("verifyOTP");
     } else if (getForgotEmailOTPError) {
-      // console.log(getForgotEmailOTPErrorMsg);
       setError(true);
       setValidClick(true);
     }
@@ -70,7 +68,9 @@ function ForgotPassword({ setDisplayPage }) {
         <PrimaryInput
           placeholder={"Enter your email address"}
           onChange={setEmail}
-          onfocus={() => {}}
+          onfocus={() => {
+            return;
+          }}
         />
         {!validClick && <PrimaryError message={"Enter Valid Email address"} />}
         {error && <PrimaryError message={getForgotEmailOTPErrorMsg} />}

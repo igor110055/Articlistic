@@ -1,5 +1,5 @@
 .sign-up-with-email-container {
-  width: 90%;
+  width: 100%;
   margin: 13rem auto 0;
 }
 
@@ -105,7 +105,7 @@
   .sign-up-with-email-container {
     margin-top: 5rem;
     box-sizing: border-box;
-    max-width: 478px;
+    width: 478px;
     background: #ffffff;
     box-shadow: 0px 0px 70px -35px rgba(27, 115, 232, 0.43);
     border-radius: 32px;

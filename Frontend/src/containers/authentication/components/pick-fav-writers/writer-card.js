@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
 
-function WriterCard({ writer, callback }) {
+function WriterCard({ writer }) {
   return (
     <div className="writer-card-container">
       <img

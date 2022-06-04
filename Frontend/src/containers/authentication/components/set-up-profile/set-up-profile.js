@@ -10,12 +10,11 @@ import Input from "../primary-input/input";
 import { checkUsername, sendProfileInfoInit } from "../../signupActions";
 import { validatePassword, validateUserName } from "../../../../utils/common";
 import PrimaryError from "../primary-error/primaryError";
-import { useNavigate } from "react-router-dom";
 import Cookie from "js-cookie";
-
+import left_img from "../../../../Images/background-left.svg";
+import right_img from "../../../../Images/background-right.svg";
 import { userUsername, userPName } from "../../../user/userActions";
 function SetUpProfile({ setDisplayPage }) {
-  const navigate = useNavigate();
   const {
     isSendingProfileInfo,
     validUsername,
@@ -23,7 +22,6 @@ function SetUpProfile({ setDisplayPage }) {
     sendProfileInfoError,
     profileInfoSuccess,
     sendProfileInfoResp,
-    user,
   } = useSelector((state) => ({
     validUsername: state.signupReducer.validUsername,
     isSendingProfileInfo: state.signupReducer.isSendingProfileInfo,
@@ -65,7 +63,6 @@ function SetUpProfile({ setDisplayPage }) {
   useEffect(() => {
     if (once) {
       if (profileInfoSuccess) {
-        // console.log(sendProfileInfoResp);
         dispatch(userUsername(sendProfileInfoResp.username));
         dispatch(userPName(sendProfileInfoResp.name));
         Cookie.set("accessToken", sendProfileInfoResp.accessToken, {
@@ -83,13 +80,9 @@ function SetUpProfile({ setDisplayPage }) {
         };
 
         localStorage.setItem("user", JSON.stringify(newUser));
-        // localStorage.setItem("user", JSON.stringify(user));
-        // console.log("Email:", user);
-        // setDisplayPage('mapWritersAndCategories'); //for writers
-        // navigate("/writerDashboard");
         localStorage.removeItem("createUserId");
         setDisplayPage("pickFavouriteWriters");
-      } else {
+      } else if (sendProfileInfoError) {
         localStorage.removeItem("email");
 
         setDisplayPage("");
@@ -116,13 +109,11 @@ function SetUpProfile({ setDisplayPage }) {
       return;
     }
 
-    // setDisplayPage("pickFavouriteWriters");
     const createUserId = localStorage.getItem("createUserId");
     if (!createUserId) {
       localStorage.removeItem("createUserId");
       setDisplayPage("");
     }
-    // console.log("here");
     const email = localStorage.getItem("userEmail");
     if (!email) {
       localStorage.removeItem("userEmail");
@@ -167,49 +158,67 @@ function SetUpProfile({ setDisplayPage }) {
   }));
 
   return (
-    <div className="set-up-profile-container">
-      <h3 className="set-up-profile-header">Set up your profile </h3>
-      <p className="set-up-profile-subtitle">
-        Almost there! finish creating your account to experience attentioun.
-      </p>
-      <form className="user-inputs">
-        {/* <label>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div className="bubble_background_container">
+        <img
+          src={left_img}
+          className="onboarding-bubble-image"
+          alt="left-img"
+        />
+      </div>
+      <div className="set-up-profile-container">
+        <h3 className="set-up-profile-header">Set up your profile </h3>
+        <p className="set-up-profile-subtitle">
+          Almost there! finish creating your account to experience attentioun.
+        </p>
+        <form className="user-inputs">
+          {/* <label>
           Name
           <input placeholder="Enter your name" />
         </label> */}
-        <Input
-          labelName={"Name"}
-          placeholder={"Enter your name"}
-          labelColor={"#777983"}
-          onChange={setName}
-          onfocus={() => {}}
-        />
-        <Input
-          labelName={"Username"}
-          placeholder={"Create a username"}
-          labelColor={"#777983"}
-          onChange={setUserName}
-          onfocus={setFocus}
-        />
-        {!validUserName && (
-          <PrimaryError message={"This username is already in use."} />
-        )}
-        <Input
-          labelName={"Password"}
-          placeholder={"Create a Password"}
-          labelColor={"#777983"}
-          type={"password"}
-          onChange={setPassword}
-          onfocus={() => {}}
-        />
-        {!validPassword && (
-          <PrimaryError message={"create a strong password"} />
-        )}
-        <p className="password-constraints">
-          Password should contain 1 uppercase letter, 1 lowercase letter, 1
-          special character and 1 number. Minimum 8 characters.
-        </p>
-        {/* <label>
+          <Input
+            labelName={"Name"}
+            placeholder={"Enter your name"}
+            labelColor={"#777983"}
+            onChange={setName}
+            onfocus={() => {
+              return;
+            }}
+          />
+          <Input
+            labelName={"Username"}
+            placeholder={"Create a username"}
+            labelColor={"#777983"}
+            onChange={setUserName}
+            onfocus={setFocus}
+          />
+          {!validUserName && (
+            <PrimaryError message={"This username is already in use."} />
+          )}
+          <Input
+            labelName={"Password"}
+            placeholder={"Create a Password"}
+            labelColor={"#777983"}
+            type={"password"}
+            onChange={setPassword}
+            onfocus={() => {
+              return;
+            }}
+          />
+          {!validPassword && (
+            <PrimaryError message={"create a strong password"} />
+          )}
+          <p className="password-constraints">
+            Password should contain 1 uppercase letter, 1 lowercase letter, 1
+            special character and 1 number. Minimum 8 characters.
+          </p>
+          {/* <label>
           Username
           <input placeholder="Create a username" />
         </label>
@@ -217,34 +226,41 @@ function SetUpProfile({ setDisplayPage }) {
           Password
           <input type="password" placeholder="Create a password" />
         </label> */}
-        <label>
-          Country
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={country}
-            label="country"
-            input={<BootstrapInput />}
-            onChange={(e) => {
-              setCountry(e.target.value);
-              // console.log(e.target.value);
-            }}
-          >
-            {countries.map((country, idx) => (
-              <MenuItem key={idx} value={country.name}>
-                {country.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </label>
-      </form>
-      <Button
-        text={"Create Account"}
-        blue
-        callback={handleCreateAccount}
-        isDisabled={isSendingProfileInfo}
-        type={"submit"}
-      />
+          <label>
+            Country
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={country}
+              label="country"
+              input={<BootstrapInput />}
+              onChange={(e) => {
+                setCountry(e.target.value);
+              }}
+            >
+              {countries.map((curCountry, idx) => (
+                <MenuItem key={idx} value={curCountry.name}>
+                  {country.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </label>
+        </form>
+        <Button
+          text={"Create Account"}
+          blue
+          callback={handleCreateAccount}
+          isDisabled={isSendingProfileInfo}
+          type={"submit"}
+        />
+      </div>
+      <div className="bubble_background_container">
+        <img
+          src={right_img}
+          className="onboarding-bubble-image"
+          alt="left-img"
+        />
+      </div>
     </div>
   );
 }

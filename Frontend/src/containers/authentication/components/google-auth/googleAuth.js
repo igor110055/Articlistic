@@ -11,8 +11,6 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
-    googleSignUpInit,
-    googleSignupFailure,
     googleSignupSuccess,
     googleSignInSuccess,
     googleSignUpData,
@@ -52,7 +50,6 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
   useEffect(() => {
     if (googleSignupSuccess) {
       localStorage.setItem("createUserId", googleSignUpData.id);
-      // dispatch(userEmail(email));
       setDisplayPage("setUpProfile");
     }
   }, [googleSignupSuccess]);
