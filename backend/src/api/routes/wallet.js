@@ -751,7 +751,7 @@ module.exports = function walletRouter() {
 
         try {
             await api.razorpay.createPayout(amount, faId, payoutId);
-        } catch (e) {
+        } catch (Err) {
 
             /**C.
              * If the previous API Fails do the following: 

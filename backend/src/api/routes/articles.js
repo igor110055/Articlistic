@@ -5,7 +5,7 @@ var express = require('express');
 var useAuth = require('../../middleware/auth');
 var file = require('../../middleware/files');
 
-// var gzip = require('gzip');
+
 
 const articleCheck = require('../../middleware/articleCheck');
 var mongo = require('../../db/mongo/index')
@@ -19,7 +19,6 @@ const BadRequestError = require('../../errors/BadRequestError');
 
 const DatabaseError = require('../../errors/DatabaseError');
 const ServiceError = require('../../errors/ServiceError');
-// const BadRequestError = require('../../errors/BadRequestError');
 
 const NotAuthenticatedError = require('../../errors/NotAuthenticatedError');
 const logger = require('../../utils/logger');
@@ -189,9 +188,9 @@ module.exports = function articlesRouter() {
 
         limit = parseInt(limit);
         skip = parseInt(skip);
-
+        var articles
         try {
-            var articles = await mongo.articles.getArticlesForPublication(publicationId, limit, skip)
+            articles = await mongo.articles.getArticlesForPublication(publicationId, limit, skip)
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -204,17 +203,7 @@ module.exports = function articlesRouter() {
 
     }
 
-    /*
 
-    async function tipSelection(req, res) {
-        let username = req.username;
-    }
-
-    async function shareSelection(req, res) {
-        let username = req.username;
-    }
-
-    */
     async function findSelection(req, res) {
         let routeName = '/selection/find';
         let articleId = req.articleId;
@@ -409,7 +398,7 @@ module.exports = function articlesRouter() {
         let {
             articleId
         } = req.query;
-        // let username = req.username;
+
 
         if (!articleId) {
             throw new MissingParamError('Missing article id', routeName);
@@ -489,9 +478,9 @@ module.exports = function articlesRouter() {
         limit = parseInt(limit);
         skip = parseInt(skip)
 
-
+        var articles;
         try {
-            var articles = await mongo.articles.getAllArticlesForUser(username, filters, limit, skip);
+            articles = await mongo.articles.getAllArticlesForUser(username, filters, limit, skip);
         } catch (e) {
             throw new DatabaseError(routeName, e)
         }
@@ -544,13 +533,13 @@ module.exports = function articlesRouter() {
         if (newlyImported && !articleId) throw new BadRequestError('Article id is required for newly imported articles', routeName)
 
         if (publicationId) {
-            let res = await mongo.publications.getPublication(publicationId);
+            let resData = await mongo.publications.getPublication(publicationId);
 
-            if (!res) {
+            if (!resData) {
                 throw new NotFoundError('Publication not there/ User not allowed to do this operation', routeName);
             }
 
-            if (res.username != username) {
+            if (resData.username != username) {
                 throw new NotAuthenticatedError('Not allowed to do this operation', routeName);
             }
         }
@@ -596,10 +585,10 @@ module.exports = function articlesRouter() {
             }
 
         }
-
+        var newArticle;
         if (!articleId) {
 
-            var newArticle = true;
+            newArticle = true;
             articleId = uuidv4();
 
             if (status == "PUBLISHED" && !publicationId) {

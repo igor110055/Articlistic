@@ -1,7 +1,4 @@
 var express = require('express');
-
-// require('../../errors/customError');
-
 var mongo = require('../../db/mongo/index');
 var redis = require('../../db/redis/index');
 
@@ -23,7 +20,7 @@ const checkDb = require('../../middleware/checkDb');
 const getTopFollowed = require('../../utils/functions/getTopFollowed');
 const s3 = require('../../utils/s3');
 const { followNotificationMail } = require('../../utils/mailer/email');
-const { email } = require('../../utils/otp');
+
 
 module.exports = function userRouter() {
 
@@ -59,9 +56,9 @@ module.exports = function userRouter() {
     async function getWriterProfile(req, res) {
         const routeName = 'get writer profile';
         const username = req.username;
-
+        var writer;
         try {
-            var writer = await mongo.writers.getWriterProfile(username, true);
+            writer = await mongo.writers.getWriterProfile(username, true);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -138,10 +135,11 @@ module.exports = function userRouter() {
         }
 
 
-
+        var resLink;
         if (buffer) {
+
             try {
-                var resLink = await s3.init().uploadImage(buffer, username);
+                resLink = await s3.init().uploadImage(buffer, username);
             } catch (e) {
                 throw new ServiceError('s3-profile-upload', routeName, e)
             }
@@ -190,9 +188,9 @@ module.exports = function userRouter() {
         if (!username) {
             throw new MissingParamError('Username required', routeName);
         }
-
+        var user
         try {
-            var user = await mongo.users.getUserProfile(username);
+            user = await mongo.users.getUserProfile(username);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -249,9 +247,9 @@ module.exports = function userRouter() {
 
         limit = parseInt(limit);
         skip = parseInt(skip);
-
+        var bookmarks;
         try {
-            var bookmarks = await mongo.bookmarks.getBookmarks(username, limit, skip);
+            bookmarks = await mongo.bookmarks.getBookmarks(username, limit, skip);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -302,9 +300,9 @@ module.exports = function userRouter() {
 
         if (username == follows) throw new NotAuthenticatedError('You can not follow yourself', routeName);
 
-
+        var x
         try {
-            var x = await mongo.users.getUserByUsername(follows);
+            x = await mongo.users.getUserByUsername(follows);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -410,9 +408,9 @@ module.exports = function userRouter() {
 
         limit = parseInt(limit);
         skip = parseInt(skip);
-
+        var following;
         try {
-            var following = await mongo.followers.getFollowing(username, limit, skip)
+            following = await mongo.followers.getFollowing(username, limit, skip)
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -439,9 +437,9 @@ module.exports = function userRouter() {
 
         limit = parseInt(limit);
         skip = parseInt(skip);
-
+        var followers;
         try {
-            var followers = await mongo.followers.getFollowers(username, limit, skip)
+            followers = await mongo.followers.getFollowers(username, limit, skip)
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -468,11 +466,11 @@ module.exports = function userRouter() {
 
         limit = parseInt(limit);
         skip = parseInt(skip);
-
+        var following;
 
         try {
 
-            var following = await mongo.followers.getFollowedWriters(username, limit, skip);
+            following = await mongo.followers.getFollowedWriters(username, limit, skip);
 
         } catch (e) {
             throw new DatabaseError(routeName, e);
@@ -522,9 +520,9 @@ module.exports = function userRouter() {
 
         limit = parseInt(limit);
         skip = parseInt(skip)
-
+        var chats
         try {
-            var chats = await mongo.chats.fetchChatsForUser(username, limit, skip);
+            chats = await mongo.chats.fetchChatsForUser(username, limit, skip);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }

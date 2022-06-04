@@ -1,7 +1,5 @@
 var express = require('express');
 
-// require('../../errors/customError');
-
 var mongo = require('../../db/mongo/index');
 const logger = require('../../utils/logger/index')
 const s3 = require('../../utils/s3/index');
@@ -124,9 +122,9 @@ module.exports = function publicationRouter() {
         if (!publicationId) {
             throw new MissingParamError('Publication Id required', routeName);
         }
-
+        var link
         try {
-            var link = await mongo.publications.getPublicationArticle(publicationId);
+            link = await mongo.publications.getPublicationArticle(publicationId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -135,9 +133,9 @@ module.exports = function publicationRouter() {
         if (!link || !link.publicationArticle) {
             throw new NotFoundError('There is no publication article', routeName);
         }
-
+        var content;
         try {
-            var content = await apis.articles.getArticle(link.publicationArticle);
+            content = await apis.articles.getArticle(link.publicationArticle);
 
         } catch (e) {
             throw new ServiceError('axios-apis-getPublication-Article', routeName, e);
@@ -171,9 +169,9 @@ module.exports = function publicationRouter() {
          */
 
         if (!publications || !publications.length) {
-
+            var writer
             try {
-                var writer = await mongo.writers.getWriterByName(username);
+                writer = await mongo.writers.getWriterByName(username);
             } catch (e) {
                 throw new DatabaseError(routeName, e);
             }
@@ -204,9 +202,9 @@ module.exports = function publicationRouter() {
         if (!publicationId || !writeup || !intro) {
             throw new MissingParamError('Publication Id or Writeup or Intro not present.', routeName);
         }
-
+        var pub
         try {
-            var pub = await mongo.publications.getPublicationForCheck(publicationId);
+            pub = await mongo.publications.getPublicationForCheck(publicationId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -219,10 +217,10 @@ module.exports = function publicationRouter() {
 
 
         let articleBuffer = Buffer.from(writeup, 'utf8');
-
+        var resLink
         try {
 
-            var resLink = await s3.init().uploadPublicationArticle(articleBuffer, username, publicationId);
+            resLink = await s3.init().uploadPublicationArticle(articleBuffer, username, publicationId);
 
         } catch (e) {
             throw new ServiceError('s3-articles', routeName, e);
@@ -274,9 +272,9 @@ module.exports = function publicationRouter() {
         } = req.query;
 
         if (!publicationId) throw new MissingParamError('Missing publication Id', routeName)
-
+        var publication
         try {
-            var publication = await mongo.publications.getPublication(publicationId);
+            publication = await mongo.publications.getPublication(publicationId);
 
         } catch (e) {
             throw new DatabaseError(routeName, e);
@@ -324,9 +322,9 @@ module.exports = function publicationRouter() {
         if (publicationOneLiner && publicationOneLiner.length < 255) {
             throw new BadRequestError('Minimum length of one liner is 255');
         }
-
+        var pub
         try {
-            var pub = await mongo.publications.getPublicationForCheck(publicationId);
+            pub = await mongo.publications.getPublicationForCheck(publicationId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }

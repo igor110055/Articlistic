@@ -18,7 +18,6 @@ async function createMailingList(name) {
     try {
         const response = await client.request(request);
         const id = response[0].body.id;
-        //logger.info(response[0].body.id);
         return id
     }
     catch (e) {
@@ -80,8 +79,9 @@ async function getContactIdbyEmail(email) {
 
 //This function removes a contacct from the list using contact id
 async function removeFromList(listId, email) {
+    var contactId;
     try {
-        var contactId = await getContactIdbyEmail(email)
+        contactId = await getContactIdbyEmail(email)
     } catch (e) {
         logger.debug(e, "Error in removeFromList function");
     }

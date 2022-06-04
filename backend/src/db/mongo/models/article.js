@@ -346,7 +346,7 @@ async function getAllArticlesForUser(username, filters, limit, skip) {
 
 
 
-async function updateArticle(articleId, status, writeup, storySetting, earlyAccess = false, pub) {
+async function updateArticle(articleId, status, writeup, storySetting, pub, earlyAccess = false) {
 
     let updateParam = {};
     updateParam.earlyAccess = earlyAccess;
@@ -402,7 +402,7 @@ async function updateArticle(articleId, status, writeup, storySetting, earlyAcce
 
 
 
-async function createNewArticle(username, articleId, status, writeup, storySetting, earlyAccess = false, pub, origin, originUrl) {
+async function createNewArticle(username, articleId, status, writeup, storySetting, pub, origin, originUrl, earlyAccess = false) {
 
     let updateParam = {};
     updateParam.earlyAccess = earlyAccess;
@@ -468,9 +468,6 @@ async function getArticleById(articleId) {
     try {
 
         client = await MDB.getClient();
-        // if (!client) {
-        //     client = await MDB.getClient()
-        // }
         let db = client.db(dbName).collection(collection);
 
         let startTime = Date.now();

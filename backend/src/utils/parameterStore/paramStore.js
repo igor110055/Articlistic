@@ -1,20 +1,16 @@
 const AWS = require('aws-sdk');
 const logger = require("../logger/index");
 var config = require("../../../config");
-var result = {};
+var newResult = {};
 var ssmClient;
-
-// var credentials = new AWS.SharedIniFileCredentials({ profile: 'default' });
-// AWS.config.credentials = credentials;
-
 
 
 async function parseArray(arrayOfEnvVariable) {
     try {
         for (let i of arrayOfEnvVariable) {
-            result[i] = await getFromParamStore(i);
+            newResult[i] = await getFromParamStore(i);
         }
-        await setConfig(result);
+        await setConfig(newResult);
     }
     catch (e) {
         logger.error(`error`, e);
