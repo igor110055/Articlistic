@@ -40,9 +40,9 @@ async function addMoneyToWallet(username, orderId) {
 
         var res = await session.withTransaction(async () => {
 
-
+            var walletObj
             try {
-                var walletObj = await walletCollection.findOneAndUpdate({
+                walletObj = await walletCollection.findOneAndUpdate({
                     orderId: orderId
                 }, {
                     $set: {
@@ -94,6 +94,7 @@ async function addMoneyToWallet(username, orderId) {
         return res;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

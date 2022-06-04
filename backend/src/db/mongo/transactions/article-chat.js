@@ -42,9 +42,9 @@ async function newResponse(chatId, articleId, selection, user, writer, chat) {
 
         var res = await session.withTransaction(async () => {
 
-
+            var res1
             try {
-                var res1 = await chatsCollection.insertOne({
+                res1 = await chatsCollection.insertOne({
                     'chatId': chatId,
                     'articleId': articleId,
                     'title': selection,
@@ -76,11 +76,11 @@ async function newResponse(chatId, articleId, selection, user, writer, chat) {
 
             if (!res1.insertedId) {
                 await session.abortTransaction();
-                throw "Transaction failed";
+                throw new Error("Transaction failed");
             }
-
+            var res2
             try {
-                var res2 = await articlesCollection.updateOne({
+                res2 = await articlesCollection.updateOne({
                     'articleId': articleId,
                     'selections.selection': selection
                 }, {
@@ -98,7 +98,7 @@ async function newResponse(chatId, articleId, selection, user, writer, chat) {
 
             if (!res2.modifiedCount) {
                 await session.abortTransaction();
-                throw "Transaction failed";
+                throw new Error("Transaction failed");
             }
 
         }, transactionOptions);
@@ -114,7 +114,7 @@ async function newResponse(chatId, articleId, selection, user, writer, chat) {
         return res;
 
     } catch (e) {
-
+        logger.debug(e);
         throw e;
 
     }

@@ -21,7 +21,7 @@ const {
 
 
 
-async function updatePublishedArticle(articleId, status, writeup, storySetting, earlyAccess = false, pub, categories, publicationId) {
+async function updatePublishedArticle(articleId, status, writeup, storySetting, pub, categories, publicationId, earlyAccess = false) {
 
     let client;
     let updateParam = {};
@@ -39,7 +39,7 @@ async function updatePublishedArticle(articleId, status, writeup, storySetting, 
         updateParam.public = pub
     }
     if (!publicationId) {
-        throw "PublicationId is required"
+        throw new Error("PublicationId is required");
     }
     if (publicationId) {
         updateParam.publicationId = publicationId;
@@ -78,9 +78,9 @@ async function updatePublishedArticle(articleId, status, writeup, storySetting, 
 
 
         var res = await session.withTransaction(async () => {
-
+            var articlesUpdate
             try {
-                var articlesUpdate = await articlesCollection.updateOne({
+                articlesUpdate = await articlesCollection.updateOne({
                     'articleId': articleId
                 }, {
                     $set: updateParam
@@ -98,7 +98,7 @@ async function updatePublishedArticle(articleId, status, writeup, storySetting, 
             if (!articlesUpdate.modifiedCount) {
 
                 await session.abortTransaction();
-                throw "Transaction error - 1 - update article";
+                throw new Error("Transaction error - 1 - update article");
             }
             const bulk = categoriesCollection.initializeUnorderedBulkOp();
 
@@ -139,7 +139,7 @@ async function updatePublishedArticle(articleId, status, writeup, storySetting, 
                 });
             } catch (e) {
                 await session.abortTransaction();
-                throw "Update Article MongoDB: Writers Push Categories";
+                throw new Error("Update Article MongoDB: Writers Push Categories");
             }
 
         }, transactionOptions);
@@ -154,13 +154,13 @@ async function updatePublishedArticle(articleId, status, writeup, storySetting, 
         return res;
 
     } catch (e) {
-
+        logger.debug(e)
         throw e;
 
     }
 }
 
-async function publishNewArticle(username, articleId, status, writeup, storySetting, earlyAccess = false, pub, categories, publicationId) {
+async function publishNewArticle(username, articleId, status, writeup, storySetting, pub, categories, publicationId, earlyAccess = false) {
 
     let client;
     let updateParam = {};
@@ -180,7 +180,7 @@ async function publishNewArticle(username, articleId, status, writeup, storySett
         updateParam.public = pub
     }
     if (!publicationId) {
-        throw "PublicationId is required"
+        throw new Error("PublicationId is required");
     }
     updateParam.createdAt = Date.now()
     updateParam.publicationId = publicationId;
@@ -213,9 +213,9 @@ async function publishNewArticle(username, articleId, status, writeup, storySett
 
 
         var res = await session.withTransaction(async () => {
-
+            var articlesUpdate
             try {
-                var articlesUpdate = await articlesCollection.insertOne(updateParam, {
+                articlesUpdate = await articlesCollection.insertOne(updateParam, {
                     session: session
                 });
             } catch (e) {
@@ -229,7 +229,7 @@ async function publishNewArticle(username, articleId, status, writeup, storySett
             if (!articlesUpdate.insertedId) {
 
                 await session.abortTransaction();
-                throw "Transaction error";
+                throw new Error("Transaction error");
             }
 
             const bulk = categoriesCollection.initializeUnorderedBulkOp();
@@ -293,7 +293,7 @@ async function publishNewArticle(username, articleId, status, writeup, storySett
         return res;
 
     } catch (e) {
-
+        logger.debug(e)
         throw e;
 
     }
