@@ -11,7 +11,7 @@ async function WelcomeMail(email, name) {
     const body = `Hello ${name}! Your Onboarding is successfully completed and Attentioun welcomes you to the platform.`
     await send(email, subject, body)
 }
-//WelcomeMail("abhisheksarakanam@attentioun.com", "TEST-1");
+
 
 
 async function followNotificationMail(email, writerName) {

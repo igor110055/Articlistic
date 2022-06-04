@@ -78,9 +78,9 @@ module.exports = function publicationRouter() {
         }
         let buffer = req.file.buffer;
 
-
+        var pub
         try {
-            var pub = await mongo.publications.getPublicationForCheck(publicationId);
+            pub = await mongo.publications.getPublicationForCheck(publicationId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -238,18 +238,7 @@ module.exports = function publicationRouter() {
         }
 
 
-        /*
-         SENDING THE UPDATE TO MAIL ON SUCCESSFULL ARTICLE PUBLISHING
 
-        try {
-            const writerData = await mongo.writers.getWriterByName(username);
-            const mailingId = writerData.mailing_list_id;
-            await createSingleSend(username, mailingId);
-        }
-        catch (e) {
-            logger.debug(e, "Failed to send mail", routeName);
-        }
-        */
         res.status(200).send({
             message: 'Updated Successfully.',
             'articleLink': resLink.url
@@ -492,9 +481,9 @@ module.exports = function publicationRouter() {
                 try {
 
                     await s3.init().deleteFile(resLink.fileName, true);
-                } catch (e) {
+                } catch (err) {
                     logger.fatal(e);
-                    throw new ServiceError('s3-publication-deleteImage', routeName, e);
+                    throw new ServiceError('s3-publication-deleteImage', routeName, err);
                 }
             }
 
