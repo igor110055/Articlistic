@@ -70,8 +70,8 @@ module.exports = function () {
 
             next();
 
-        } catch (e) {
-            logger.info(e);
+        } catch (err) {
+            logger.info(err);
             try {
 
                 /**

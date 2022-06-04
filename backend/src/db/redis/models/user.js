@@ -1,7 +1,3 @@
-// import {
-//     createClient
-// } from 'redis';
-
 
 const config = require('../../../../config');
 const logger = require('../../../utils/logger');
@@ -43,10 +39,11 @@ async function check(username) {
 
     let startTime = Date.now();
     const client = await RDB.getClient();
-
+    var res
     try {
-        var res = await client.SISMEMBER(collection, username);
+        res = await client.SISMEMBER(collection, username);
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 

@@ -37,13 +37,14 @@ async function setName(username, name) {
 
 async function getName(username) {
 
-    if (!username) throw "Username required"
+    if (!username) throw new Error("Username required");
     let startTime = Date.now();
     const client = await RDB.getClient();
-
+    var res
     try {
-        var res = await client.GET(username);
+        res = await client.GET(username);
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 

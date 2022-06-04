@@ -8,19 +8,17 @@ const apiKey = config.ip.apiKey;
 
 module.exports = async (ip) => {
     const uri = `https://ipgeolocation.abstractapi.com/v1/?api_key=${apiKey}&ip_address=${ip}`;
-
+    var data = {};
     try {
 
-        var {
-            data
-        } = await axios.get(uri);
-
+        data = await axios.get(uri);
+        logger.info(data);
     } catch (e) {
-
+        logger.debug(e);
         throw e;
     }
 
-    const country = data.country;
-    return country;
+
+    return data.country;
 
 }

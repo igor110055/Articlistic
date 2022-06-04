@@ -20,6 +20,7 @@ async function createContact(name, email, username) {
         logger.debug(contactId);
         return contactId;
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -45,7 +46,7 @@ async function createBankFundAccount(name, IFSC, contactId, accountNumber) {
         return fa;
 
     } catch (e) {
-
+        logger.debug(e);
         throw e;
 
     }
@@ -77,7 +78,7 @@ async function createUPIFundAccount(upiId, contactId) {
         return obj;
 
     } catch (e) {
-
+        logger.debug(e);
         throw e;
 
     }
@@ -86,7 +87,7 @@ async function createUPIFundAccount(upiId, contactId) {
 async function createPayout(amount, fundAccount, referenceId) {
 
     if (!amount || !fundAccount) {
-        throw "Amount is required parameter"
+        throw new Error("Amount is required parameter");
     }
 
     const attAccNo = config.rp.accountNumber;
@@ -115,6 +116,7 @@ async function createPayout(amount, fundAccount, referenceId) {
         })).data;
         return res;
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
