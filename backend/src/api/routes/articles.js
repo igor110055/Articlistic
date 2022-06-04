@@ -68,7 +68,7 @@ module.exports = function articlesRouter() {
         .post('/deleteImage', useAuth(), deleteEmbed);
 
 
-    async function getTopFunders(req, res) {
+    async function getTopFunders(req, _res) {
         const routeName = 'get top funders';
         const articleId = req.articleId;
 
@@ -624,22 +624,22 @@ module.exports = function articlesRouter() {
                 */
 
                 newArticle = false;
-                let articleCheck;
+                let articleExistCheck;
                 try {
-                    articleCheck = await mongo.articles.getArticleById(articleId);
+                    articleExistCheck = await mongo.articles.getArticleById(articleId);
                 } catch (e) {
                     throw new DatabaseError(routeName, e);
                 }
 
-                if (!articleCheck) {
+                if (!articleExistCheck) {
                     throw new NotFoundError('Could not find article', routeName);
                 }
 
-                if (articleCheck.username != username) {
+                if (articleExistCheck.username != username) {
                     throw new NotAuthenticatedError('You are not allowed to change the article. ', routeName);
                 }
 
-                if (articleCheck.status == "PUBLISHED" && status != "PUBLISHED") {
+                if (articleExistCheck.status == "PUBLISHED" && status != "PUBLISHED") {
                     throw new NotAuthenticatedError('You can not change a published article to another type', routeName);
                 }
 

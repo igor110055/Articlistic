@@ -61,6 +61,7 @@ async function getWriters() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -92,6 +93,7 @@ async function getWriterByName(username) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -139,6 +141,7 @@ async function getWriterProfile(username, my) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

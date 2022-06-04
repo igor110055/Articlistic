@@ -69,7 +69,7 @@ async function followMultiple(followArray = []) {
 
 }
 
-async function follow(username, follows, isWriter) {
+async function follow(username, follows, _isWriter) {
     let client;
 
     try {
