@@ -89,13 +89,14 @@ async function uploadPublicationArticle(buffer, username, publicationId) {
     /*
     yash-dxt/publications/articles/publicationId
     */
+    var compressedFile
     try {
-        var compressedFile = await gzip(buffer);
+        compressedFile = await gzip(buffer);
     } catch (e) {
-        throw {
+        throw new Error({
             error: e,
             message: 'Could not compress'
-        }
+        });
     }
     await uploadFileFromStream(compressedFile, fileName, profileBucket);
 
@@ -201,13 +202,14 @@ async function deleteFile(fileName, profile) {
 
 async function uploadArticle(buffer, username, articleId) {
     let fileName = dirForArticles + username + "/" + articleId + '.gzip';
+    var compressedFile
     try {
-        var compressedFile = await gzip(buffer);
+        compressedFile = await gzip(buffer);
     } catch (e) {
-        throw {
+        throw new Error({
             error: e,
             message: 'Could not compress'
-        }
+        });
     }
     await uploadFileFromStream(compressedFile, fileName, articlesBucket);
 
@@ -231,6 +233,7 @@ async function deleteAllImagesRelatedToArticle(articleId) {
     try {
         await del(fileName, articlesBucket);
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
     return 'success';
@@ -241,6 +244,7 @@ async function deleteArticle(username, articleId) {
     try {
         await del(fileName, articlesBucket);
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
     return 'success';
@@ -337,6 +341,7 @@ async function fullDeleteArticle(username, articleId) {
     try {
         await deleteMultipleFiles(files, articlesBucket);
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

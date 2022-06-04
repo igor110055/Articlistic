@@ -15,8 +15,8 @@ module.exports = function convert_IST_TimeToCRON_UTC(time) {
 
     // Checking if time falls in valid range
     if (hrs > 24 || hrs < 0 || mins > 60 || mins < 0) {
-        var err = 'Invalid Time'
-        throw err;
+
+        throw new Error('Invalid Time');
     }
 
     /**

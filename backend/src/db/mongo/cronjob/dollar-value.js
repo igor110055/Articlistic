@@ -10,7 +10,7 @@ const MDB = require('../client').MDB;
 
 async function insertDollarValue(dollarValue, date) {
     if (!dollarValue || !date) {
-        throw "Dollar value required";
+        throw new Error("Dollar value required");
     }
 
     const obj = {
@@ -41,6 +41,7 @@ async function insertDollarValue(dollarValue, date) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

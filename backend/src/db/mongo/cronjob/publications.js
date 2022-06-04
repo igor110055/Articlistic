@@ -38,6 +38,7 @@ async function createDeletedAtIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -78,6 +79,7 @@ async function getPublicationsToBeDeleted(deleteAtTime) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -85,7 +87,7 @@ async function getPublicationsToBeDeleted(deleteAtTime) {
 async function delPubS3Error(publicationId) {
     let client;
 
-    if (!publicationId) throw "Publication Id is required parameter";
+    if (!publicationId) throw new Error("Publication Id is required parameter");
 
     const insertObj = {
         alertType: 'publication-delete-alert',
@@ -113,12 +115,13 @@ async function delPubS3Error(publicationId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
 
 async function deletePublication(publicationId, username) {
-
+    let client;
     try {
 
         client = await MDB.getClient();
@@ -142,10 +145,10 @@ async function deletePublication(publicationId, username) {
 
 
         var res = await session.withTransaction(async () => {
-
+            var res1
             try {
 
-                var res1 = await pub.deleteOne({
+                res1 = await pub.deleteOne({
                     publicationId: publicationId
                 }, {
                     session: session
@@ -160,12 +163,12 @@ async function deletePublication(publicationId, username) {
 
             if (!res1.deletedCount) {
                 await session.abortTransaction();
-                throw "Transaction error - del pub";
+                throw new Error("Transaction error - del pub");
             }
-
+            var res2
             try {
 
-                var res2 = await writers.updateOne({
+                res2 = await writers.updateOne({
                     username: username
                 }, {
                     $pull: {
@@ -184,7 +187,7 @@ async function deletePublication(publicationId, username) {
 
             if (!res2.modifiedCount) {
                 await session.abortTransaction();
-                throw "Transaction error - del pub - 2";
+                throw new Error("Transaction error - del pub - 2");
             }
 
 
@@ -202,6 +205,7 @@ async function deletePublication(publicationId, username) {
         return res;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

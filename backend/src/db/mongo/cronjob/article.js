@@ -35,6 +35,7 @@ async function createDeletedAtIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -43,7 +44,7 @@ async function deleteS3FileFailAlert(articleId, username) {
     let client;
     let insertObj = {};
 
-    if (!articleId || !username) throw "Article Id | username should not be missing for this query - delete S3 fail alert."
+    if (!articleId || !username) throw new Error("Article Id | username should not be missing for this query - delete S3 fail alert.");
 
     insertObj.alertType = 'article-deletion-alert';
     insertObj.articleId = articleId;
@@ -70,6 +71,7 @@ async function deleteS3FileFailAlert(articleId, username) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -103,6 +105,7 @@ async function deleteArticles(listOfArticleIds = []) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -146,6 +149,7 @@ async function getArticlesMarkedForDeletion(deleteAtTime) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -186,6 +190,7 @@ async function getArticlesForPublication(publicationId) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

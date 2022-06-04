@@ -22,7 +22,7 @@ module.exports = class Pin {
 
     static async compare(requestPin, dbPin) {
         var res = await bcryptjs.compare(requestPin, dbPin);
-        if (!res) throw "PIN is wrong"
+        if (!res) throw new Error("PIN is wrong");
         return true;
     }
 }

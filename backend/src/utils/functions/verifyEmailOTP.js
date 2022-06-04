@@ -10,10 +10,10 @@ module.exports = async function verifyEmailOTP(otp, email, routeName, type) {
 
     }
 
-
+    var mongoRes
     try {
 
-        var mongoRes = await mongo.email.checkWalletOTP(email, otp, type);
+        mongoRes = await mongo.email.checkWalletOTP(email, otp, type);
 
     } catch (e) {
 
