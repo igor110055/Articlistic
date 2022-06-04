@@ -716,11 +716,11 @@ module.exports = function articlesRouter() {
                     /*
                         In case of drafts we don't have story settings so we don't need to deal with many collections. Only the article collection will suffice. 
                     */
-                    await mongo.articles.updateArticle(articleId, status, writeupUpload, false, false, publicData);
+                    await mongo.articles.updateArticle(articleId, status, writeupUpload, false, publicData, false);
 
                 } else {
 
-                    await mongo.transactionArticleCategory.updatePublishedArticle(articleId, status, writeupUpload, storySetting, false, publicData, categories, publicationId);
+                    await mongo.transactionArticleCategory.updatePublishedArticle(articleId, status, writeupUpload, storySetting, publicData, categories, publicationId, false);
                 }
             } catch (e) {
                 // await s3.init().deleteFile(fn);
@@ -734,10 +734,10 @@ module.exports = function articlesRouter() {
                         In case of drafts we don't have story settings. 
                     */
 
-                    await mongo.articles.createNewArticle(username, articleId, status, writeupUpload, false, false, publicData, origin, originUrl);
+                    await mongo.articles.createNewArticle(username, articleId, status, writeupUpload, false, publicData, origin, originUrl, false);
                 } else {
                     try {
-                        await mongo.transactionArticleCategory.publishNewArticle(username, articleId, status, writeupUpload, storySetting, false, publicData, categories, publicationId);
+                        await mongo.transactionArticleCategory.publishNewArticle(username, articleId, status, writeupUpload, storySetting, publicData, categories, publicationId, false);
                         await createSingleSend(username, listId);
                     }
                     catch (e) {

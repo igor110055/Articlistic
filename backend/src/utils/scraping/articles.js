@@ -4,7 +4,7 @@ const scrapeMedia = require('./media');
 
 async function scrapeArticle(origin, content, articleId, username) {
 
-    if (!origin || !content || !articleId || !username) throw "Content, origin or article missing";
+    if (!origin || !content || !articleId || !username) throw new Error("Content, origin or article missing");
 
     try {
 
@@ -15,6 +15,7 @@ async function scrapeArticle(origin, content, articleId, username) {
         }
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -48,10 +49,10 @@ async function scrapeSubstackArticle(content, articleId, username) {
     images.each((i, ele) => {
         substackImages.push($(ele).attr('href'));
     });
-
+    var convertedImages
     if (substackImages.length) {
-        // logger.debug(substackImages);
-        var convertedImages = await scrapeMedia.convertMultipleImagesLinksToS3(substackImages, articleId, username);
+
+        convertedImages = await scrapeMedia.convertMultipleImagesLinksToS3(substackImages, articleId, username);
     }
 
 
@@ -104,7 +105,7 @@ async function scrapeSubstackArticle(content, articleId, username) {
     return obj;
 }
 
-async function scrapeMediumArticle(content, articleId, username) {
+async function scrapeMediumArticle(_content, _articleId, _username) {
 
 }
 
