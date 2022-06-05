@@ -23,7 +23,7 @@ import MultipleTab from "./utils/MultipleTab";
 import MainLoader from "./components/mainLoader";
 import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
-
+import MainLoader from "./components/mainLoader";
 // import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 // import {
 //   getAuthToken,
@@ -91,7 +91,7 @@ function App() {
   return (
     //for writers
     <div>
-      {getEnvVariablesSuccess && (
+      {getEnvVariablesSuccess ? (
         <div className="App">
           {!mulitpleTabs && (
             <Router>
@@ -168,7 +168,7 @@ function App() {
           />
           {/* <Navbar /> */}
         </div>
-      )}
+      ): (<MainLoader/>)}
     </div>
   );
 }
