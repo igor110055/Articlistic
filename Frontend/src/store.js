@@ -8,6 +8,7 @@ import writerEditor from "./containers/writerEditor/writerEditorReducer";
 import unsplash from "./containers/unsplash/unsplashReducer";
 import nft from "./containers/writerEditor/nftBlock/nftReducer";
 import home from "./containers/home/homeReducer";
+import homepage from "./containers/homepage/homepagereducer";
 import common from "./containers/common/commonReducer";
 import rootSaga from "./rootSaga";
 import writerContent from "./containers/writerContent/writerReducers";
@@ -22,6 +23,7 @@ const reducer = combineReducers({
   unsplash,
   nft,
   home,
+  homepage,
   common,
   writerContent,
   ArticleData,

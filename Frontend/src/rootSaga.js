@@ -8,6 +8,7 @@ import * as followedWritersSagas from "./containers/home/homeSaga";
 import * as writerContentSagas from "./containers/writerContent/writerSaga";
 import * as articleSagas from "./containers/writerContent/components/articleSaga";
 import * as signupSaga from "./containers/authentication/signupSaga";
+import * as homeSaga from "./containers/home/homeSaga";
 export default function* rootSaga() {
   yield all(
     [
@@ -20,6 +21,7 @@ export default function* rootSaga() {
       ...Object.values(writerContentSagas),
       ...Object.values(articleSagas),
       ...Object.values(signupSaga),
+      ...Object.values(homeSaga),
     ].map(spawn)
   );
 }

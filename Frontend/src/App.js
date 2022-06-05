@@ -1,4 +1,5 @@
 // import LandingPage from "./containers/loginSignup/landingPage";
+import { getEnvVariables } from "./config";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import TempNavbar from "./containers/navbar/tempNavbar";
 // import OnBoarding from "./containers/loginSignup/onBoarding";
