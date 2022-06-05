@@ -22,13 +22,17 @@ import MultipleTab from "./utils/MultipleTab";
 import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
 // import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
-
+import Homepage from "./containers/homepage/homepage";
+import {
+  getAuthToken,
+  getRefreshToken
+  } from "./containers/common/commonFunctions";
 // import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
 // import {
 //   getAuthToken,
 //   getRefreshToken,
 // } from "./containers/common/commonFunctions";
-import getEnvVariables from "./config";
+// import getEnvVariables from "./config";
 function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
   const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
@@ -103,7 +107,7 @@ function App() {
                 <Route exact path="/signup" element={<SignUp />} />
                 <Route exact path="/login" element={<SignIn />} />
                 {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
-                <Route
+                {/* <Route
                   exact
                   path="/story"
                   element={
@@ -111,7 +115,7 @@ function App() {
                       <WriterEditor />
                     </PrivateRoute>
                   }
-                />
+                /> */}
                 <Route
                   exact
                   path="/publication/:username/:publicationName"
@@ -130,6 +134,15 @@ function App() {
                     </PrivateRoute>
                   }
                 />
+                 <Route
+               exact
+               path="/homepage"
+               element={
+                 <PrivateRoute>
+                   <Homepage />
+                 </PrivateRoute>
+               }
+	             />
                 <Route
                   exact
                   path="/writersettings"

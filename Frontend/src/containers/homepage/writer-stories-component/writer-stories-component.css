@@ -1,0 +1,142 @@
+.writer-stories-container{
+    margin-left: 4.5rem;
+    margin-top: 5rem;
+}
+
+.writer-stories{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2.75rem;
+}
+
+.writer-stories-container .writer-stories-content{
+    margin: 3.5em 4.5rem 0 4rem ;
+    min-width: 235px;
+}
+
+.writer-stories-container .writer-stories-content .header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.writer-stories-container .writer-stories-content .header .profile-pic{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.writer-stories-container .writer-stories-content .header .profile-name{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 1.68rem;
+    line-height: 1.18em;
+    /* identical to box height */
+    margin: 0;
+    margin-left: .51em;
+    letter-spacing: -0.0947917px;
+
+    color: #0A2B98;
+    
+}
+
+.writer-stories-container .writer-stories-content .header .profile-subtitle{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    margin: 0;
+    margin-left: 1em;
+    font-size: 1.25rem;
+    line-height: 1.15em;
+    letter-spacing: -0.0947917px;
+    color: #0A2B98;
+}
+
+.writer-stories-container .writer-stories-content .publications-nav{
+    margin: 0.5em 0 1em 0;
+    overflow-x: scroll;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-start;
+    gap: 1em;
+}
+
+.writer-stories-container .writer-stories-content .publications-nav .publication-button{
+    background: #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 0;
+    cursor: pointer;
+    outline: 0;
+}
+.writer-stories-container .writer-stories-content .publications-nav .publication-button .publication-span{
+    font-family: 'Poppins';
+    width: max-content;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 0.94rem;
+    line-height: 18px;
+    /* identical to box height */
+    margin: .5em 1.1em .5em .6em;
+    color: #000000;
+}
+.active-publication{
+    border: 2px solid #0A2B98  !important;
+}
+
+@media (max-width: 768px){
+    .writer-stories-container{
+        margin-left: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .writer-stories-container .writer-stories-content {
+        margin-right: 0.62rem;
+        margin-top: 1rem;
+    }
+    .writer-stories{
+        flex-direction: column;
+        margin: 0 auto;
+        gap: 1rem;
+    }
+    .writer-stories-container .writer-stories-content .header .profile-name{
+        margin-left: 0;
+    }
+    #homepage-writer-profile-subtitle{
+        display: none;
+    }
+
+     #homepage-writer-profile-img{
+         display: none;
+     }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .writer-stories{
+        flex-direction: column;
+        margin: 0 auto;
+    }
+
+    #homepage-writer-profile-subtitle{
+        display: none;
+    }
+
+     #homepage-writer-profile-img{
+         display: none;
+     }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+   .writer-stories{
+        flex-direction: row;
+        margin: 0 auto;
+        flex-wrap: wrap;
+    }
+}
