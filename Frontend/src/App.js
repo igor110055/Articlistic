@@ -8,6 +8,7 @@ import PrivateRoute from "./components/privateRoute";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 // import Cookie from "js-cookie";
+import WriterForm from "./containers/writerform/writerForm";
 import WriterSetting from "./containers/writerEditor/writerSetting";
 import WriterEditor from "./containers/writerEditor/writerEditor";
 import WriterContentContainer from "./containers/writerContent/writerContentContainer";
@@ -107,6 +108,7 @@ function App() {
                 {/* <Route exact path="/signup" element={<OnBoarding />} /> */}
                 <Route exact path="/signup" element={<SignUp />} />
                 <Route exact path="/login" element={<SignIn />} />
+                <Route exact path="/login/writer" element={<WriterForm />} />
                 {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
                 {/* <Route
                   exact

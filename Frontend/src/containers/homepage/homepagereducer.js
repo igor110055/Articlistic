@@ -26,6 +26,7 @@ const homepage = (state = initialState, action) => {
       };
 
     case GET_ABOUT_PUBLICATION_SUCCESS:
+      
       return {
         ...state,
         userlist: data,

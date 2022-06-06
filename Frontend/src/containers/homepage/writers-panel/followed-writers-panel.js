@@ -12,73 +12,89 @@ import Stephanus from "../../../Images/users/Stephanus.png";
 import UesugiSuzuki from "../../../Images/users/UesugiSuzuki.png";
 import YiChunHwa from "../../../Images/users/YiChun-Hwa.png";
 
+import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as AttentiounLogo } from "../../../Images/logo.svg";
 
 import "./followed-writers-panel.css";
 
 function FollowedWritersPanel({ activeIdx, setActiveIdx }) {
-  const writersData = [
-    {
-      name: "Alex Tenario",
+  const { userlist, message } = useSelector((state) => ({
+    // thisState: state,
+    userlist: state.homepage.userlist,
+    message: state.common.snackbar.message,
+  }));
+  const writersData =  Object.keys(userlist).map((key) => {
+    return {
+      name: key,
       img: AlexTenario,
-      shortName: "Alex"
-    },
-    {
-      name: "Amarachi",
-      img: Amarachi,
-      shortName: "Amarachi"
-    },
-    {
-      name: "Chandrava",
-      img: Chandrava,
-      shortName: "Chandrava"
-    },
-    {
-      name: "Dontae",
-      img: Dontae,
-      shortName: "Dontae"
-    },
-    {
-      name: "Hu Hyon-Suk",
-      img: HuHyon,
-      shortName: "Hyon-Suk"
-    },
-    {
-      name: "Ivan Polo",
-      img: IvanPolo,
-      shortName: "Ivan"
-    },
-    {
-      name: "Jordanna",
-      img: Jordanna,
-      shortName: "Jordanna"
-    },
-    {
-      name: "Lilahi Loselev",
-      img: LilahiLoselev,
-      shortName: "Lilahi"
-    },
-    {
-      name: "Lumir",
-      img: Lumir,
-      shortName: "Lumir"
-    },
-    {
-      name: "Stephanus",
-      img: Stephanus,
-      shortName: "Stephanus"
-    },
-    {
-      name: "Uesugi Suzuki",
-      img: UesugiSuzuki,
-      shortName: "Uesugi"
-    },
-    {
-      name: "Yi Chun-Hwa",
-      img: YiChunHwa,
-      shortName: "Chun-Hwa"
-    }
-  ];
+      shortName: key.split(" ")[0],
+    };
+  })
+
+
+
+  // [
+  //   {
+  //     name: "Alex Tenario",
+  //     img: AlexTenario,
+  //     shortName: "Alex"
+  //   },
+  //   {
+  //     name: "Amarachi",
+  //     img: Amarachi,
+  //     shortName: "Amarachi"
+  //   },
+  //   {
+  //     name: "Chandrava",
+  //     img: Chandrava,
+  //     shortName: "Chandrava"
+  //   },
+  //   {
+  //     name: "Dontae",
+  //     img: Dontae,
+  //     shortName: "Dontae"
+  //   },
+  //   {
+  //     name: "Hu Hyon-Suk",
+  //     img: HuHyon,
+  //     shortName: "Hyon-Suk"
+  //   },
+  //   {
+  //     name: "Ivan Polo",
+  //     img: IvanPolo,
+  //     shortName: "Ivan"
+  //   },
+  //   {
+  //     name: "Jordanna",
+  //     img: Jordanna,
+  //     shortName: "Jordanna"
+  //   },
+  //   {
+  //     name: "Lilahi Loselev",
+  //     img: LilahiLoselev,
+  //     shortName: "Lilahi"
+  //   },
+  //   {
+  //     name: "Lumir",
+  //     img: Lumir,
+  //     shortName: "Lumir"
+  //   },
+  //   {
+  //     name: "Stephanus",
+  //     img: Stephanus,
+  //     shortName: "Stephanus"
+  //   },
+  //   {
+  //     name: "Uesugi Suzuki",
+  //     img: UesugiSuzuki,
+  //     shortName: "Uesugi"
+  //   },
+  //   {
+  //     name: "Yi Chun-Hwa",
+  //     img: YiChunHwa,
+  //     shortName: "Chun-Hwa"
+  //   }
+  // ];
   return (
     <div className="writers-panel-container">
       <div className="followed-writers">

@@ -4,40 +4,54 @@ import AlexTenario from "../../../Images/users/AlexTenario.png";
 import Amarachi from "../../../Images/users/Amarachi.png";
 import Chandrava from "../../../Images/users/Chandrava.png";
 import StoryCard from "../story-card/story-card.js";
+import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as AttentiounLogo } from "../../../Images/HomepagePublicationSVG.svg";
 import "./writer-stories-component.css";
 function WriterStoriesComponent({ setActiveIdx }) {
   const [activePublication, setActivePublication] = useState("All Stories");
-
+  const { userlist, message } = useSelector((state) => ({
+    // thisState: state,
+    userlist: state.homepage.userlist,
+    message: state.common.snackbar.message,
+  }));
+  // const article=userlist.
   const article = {
     public: {
       articlePic:
         "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-      body:
-        "BNPL solutions allow customers to spread out the cost of their purchases...",
+      body: "BNPL solutions allow customers to spread out the cost of their purchases...",
       date: 1649771892446,
       readingTime: "1 min",
       title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-      writerName: "yashchaudhari"
-    }
+      writerName: "yashchaudhari",
+    },
   };
-  const writersData = [
-    {
-      name: "Alex Tenario",
+
+  const writersData = Object.keys(userlist).map((key) => {
+    return {
+      name: key,
       img: AlexTenario,
-      shortName: "Alex"
-    },
-    {
-      name: "Amarachi",
-      img: Amarachi,
-      shortName: "Amarachi"
-    },
-    {
-      name: "Chandrava",
-      img: Chandrava,
-      shortName: "Chandrava"
-    }
-  ];
+      shortName: key.split(" ")[0],
+    };
+  })
+
+  // [
+  //   ({
+  //     name: "Alex Tenario",
+  //     img: AlexTenario,
+  //     shortName: "Alex",
+  //   },
+  //   {
+  //     name: "Amarachi",
+  //     img: Amarachi,
+  //     shortName: "Amarachi",
+  //   },
+  //   {
+  //     name: "Chandrava",
+  //     img: Chandrava,
+  //     shortName: "Chandrava",
+  //   })
+  // ];
 
   const publicationData = [
     "All stories",
@@ -51,7 +65,7 @@ function WriterStoriesComponent({ setActiveIdx }) {
     "The Time Machine",
     "Culture Study",
     "Blue Print",
-    "Crypto Insider"
+    "Crypto Insider",
   ];
 
   return (

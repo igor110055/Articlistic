@@ -9,6 +9,9 @@ import * as writerContentSagas from "./containers/writerContent/writerSaga";
 import * as articleSagas from "./containers/writerContent/components/articleSaga";
 import * as signupSaga from "./containers/authentication/signupSaga";
 import * as homeSaga from "./containers/home/homeSaga";
+import * as homePageSaga from "./containers/homepage/homepageSaga";
+import * as writerSaga from "./containers/writerform/writerformsaga";
+
 export default function* rootSaga() {
   yield all(
     [
@@ -22,6 +25,8 @@ export default function* rootSaga() {
       ...Object.values(articleSagas),
       ...Object.values(signupSaga),
       ...Object.values(homeSaga),
+      ...Object.values(homePageSaga),
+      ...Object.values(writerSaga),
     ].map(spawn)
   );
 }

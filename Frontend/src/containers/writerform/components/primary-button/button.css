@@ -1,0 +1,32 @@
+.primary-buttonn{
+    min-width: 100%;
+    width: 100%;
+    height: 3rem;
+    background-color: #fff;
+    border: 2px solid #EFEFEF;
+    border-radius: 10px;
+    outline: none;  
+    font-family: 'Poppins';
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.primary-button .svg-container{
+    margin-bottom: -5px;
+    padding-right: 1rem;
+}
+
+.primary-button .button-text{
+    font-family: 'Poppins';
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    /* identical to box height */
+
+    color: #373946;
+}
