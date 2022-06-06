@@ -12,7 +12,6 @@ function ForgotPassword({ setDisplayPage }) {
     isGettingForgotEmailOTP,
     getForgotEmailOTPError,
     getForgotEmailSuccess,
-    getForgotEmailOTPResp,
     getForgotEmailOTPErrorMsg,
   } = useSelector((state) => ({
     getForgotEmailOTPError: state.signupReducer.getForgotEmailOTPError,
@@ -29,28 +28,20 @@ function ForgotPassword({ setDisplayPage }) {
     setDisplayPage("sign-in");
   };
 
-  // useEffect(() => {
-  //   const forgotPasswordEmail = localStorage.getItem("forgotPasswordEmail");
-  //   const forgotPasswordUserId = localStorage.getItem("forgotPasswordUserId");
-  //   console.log(forgotPasswordEmail, forgotPasswordUserId);
-  //   console.log(forgotPasswordEmail === null);
-  //   console.log(forgotPasswordUserId === null);
-  //   // console.log(forgotPasswordUserId === undefined);
-  //   // console.log(forgotPasswordEmail === undefined);
-  //   if (forgotPasswordEmail === null || forgotPasswordUserId === null) {
-  //     // setDisplayPage("setNewPassword");
-  //   } else {
-  //     setDisplayPage("setNewPassword");
-  //   }
-  // }, []);
+  useEffect(() => {
+    const forgotPasswordEmail = localStorage.getItem("forgotPasswordEmail");
+    const forgotPasswordUserId = localStorage.getItem("forgotPasswordUserId");
+    if (forgotPasswordUserId !== null && forgotPasswordEmail !== null)
+      setDisplayPage("set-new-password");
+  }, []);
 
   useEffect(() => {
     if (getForgotEmailSuccess) {
       setValidClick(true);
       setError(false);
-      setDisplayPage("verifyOTP");
+      if (localStorage.getItem("forgotPasswordEmail") !== null)
+        setDisplayPage("verifyOTP");
     } else if (getForgotEmailOTPError) {
-      console.log(getForgotEmailOTPErrorMsg);
       setError(true);
       setValidClick(true);
     }
@@ -74,18 +65,26 @@ function ForgotPassword({ setDisplayPage }) {
         associated with your Attentioun account.
       </p>
       <div className="forgot-password-button-container">
-        <PrimaryInput
-          placeholder={"Enter your email address"}
-          onChange={setEmail}
-        />
-        {!validClick && <PrimaryError message={"Enter Valid Email address"} />}
-        {error && <PrimaryError message={getForgotEmailOTPErrorMsg} />}
-        <Button
-          blue
-          text={"Send OTP"}
-          callback={handleSendOTP}
-          isDisabled={isGettingForgotEmailOTP}
-        />
+        <form>
+          <PrimaryInput
+            placeholder={"Enter your email address"}
+            onChange={setEmail}
+            onfocus={() => {
+              return;
+            }}
+          />
+          {!validClick && (
+            <PrimaryError message={"Enter Valid Email address"} />
+          )}
+          {error && <PrimaryError message={getForgotEmailOTPErrorMsg} />}
+          <Button
+            blue
+            text={"Send OTP"}
+            callback={handleSendOTP}
+            isDisabled={isGettingForgotEmailOTP}
+            type={"submit"}
+          />
+        </form>
       </div>
       <div className="back-sign-in" onClick={gotoSignIn}>
         <OtherOptions className="other-options-svg" />

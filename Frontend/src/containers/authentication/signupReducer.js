@@ -36,6 +36,10 @@ import {
   FOLLOW_MULTIPLE_WRITERS_INIT,
   FOLLOW_MULTIPLE_WRITERS_SUCCESS,
   FOLLOW_MULTIPLE_WRITERS_FAILURE,
+  GOOGLE_SIGN_UP_INIT,
+  GOOGLE_SIGN_UP_SUCCESS,
+  GOOGLE_SIGN_UP_FAILURE,
+  GOOGLE_SIGN_IN_SUCCESS,
 } from "../../utils/actionTypes";
 
 const initialState = {
@@ -107,10 +111,16 @@ const initialState = {
   followMultipleWritersFailure: false,
   followMultipleWriterssData: {},
   followMultipleWritersErrorMsg: {},
+
+  googleSignUpInit: false,
+  googleSignupFailure: false,
+  googleSignupSuccess: false,
+  googleSignInSuccess: false,
+  googleSignUpData: {},
+  googleSignInData: {},
 };
 
 const signupReducer = (state = initialState, action) => {
-  // console.log(action);
   switch (action.type) {
     case GET_EMAIL_OTP_INIT:
       return {
@@ -243,6 +253,44 @@ const signupReducer = (state = initialState, action) => {
         loginErrorMsg: action.error,
         isLoggedIn: false,
       };
+
+    case GOOGLE_SIGN_UP_INIT: {
+      return {
+        ...state,
+        googleSignUpInit: true,
+        googleSignupSuccess: false,
+        googleSignupFailure: false,
+        googleSignInSuccess: false,
+      };
+    }
+    case GOOGLE_SIGN_UP_SUCCESS: {
+      return {
+        ...state,
+        googleSignUpInit: false,
+        googleSignupSuccess: true,
+        googleSignUpData: action.payload,
+        googleSignupFailure: false,
+        googleSignInSuccess: false,
+      };
+    }
+    case GOOGLE_SIGN_IN_SUCCESS:
+      return {
+        googleSignUpInit: false,
+        googleSignupSuccess: false,
+        googleSignInData: action.payload,
+        googleSignupFailure: false,
+        googleSignInSuccess: true,
+      };
+
+    case GOOGLE_SIGN_UP_FAILURE: {
+      return {
+        ...state,
+        googleSignUpInit: false,
+        googleSignupSuccess: false,
+        googleSignupFailure: true,
+        googleSignInSuccess: false,
+      };
+    }
     case GET_PICK_FAV_DATA_INIT:
       return {
         ...state,
@@ -371,6 +419,18 @@ const signupReducer = (state = initialState, action) => {
     case RESET_PASSWORD_STATE:
       return {
         ...state,
+        isGettingForgotEmailOTP: false,
+        getForgotEmailOTPError: false,
+        getForgotEmailOTPErrorMsg: "",
+        getForgotEmailOTPResp: {},
+        getForgotEmailSuccess: false,
+
+        isVerifyingForgotEmailOTP: false,
+        verifyForgotEmailOTPError: false,
+        verifyForgotEmailOTPErrorMsg: "",
+        verifyForgotEmailOTPResp: {},
+        verifyForgotEmailOTPSuccess: false,
+
         isResettingPassword: false,
         resetPasswordError: false,
         resetPasswordErrorMsg: "",
@@ -391,6 +451,8 @@ const signupReducer = (state = initialState, action) => {
         isLoggingOut: false,
         logoutResp: data,
         isLoggedIn: false,
+        googleSignInSuccess: false,
+        googleSignupSuccess: false,
       };
     }
 

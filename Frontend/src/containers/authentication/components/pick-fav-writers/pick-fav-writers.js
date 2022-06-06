@@ -5,13 +5,6 @@ import WriterCard from "./writer-card";
 import Button from "../primary-button/button";
 import { showSnackbar } from "../../../common/commonActions";
 import CustomizedSnackbars from "../../../../components/materialuiSnackbar";
-
-// import Jarret from "../../../../Images/Jarret.png";
-// import Nathan from "../../../../Images/Nathan.png";
-// import Ashley from "../../../../Images/Ashley.png";
-// import Margot from "../../../../Images/Margot.png";
-// import Carl from "../../../../Images/Carl.png";
-// import Shawn from "../../../../Images/Shawn.png";
 import { getAuthToken } from "../../../common/commonFunctions";
 import {
   followMultipleWritersInit,
@@ -23,8 +16,6 @@ function PickFavWriters() {
   const navigate = useNavigate();
   const {
     pickFavWritersData,
-    isGettingPickFavWritersData,
-    pickFavWritersDataError,
     open,
     variant,
     message,
@@ -32,7 +23,6 @@ function PickFavWriters() {
     followMultipleWritersFailure,
     followMultipleWriterssData,
     isFollowingMultipleWriters,
-    followMultipleWritersErrorMsg,
   } = useSelector((state) => ({
     pickFavWritersData: state.signupReducer.pickFavWritersData,
     isGettingPickFavWritersData:
@@ -58,7 +48,6 @@ function PickFavWriters() {
   useEffect(() => {
     const token = getAuthToken();
     dispatch(getPickFavDataInit({ token }));
-    // dispatch(showSnackbar("Getting writers", "success"));
   }, []);
 
   const handleWriterClick = (idx) => {
@@ -75,7 +64,6 @@ function PickFavWriters() {
       const writerUsername = pickFavWritersData[idx].username;
       if (value) array.push(writerUsername);
     });
-    // console.log(token, array);
     if (array.length < 3) {
       dispatch(
         showSnackbar("You must select at least 3 writers to follow", "error")
@@ -87,23 +75,6 @@ function PickFavWriters() {
       navigate("/writerDashboard");
     }, 1000);
   };
-  const tagsData = [
-    "All",
-    "Technology",
-    "Design",
-    "Health",
-    "Cultures",
-    "Sports",
-    "Economy",
-    "Politics",
-    "Technology",
-    "Design",
-    "Health",
-    "Cultures",
-    "Sports",
-    "Economy",
-    "Politics",
-  ];
 
   useEffect(() => {
     if (followMultipleWritersFailure)

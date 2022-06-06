@@ -16,7 +16,6 @@ function VerifyOtp({ setDisplayPage, email }) {
   const {
     isVerifyingEmailOTP,
     verifyEmailOTPError,
-    verifyEmailOTPErrorMsg,
     verifyEmailOTPResp,
     emailOTPVerified,
   } = useSelector((state) => ({
@@ -28,7 +27,6 @@ function VerifyOtp({ setDisplayPage, email }) {
   }));
 
   const handleVerify = () => {
-    // console.log(otp);
     if (otp.length === 6) {
       setValidOtp(true);
       dispatch(verifyEmailOTPInit({ email, otp }));
@@ -51,7 +49,6 @@ function VerifyOtp({ setDisplayPage, email }) {
       if (emailOTPVerified) {
         setValidOtp(true);
         localStorage.setItem("createUserId", verifyEmailOTPResp.id);
-        // console.log(verifyEmailOTPResp.id);
         dispatch(userEmail(email));
         setDisplayPage("setUpProfile");
       }
@@ -64,33 +61,36 @@ function VerifyOtp({ setDisplayPage, email }) {
       <p className="verify-otp-subtitle">
         {`We sent a 6-digit code to ${email} Please enter it below.`}
       </p>
-      <div className="pin-container">
-        <ReactPinField
-          className="pin-field"
-          length={6}
-          placeholder={"_"}
-          validate="0123456789"
-          onChange={setOtp}
-          style={
-            !validOtp
-              ? {
-                  borderColor: "#eb4335",
-                }
-              : {}
-          }
+      <form>
+        <div className="pin-container">
+          <ReactPinField
+            className="pin-field"
+            length={6}
+            placeholder={"_"}
+            validate="0123456789"
+            onChange={setOtp}
+            style={
+              !validOtp
+                ? {
+                    borderColor: "#eb4335",
+                  }
+                : {}
+            }
+          />
+        </div>
+        {!validOtp && (
+          <p className="wrong-code">
+            <ErrorSvg /> <span>Invalid code. Please try again.</span>
+          </p>
+        )}
+        <Button
+          text="Verify"
+          blue
+          callback={handleVerify}
+          isDisabled={isVerifyingEmailOTP}
+          type={"submit"}
         />
-      </div>
-      {!validOtp && (
-        <p className="wrong-code">
-          <ErrorSvg /> <span>Invalid code. Please try again.</span>
-        </p>
-      )}
-      <Button
-        text="Verify"
-        blue
-        callback={handleVerify}
-        isDisabled={isVerifyingEmailOTP}
-      />
+      </form>
       {!sentAgain ? (
         <p
           className="get-code-text"

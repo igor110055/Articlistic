@@ -62,9 +62,9 @@ const WriterSetting = () => {
   );
 
   const onAddition = useCallback(
-    newTag => {
-      for (let i = 0; i < tags.length; i++) {
-        if (tags[i].name === newTag.name) {
+    (newTag) => {
+      for (let i of tags) {
+        if (i.name === newTag.name) {
           return;
         }
       }
@@ -114,12 +114,10 @@ const WriterSetting = () => {
         if (getArticleResp?.article?.status !== "DRAFT") {
           let temp = [];
           for (
-            let i = 0;
-            i < getArticleResp.article.storySetting.categories.length;
-            i++
+            let i of getArticleResp.article.storySetting.categories
           ) {
             temp.push({
-              name: getArticleResp.article.storySetting.categories[i]
+              name: i
             });
           }
           // console.log(temp);
@@ -198,8 +196,8 @@ const WriterSetting = () => {
       const temp = getAuthToken();
       const date = new Date().getTime();
       const finalTags = [];
-      for (let i = 0; i < tags.length; i++) {
-        finalTags.push(tags[i].name);
+      for (let i of tags) {
+        finalTags.push(i.name);
       }
       if (canonicalChecked) {
         // console.log(articleData);
@@ -374,11 +372,11 @@ const WriterSetting = () => {
         >
           {isUploadingArticle ? (
             <CircularProgress size={20} style={{ color: "white" }} />
-          ) : getArticleResp?.article?.status === "PUBLISHED" ? (
+          ) : (getArticleResp?.article?.status === "PUBLISHED" ? (
             `Republish`
           ) : (
             `Publish`
-          )}
+          ))}
         </Button>
       </div>
 

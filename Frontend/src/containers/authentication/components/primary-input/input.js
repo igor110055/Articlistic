@@ -8,6 +8,7 @@ function Input({
   inputBorderColor,
   type,
   onChange,
+  onfocus,
 }) {
   return (
     <div className="primary-input-div">
@@ -17,6 +18,8 @@ function Input({
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
         style={{ borderColor: `${inputBorderColor}` }}
+        onFocus={() => onfocus(true)}
+        onBlur={() => onfocus(false)}
       />
     </div>
   );

@@ -16,7 +16,7 @@ import DelimiterBlock from "./delimiterBlock/delimliterBlock";
 import QuoteBlock from "./quoteBlock/quoteBlock";
 import NftBlock from "./nftBlock/nftBlock";
 import ImageUploadBlock from "./imageUploadBlock/imageUploadBlock";
-import { Container, Box, Button } from "@mui/material";
+import { Container, Box, Button,CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadArticle, getArticle } from "./writerEditorActions";
@@ -25,7 +25,7 @@ import { useNavigate } from "react-router";
 import iconOnly from "./../../Images/icon_only.svg";
 import CoverPhoto from "../../components/coverPhoto";
 import readingTime from "reading-time";
-import { CircularProgress } from "@mui/material";
+// import { CircularProgress } from "@mui/material";
 import { userUsername } from "../user/userActions";
 import { useInterval } from "./../../utils/common";
 import Auth from "../../components/auth";
@@ -58,21 +58,21 @@ const WriterEditor = () => {
   const {state} = useLocation()
   const navigate = useNavigate();
   const [editorData, setEditorData] = useState();
-  const [check, setCheck] = useState(false);
+  // const [check, setCheck] = useState(false);
   const [articleTitle, setArticleTitle] = useState("");
   const [articleDes, setArticleDes] = useState("");
   const [articleCover, setArticleCover] = useState("");
   const [getArticleSuccess, setGetArticleSuccess] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
+  // const [uploadSuccess, setUploadSuccess] = useState(false);
   const [saveDraftInitiate, setSaveDraftInitiate] = useState(false);
   const [nextClicked, setNextClicked] = useState(false);
   const [getArticleInitiate, setGetArticleInitiate] = useState(false);
-  const [articleData, setArticleData] = useState({});
+  // const [articleData, setArticleData] = useState({});
   const [startTimer, setStartTimer] = useState(false);
-  const [savedBefore, setSavedBefore] = useState(0);
+  // const [savedBefore, setSavedBefore] = useState(0);
   let [counter, setCounter] = useState(0);
   const [saveClicked, setSaveClicked] = useState(false);
-  const [articleId, setArticleId] = useState("");
+  // const [articleId, setArticleId] = useState("");
   const [noImageFound, setNoImageFound] = useState(false);
   const [noTitleFound, setNoTitleFound] = useState(false);
   const [noSubtitleFound, setNoSubtitleFound] = useState(false);
@@ -109,14 +109,16 @@ const WriterEditor = () => {
           editorInstance.current = editor;
           getReadingTime()
           if(state){
-            const {html, articleId, heading, subtitle} = state
+            const {html,
+              //  articleId,
+               heading, subtitle} = state
             setArticleTitle(heading)
             setArticleDes(subtitle)
             editorInstance?.current?.blocks?.renderFromHTML(html)
             saveImport()
             getReadingTime()
           }
-          setCheck(true);
+          // setCheck(true);
           try {
             new Undo({ editor });
           } catch {
@@ -209,14 +211,14 @@ const WriterEditor = () => {
     ?.save()
     .then((outputData) => {
       let readTime = 0;
-      for (let i = 0; i < outputData.blocks.length; i++) {
+      for (let i of outputData.blocks) {
         // console.log(outputData.blocks[i].data);
-        if (outputData.blocks[i].data?.text !== undefined) {
-          readTime += readingTime(outputData.blocks[i]?.data?.text).time;
+        if (i.data?.text !== undefined) {
+          readTime += readingTime(i?.data?.text).time;
         }
         if (
-          outputData.blocks[i].type === "image" ||
-          outputData.blocks[i].type === "unsplash"
+          i.type === "image" ||
+          i.type === "unsplash"
         ) {
           readTime += 8000;
         }
@@ -242,7 +244,7 @@ const WriterEditor = () => {
     userUserName,
     isUploadingArticle,
     uploadArticleError,
-    uploadArticleErrorMsg,
+    // uploadArticleErrorMsg,
     uploadArticleResp,
     isGettingArticle,
     getArticleError,
@@ -264,8 +266,8 @@ const WriterEditor = () => {
         setEditorData(JSON.parse(getArticleResp.article?.writeup));
       }
     }
-    if (getArticle) {
-    }
+    // if (getArticle) {
+    // }
   }, [getArticleSuccess]);
 
   useInterval(() => {
@@ -274,7 +276,7 @@ const WriterEditor = () => {
 
   useEffect(() => {
     if (getArticleError) {
-      setArticleData({});
+      // setArticleData({});
       setGetArticleInitiate(false);
       setGetArticleSuccess(false);
     } else {
@@ -282,11 +284,11 @@ const WriterEditor = () => {
         // console.log(getArticleResp);
         localStorage.setItem("article", JSON.stringify(getArticleResp));
         // console.log(getArticleResp);
-        setArticleData(
-          getArticleResp?.article?.writeup
-            ? JSON.parse(getArticleResp.article.writeup)
-            : ""
-        );
+        // setArticleData(
+        //   getArticleResp?.article?.writeup
+        //     ? JSON.parse(getArticleResp.article.writeup)
+        //     : ""
+        // );
         setArticleTitle(
           getArticleResp.article?.public?.title
             ? getArticleResp.article.public.title
@@ -333,7 +335,7 @@ const WriterEditor = () => {
   useEffect(() => {
     if (userUserName !== "") {
       setInterval(() => {
-        setCounter(counter => (counter === 120 ? 0 : counter + 1));
+        setCounter(cn => (cn === 120 ? 0 : cn + 1));
       }, 1000);
     }
   }, [startTimer]);
@@ -364,10 +366,11 @@ const WriterEditor = () => {
 
   useEffect(() => {
     if (uploadArticleError) {
-      setUploadSuccess(false);
+      console.log("Inside");
+      // setUploadSuccess(false);
     } else {
       if (!isUploadingArticle && saveDraftInitiate) {
-        setUploadSuccess(true);
+        // setUploadSuccess(true);
         counter = 0;
         setCounter(counter);
         if (uploadArticleResp?.articleId) {
@@ -389,14 +392,14 @@ const WriterEditor = () => {
       ?.save()
       .then((outputData) => {
         let readTime = 0;
-        for (let i = 0; i < outputData.blocks.length; i++) {
+        for (let i of outputData.blocks) {
           // console.log(outputData.blocks[i].data);
-          if (outputData.blocks[i].data?.text !== undefined) {
-            readTime += readingTime(outputData.blocks[i]?.data?.text).time;
+          if (i.data?.text !== undefined) {
+            readTime += readingTime(i?.data?.text).time;
           }
           if (
-            outputData.blocks[i].type === "image" ||
-            outputData.blocks[i].type === "unsplash"
+            i.type === "image" ||
+            i.type === "unsplash"
           ) {
             readTime += 8000;
           }
@@ -445,14 +448,14 @@ const WriterEditor = () => {
         ?.save()
         .then(outputData => {
           let readTime = 0;
-          for (let i = 0; i < outputData.blocks.length; i++) {
+          for (let i of outputData.blocks) {
             // console.log(outputData.blocks[i].data);
-            if (outputData.blocks[i].data?.text !== undefined) {
-              readTime += readingTime(outputData.blocks[i]?.data?.text).time;
+            if (i.data?.text !== undefined) {
+              readTime += readingTime(i?.data?.text).time;
             }
             if (
-              outputData.blocks[i].type === "image" ||
-              outputData.blocks[i].type === "unsplash"
+              i.type === "image" ||
+              i.type === "unsplash"
             ) {
               readTime += 8000;
             }
@@ -511,7 +514,7 @@ const WriterEditor = () => {
         .catch(error => {
           // console.log('Saving failed: ', error);
         });
-      setUploadSuccess(false);
+      // setUploadSuccess(false);
       setSaveDraftInitiate(true);
     }
   };
@@ -613,7 +616,7 @@ const WriterEditor = () => {
             .catch(error => {
               // console.log('Saving failed: ', error);
             });
-          setUploadSuccess(false);
+          // setUploadSuccess(false);
           setSaveDraftInitiate(true);
         }
       }
@@ -633,7 +636,7 @@ const WriterEditor = () => {
       setNotFoundErrorMsg("Please add story subtitle");
     } else {
       setNoImageFound(false);
-      setUploadSuccess(false);
+      // setUploadSuccess(false);
       localStorage.setItem("articlePic", articleCover);
       localStorage.setItem("articleTitle", articleTitle);
       localStorage.setItem("articleDes", articleDes);
@@ -675,7 +678,7 @@ const WriterEditor = () => {
       setNotFoundErrorMsg("Please add subtitle");
     } else {
       setNoImageFound(false);
-      setUploadSuccess(false);
+      // setUploadSuccess(false);
       saveDraft();
       setNextClicked(false);
     }

@@ -1,5 +1,5 @@
-// import LandingPage from "./containers/loginSignup/landingPage";
 import { getEnvVariables } from "./config";
+// import LandingPage from "./containers/loginSignup/landingPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import TempNavbar from "./containers/navbar/tempNavbar";
 // import OnBoarding from "./containers/loginSignup/onBoarding";
@@ -21,6 +21,7 @@ import WriterPublicationEditor from "./containers/writerContent/writerPublicatio
 import AboutPublication from "./containers/writerContent/aboutPublication";
 import "./App.css";
 import MultipleTab from "./utils/MultipleTab";
+import MainLoader from "./components/mainLoader";
 import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
 // import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
@@ -39,8 +40,8 @@ function App() {
   // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
   const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
   const [mulitpleTabs, setMultipleTabs] = useState(false);
-  const { variant, message, open } = useSelector((state) => ({
-    // thisState: state,
+  const { variant, message, open, state } = useSelector((state) => ({
+    thisState: state,
     loginError: state.signupReducer.isLoggedIn,
     variant: state.common.snackbar.variant,
     message: state.common.snackbar.message,
@@ -53,7 +54,11 @@ function App() {
   // }, [thisState]);
   useEffect(() => {
     getEnvVariables(
-      ["REACT_APP_ENCRYPTION_SALT", "REACT_APP_SERVER_LINK"],
+      [
+        "REACT_APP_ENCRYPTION_SALT",
+        "REACT_APP_SERVER_LINK",
+        "GOOGLE_CLIENT_ID",
+      ],
       setEnvVariablesSuccess
     );
 
@@ -72,6 +77,10 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
+
   localStorage.openpages = Date.now();
   var onLocalStorageEvent = function (e) {
     if (e.key === "openpages") {
@@ -85,10 +94,25 @@ function App() {
   };
   window.addEventListener("storage", onLocalStorageEvent, false);
 
+
+  useEffect(() => {
+    if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+        setEnvVariablesSuccess(false);
+        getEnvVariables(
+          [
+            "REACT_APP_ENCRYPTION_SALT",
+            "REACT_APP_SERVER_LINK",
+            "GOOGLE_CLIENT_ID",
+          ],
+          setEnvVariablesSuccess
+        );
+    }
+  }, [performance.navigation.type]);
+
   return (
     //for writers
     <div>
-      {getEnvVariablesSuccess && (
+      {getEnvVariablesSuccess ? (
         <div className="App">
           {!mulitpleTabs && (
             <Router>
@@ -175,7 +199,7 @@ function App() {
           />
           {/* <Navbar /> */}
         </div>
-      )}
+      ): (<MainLoader/>)}
     </div>
   );
 }

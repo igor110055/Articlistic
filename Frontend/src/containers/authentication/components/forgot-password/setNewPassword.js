@@ -30,50 +30,19 @@ function SetNewPassword({ setDisplayPage }) {
     open: state.common.snackbar.open,
   }));
 
-  useEffect(() => {
-    const email = localStorage.getItem("forgotPasswordEmail");
-    const id = localStorage.getItem("forgotPasswordUserId");
-    // if (
-    //   email === undefined ||
-    //   email === null ||
-    //   id === undefined ||
-    //   id === null
-    // ) {
-    //   localStorage.clear();
-    //   setDisplayPage("forgot-password");
-    // }
-  });
-
   const handleReset = () => {
     if (!validatePassword(newPass)) {
       setValidPass(false);
       setSamePass(true);
-      return;
     } else if (newPass !== confirmPass) {
       setValidPass(true);
       setSamePass(false);
-      return;
     } else {
       const email = localStorage.getItem("forgotPasswordEmail");
       const id = localStorage.getItem("forgotPasswordUserId");
       dispatch(resetPassword({ email: email, newPassword: newPass, id: id }));
     }
   };
-
-  //   useEffect(() => {
-  //     if (resetPasswordSuccess && !resetPasswordError) {
-  //       localStorage.removeItem("forgotPasswordEmail");
-  //       localStorage.removeItem("forgotPasswordUserId");
-  //       setTimeout(() => {
-  //         setDisplayPage("sign-in");
-  //       }, 1000);
-  //     } else if (resetPasswordError) {
-  //       localStorage.removeItem("forgotPasswordUserId");
-  //       localStorage.removeItem("forgotPasswordEmail");
-  //
-  //       setDisplayPage("sign-in");
-  //     }
-  //   }, [resetPasswordSuccess, resetPasswordError]);
 
   useEffect(() => {
     if (resetPasswordSuccess) {
@@ -84,8 +53,6 @@ function SetNewPassword({ setDisplayPage }) {
 
       localStorage.removeItem("forgotPasswordUserId");
       localStorage.removeItem("forgotPasswordEmail");
-      // localStorage.clear();
-      dispatch(resetPasswordState());
       setTimeout(() => {
         setDisplayPage("sign-in");
       }, 1000);
@@ -94,15 +61,14 @@ function SetNewPassword({ setDisplayPage }) {
 
   useEffect(() => {
     if (resetPasswordError) {
-      // dispatch(
-      //   showSnackbar(
-      //     "Error occurred while updating password. Please try resetting passowrd again",
-      //     "error"
-      //   )
-      // );
+      dispatch(
+        showSnackbar(
+          "Error occurred while updating password. Please try resetting passowrd again",
+          "error"
+        )
+      );
       localStorage.removeItem("forgotPasswordUserId");
       localStorage.removeItem("forgotPasswordEmail");
-      // localStorage.clear();
       dispatch(resetPasswordState());
       setTimeout(() => {
         setDisplayPage("sign-in");
@@ -123,32 +89,41 @@ function SetNewPassword({ setDisplayPage }) {
         style={{ margin: 0 }}
       >{`Please enter a new password.`}</p>
       <div style={{ marginTop: "36px" }}>
-        <Input
-          type={"password"}
-          labelName={"New Password"}
-          inputBorderColor={!validPass ? "#EB4335" : "#777983"}
-          labelColor={!validPass ? "#EB4335" : "#777983"}
-          onChange={setNewPass}
-        />
-        {!validPass && <PrimaryError message={"Use a strong password"} />}
-        <p className="password-constraints">
-          Password should contain 1 uppercase letter, 1 lowercase letter, 1
-          special character and 1 number. Minimum 8 characters.
-        </p>
-        <Input
-          type={"password"}
-          inputBorderColor={!samePass ? "#EB4335" : "#777983"}
-          labelColor={!samePass ? "#EB4335" : "#777983"}
-          labelName={"Confirm password"}
-          onChange={setConfirmPass}
-        />
-        {!samePass && <PrimaryError message={"passwords do not match"} />}
-        <Button
-          blue
-          text={"Reset Password"}
-          callback={() => handleReset()}
-          isDisabled={isResettingPassword}
-        />
+        <form>
+          <Input
+            type={"password"}
+            labelName={"New Password"}
+            inputBorderColor={!validPass ? "#EB4335" : "#777983"}
+            labelColor={!validPass ? "#EB4335" : "#777983"}
+            onChange={setNewPass}
+            onfocus={() => {
+              return;
+            }}
+          />
+          {!validPass && <PrimaryError message={"Use a strong password"} />}
+          <p className="password-constraints">
+            Password should contain 1 uppercase letter, 1 lowercase letter, 1
+            special character and 1 number. Minimum 8 characters.
+          </p>
+          <Input
+            type={"password"}
+            inputBorderColor={!samePass ? "#EB4335" : "#777983"}
+            labelColor={!samePass ? "#EB4335" : "#777983"}
+            labelName={"Confirm password"}
+            onChange={setConfirmPass}
+            onfocus={() => {
+              return;
+            }}
+          />
+          {!samePass && <PrimaryError message={"passwords do not match"} />}
+          <Button
+            blue
+            text={"Reset Password"}
+            callback={() => handleReset()}
+            isDisabled={isResettingPassword}
+            type={"submit"}
+          />
+        </form>
       </div>
       <CustomizedSnackbars variant={variant} message={message} openS={open} />
     </div>

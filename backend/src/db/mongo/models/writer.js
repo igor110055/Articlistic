@@ -178,9 +178,9 @@ async function removeWriterCategory(username, category) {
     }
 }
 
-
-
-async function insertWriter(username, description, categories, image, profileName) {
+*/
+/*
+async function insertWriter(username, description, categories, image, profileName,list_id) {
     let client;
 
     try {

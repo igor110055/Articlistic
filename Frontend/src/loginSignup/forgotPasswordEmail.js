@@ -1,10 +1,10 @@
 import { Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useState, useEffect } from "react";
-import {BlueTextField, validateEmail } from "../../utils/common";
+import {BlueTextField, validateEmail } from "../utils/common";
 import { useSelector, useDispatch } from "react-redux";
 import { getForgotEmailOTP, verifyForgotEmailOTP } from "./loginSignupAction";
-import { userEmail } from "../user/userActions";
+import { userEmail } from "../containers/user/userActions";
 import { CircularProgress } from "@mui/material";
 import { Error as ErrorInOTP } from "./helper_functions/error";
 import { Timer } from "./Timer";

@@ -7,7 +7,7 @@ const redis = require('../db/redis/index')
 
 
 
-module.exports = function (isSocketMiddleware, logout, checkIfWriter) {
+module.exports = function (isSocketMiddleware, logout, checkIfWriter, attachUserWithRequest) {
     return async function asyncMiddleware(req, res, next) {
 
         let token = isSocketMiddleware ? req.handshake.auth.token : req.headers.authorization;
@@ -68,10 +68,16 @@ module.exports = function (isSocketMiddleware, logout, checkIfWriter) {
 
 
             try {
-                if (checkIfWriter) {
+                if (attachUserWithRequest || checkIfWriter) {
                     var user = await mongo.users.getUserByUsername(check.payload.username);
 
-                    if (!user || !user.isWriter) {
+
+                    /**
+                     * Checks if user exists & is a writer
+                     * and throws an error if checkIfWriter is true.
+                     */
+
+                    if (checkIfWriter && (!user || !user.isWriter)) {
                         throw "It is required to be a writer for this operation."
                     }
 

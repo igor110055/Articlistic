@@ -4,9 +4,10 @@ const request = require('supertest');
 
 const email = 'test1@gmail.com';
 const username = 'test-user';
-const international = false;
+const country = 'India';
 const name = 'sam';
 const password = 'Default@123'
+const isWriter = false
 let id;
 
 /*
@@ -14,124 +15,99 @@ let id;
     First two lines add an ID on the database side which is used for Security purposes. 
     Check out Notion. 
 */
-it('Returns a 201 on create user when successful', async () => {
-    id = await mongo.security.createUserAddPhone(phone);
-    await mongo.security.createUserAddEmail(email);
+test('Returns a 201 on create user when successful', async () => {
+    id = await mongo.security.createUserAddEmail(email);
     await request(app).post('/onboarding/createUser').send({
         username,
         email,
         password,
-        phone,
         name,
-        international,
+        country,
+        isWriter,
         id
     }).expect(201);
-
-
 })
 
 
 /*
     The above code is a test case. It is a test case that tests the `createUser` endpoint. 
-    Whenever the CreateUser API is used - an ID is required for Security Purposes. 
-
+    The required params are - username, email, password, name, phone, id andcountry. 
 */
 
-it('Returns 500 in case verification is not complete ', async () => {
-
-    //Trying to create a user with same phone. 
-    await request(app).post('/onboarding/createUser').send({
-        username: 'tester-dixit',
-        email: 'yash@gmail.com',
-        password,
-        phone,
-        name,
-        international,
-        id
-    }).expect(500);
-
-    //Trying to create a user with same email. 
-    await request(app).post('/onboarding/createUser').send({
-        username: 'tester-dixit',
-        email,
-        password,
-        phone: '9832919928',
-        name,
-        international,
-        id
-    }).expect(500);
-
-})
-
-/*
-    The above code is a test case. It is a test case that tests the `createUser` endpoint. 
-    The required params are - username, email, password, name, phone, id and international. 
-*/
-
-it('Returns a 400 in case of missing parameters', async () => {
+describe('Returns a 400 in case of missing parameters', () => {
 
 
-    //Missing international as a param.
-    await request(app).post('/onboarding/createUser').send({
-        username,
-        email,
-        password,
-        phone,
-        name,
-        id
-    }).expect(400);
+    //Missingcountry as a param.
+    test("Returns 400 in case of missing Country", async () => {
+        await request(app).post('/onboarding/createUser').send({
+            username,
+            email,
+            password,
+            name,
+            isWriter,
+            id
+        }).expect(400);
+    })
 
     //Missing username as a param.
-    await request(app).post('/onboarding/createUser').send({
-        email,
-        password,
-        phone,
-        name,
-        international,
-        id
-    }).expect(400);
-
-    //Missing phone as a param.
-    await request(app).post('/onboarding/createUser').send({
-        username,
-        email,
-        password,
-        name,
-        international,
-        id
-    }).expect(400);
-
+    test("Returns 400 in case of missing Username", async () => {
+        await request(app).post('/onboarding/createUser').send({
+            country,
+            email,
+            password,
+            name,
+            isWriter,
+            id
+        }).expect(400);
+    })
 
     //Missing password as a param.
-    await request(app).post('/onboarding/createUser').send({
-        username,
-        email,
-        phone,
-        name,
-        international,
-        id
-    }).expect(400);
+    test("Returns 400 in case of missing Password", async () => {
+        await request(app).post('/onboarding/createUser').send({
+            country,
+            email,
+            username,
+            name,
+            isWriter,
+            id
+        }).expect(400);
+    })
 
 
     //Missing name as a param.
-    await request(app).post('/onboarding/createUser').send({
-        username,
-        email,
-        password,
-        phone,
-        international,
-        id
-    }).expect(400);
-
+    test("Returns 400 in case of missing Name", async () => {
+        await request(app).post('/onboarding/createUser').send({
+            country,
+            email,
+            username,
+            password,
+            isWriter,
+            id
+        }).expect(400);
+    })
     //Missing id as parameter
-    await request(app).post('/onboarding/createUser').send({
-        username,
-        email,
-        password,
-        phone,
-        international,
-        name
-    }).expect(400);
+    test("Returns 400 in case of missing id", async () => {
+        await request(app).post('/onboarding/createUser').send({
+            country,
+            email,
+            username,
+            name,
+            isWriter,
+            password
+        }).expect(400);
+    })
+
+    //Missing isWriter as Parameter
+    test("Returns 400 in case of missing isWriter", async () => {
+        await request(app).post('/onboarding/createUser').send({
+            country,
+            email,
+            username,
+            name,
+            id,
+            password
+        }).expect(400);
+    })
 
 });
 
@@ -142,4 +118,46 @@ it('Returns a 400 in case of missing parameters', async () => {
     500 Error comes in case the user has same email/phone and username. This confirms that our uniqueness index works.  
 */
 
-it('Returns a 500 in case there is duplication of email/phone/username', async () => {});
+describe('Returns a 409 in case there is duplication of email/username', () => {
+
+    //email duplicacy
+    test("Return 409 if Email already exist", async () => {
+        id = await mongo.security.createUserAddEmail(email)
+        await request(app).post("/onboarding/createUser").send({
+            username,
+            email,
+            password,
+            name,
+            country,
+            isWriter,
+            id
+        }).expect(201);
+
+        await request(app).post("/onboarding/email/sendOTP").query({
+            email
+        }).expect(409)
+    })
+
+    //if username exist
+    test("Return 409 if Username already exist", async () => {
+        id = await mongo.security.createUserAddEmail(email);
+
+        await request(app).get("/onboarding/checkUsername").query({
+            username: "whiteFang"
+        }).expect(200)
+
+        await request(app).post("/onboarding/createUser").send({
+            username: "whiteFang",
+            email,
+            password,
+            name,
+            country,
+            isWriter,
+            id
+        }).expect(201);
+
+        await request(app).get("/onboarding/checkUsername").query({
+            username: "whiteFang"
+        }).expect(409)
+    })
+});

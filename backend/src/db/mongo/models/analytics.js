@@ -14,7 +14,7 @@ const collection = MDB_COLLECTION_ANALYTICS;
 async function createUniquenessIndex() {
     try {
 
-        client = await MDB.getClient();
+        var client = await MDB.getClient();
         let db = client.db(dbName).collection(collection);
 
         let startTime = Date.now();
@@ -38,6 +38,7 @@ async function createUniquenessIndex() {
 
 
     } catch (e) {
+        logger.debug(e)
         throw e;
     }
 }

@@ -39,7 +39,7 @@ export const ATextField = styled(TextField)`
     }
   }
   & .MuiFormHelperText-root {
-    font-family: Poppins;
+    /*font-family: Poppins;*/
   }
 `;
 
@@ -47,20 +47,20 @@ export const ATextField = styled(TextField)`
 export const BlueTextField = styled(TextField)`
   fieldset {
     border-radius: 10px;
-    font-family: Poppins;
+    /*font-family: Poppins;*/
   }
   & label.Mui-focused {
     color: #0fc7fc;
-    font-family: Poppins;
+    /*font-family: Poppins;*/
   }
   & .MuiOutlinedInput-root {
     &.Mui-focused fieldset {
       border-color: #0fc7fc;
-      font-family: Poppins;
+      /*font-family: Poppins;*/
     }
   }
   & .MuiFormHelperText-root {
-    font-family: Poppins;
+    /*font-family: Poppins;*/
   }
 `;
 
@@ -121,15 +121,9 @@ export const validatePassword = (password) => {
 };
 
 export const validateUserName = (uName) => {
-  if (
-    uName[uName.length - 1] !== "-" &&
-    uName[0] !== "-" &&
-    uName.length > 3 &&
-    uName.length < 21
-  ) {
-    return true;
-  }
-  return false;
+  const regex = /^[a-zA-Z][A-Za-z0-9-]*[a-zA-Z0-9]+$/;
+  if (uName.length < 3 || uName.length > 25) return false;
+  return regex.test(uName);
 };
 
 

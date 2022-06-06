@@ -4,7 +4,7 @@ import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOTP, verifyOTP } from "./loginSignupAction";
-import { userPhone } from "../user/userActions";
+import { userPhone } from "../containers/user/userActions";
 import MuiPhoneNumber from "material-ui-phone-number";
 import "./../../index.css";
 import { Timer } from "./Timer";

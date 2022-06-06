@@ -41,7 +41,7 @@ import {
     GET_REFRESH_TOKEN_INIT,
     GET_REFRESH_TOKEN_SUCCESS,
     GET_REFRESH_TOKEN_FAILURE,
-} from '../../utils/actionTypes';
+} from '../utils/actionTypes';
 
 
 const initialState = {
