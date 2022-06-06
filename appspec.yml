@@ -14,7 +14,7 @@ hooks:
       timeout: 60
       runas: root
   ApplicationStart:
-    - location: Frontend/getParameters.sh
+    - location: /home/ec2-user/getP.sh
       timeout: 60
       runas: root
     - location: backend/RunBackendScript.sh
