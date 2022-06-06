@@ -55,7 +55,7 @@ module.exports = function articlesRouter() {
 
         .put('/analytics/read', addRead)
         .put('/analytics/view', addView)
-        .get('/analytics/', useAuth(), checkDb(true, false, true), getArticleViews)
+        .get('/analytics/', useAuth(), checkDb(true, false, true), getArticleAnalytics)
 
         .put('/uploadImage', useAuth(), checkDb(true, false, true), file.single('image'), uploadEmbed)
         .put('/upload', useAuth(false, false, true), uploadArticle)
