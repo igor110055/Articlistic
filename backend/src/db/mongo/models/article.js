@@ -468,9 +468,7 @@ async function getArticleById(articleId) {
     try {
 
         client = await MDB.getClient();
-        // if (!client) {
-        //     client = await MDB.getClient()
-        // }
+
         let db = client.db(dbName).collection(collection);
 
         let startTime = Date.now();
@@ -485,11 +483,6 @@ async function getArticleById(articleId) {
         let timeTaken = endTime - startTime;
 
         logger.info("getArticleById mongo response time: " + timeTaken.toString());
-        if (articleId == 'some-random-articleId') {
-            logger.info('article Found: ');
-            logger.info(res);
-
-        }
         return res;
 
 

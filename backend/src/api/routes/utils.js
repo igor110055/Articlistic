@@ -166,7 +166,7 @@ module.exports = function utilitiesRouter() {
         let pvt = encryption.decrypt(user.private);
 
         pvt.password = newPassword;
-
+        logger.debug("here");
         let encryptedPrivateField = encryption.encrypt(pvt);
 
         try {

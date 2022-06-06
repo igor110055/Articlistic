@@ -1,9 +1,6 @@
-// import {
-//     createClient
-// } from 'redis';
-
-
-
+const {
+    RDB_CLOUDWATCH_NEXT_TOKEN
+} = require('../../../../constants');
 const logger = require('../../../utils/logger');
 
 const {
@@ -11,14 +8,14 @@ const {
 } = require('../client')
 
 
-async function setName(username, name) {
+async function setCloudwatchNextToken(token) {
 
     let startTime = Date.now();
 
     const client = await RDB.getClient();
     try {
 
-        await client.SET(username, name);
+        await client.SET(RDB_CLOUDWATCH_NEXT_TOKEN, token);
 
     } catch (e) {
         logger.error(e);
@@ -35,36 +32,31 @@ async function setName(username, name) {
 }
 
 
-async function getName(username) {
+async function getCloudwatchNextToken() {
 
-    if (!username) throw "Username required"
     let startTime = Date.now();
     const client = await RDB.getClient();
 
     try {
-        var res = await client.GET(username);
+        var res = await client.GET(RDB_CLOUDWATCH_NEXT_TOKEN);
     } catch (e) {
         throw e;
     }
 
-
-    if (!res) {
-        logger.debug("ISN'T MEMBER");
-        return false;
-    }
-
-
     let endTime = Date.now();
 
     let timeTaken = endTime - startTime;
-
+    logger.debug(res);
     logger.info("username to name get - redis: " + timeTaken.toString() + "ms");
     return res;
 }
 
 
 
+
+
+
 module.exports = {
-    getName,
-    setName
+    getCloudwatchNextToken,
+    setCloudwatchNextToken
 }

@@ -4,6 +4,9 @@ var express = require('express');
 const {
     v4: uuidv4
 } = require('uuid');
+var file = require('../../middleware/files');
+
+const s3 = require('../../utils/s3');
 
 // require('../../errors/customError');
 
@@ -16,7 +19,9 @@ const otp = require('../../utils/otp/index')
 const mailer = require("../../utils/mailer/email")
 
 var encryption = require('../../utils/encryption/index');
-const { createMailingList } = require("../../utils/mailer/client")
+const {
+    createMailingList
+} = require("../../utils/mailer/client")
 const NetworkError = require('../../errors/NetworkError');
 const MissingParamError = require('../../errors/MissingParamError');
 const DatabaseError = require('../../errors/DatabaseError');
@@ -53,6 +58,8 @@ module.exports = function onboardingRouter() {
         .post('/email/verifyOTP', verifyEmailOTP)
         .post('/login', login)
         .post('/createUser', createUser)
+
+        .post('/createWriter', file.single('image'), createWriter)
         .post('/google/signup', signupUsingGoogle)
 
         .get('/getCategoriesAndWriters', useAuth(), getCategoriesAndWriters)
@@ -62,6 +69,121 @@ module.exports = function onboardingRouter() {
 
         .post('/followMultiple', useAuth(), bulkFollow);
 
+
+    async function createWriter(req, res) {
+        let routeName = "POST /onboarding/createWriter";
+        let user = {};
+        let international = true;
+        var listId;
+
+        /* The below code is checking if the parameters are missing. If they are missing, it throws an error. */
+
+        let {
+            username,
+            email,
+            password,
+            name,
+            country
+        } = req.body
+
+
+        const googleUser = false;
+        const isWriter = true;
+
+        let buffer = req.file ? req.file.buffer : null;
+
+        if (!username || !email || !password || !name || !country || !buffer) {
+            throw new MissingParamError('Some parameters are missing.', routeName);
+        }
+
+
+
+        try {
+            var resLink = await s3.init().uploadImage(buffer, username);
+        } catch (e) {
+            throw new ServiceError('s3-profile-upload', routeName, e)
+        }
+
+
+        if (country === "India") {
+            international = false;
+        }
+
+
+        email = email.trim();
+        /* The above code is removing any leading and trailing spaces from email . */
+
+        /* The above code is encrypting the private fields of the user object. 
+         * This won't be there while creating a user using google user.
+         */
+
+
+
+
+        const privateField = {
+            email,
+            password
+        }
+        var encryptedPrivateField = encryption.encrypt(privateField);
+
+        var emailEncrypted = encryption.staticEncrypt(email);
+
+
+        /*
+        Creating the user object properly. 
+        */
+
+
+
+        user.username = username;
+        user.name = name;
+        user.private = encryptedPrivateField;
+        user.email = emailEncrypted;
+        user.isWriter = isWriter;
+        user.international = international;
+        user.googleUser = googleUser;
+        user.country = country;
+        user.profilePic = resLink.url;
+
+        /*
+
+        Creates a transaction in the database which inserts a value of the user
+        in the analytics + writers + user collection.
+
+        */
+
+        try {
+            listId = await createMailingList(username);
+        } catch (e) {
+            logger.info(e, "Mailing List creation Failed");
+        }
+
+
+        //Adding mailing_list_id to writer's collection
+        try {
+            await mongo.transactionsUserAnalytics.createUser(user, listId);
+        } catch (e) {
+
+            await s3.init().deleteFile(resLink.fileName, true);
+
+            throw new DatabaseError(routeName, e);
+        }
+
+
+        /* The above code is creating a JWT token and encrypting the refresh token. 
+        After this deletes not required fields and then sends out the response */
+
+        try {
+            await mailer.WelcomeMail(email, name);
+        } catch (e) {
+            logger.debug(e, "Failed to send Welcome mail", routeName)
+        }
+
+        return res.status(201).send({
+            "message": "Writer successfully created."
+        });
+
+    }
 
     async function bulkFollow(req, res) {
         const routeName = 'onboarding bulk follow';
@@ -496,7 +618,7 @@ module.exports = function onboardingRouter() {
 
 
         user.username = username;
-        user.public = {};
+        // user.public = {};
         // user.public.username = username;
         user.name = name;
 
@@ -510,6 +632,7 @@ module.exports = function onboardingRouter() {
         user.isWriter = isWriter;
         user.international = international;
         user.googleUser = googleUser;
+        user.country = country;
 
         /*
 
@@ -522,8 +645,7 @@ module.exports = function onboardingRouter() {
         if (isWriter) {
             try {
                 listId = await createMailingList(username);
-            }
-            catch (e) {
+            } catch (e) {
                 logger.info(e, "Mailing List creation Failed");
             }
         }
@@ -547,12 +669,13 @@ module.exports = function onboardingRouter() {
         delete user.email;
         delete user.public;
         delete user.refreshToken;
+
         try {
             await mailer.WelcomeMail(email, name);
-        }
-        catch (e) {
+        } catch (e) {
             logger.debug(e, "Failed to send Welcome mail", routeName)
         }
+
         return res.status(201).send({
             ...user,
             accessToken,
@@ -605,8 +728,7 @@ module.exports = function onboardingRouter() {
         try {
 
             await otp.email.sendVerificationOTP(email, code);
-        }
-        catch (e) {
+        } catch (e) {
             try {
                 await mongo.email.deleteOTP(code);
             } catch (e) {

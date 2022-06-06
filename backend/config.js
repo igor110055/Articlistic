@@ -64,6 +64,11 @@ const dev = {
     },
     ip: {
         apiKey: process.env.IP_API_KEY
+    },
+    cloudwatch: {
+        nextSequenceToken: 'abc',
+        p1Alarm: "dev-alarm-p1",
+        streamWithdrawApi: "withdraw-api-db-fail"
     }
 }
 
@@ -118,6 +123,11 @@ const local = {
     },
     ip: {
         apiKey: process.env.IP_API_KEY
+    },
+    cloudwatch: {
+        nextSequenceToken: '49628740026582044430852564438855440323279542750428528962',
+        p1Alarm: "dev-alarm-p1",
+        streamWithdrawApi: "withdraw-api-db-fail"
     }
 };
 
@@ -171,8 +181,12 @@ const prod = {
     },
     ip: {
         apiKey: process.env.IP_API_KEY
+    },
+    cloudwatch: {
+        nextSequenceToken: 'abc',
+        p1Alarm: "dev-alarm-p1",
+        streamWithdrawApi: "withdraw-api-db-fail"
     }
-
 }
 
 const test = {
