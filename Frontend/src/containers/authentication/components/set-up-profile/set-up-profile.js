@@ -133,7 +133,7 @@ function SetUpProfile({ setDisplayPage }) {
         password,
         username: userName,
         id: createUserId,
-        isWriter: true,
+        isWriter: false,
         country: country,
         googleUser: false,
       })
