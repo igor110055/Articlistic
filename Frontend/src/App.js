@@ -88,18 +88,20 @@ function App() {
   };
   window.addEventListener("storage", onLocalStorageEvent, false);
 
-  if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
-    getEnvVariables(
-      [
-        "REACT_APP_ENCRYPTION_SALT",
-        "REACT_APP_SERVER_LINK",
-        "GOOGLE_CLIENT_ID",
-      ],
-      setEnvVariablesSuccess
-    );
-  } else {
-    console.info("This page is not reloaded");
-  }
+
+  useEffect(() => {
+    if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+        setEnvVariablesSuccess(false);
+        getEnvVariables(
+          [
+            "REACT_APP_ENCRYPTION_SALT",
+            "REACT_APP_SERVER_LINK",
+            "GOOGLE_CLIENT_ID",
+          ],
+          setEnvVariablesSuccess
+        );
+    }
+  }, [performance.navigation.type]);
 
   return (
     //for writers
