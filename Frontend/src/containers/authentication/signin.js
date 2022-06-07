@@ -152,7 +152,7 @@ function SignIn() {
               <span onClick={() => navigate("/signup")}>Sign up</span>
             </p>
             <p className="sign-up">
-              Register as a writer{" "}
+              Register as a Writer{" "}
               <span onClick={() => navigate("/login/writer")}>Register</span>
             </p>
           </div>
