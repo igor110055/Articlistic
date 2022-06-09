@@ -67,7 +67,7 @@ const WriterPublicationForm = ({ closeModal }) => {
     }
 
     const token = getAuthToken();
-
+console.log(publicationName)
     dispatch(
       createPublications({
         token,
