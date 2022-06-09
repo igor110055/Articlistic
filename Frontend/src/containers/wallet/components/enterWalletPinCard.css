@@ -1,0 +1,96 @@
+
+.pin-field{
+    width: 44px;
+    height: 43px;
+    background: rgba(0, 79, 213, 0.86);
+    border: none;
+    border-radius: 15px;
+    outline: none;
+    color: white;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    /* line-height: 34px; */
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 4px;
+    margin-right: 4px;
+    caret-color: transparent;
+
+
+    text-align: center;
+    transition-duration: 250ms;
+    transition-property: background, color, border, box-shadow, transform;
+    width: 3rem;
+    /* padding-left: 11px; */
+}
+
+
+.pin-field::placeholder{
+  color: #2B56FF;
+}
+
+
+.pin-field:focus {
+  outline: none;
+  transform: scale(1.05);
+}
+
+.pin-field:invalid {
+  animation: shake 3 linear 75ms;
+  border-color: rgb(220, 53, 69);
+  box-shadow: 0 0 0.25rem rgba(220, 53, 69, 0.5);
+}
+
+@keyframes shake {
+  from {
+    transform: scale(1.05) translateY(-5%);
+  }
+  to {
+    transform: scale(1.05) translateY(5%);
+  }
+}
+
+.enter-pin-header{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 34px;
+    /* identical to box height, or 142% */
+    margin: 0;
+    margin-top: 40px;
+    color: #FFFFFF;
+}
+
+.enter-pin-subtitle {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 34px;
+    margin: 0;
+    color: #FFFFFF;
+    margin-bottom: 17px;
+}
+
+.enter-pin-content{
+
+    width: 412px;
+    height: 250px;
+    background: url("../../../Images/EnterPinImage.png");
+    background-repeat: no-repeat;
+    background-size: 412px;
+
+    /* box-shadow: 0px 4px 10px -6px rgba(0, 0, 0, 0.25); */
+    border-radius: 20px;
+    margin: 44px 0;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+    align-items: center;
+}
