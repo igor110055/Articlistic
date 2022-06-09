@@ -29,7 +29,7 @@ const WriterSetting = () => {
   const [articleData, setArticleData] = useState({});
   const [noCategoriesFound, setNoCategoriesFound] = useState(false);
   const [alreadySignedIn, setAlreadySignedIn] = useState(false);
-  const [selectedPublicationId, setSelectedPublicationId] = useState("");
+  const [selectedPublicationId, setSelectedPublicationId] = useState("c41f8076-fb90-4f1b-a215-cf718972e84e");
   const [publicationErrorMsg, setPublicationErrorMsg] = useState("");
   const [canonicalLink, setCanonicalLink] = useState("");
   const [canonicalChecked, setCanonicalChecked] = useState(false);

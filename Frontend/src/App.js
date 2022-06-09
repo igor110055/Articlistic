@@ -119,7 +119,7 @@ function App() {
                 <Route exact path="/login" element={<SignIn />} />
                 <Route exact path="/login/writer" element={<WriterForm />} />
                 {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
-                {/* <Route
+                <Route
                   exact
                   path="/story"
                   element={
@@ -127,7 +127,7 @@ function App() {
                       <WriterEditor />
                     </PrivateRoute>
                   }
-                /> */}
+                />
                 <Route
                   exact
                   path="/publication/:username/:publicationName"

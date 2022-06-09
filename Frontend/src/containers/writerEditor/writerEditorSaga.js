@@ -51,7 +51,7 @@ export function* uploadImageSaga() {
 }
 
 function* createNewArticle(action) {
-    // console.log(action);
+    console.log(action);
     try {
         const params = new URLSearchParams({
             username: action.data.params,
@@ -62,6 +62,7 @@ function* createNewArticle(action) {
         const url = `${baseURL}/${endPoints.createNewArticle}?${params}`;
         // console.log(url);
         const data = yield call(authPostRequest, url, {}, headers);
+        console.log(data)
         if (!data.error) {
             yield put(createNewArticleSuccess(data));
         } else {
