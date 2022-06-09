@@ -81,7 +81,7 @@ function* createPublication(action) {
     const headers = {
       Authorization: action.data.token,
     };
-    const url = `${baseURL}/${endPoints.createNewPublications}?&name=${action.data.name}`;
+    const url = `${baseURL}/${endPoints.createNewPublications}?name=${action.data.name}`;
     const data = yield call(authPostRequest, url, action.data.fd, headers);
 
     if (!data.error) {
