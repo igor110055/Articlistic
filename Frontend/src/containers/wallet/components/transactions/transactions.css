@@ -1,0 +1,152 @@
+.transactions {
+    width: 792px;
+    height: 462px;
+    background-color: #FFFFFF;
+    box-shadow: 20px -1px 64px rgba(214, 230, 255, 0.5);
+    border-radius: 20px;
+    margin-top: 26px;
+}
+
+.transactions .header {
+    width: 100%;
+    height: 73.5px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   
+    
+}
+.transactions .header .transactions-text{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+    /* identical to box height */
+    margin-left: 31px;
+    
+    letter-spacing: -0.120173px;
+    
+    color: #636363;
+}
+.transactions .header .date-picker{
+    margin-right: 24px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+
+    letter-spacing: -0.10682px;
+
+    color: #636363;
+
+}
+
+.transactions .header .date-picker .svg-date-picker{
+    margin-left: 4px;
+    margin-top: -5px;
+}
+
+.transactions .transactions-separator{
+    width: 792px;
+    height: 1px;
+
+    mix-blend-mode: normal;
+    opacity: 0.19;
+    background-color: #979797;
+}
+
+.transactions .transactions-data{
+    overflow-y: scroll;
+    margin-bottom: 21px;
+}
+
+.transactions .transactions-data .one-transaction {
+    margin: 35px 46px 0 40px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    overflow-y: scroll;
+}
+
+.transactions .transactions-data .one-transaction .transaction-details{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.transactions .transactions-data .one-transaction .transaction-details .transaction-article-name{
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+
+    letter-spacing: -0.10682px;
+
+    color: #636363;
+
+    margin: 0;
+}
+
+.transactions .transactions-data .one-transaction .transaction-details .transaction-date{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    /* identical to box height */
+
+    letter-spacing: -0.10682px;
+
+    color: #636363;
+
+    mix-blend-mode: normal;
+    opacity: 0.49;
+    margin: 0;
+}
+.transactions .transactions-data .one-transaction .transaction-amount{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+
+    text-align: right;
+    letter-spacing: -0.10682px;
+
+    color: #636363;
+
+}
+
+.transactions .transactions-see-more-button{
+    width: 83px;
+    height: 27px;
+
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+    /* identical to box height */
+    padding: 0;
+    letter-spacing: -0.120173px;
+    
+    color: #042BA2;
+    cursor: pointer;
+    border: 0;
+    background-color: #FFFFFF;
+    margin-left: 40px;
+}

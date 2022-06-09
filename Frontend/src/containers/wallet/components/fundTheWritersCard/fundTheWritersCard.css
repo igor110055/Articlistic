@@ -1,0 +1,282 @@
+.fund-the-writer-card-container{
+    width: 465px;
+    height: 776px;
+
+    background: #FFFFFF;
+    box-shadow: 20px -1px 64px rgba(214, 230, 255, 0.5);
+    border-radius: 20px;
+
+}
+
+.fund-the-writer-total-amount-container{
+    width: 465px;
+    height: 146px;
+
+    background: linear-gradient(301deg, #0A2B98 5.92%, #1395FD 92.42%);
+    box-shadow: 20px -1px 64px rgba(214, 230, 255, 0.5);
+    border-radius: 20px 20px 0px 0px;
+}
+.fund-the-writer-total-amount-content{
+    padding-left: 30px;
+    padding-top: 30px;
+}
+.fund-the-writer-total-balance-text{
+    width: 125px;
+    height: 27px;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 27px;
+    /* identical to box height */
+
+    letter-spacing: -0.13734px;
+
+    color: #FFFFFF;
+}
+
+.fund-the-writer-total-balance-amount{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 72px;
+    /* identical to box height */
+
+    letter-spacing: -0.111735px;
+
+    color: #FFFFFF;
+}
+
+.fund-the-writers-tab-passive-button{
+    width: 232.5px;
+    height: 70px;
+
+    background: #ECF4FE;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 27px;
+/* identical to box height */
+
+text-align: center;
+letter-spacing: -0.0583333px;
+
+color: #000000;
+
+cursor: pointer;
+outline: none;
+border: 0;
+}
+
+.fund-the-writers-tab-active-button{
+    cursor: pointer;
+    background: #FFFFFF;
+}
+.fund-the-writers-tab-passive-button:focus{
+    outline: none;
+    border: 0;
+}
+
+.fund-the-writers-tab-content{
+    margin: 36px 50px 22px 40px;
+}
+
+.fund-the-writers-tab-amount{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+
+    letter-spacing: -0.0583333px;
+
+    color: #7C7C7C;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.fund-the-writers-tab-amount-input{
+   width: 370px;
+height: 52px;
+
+border: 1px solid #CFCFCF;
+box-sizing: border-box;
+border-radius: 10px;
+padding: 14px 15px;
+
+ font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height */
+
+letter-spacing: -0.0583333px;
+
+color: #7C7C7C;
+
+mix-blend-mode: normal;
+opacity: 0.8;
+}
+
+.fund-the-writers-tab-amount-input::placeholder{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height */
+
+letter-spacing: -0.0583333px;
+
+color: #7C7C7C;
+
+mix-blend-mode: normal;
+opacity: 0.8;
+}
+
+.fund-the-writers-tab-amount-buttons-container{
+    margin-top: 21.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fund-the-writers-tab-amount-button{
+    width: 81.57px;
+    height:32px;
+    border: 2px solid #0095FF;
+    box-sizing: border-box;
+    border-radius: 21px;
+    background: #FFFFFF;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+    cursor: pointer;
+    text-align: center;
+    letter-spacing: -0.0583333px;
+
+    /* Blue */
+
+    color: #0095FF;
+}
+
+.fund-the-writers-tab-amount-separator{
+    width: 466px;
+height: 1px;
+
+background-color: #979797;
+
+}
+
+.fund-the-writers-tab-writer-section{
+    margin: 20px 55px 19px 40px;
+}
+
+.fund-the-writers-tab-writer-text{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height */
+
+letter-spacing: -0.0583333px;
+
+color: #7C7C7C;
+margin-bottom: 5px;
+}
+
+.fund-the-writers-tab-recent-writers-text{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+
+letter-spacing: -0.0510417px;
+
+color: #000000;
+
+mix-blend-mode: normal;
+opacity: 0.42;
+
+margin-top: 17px;
+margin-bottom: 5px;
+}
+
+.fund-the-writers-tab-recent-writers-profiles{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fund-the-writers-tab-recent-writers-profiles-name{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 10px;
+line-height: 15px;
+/* identical to box height */
+
+letter-spacing: -0.0364583px;
+
+color: #000000;
+
+mix-blend-mode: normal;
+opacity: 0.42;
+}
+
+.fund-the-writers-tab-recent-writers-profile{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.fund-the-writers-tab-recent-writers-profile-image{
+    border: 1px solid #979797;
+    border-radius: 50%;
+    outline: none;
+}
+
+.separator-fund-the-writers-tab-recent-writers{
+    width: 407px;
+height: 1px;
+margin-left: 28px;
+background-color: #979797;
+}
+
+.separator-fund-the-writers-tab-fund-button{
+    border: 0;
+    background: linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%);
+border-radius: 10px;
+width: 408px;
+height: 54px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 27px;
+/* identical to box height */
+
+text-align: center;
+letter-spacing: -0.0583333px;
+
+color: #FFFFFF;
+cursor: pointer;
+outline: none;
+
+margin-top: 21px;
+margin-left: 29px;
+}
