@@ -1,5 +1,5 @@
 import "./earningsGraphCard.css";
-import earningsGraphImage from "../../../../Images/earningsGraphImage.png";
+// import earningsGraphImage from "../../../../Images/earningsGraphImage.png";
 function EarningsGraphCard() {
   return (
     <div className="earnings-graph">
@@ -28,7 +28,7 @@ function EarningsGraphCard() {
       </div>
       <div className="earnings-graph-separator" />
       <div className="dummy-image">
-        <img src={earningsGraphImage} alt="graph" />
+        {/* <img src={earningsGraphImage} alt="graph" /> */}
       </div>
     </div>
   );

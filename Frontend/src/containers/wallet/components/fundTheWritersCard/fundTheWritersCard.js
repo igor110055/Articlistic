@@ -1,9 +1,9 @@
 import { useState } from "react";
-import User1 from "../../../../Images/users/Alex Tenario.png";
+import User1 from "../../../../Images/users/AlexTenario.png";
 import User2 from "../../../../Images/users/Amarachi.png";
 import User3 from "../../../../Images/users/Chandrava.png";
 import User4 from "../../../../Images/users/Dontae.png";
-import User5 from "../../../../Images/users/Hu Hyon-Suk.png";
+import User5 from "../../../../Images/users/HuHyon-Suk.png";
 
 import "./fundTheWritersCard.css";
 

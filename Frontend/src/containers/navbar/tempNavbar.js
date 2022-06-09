@@ -101,7 +101,7 @@ const TempNavbar = () => {
         </div>
       </a>
       <div className="nav-right">
-        {/* <a href="#wallet" className="right-first right-content">Wallet</a> */}
+        <a href="/wallet" className="right-first right-content">Wallet</a>
         {/* <a href="#profile" className="right-content">Profile</a> */}
         {/* <a className="dropdown"> */}
         {/* <a href="#profile" className="right-content">Profile</a> */}
