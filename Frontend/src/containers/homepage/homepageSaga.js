@@ -175,9 +175,10 @@ function* getWritersAndArticles(action) {
 
     const url = `${baseURL}/${endPoints.userHomePageGet}`;
     var data = yield call(authGetRequest, url, headers);
-    data=INIT_DATA
+    console.log(data);
+    // data=INIT_DATA;
     if (!data.error) {
-      yield put(getWritersSuccess(data));
+      yield put(getWritersSuccess(data.result));
     } else {
       yield put(getWritersFailure(data.message));
     }
