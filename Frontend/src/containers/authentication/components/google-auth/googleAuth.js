@@ -50,9 +50,14 @@ function GoogleAuth({ isSignIn }) {
   useEffect(() => {
     if (googleSignupSuccess) {
       localStorage.setItem("createUserId", googleSignUpData.id);
-      navigate("/signup");
+      if (
+        googleSignUpData.id !== undefined &&
+        googleSignUpData.id !== "undefined"
+      )
+        navigate("/signup");
     }
   }, [googleSignupSuccess]);
+
 
   const handleGoogleFailure = (error) => {
     console.error(error);
