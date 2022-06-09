@@ -14,7 +14,6 @@ function WriterStoriesComponent({ setActiveIdx }) {
     userlist: state.homepage.userlist,
     message: state.common.snackbar.message,
   }));
-  console.log(userlist);
 
   const writersData = Object.keys(userlist).map((key) => {
     return {
