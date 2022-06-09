@@ -37,9 +37,11 @@ function SignUp() {
     cursor: "pointer",
   };
 
-  useEffect(() => {
+useEffect(() => {
     const id = localStorage.getItem("createUserId");
-    if (id) setDisplayPage("setUpProfile");
+
+    if (typeof id !== "undefined" && id !== null && id !== "undefined")
+      setDisplayPage("setUpProfile");
   }, []);
 
   const handleGoogleLogin = async (googleData) => {
