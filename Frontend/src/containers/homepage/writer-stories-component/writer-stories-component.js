@@ -14,18 +14,20 @@ function WriterStoriesComponent({ setActiveIdx }) {
     userlist: state.homepage.userlist,
     message: state.common.snackbar.message,
   }));
+  console.log(userlist)
+
   // const article=userlist.
-  const article = {
-    public: {
-      articlePic:
-        "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-      body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-      date: 1649771892446,
-      readingTime: "1 min",
-      title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-      writerName: "yashchaudhari",
-    },
-  };
+  // const article = {
+  //   public: {
+  //     articlePic:
+  //       "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
+  //     body: "BNPL solutions allow customers to spread out the cost of their purchases...",
+  //     date: 1649771892446,
+  //     readingTime: "1 min",
+  //     title: "What Next for ‘Buy Now, Pay Later’ Companies?",
+  //     writerName: "yashchaudhari",
+  //   },
+  // };
 
   const writersData = Object.keys(userlist).map((key) => {
     return {
@@ -107,10 +109,10 @@ function WriterStoriesComponent({ setActiveIdx }) {
             ))}
           </div>
           <div className="writer-stories">
-            <StoryCard article={article} writer="yash" />
-            <StoryCard article={article} writer="yash" />
-            <StoryCard article={article} writer="yash" />
-            <StoryCard article={article} writer="yash" />
+            {userlist[writer.name].articles.map(article=>(
+ <StoryCard article={article} writer="yash" />
+            ))}
+           
           </div>
         </div>
       ))}

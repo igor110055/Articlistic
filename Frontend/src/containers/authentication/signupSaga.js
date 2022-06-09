@@ -57,6 +57,8 @@ function* getEmailOTP(action) {
     const headers = action.data;
     const params = new URLSearchParams({ email: headers });
     const url = `${baseURL}/${endPoints.sendEmailOTP}?${params}`;
+    console.log('getemail' ,data)
+   
     const data = yield call(postRequest, url);
     if (!data.error) {
       yield put(getEmailOTPSuccess(data));
@@ -77,6 +79,8 @@ function* verifyEmailOTP(action) {
     const headers = action.data;
     const params = new URLSearchParams(headers);
     const url = `${baseURL}/${endPoints.verifyEmailOTP}?${params}`;
+    console.log('verified' ,data)
+    
     const data = yield call(postRequest, url);
     if (!data.error) {
       yield put(verifyEmailOTPSuccess(data));
@@ -96,7 +100,10 @@ function* sendProfileInfo(action) {
   try {
     const headers = action.data;
     const url = `${baseURL}/${endPoints.createUser}`;
+    console.log('sendprofileinfo',data)
+    
     const data = yield call(postRequest, url, headers);
+    console.log(data)
     if (!data.error) {
       yield put(sendProfileInfoSuccess(data));
     } else {
@@ -136,6 +143,8 @@ function* login(action) {
     const headers = action.payload.params;
     const url = `${baseURL}/${endPoints.login}`;
     const data = yield call(postRequest, url, headers);
+    console.log('login',data)
+    
     if (!data.error && !data.status) {
       yield put(loginSuccess(data));
       Cookie.set("refreshToken", data.refreshToken, { expires: 30 });
