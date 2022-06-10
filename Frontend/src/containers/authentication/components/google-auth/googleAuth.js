@@ -26,7 +26,8 @@ function GoogleAuth({ isSignIn }) {
 
   const handleGoogleLogin = async (googleData) => {
     localStorage.setItem("userEmail", googleData.profileObj.email);
-    dispatch(signupWithGoogleInit(googleData.tokenId));
+    if(googleData.tokenId !== undefined && googleData.tokenId !== null)
+      dispatch(signupWithGoogleInit(googleData.tokenId));
   };
 
   useEffect(() => {
@@ -43,16 +44,21 @@ function GoogleAuth({ isSignIn }) {
           userUserName: googleSignInData.username,
         })
       );
-      navigate("/writerDashboard");
+      navigate("/homepage");
     }
   }, [googleSignInSuccess]);
 
   useEffect(() => {
     if (googleSignupSuccess) {
       localStorage.setItem("createUserId", googleSignUpData.id);
-      navigate("/signup");
+      if (
+        googleSignUpData.id !== undefined &&
+        googleSignUpData.id !== "undefined"
+      )
+        navigate("/signup");
     }
   }, [googleSignupSuccess]);
+
 
   const handleGoogleFailure = (error) => {
     console.error(error);

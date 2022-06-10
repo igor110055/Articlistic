@@ -1,0 +1,122 @@
+.earnings-card{
+    width: 383px;
+    height: 290px;
+
+    background: #FFFFFF;
+    box-shadow: 20px -1px 64px rgba(214, 230, 255, 0.5);
+    border-radius: 20px;
+}
+
+.earnings-card .content { 
+    padding: 29px 45px 32px 42px;
+}
+
+.earnings-card .content .earnings-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.earnings-card .content .earnings-container .earning .earning-text{
+    margin: 0;
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height */
+
+letter-spacing: -0.120173px;
+
+color: #636363;
+}
+.earnings-card .content .earnings-container .earning .earning-amount{
+    margin: 0;
+
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 32px;
+line-height: 48px;
+/* identical to box height */
+
+letter-spacing: -0.120173px;
+
+color: #000000;
+
+}
+
+.earnings-card .content .earnings-container .earning .credits-amount{
+    margin: 0;
+
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 15px;
+line-height: 22px;
+/* identical to box height */
+
+letter-spacing: -0.120173px;
+
+color: #979797;
+}
+
+.earnings-card .content .payout-button{
+    outline: none;
+    border: 0;
+    width: 293px;
+    height: 51px;
+    background: linear-gradient(136.66deg, #2B56FF -9.32%, #1395FD 95.4%);
+
+    cursor: pointer;
+
+border-radius: 10px;
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 27px;
+/* identical to box height */
+
+text-align: center;
+letter-spacing: -0.0583333px;
+
+color: #FFFFFF;
+
+margin-top: 32px;
+}
+
+.earnings-card .content .earnings-separator{
+    width: 292px;
+height: 1px;
+background-color: #EBEBEB;
+margin-top: 19px;
+margin-bottom: 13px;
+/* border: 0; */
+}
+
+
+.earnings-card .content .add-payout-container{
+    display: flex;
+    align-items: flex-start;
+    justify-content:center ;
+    padding-bottom: 32px;
+}
+.earnings-card .content .add-payout-container .add-payout-details-button{
+    width: 160px;
+    height: 23px;
+    background-color: #FFFFFF;
+    border: 0;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 22px;
+    /* identical to box height */
+
+    letter-spacing: -0.120173px;
+    cursor: pointer;
+    color: #979797;
+
+}

@@ -24,11 +24,12 @@ function SignUp() {
     if (googleSignInSuccess) navigate("/writerDashboard");
   }, [googleSignInSuccess]);
 
-  useEffect(() => {
+useEffect(() => {
     const id = localStorage.getItem("createUserId");
-    if (id) setDisplayPage("setUpProfile");
+    if (typeof id !== "undefined" && id !== null && id !== "undefined")
+      setDisplayPage("setUpProfile");
   }, []);
-
+  
   useEffect(() => {
     if (Cookie.get("accessToken")) navigate("/writerDashboard");
   }, []);

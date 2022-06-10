@@ -1,0 +1,33 @@
+body{
+    background: #F2F2F2;
+}
+.wallet-container{
+
+    margin: 51px 170px 95px 129px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 39px;
+
+    /* identical to box height */
+
+    letter-spacing: -0.0947917px;
+
+    color: #636363;
+
+}
+
+.wallet-cards-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.fund-the-writers-container{
+    margin-right: 44px;
+}
+
+.earings-container{
+    display: flex;
+    
+}

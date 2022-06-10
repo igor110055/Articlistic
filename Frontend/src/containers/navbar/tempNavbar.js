@@ -11,6 +11,7 @@ import { getAuthToken } from "../common/commonFunctions";
 const TempNavbar = () => {
   const [isResponsive, setIsResponsive] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
+  const isWriter = localStorage.getItem("isWriter");
   function myFunction() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
@@ -29,7 +30,7 @@ const TempNavbar = () => {
   }
 
   const refreshPage = () => {
-    window.location.reload();
+    navigate("/homepage");
   };
 
   useEffect(() => {
@@ -46,6 +47,7 @@ const TempNavbar = () => {
   const [submitClicked, setSubmitClicked] = useState(false);
 
   const { isLoggingOut, logoutError } = useSelector((state) => ({
+    state: state,
     isLoggingOut: state.signupReducer.isLoggingOut,
     logoutError: state.signupReducer.logoutError,
     logoutSuccess: state.signupReducer.logoutSuccess,
@@ -59,7 +61,6 @@ const TempNavbar = () => {
       setSubmitClicked(false);
     } else {
       if (!isLoggingOut && submitClicked) {
-        // console.log("logging out");
         Cookie.remove("oneDayBeforeAccessToken");
         Cookie.remove("accessToken");
         Cookie.remove("refreshToken");
@@ -101,7 +102,14 @@ const TempNavbar = () => {
         </div>
       </a>
       <div className="nav-right">
-        {/* <a href="#wallet" className="right-first right-content">Wallet</a> */}
+        {isWriter === "true" && (
+          <a href="/writerDashboard" className="right-first right-content">
+            Writer-Dashboard
+          </a>
+        )}
+        <a href="/wallet" className="right-first right-content">
+          Wallet
+        </a>
         {/* <a href="#profile" className="right-content">Profile</a> */}
         {/* <a className="dropdown"> */}
         {/* <a href="#profile" className="right-content">Profile</a> */}

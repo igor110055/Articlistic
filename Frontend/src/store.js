@@ -13,6 +13,7 @@ import common from "./containers/common/commonReducer";
 import rootSaga from "./rootSaga";
 import writerContent from "./containers/writerContent/writerReducers";
 import ArticleData from "./containers/writerContent/components/articleReducer";
+import wallet from "./containers/wallet/walletReducer";
 
 const reducer = combineReducers({
   writers,
@@ -27,6 +28,7 @@ const reducer = combineReducers({
   common,
   writerContent,
   ArticleData,
+  wallet
 });
 const sagaMiddleware = createSagaMiddleware();
 

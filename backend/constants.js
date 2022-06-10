@@ -52,6 +52,7 @@ const TYPE_WALLET_FUND_ACCOUNT = 'fa';
 const TYPE_WALLET_WITHDRAW = 'withdraw';
 const TYPE_RESET_PIN = 'reset-pin';
 
+// Exporting the constants.
 
 
 module.exports = {

@@ -186,13 +186,13 @@ function a11yProps(index) {
 
 const useStyles = makeStyles({
   outsideContainer: {
-    backgroundColor: "#F6F6F7"
+    backgroundColor: "#FFFFFF"
   },
 
   container: {
     minHeight: "100vh",
     maxWidth: "100vw",
-    backgroundColor: "#F6F6F7",
+    backgroundColor: "#FFFFFF",
     marginLeft: "151px",
     marginRight: "72px"
   },
@@ -222,7 +222,8 @@ const useStyles = makeStyles({
     color: "rgba(255, 255, 255, 1)",
     boxShadow: "0px 2px 124px rgba(199, 212, 223, 0.37612)",
     zIndex: 4,
-    borderBottom: "3px solid #0FC7FC"
+    borderBottom: "3px solid #0FC7FC",
+    background: "#FFFFFF !important"
     // zIndex: 1,
   },
 
