@@ -316,6 +316,7 @@ export function* googleSignup(action) {
       yield put(signupWithGoogleFailure(data.message));
     } else {
       if (data.accessToken) {
+        localStorage.setItem("isWriter", data.isWriter);
         Cookie.set("refreshToken", data.refreshToken, { expires: 30 });
         Cookie.set("accessToken", data.accessToken, { expires: 7 });
         Cookie.set("oneDayBeforeAccessToken", true, { expires: 6 });
