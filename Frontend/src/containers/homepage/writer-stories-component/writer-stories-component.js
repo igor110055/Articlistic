@@ -95,8 +95,8 @@ function WriterStoriesComponent({ setActiveIdx }) {
             ))}
           </div>
           <div className="writer-stories">
-            {userlist[writer.name].articles.slice(0,4).map((article) => (
-              <StoryCard article={article} writer="yash" />
+            {userlist[writer.name].articles.slice(0, 4).map((article, idx) => (
+              <StoryCard article={article} writer="yash" key={idx} />
             ))}
           </div>
         </div>

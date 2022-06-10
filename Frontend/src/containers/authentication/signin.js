@@ -71,7 +71,7 @@ function SignIn() {
         })
       );
 
-      navigate("/writerDashboard");
+      navigate("/homepage");
     } else if (loginError) setValidCred(false);
   }, [loginError, isLoggedIn]);
 

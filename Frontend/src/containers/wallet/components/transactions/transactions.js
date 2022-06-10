@@ -5,25 +5,25 @@ function Transactions() {
     {
       articleName: "Campaign: My Black Friend Corrected….",
       date: "03 / 05 / 2020",
-      amount: "-1200"
+      amount: "-1200",
     },
     {
       articleName:
         "Campaign: This Morning Routine will Save You 20+ Hours Per Week",
       date: "03 / 05 / 2020",
-      amount: "+3500"
+      amount: "+3500",
     },
     {
       articleName: "Campaign: My Black Friend Corrected….",
       date: "03 / 05 / 2020",
-      amount: "-1200"
+      amount: "-1200",
     },
     {
       articleName:
         "Campaign: This Morning Routine will Save You 20+ Hours Per Week",
       date: "03 / 05 / 2020",
-      amount: "+3500"
-    }
+      amount: "+3500",
+    },
     // {
     //   articleName:
     //     "Campaign: This Morning Routine will Save You 20+ Hours Per Week",
@@ -54,7 +54,7 @@ function Transactions() {
               <path
                 d="M1 1L6 6L11 1"
                 stroke="#979797"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
@@ -64,7 +64,7 @@ function Transactions() {
       </div>
       <div className="transactions-separator" />
       <div className="transactions-data">
-        {transactionsData.map(transaction => (
+        {transactionsData.map((transaction) => (
           <div className="one-transaction">
             <div className="transaction-details">
               <p className="transaction-article-name">

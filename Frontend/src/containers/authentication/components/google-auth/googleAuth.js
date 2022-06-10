@@ -44,7 +44,7 @@ function GoogleAuth({ isSignIn }) {
           userUserName: googleSignInData.username,
         })
       );
-      navigate("/writerDashboard");
+      navigate("/homepage");
     }
   }, [googleSignInSuccess]);
 

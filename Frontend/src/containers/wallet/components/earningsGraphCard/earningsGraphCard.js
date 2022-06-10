@@ -18,7 +18,7 @@ function EarningsGraphCard() {
               <path
                 d="M1 1L6 6L11 1"
                 stroke="#979797"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />

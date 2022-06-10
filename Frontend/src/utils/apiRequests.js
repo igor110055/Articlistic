@@ -1,20 +1,20 @@
 import axios from "axios";
-import { ErrorMessage } from "../loginSignup/helper_functions/errorMessageFunction";
+import { ErrorMessage } from "../containers/authentication/components/errorMessageFunction/errorMessageFunction";
 
-export const getRequest = async url => {
+export const getRequest = async (url) => {
   try {
     const headers = {
       method: "GET",
       header: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "X-Requested-With"
-      }
+        "Access-Control-Allow-Headers": "X-Requested-With",
+      },
     };
     const data = await axios
       .get(url, headers)
-      .then(resp => resp.data)
-      .catch(err => getErrorResponse(err));
+      .then((resp) => resp.data)
+      .catch((err) => getErrorResponse(err));
     return data;
   } catch (e) {
     return e;
@@ -25,8 +25,8 @@ export const postRequest = async (url, postData) => {
   try {
     const data = await axios
       .post(url, postData)
-      .then(resp => resp.data)
-      .catch(err => {
+      .then((resp) => resp.data)
+      .catch((err) => {
         return getErrorResponse(err);
       });
     return data;
@@ -39,8 +39,8 @@ export const putRequest = async (url, postData) => {
   try {
     const data = await axios
       .put(url, postData)
-      .then(resp => resp.data)
-      .catch(err => getErrorResponse(err));
+      .then((resp) => resp.data)
+      .catch((err) => getErrorResponse(err));
     return data;
   } catch (e) {
     return e;
@@ -52,15 +52,15 @@ export const authPostRequest = async (url, postData, headers) => {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "X-Requested-With",
-    Authorization: headers.Authorization
+    Authorization: headers.Authorization,
   };
   try {
     const data = await axios
       .post(url, postData, { headers: header })
-      .then(resp => {
+      .then((resp) => {
         return resp.data;
       })
-      .catch(err => {
+      .catch((err) => {
         getErrorResponse(err);
       });
     return data;
@@ -74,8 +74,8 @@ export const authGetRequest = async (url, headers) => {
   try {
     const data = await axios
       .get(url, { headers: headers })
-      .then(resp => resp.data)
-      .catch(err => getErrorResponse(err));
+      .then((resp) => resp.data)
+      .catch((err) => getErrorResponse(err));
     return data;
   } catch (e) {
     return e;
@@ -87,8 +87,8 @@ export const authPutRequest = async (url, putData, headers) => {
   try {
     const data = await axios
       .put(url, putData, { headers: headers })
-      .then(resp => resp.data)
-      .catch(err => getErrorResponse(err));
+      .then((resp) => resp.data)
+      .catch((err) => getErrorResponse(err));
     return data;
   } catch (e) {
     return e;
@@ -120,6 +120,6 @@ const getErrorResponse = (err) => {
   }
   return {
     error: true,
-    message: ErrorMessage(errorMsg)
+    message: ErrorMessage(errorMsg),
   };
 };

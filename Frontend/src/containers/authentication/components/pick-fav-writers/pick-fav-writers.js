@@ -72,7 +72,7 @@ function PickFavWriters() {
     }
     dispatch(followMultipleWritersInit({ token, usernames: array }));
     setTimeout(() => {
-      navigate("/writerDashboard");
+      navigate("/homepage");
     }, 1000);
   };
 

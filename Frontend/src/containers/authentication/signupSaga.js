@@ -57,8 +57,7 @@ function* getEmailOTP(action) {
     const headers = action.data;
     const params = new URLSearchParams({ email: headers });
     const url = `${baseURL}/${endPoints.sendEmailOTP}?${params}`;
-   
-   
+
     const data = yield call(postRequest, url);
     if (!data.error) {
       yield put(getEmailOTPSuccess(data));
@@ -80,7 +79,6 @@ function* verifyEmailOTP(action) {
     const params = new URLSearchParams(headers);
     const url = `${baseURL}/${endPoints.verifyEmailOTP}?${params}`;
 
-    
     const data = yield call(postRequest, url);
     if (!data.error) {
       yield put(verifyEmailOTPSuccess(data));
@@ -100,10 +98,9 @@ function* sendProfileInfo(action) {
   try {
     const headers = action.data;
     const url = `${baseURL}/${endPoints.createUser}`;
-  
-    
+
     const data = yield call(postRequest, url, headers);
-    
+
     if (!data.error) {
       yield put(sendProfileInfoSuccess(data));
     } else {
@@ -144,9 +141,9 @@ function* login(action) {
     const url = `${baseURL}/${endPoints.login}`;
     const data = yield call(postRequest, url, headers);
 
-    
     if (!data.error && !data.status) {
       yield put(loginSuccess(data));
+      localStorage.setItem("isWriter", data.isWriter);
       Cookie.set("refreshToken", data.refreshToken, { expires: 30 });
       Cookie.set("accessToken", data.accessToken, { expires: 7 });
       Cookie.set("oneDayBeforeAccessToken", true, { expires: 6 });
@@ -314,7 +311,7 @@ export function* googleSignup(action) {
     const tokenId = action.payload;
     const url = `${baseURL}/${endPoints.googleSignup}?token=${tokenId}`;
     const data = yield call(postRequest, url, {}, {});
-    
+
     if (data.error) {
       yield put(signupWithGoogleFailure(data.message));
     } else {

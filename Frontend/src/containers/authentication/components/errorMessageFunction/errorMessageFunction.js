@@ -10,13 +10,13 @@ export function ErrorMessage(error) {
 
     case "Already present.":
       return "Account with this email already exists.";
-    
+
     case "Could Not Authenticate":
       return "Please enter a valid verification code.";
 
     case "VerificationException: Verification code is incorrect, cannot verify the destination phone number.":
       return "Please enter a valid verification code.";
-      
+
     default:
       return error;
   }
