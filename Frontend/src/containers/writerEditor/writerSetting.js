@@ -6,7 +6,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Alert
+  Alert,
 } from "@mui/material";
 import { useRef, useState, useCallback, useEffect } from "react";
 import ReactTags from "react-tag-autocomplete";
@@ -55,7 +55,7 @@ const WriterSetting = () => {
   }, []);
 
   const onDelete = useCallback(
-    tagIndex => {
+    (tagIndex) => {
       setTags(tags.filter((_, i) => i !== tagIndex));
     },
     [tags]
@@ -81,15 +81,15 @@ const WriterSetting = () => {
     userUserName,
     isUploadingArticle,
     publicationsData,
-    uploadArticleError
-  } = useSelector(state => ({
+    uploadArticleError,
+  } = useSelector((state) => ({
     isGettingArticle: state.writerEditor.isGettingArticle,
     getArticleError: state.writerEditor.getArticleError,
     getArticleResp: state.writerEditor.getArticleResp,
     publicationsData: state.writerContent.publicationsData,
     userUserName: state.user.userUserName,
     isUploadingArticle: state.writerEditor.isUploadingArticle,
-    uploadArticleError: state.writerEditor.uploadArticleError
+    uploadArticleError: state.writerEditor.uploadArticleError,
   }));
 
   useEffect(() => {
@@ -113,11 +113,9 @@ const WriterSetting = () => {
       if (!isGettingArticle && getArticleInitiate) {
         if (getArticleResp?.article?.status !== "DRAFT") {
           let temp = [];
-          for (
-            let i of getArticleResp.article.storySetting.categories
-          ) {
+          for (let i of getArticleResp.article.storySetting.categories) {
             temp.push({
-              name: i
+              name: i,
             });
           }
           // console.log(temp);
@@ -151,7 +149,7 @@ const WriterSetting = () => {
     dispatch(
       getPublications({
         token,
-        userUserName: JSON.parse(localStorage.getItem("user")).userUserName
+        userUserName: JSON.parse(localStorage.getItem("user")).userUserName,
       })
     );
   }, []);
@@ -164,7 +162,7 @@ const WriterSetting = () => {
         getArticle(
           {
             articleId: localStorage.getItem("articleId"),
-            username: userUserName
+            username: userUserName,
           },
           temp
         )
@@ -226,13 +224,13 @@ const WriterSetting = () => {
                 canonicalUrl: canonicalLink || "",
                 categories: finalTags,
                 articlePic: articlePic,
-                publicationId: selectedPublicationId
+                publicationId: selectedPublicationId,
               },
 
               qParams: {
                 writer: userUserName,
-                articleId: articleData.articleId
-              }
+                articleId: articleData.articleId,
+              },
             },
             temp
           )
@@ -264,13 +262,13 @@ const WriterSetting = () => {
                 earlyAccessLastDate: date,
                 categories: finalTags,
                 articlePic: articlePic,
-                publicationId: selectedPublicationId
+                publicationId: selectedPublicationId,
               },
 
               qParams: {
                 writer: userUserName,
-                articleId: articleData.articleId
-              }
+                articleId: articleData.articleId,
+              },
             },
             temp
           )
@@ -287,10 +285,10 @@ const WriterSetting = () => {
                       type: "header",
                       data: {
                         text: "Attentioun editor!",
-                        level: 1
-                      }
-                    }
-                  ]
+                        level: 1,
+                      },
+                    },
+                  ],
                 }),
                 status: "PUBLISHED",
                 title: "abc",
@@ -301,7 +299,7 @@ const WriterSetting = () => {
                 earlyAccess: false,
                 // earlyAccessLastDate: date,
                 categories: finalTags,
-                articlePic: articleData.articlePic
+                articlePic: articleData.articlePic,
                 // writeup: JSON.stringify(articleData),
                 // status: "PUBLISHED",
                 // title: "titleakjfd",
@@ -316,8 +314,8 @@ const WriterSetting = () => {
 
               qParams: {
                 username: userUserName,
-                articleId: articleData.articleId
-              }
+                articleId: articleData.articleId,
+              },
             },
             temp
           )
@@ -326,13 +324,13 @@ const WriterSetting = () => {
     }
   };
 
-  const handleSelectPublication = e => {
+  const handleSelectPublication = (e) => {
     setPublicationErrorMsg("");
     setSelectedPublicationId(e.target.value);
   };
 
   return (
-    <div>
+    <div className={classes.whiteBackground}>
       {!alreadySignedIn && <Auth setAlreadySignedIn={setAlreadySignedIn} />}
       <div className={classes.saveBar}>
         <Button
@@ -345,7 +343,7 @@ const WriterSetting = () => {
             width: "6rem",
             height: "38px",
             borderRadius: "10px",
-            border: "2px solid #979797"
+            border: "2px solid #979797",
           }}
           style={{ marginLeft: "1rem" }}
           disabled={isUploadingArticle}
@@ -364,7 +362,7 @@ const WriterSetting = () => {
             textTransform: "capitalize",
             background:
               "linear-gradient(136.99deg, #FFA700 10.01%, #FF6D00 81.93%)",
-            borderRadius: "10px"
+            borderRadius: "10px",
           }}
           style={{ marginRight: "0.5%", width: "8rem" }}
           disabled={isUploadingArticle || isGettingArticle}
@@ -372,11 +370,11 @@ const WriterSetting = () => {
         >
           {isUploadingArticle ? (
             <CircularProgress size={20} style={{ color: "white" }} />
-          ) : (getArticleResp?.article?.status === "PUBLISHED" ? (
+          ) : getArticleResp?.article?.status === "PUBLISHED" ? (
             `Republish`
           ) : (
             `Publish`
-          ))}
+          )}
         </Button>
       </div>
 
@@ -398,7 +396,7 @@ const WriterSetting = () => {
                 ref={reactTags}
                 tags={tags}
                 onDelete={onDelete}
-                onAddition={e => {
+                onAddition={(e) => {
                   setTagValidation("");
                   if (!/^[a-zA-Z]*$/g.test(e.name)) {
                     setTagValidation(
@@ -442,7 +440,7 @@ const WriterSetting = () => {
               value={selectedPublicationId}
               onChange={handleSelectPublication}
             >
-              {publicationsData.map(publication => (
+              {publicationsData.map((publication) => (
                 <FormControlLabel
                   disabled={
                     localStorage.getItem("articleStatus") === "PUBLISHED"
@@ -455,11 +453,11 @@ const WriterSetting = () => {
                       sx={{
                         color: "#59C995",
                         "&.Mui-checked": {
-                          color: "#59C995"
+                          color: "#59C995",
                         },
                         "&.Mui-disabled": {
-                          color: "gray"
-                        }
+                          color: "gray",
+                        },
                       }}
                     />
                   }
@@ -496,7 +494,7 @@ const WriterSetting = () => {
                   here.
                 </div>
                 <PublicationTextField
-                  onChange={e => {
+                  onChange={(e) => {
                     setCanonicalError("");
                     setCanonicalLink(e.target.value.substring(0, 80));
                   }}
@@ -512,20 +510,20 @@ const WriterSetting = () => {
                       fontFamily: "Roboto",
                       color: "#636363",
                       fontSize: "16px",
-                      height: "14px"
-                    }
+                      height: "14px",
+                    },
                   }}
                   InputLabelProps={{
                     style: {
                       fontFamily: "Roboto",
                       fontSize: "16px",
-                      fontWeight: "500"
-                    }
+                      fontWeight: "500",
+                    },
                   }}
                   style={{
                     width: "calc(100% - 32px)",
                     marginTop: "16px",
-                    marginLeft: "10px"
+                    marginLeft: "10px",
                   }}
                 />
               </>
@@ -585,13 +583,16 @@ const LoginError = ({ message }) => {
 };
 
 const useStyles = makeStyles({
+  whiteBackground: {
+    background: "#FFFFFF !important",
+  },
   settingContainer: {
     marginTop: "4rem",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    minHeight: "calc(100vh - 10rem)"
+    minHeight: "calc(100vh - 10rem)",
   },
 
   settingContainerWrap: {
@@ -599,14 +600,14 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 
   canonicalTitle: {
     // fontWeight: 'bold',
     fontFamily: "RobotoBold",
     fontSize: "16px",
-    color: "#636363"
+    color: "#636363",
   },
 
   canonicalSubtitle: {
@@ -614,7 +615,7 @@ const useStyles = makeStyles({
     fontSize: "16px",
     fontFamily: "Roboto",
     padding: "10px",
-    paddingBottom: "0px"
+    paddingBottom: "0px",
   },
 
   writerSettinggTitle: {
@@ -628,7 +629,7 @@ const useStyles = makeStyles({
     display: "flex",
     fontFamily: "PoppinsBold",
     alignItems: "flex-start",
-    width: "100%"
+    width: "100%",
   },
 
   writerSettingCard: {
@@ -637,7 +638,7 @@ const useStyles = makeStyles({
     width: "15rem",
     padding: "3%",
     marginBottom: "10%",
-    width: "100%"
+    width: "100%",
   },
 
   cardTitle: {
@@ -646,13 +647,13 @@ const useStyles = makeStyles({
     color: "#636363",
     letterSpacing: "0.2px",
     fontFamily: "RobotoBold",
-    marginBottom: "10px"
+    marginBottom: "10px",
   },
 
   publicationRadioBtns: {
     fontSize: "15px",
     fontFamily: "Roboto",
-    color: "#444444"
+    color: "#444444",
   },
 
   saveBar: {
@@ -662,7 +663,7 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     boxShadow: "0px 2px 24px rgba(199, 212, 223, 0.37612)",
     alginItems: "center",
-    padding: "0.6% 0% 0.6% 0%"
+    padding: "0.6% 0% 0.6% 0%",
   },
 
   saveBarButton: {
@@ -672,13 +673,13 @@ const useStyles = makeStyles({
     borderRadius: "5px",
     marginRight: "2%",
     cursor: "pointer",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 
   loginErrorContainer: {
     display: "flex",
     justifyContent: "center",
-    aligntems: "center"
+    aligntems: "center",
   },
 
   loginError: {
@@ -691,17 +692,17 @@ const useStyles = makeStyles({
     justifyContent: "space-around",
     marginTop: "2%",
     height: "0.8rem",
-    position: "absolute"
+    position: "absolute",
   },
 
   loginErrorSVG: {
-    margin: "-0.3% 5% 0% 5%"
+    margin: "-0.3% 5% 0% 5%",
   },
 
   loginErrorMsg: {
     display: "flex",
     alignItems: "center",
-    width: "90%"
+    width: "90%",
   },
 
   tagValidation: {
@@ -713,7 +714,7 @@ const useStyles = makeStyles({
     width: "270px",
     borderRadius: "10px",
     fontSize: "12px",
-    backgroundColor: "#FFDC9A"
+    backgroundColor: "#FFDC9A",
   },
   disabledPublicationMsg: {
     alignSelf: "center",
@@ -725,8 +726,8 @@ const useStyles = makeStyles({
     width: "375px",
     borderRadius: "10px",
     fontSize: "12px",
-    backgroundColor: "#FFDC9A"
-  }
+    backgroundColor: "#FFDC9A",
+  },
 });
 
 export default WriterSetting;
