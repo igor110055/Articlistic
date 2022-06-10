@@ -24,7 +24,7 @@ function SignUp() {
     if (googleSignInSuccess) navigate("/writerDashboard");
   }, [googleSignInSuccess]);
 
-  useEffect(() => {
+useEffect(() => {
     const id = localStorage.getItem("createUserId");
     if (typeof id !== "undefined" && id !== null && id !== "undefined")
       setDisplayPage("setUpProfile");

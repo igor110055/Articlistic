@@ -54,7 +54,7 @@ export const endPoints = {
   unsplash:
     "https://api.unsplash.com/search/photos?page=1&client_id=6q218GWJ_v9YTd3O7njaaLdzC4WvPffU-9J1jQErXhg",
   createNewArticle: "articles/new",
-  writerdetails:"onboarding/createWriter",
+  writerdetails: "onboarding/createWriter",
   uploadArticle: "articles/upload",
   getArticle: "articles/get",
   getAllArticles: "articles/getAllArticlesForUser",
@@ -71,4 +71,7 @@ export const endPoints = {
   followWriter: "users/followWriter",
   followMultipleWriters: "onboarding/followMultiple",
   googleSignup: "onboarding/google/signup",
+  walletSendOTP: "wallet/sendOTP",
+  walletActivate: "wallet/activate",
+  walletResetPin: "wallet/resetPIN",
 };
