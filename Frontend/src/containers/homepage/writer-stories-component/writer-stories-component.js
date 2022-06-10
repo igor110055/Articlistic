@@ -95,7 +95,7 @@ function WriterStoriesComponent({ setActiveIdx }) {
             ))}
           </div>
           <div className="writer-stories">
-            {userlist[writer.name].articles.slice(0, 4).map((article, idx) => (
+            {userlist[writer.name].articles.reverse().slice(0, 4).map((article, idx) => (
               <StoryCard article={article} writer="yash" key={idx} />
             ))}
           </div>
