@@ -29,7 +29,9 @@ const WriterSetting = () => {
   const [articleData, setArticleData] = useState({});
   const [noCategoriesFound, setNoCategoriesFound] = useState(false);
   const [alreadySignedIn, setAlreadySignedIn] = useState(false);
-  const [selectedPublicationId, setSelectedPublicationId] = useState("c41f8076-fb90-4f1b-a215-cf718972e84e");
+  const [selectedPublicationId, setSelectedPublicationId] = useState(
+    "c41f8076-fb90-4f1b-a215-cf718972e84e"
+  );
   const [publicationErrorMsg, setPublicationErrorMsg] = useState("");
   const [canonicalLink, setCanonicalLink] = useState("");
   const [canonicalChecked, setCanonicalChecked] = useState(false);
@@ -106,6 +108,10 @@ const WriterSetting = () => {
     }
   }, [isUploadingArticle]);
 
+  // useEffect(() => {
+  //   console.log("pubs", publicationsData);
+  // }, [publicationsData]);
+
   useEffect(() => {
     if (getArticleError) {
       setArticleData({});
@@ -146,6 +152,7 @@ const WriterSetting = () => {
     dispatch(
       userUsername(JSON.parse(localStorage.getItem("user")).userUserName)
     );
+    // console.log("getting pubs");
     dispatch(
       getPublications({
         token,
