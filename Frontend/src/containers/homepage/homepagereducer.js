@@ -25,7 +25,7 @@ const homepage = (state = initialState, action) => {
         listError: false,
       };
 
-    case GET_ABOUT_PUBLICATION_SUCCESS:
+    case GET_HOME_PAGE_DATA_SUCCESS:
       
       return {
         ...state,

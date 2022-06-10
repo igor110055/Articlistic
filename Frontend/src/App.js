@@ -96,6 +96,7 @@ function App() {
                 <Route exact path="/signup" element={<SignUp />} />
                 <Route exact path="/login" element={<SignIn />} />
                 <Route exact path="/login/writer" element={<WriterForm />} />
+                {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
                 <Route
                   exact
                   path="/story"

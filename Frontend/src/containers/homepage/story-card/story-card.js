@@ -2,7 +2,7 @@ import React from "react";
 import "./story-card.css";
 
 function StoryCard({ article, writer }) {
-  const { articlePic, readingTime, body, date, title } = article.public;
+  const { articlePic, readingTime, body, date, title } = article;
 
   const formatDate = () => {
     var d = new Date(parseInt(date, 10));
