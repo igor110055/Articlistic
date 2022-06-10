@@ -152,7 +152,7 @@ async function getFollowedWriters(username, limit, skip) {
          */
         await db.aggregate([{
             '$match': {
-                'username': 'amoghnagar'
+                'username': username
             }
         }, {
             '$project': {
@@ -160,23 +160,24 @@ async function getFollowedWriters(username, limit, skip) {
             }
         }, {
             '$lookup': {
-                'from': 'writers',
+                'from': 'users',
                 'localField': 'follows',
                 'foreignField': 'username',
-                'as': 'writerDetails'
+                'as': 'writerDetails',
+                'pipeline': [{
+                    '$project': {
+                        'isWriter': 1,
+                        'name': 1,
+                        'profilePic': 1
+                    }
+                }]
             }
         }, {
             '$match': {
-                'writerDetails.0': {
-                    '$exists': true
-                }
-            }
-        }, {
-            '$sort': {
-                '_id': -1
+                'writerDetails.0.isWriter': true
             }
         }]).forEach((x) => {
-            followed.push(x.follows);
+            followed.push(x);
         })
 
         let endTime = Date.now();
