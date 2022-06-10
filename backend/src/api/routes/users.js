@@ -485,7 +485,7 @@ module.exports = function userRouter() {
 
         following.forEach((x) => {
 
-            homepageData.push(mongo.articles.getAllArticlesForUser(x, ["PUBLISHED"], 5, 0))
+            homepageData.push(mongo.articles.getAllArticlesForUser(x.follows, ["PUBLISHED"], 5, 0))
 
         })
 
