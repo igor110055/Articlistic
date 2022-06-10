@@ -46,7 +46,7 @@ const TempNavbar = () => {
 
   const [submitClicked, setSubmitClicked] = useState(false);
 
-  const { isLoggingOut, logoutError, state } = useSelector((state) => ({
+  const { isLoggingOut, logoutError } = useSelector((state) => ({
     state: state,
     isLoggingOut: state.signupReducer.isLoggingOut,
     logoutError: state.signupReducer.logoutError,
@@ -57,12 +57,10 @@ const TempNavbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(state);
     if (logoutError) {
       setSubmitClicked(false);
     } else {
       if (!isLoggingOut && submitClicked) {
-        // console.log("logging out");
         Cookie.remove("oneDayBeforeAccessToken");
         Cookie.remove("accessToken");
         Cookie.remove("refreshToken");
