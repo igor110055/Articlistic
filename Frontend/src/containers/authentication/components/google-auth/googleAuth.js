@@ -26,7 +26,8 @@ function GoogleAuth({ isSignIn }) {
 
   const handleGoogleLogin = async (googleData) => {
     localStorage.setItem("userEmail", googleData.profileObj.email);
-    dispatch(signupWithGoogleInit(googleData.tokenId));
+    if(googleData.tokenId !== undefined && googleData.tokenId !== null)
+      dispatch(signupWithGoogleInit(googleData.tokenId));
   };
 
   useEffect(() => {
