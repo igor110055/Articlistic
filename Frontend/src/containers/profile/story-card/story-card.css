@@ -1,0 +1,127 @@
+.story-card-container{
+    /* min-height: fit-content; */
+    /* min-height: -moz-fit-content; */
+    width: 29%;
+    height:315px;
+    max-width: 335px;
+    background: #FFFFFF;
+    box-shadow: 2px 5px 24px rgba(175, 176, 198, 0.297886);
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.story-card-container .articlePic{
+    width: 92.30%;
+    max-height: 180px;
+
+    border-radius: 15px;
+    object-fit: cover;
+    margin: .75em auto;
+}
+
+.story-card-container .story-title{
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 700;
+font-size: 1.25rem;
+line-height: 1.5rem;
+
+letter-spacing: -0.105px;
+margin: 0 .6em;
+color: #000000;
+}
+
+.story-card-container .story-body{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1em;
+    /* or 107% */
+
+    letter-spacing: -0.0816667px;
+    margin: .95em .95em .75em .95em;
+    color: #9F9F9F;
+}
+
+.story-card-container .story-details{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: .75rem;
+    line-height: 1em;
+    /* identical to box height */
+
+    letter-spacing: -0.07px;
+    margin: 0 1.2em 1.75em 1.25em;
+    color: #9F9F9F;
+    /* align-items: center; */
+}
+
+.story-card-container .story-details .story-writer-details{
+    display: flex;
+    flex-direction: row;
+}
+
+.story-card-container .story-details .reading-time{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3.71px;
+}
+
+@media (max-width: 480px) {
+    .story-card-container{
+        width: 85.7%;
+        min-width: 229px;
+        min-height: 256px;
+        height: 315px;
+        max-width: 250px;
+    }
+
+    .story-card-container .articlePic {
+        max-height: 132px;
+        height: 51.56%;
+    }
+
+    .story-card-container .story-title{
+        font-size: .95rem;
+        line-height: 1rem;
+    }
+
+    .story-card-container .story-body {
+        font-size: .75rem;
+        line-height: .70rem;
+    }
+    .story-card-container .story-details{
+        font-size: .56rem;
+        line-height: 1.1em;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .story-card-container{
+        width: 70%;
+        min-width: 229px;
+        min-height: 256px;
+        height: 315px;
+        max-width: 300px;
+    }
+
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .story-card-container{
+        width: 45%;
+        min-width: 229px;
+        max-width: 337px;
+        height: 315px;
+    }
+}
