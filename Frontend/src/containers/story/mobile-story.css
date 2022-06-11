@@ -1,0 +1,96 @@
+.mobile-story-container {
+  width: 100%;
+}
+
+.mobile-story-container .mobile-article-pic {
+  height: 200px;
+  width: 100%;
+}
+
+.mobile-story-container .mobile-writers-details-div {
+  transform: translateY(-55%);
+}
+
+.mobile-story-container .mobile-social-interaction-div {
+  margin-left: 7.5%;
+  gap: 17px;
+  margin-top: -1rem;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.mobile-story-container .mobile-social-interaction-div span {
+  display: flex;
+  align-items: center;
+}
+.mobile-story-container .mobile-social-interaction-div .meaningful-span {
+  box-sizing: border-box;
+  height: 32px;
+  border: 1px solid #dddddd;
+  border-radius: 22px;
+  padding: 4px 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mobile-story-container .mobile-social-interaction-div .meaningful-span span {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 24px;
+  /* identical to box height, or 200% */
+
+  color: #757575;
+}
+
+.mobile-story-container
+  .mobile-social-interaction-div
+  .meaningful-span
+  .mobile-meaningful-separator {
+  height: 32px;
+  width: 1px;
+  background-color: #dddddd;
+}
+
+.mobile-story-container
+  .mobile-social-interaction-div
+  .meaningful-span
+  .meaningful-svg {
+  width: 14px;
+  height: 19px;
+}
+
+.mobile-story-main-content .mobile-story-headers .mobile-story-article-name {
+  font-weight: 700;
+  font-size: 27px;
+  line-height: 32px;
+  /* or 119% */
+
+  letter-spacing: -0.145833px;
+
+  color: #1a1a1a;
+  margin: 0 0 6px 0;
+}
+
+.mobile-story-main-content
+  .mobile-story-headers
+  .mobile-story-article-subtitle {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  /* or 120% */
+
+  letter-spacing: -0.105px;
+
+  color: #757575;
+  margin: 0;
+}
+
+.mobile-story-main-content .mobile-story-headers {
+  margin: 31px 0 19px 7.5%;
+}
+
+.mobile-story-main-content .mobile-story-body {
+  width: 768px;
+}

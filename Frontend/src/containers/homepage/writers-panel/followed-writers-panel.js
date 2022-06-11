@@ -11,7 +11,7 @@ import Lumir from "../../../Images/users/Lumir.png";
 import Stephanus from "../../../Images/users/Stephanus.png";
 import UesugiSuzuki from "../../../Images/users/UesugiSuzuki.png";
 import YiChunHwa from "../../../Images/users/YiChun-Hwa.png";
-
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as AttentiounLogo } from "../../../Images/logo.svg";
 
@@ -97,6 +97,15 @@ function FollowedWritersPanel({ activeIdx, setActiveIdx }) {
     <div className="writers-panel-container">
       <div className="followed-writers">
         <AttentiounLogo id="attentioun-logo" className="attentioun-logo" />
+        <Link to="/aloo-by-virenoswall/The-Great-Online-Game+70c0aef2-2c80-45dc-8fa3-cf4b3b0e126e">
+          <span
+            style={{
+              backgroundColor: "black",
+            }}
+          >
+            Story
+          </span>
+        </Link>
         <div id="logo-separator" className="logo-separator-div" />
         {writersData.map((writer, idx) => (
           <a

@@ -27,7 +27,13 @@ function Homepage() {
         <TempNavbar />
       </div>
       <Link to="/Pub-by-yashchaudhari/story-expections+c1866538-8584-47ac-b35d-738954ad3d6c">
-        story
+        <span
+          style={{
+            backgroundColor: "black",
+          }}
+        >
+          Story
+        </span>
       </Link>
       <FollowedWritersPanel activeIdx={activeIdx} setActiveIdx={setActiveIdx} />
       <WriterStoriesComponent setActiveIdx={setActiveIdx} />

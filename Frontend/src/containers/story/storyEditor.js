@@ -27,6 +27,7 @@ function StoryEditor({ storyData }) {
   useEffect(() => {
     // console.log(storyData);
     startEditor();
+    // console.log("started ediotr");
   }, []);
   const startEditor = () => {
     // console.log('ajs');
@@ -52,30 +53,30 @@ function StoryEditor({ storyData }) {
           config: {
             placeholder: "Publication Title",
             levels: [1, 2, 3],
-            defaultLevel: 1
+            defaultLevel: 1,
             // fontFamily: 'Merriweather',
-          }
+          },
         },
         paragraph: {
           class: Paragraph,
-          inlineToolbar: true
+          inlineToolbar: true,
         },
         list: {
           class: List,
           shortcut: "CMD+SHIFT+l",
-          inlineToolbar: true
+          inlineToolbar: true,
         },
         quote: QuoteBlock,
         delimiter: DelimiterBlock,
         // image: ImageUploadBlock,
         image: {
           class: ImageUploadBlock,
-          inlineToolbar: true
+          inlineToolbar: true,
         },
         unsplash: TempBlock,
         imageCopy: {
           class: SimpleImage,
-          inlineToolbar: ["link"]
+          inlineToolbar: ["link"],
         },
         // twitter: {
         //   class: Twitter
@@ -89,20 +90,20 @@ function StoryEditor({ storyData }) {
               youtube: true,
               coub: true,
               spotify: {
-                regex: /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(album|track|playlist)\/|\?uri=spotify:track:)((\w|-){22})/,
+                regex:
+                  /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(album|track|playlist)\/|\?uri=spotify:track:)((\w|-){22})/,
                 embedUrl:
                   "https://embed.spotify.com/?uri=https://open.spotify.com/track/6teW0qt23aGnWhC0rSvtoz?si=a02a9857240a4e44",
-                html:
-                  "<iframe src='https://embed.spotify.com/?uri=https://open.spotify.com/track/6teW0qt23aGnWhC0rSvtoz?si=39d59b3cb3134df5' width='100%' height='380' frameBorder='0' allowfullscreen=' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'></iframe>",
+                html: "<iframe src='https://embed.spotify.com/?uri=https://open.spotify.com/track/6teW0qt23aGnWhC0rSvtoz?si=39d59b3cb3134df5' width='100%' height='380' frameBorder='0' allowfullscreen=' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'></iframe>",
                 height: 300,
-                width: 600
+                width: 600,
                 // id: (groups) => groups.join('/embed/')
-              }
-            }
-          }
+              },
+            },
+          },
         },
         nft: NftBlock,
-        code: CodeBlock
+        code: CodeBlock,
         // Marker: {
         //   class: Marker,
         //   shortcut: "CMD+SHIFT+M"
@@ -111,10 +112,12 @@ function StoryEditor({ storyData }) {
 
       data: storyData,
       readOnly: true,
-      autofocus: true
+      autofocus: true,
 
       // placeholder: 'Write your story!',
     });
+
+    console.log("works");
   };
 
   return (
@@ -133,7 +136,7 @@ const useStyles = makeStyles({
     backgroundColor: "#FFFFFF",
     fontFamily: "Poppins",
     width: "760px",
-    color: "#616161"
+    color: "#616161",
   },
 
   saveBar: {
@@ -143,25 +146,25 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alginItems: "center",
     padding: "0.5% 0% 0.5% 0%",
-    zIndex: 4
+    zIndex: 4,
     // zIndex: 1,
   },
 
   editorHidden: {
-    visibility: "hidden"
+    visibility: "hidden",
   },
 
   editorVisible: {
-    visibility: "visible"
+    visibility: "visible",
   },
 
   saveBaricon: {
     width: "40px",
-    marginLeft: "1%"
+    marginLeft: "1%",
   },
 
   saveBarRight: {
-    display: "flex"
+    display: "flex",
   },
 
   saveBarButton: {
@@ -176,7 +179,7 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
-    width: "100px"
+    width: "100px",
   },
 
   saveTimer: {
@@ -185,24 +188,24 @@ const useStyles = makeStyles({
     alignItems: "center",
     flexDirection: "column",
     marginRight: "4%",
-    width: "100px"
+    width: "100px",
   },
 
   saveTimerTitle: {
     color: "rgba(89, 201, 149, 1)",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 
   saveTimerTime: {
     color: "rgba(150, 150, 150, 1)",
-    fontSize: "10px"
+    fontSize: "10px",
   },
 
   loginErrorContainer: {
     width: "100%",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
 
   loginError: {
@@ -215,16 +218,16 @@ const useStyles = makeStyles({
     justifyContent: "space-around",
     marginTop: "2%",
     height: "0.8rem",
-    position: "absolute"
+    position: "absolute",
   },
 
   loginErrorSVG: {
-    margin: "-0.3% 5% 0% 5%"
+    margin: "-0.3% 5% 0% 5%",
   },
 
   loginErrorMsg: {
     display: "flex",
     alignItems: "center",
-    width: "90%"
-  }
+    width: "90%",
+  },
 });
