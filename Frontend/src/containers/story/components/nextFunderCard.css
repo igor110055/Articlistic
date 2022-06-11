@@ -1,0 +1,57 @@
+.next-funder-container{
+    width: 291.95px;
+    height: 56.01px;
+
+    margin-top: 8px;
+    /* margin-bottom: 8px; */
+
+    border: 2px solid #F3F3F3;
+    box-sizing: border-box;
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.next-funder-profile-container{
+    display: flex;
+    align-items: center;
+
+    margin-left: 13px;
+}
+.next-funder-pic{
+    width: 34px;
+    height: 34px;
+    margin-right: 13px;
+}
+
+.next-funder-amount{
+    margin-right: 23px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+
+    text-align: center;
+    letter-spacing: -0.0583333px;
+
+    color: #000000;
+
+}
+
+.next-funder-name{
+   font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 550;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+
+    letter-spacing: -0.0583333px;
+
+    color: #000000;
+
+}
