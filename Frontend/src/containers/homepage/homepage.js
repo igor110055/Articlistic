@@ -8,6 +8,7 @@ import { getWritersandArticles } from "./homepageAction";
 import MobileNavbar from "../navbar/mobile-navbar";
 import TempNavbar from "../navbar/tempNavbar";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { put, call, takeLatest } from "redux-saga/effects";
 import { authGetRequest } from "../../utils/apiRequests";
 import { useDispatch } from "react-redux";
@@ -15,9 +16,9 @@ function Homepage() {
   const [activeIdx, setActiveIdx] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-      var token = getAuthToken();
-      
-      dispatch(getWritersandArticles({ token }));
+    var token = getAuthToken();
+
+    dispatch(getWritersandArticles({ token }));
   }, []);
 
   return (
@@ -25,6 +26,9 @@ function Homepage() {
       <div id="homepage-navbar">
         <TempNavbar />
       </div>
+      <Link to="/Pub-by-yashchaudhari/story-expections+c1866538-8584-47ac-b35d-738954ad3d6c">
+        story
+      </Link>
       <FollowedWritersPanel activeIdx={activeIdx} setActiveIdx={setActiveIdx} />
       <WriterStoriesComponent setActiveIdx={setActiveIdx} />
       <div id="mobile-navbar">
