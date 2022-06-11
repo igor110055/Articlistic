@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   createNewArticle,
   discardArticle,
-  getAllArticles
+  getAllArticles,
 } from "../writerEditor/writerEditorActions";
 import graph from "./../../Images/graph.png";
 import progress from "./../../Images/progress.png";
@@ -33,8 +33,8 @@ const WriterDashboard = () => {
     isGettingAllArticles,
     getAllArticlesError,
     getAllArticlesErrorMsg,
-    getAllArticlesResp
-  } = useSelector(state => ({
+    getAllArticlesResp,
+  } = useSelector((state) => ({
     userUserName: state.user.userUserName,
     isCreatingNewArticle: state.writerEditor.isCreatingNewArticle,
     createNewArticleError: state.writerEditor.createNewArticleError,
@@ -42,7 +42,7 @@ const WriterDashboard = () => {
     isGettingAllArticles: state.writerEditor.isGettingAllArticles,
     getAllArticlesError: state.writerEditor.getAllArticlesError,
     getAllArticlesErrorMsg: state.writerEditor.getAllArticlesErrorMsg,
-    getAllArticlesResp: state.writerEditor.getAllArticlesResp
+    getAllArticlesResp: state.writerEditor.getAllArticlesResp,
   }));
 
   useEffect(() => {
@@ -58,6 +58,11 @@ const WriterDashboard = () => {
   }, [isCreatingNewArticle]);
 
   useEffect(() => {
+    const isWriter = localStorage.getItem("isWriter");
+    if (isWriter !== true && isWriter !== "true") navigate("/homepage");
+  }, []);
+
+  useEffect(() => {
     if (getAllArticlesError) {
     } else {
       if (!isGettingAllArticles && getAllArticlesI) {
@@ -67,7 +72,7 @@ const WriterDashboard = () => {
   }, [isGettingAllArticles]);
   // console.log(readyWriteups);
 
-  const fetchArticles = skip => {
+  const fetchArticles = (skip) => {
     const temp = getAuthToken();
     // dispatch(userUsername(JSON.parse(localStorage.getItem('user')).userUserName));
     // dispatch(getAllArticles({
@@ -78,16 +83,16 @@ const WriterDashboard = () => {
     // setGetAllArticlesI(true);
     const params = new URLSearchParams({
       skip: skip,
-      limit: 10
+      limit: 10,
       // filters: "PUBLISHED",
     });
     axios
       .get(`${baseURL}/${endPoints.getAllArticles}?${params}`, {
         headers: {
-          Authorization: temp
-        }
+          Authorization: temp,
+        },
       })
-      .then(res => {
+      .then((res) => {
         setRequestCounter(requestCounter + 1);
         if (res.data.articles.length === 0) {
           setHasMore(false);
@@ -138,7 +143,7 @@ const WriterDashboard = () => {
                 color: "rgba(49, 61, 124, 1)",
                 fontWeight: 600,
                 paddingBottom: "10px",
-                fontSize: "18px"
+                fontSize: "18px",
               }}
             >
               My Stories
@@ -172,7 +177,7 @@ const WriterDashboard = () => {
               scrollableTarget="scrollableDiv"
             >
               {/* <div id="scrollableDiv" style={{ height: 'auto', maxHeight: '40rem', overflow: 'auto' }}> */}
-              {readyWriteups.map(eachCard => {
+              {readyWriteups.map((eachCard) => {
                 if (!eachCard.deleteAt)
                   return (
                     <WriterDashboardCard
@@ -195,7 +200,7 @@ const WriterDashboard = () => {
                   minHeight: requestCounter <= 1 ? "60vh" : "0vh",
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 {requestCounter <= 1 ? "Create a Story 👨‍💻" : ""}
@@ -271,12 +276,12 @@ const useStyles = makeStyles({
     height: "3rem",
     // position: 'fixed',
     backgroundColor: "white",
-    zIndex: 1
+    zIndex: 1,
   },
 
   saveBaricon: {
     width: "40px",
-    marginLeft: "1%"
+    marginLeft: "1%",
   },
 
   saveBarLeft: {
@@ -284,7 +289,7 @@ const useStyles = makeStyles({
     width: "80%",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingLeft: "1%"
+    paddingLeft: "1%",
   },
 
   saveBarLeftMyStories: {
@@ -292,12 +297,12 @@ const useStyles = makeStyles({
     textAlign: "center",
     width: "9.125em",
     border: "1px solid rgba(151, 151, 151, 0.3)",
-    borderRadius: "10px"
+    borderRadius: "10px",
   },
 
   saveBarRight: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
 
   writerDashboardContainer: {
@@ -306,14 +311,14 @@ const useStyles = makeStyles({
     alignItems: "center",
     backgroundColor: "#F6F6F7",
     // marginTop: '7rem',
-    minHeight: "calc(100vh - 4rem)"
+    minHeight: "calc(100vh - 4rem)",
   },
 
   writerDashboard: {
     display: "flex",
     minHeight: "90%",
     height: "80vh",
-    maxHeight: "50rem"
+    maxHeight: "50rem",
     // width: '90vw',
   },
 
@@ -325,13 +330,13 @@ const useStyles = makeStyles({
     marginRight: "2%",
     overflow: "auto",
     minHeight: "90%",
-    maxHeight: "31.50"
+    maxHeight: "31.50",
   },
 
   writerCards: {
     display: "flex",
     flexDirection: "column-reverse",
-    paddingTop: "2%"
+    paddingTop: "2%",
     // minHeight: '100%',
   },
 
@@ -343,7 +348,7 @@ const useStyles = makeStyles({
     padding: "3% 5% 3% 5%",
     borderRadius: "10px",
     marginBottom: "2%",
-    fontFamily: "Poppins"
+    fontFamily: "Poppins",
   },
 
   writerDashboardRight: {
@@ -352,7 +357,7 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     width: "50vw",
     height: "100%",
-    pointerEvents: "none"
+    pointerEvents: "none",
   },
 
   writerDashboardLeftCardContainer: {},
@@ -366,7 +371,7 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "3%"
+    marginBottom: "3%",
   },
 
   writerDashboardProgress: {
@@ -377,8 +382,8 @@ const useStyles = makeStyles({
     height: "100%",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 export default WriterDashboard;

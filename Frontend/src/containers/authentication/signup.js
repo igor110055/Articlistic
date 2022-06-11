@@ -21,7 +21,7 @@ function SignUp() {
   const [displayPage, setDisplayPage] = useState("");
 
   useEffect(() => {
-    if (googleSignInSuccess) navigate("/writerDashboard");
+    if (googleSignInSuccess) navigate("/homepage");
   }, [googleSignInSuccess]);
 
 useEffect(() => {
@@ -31,7 +31,7 @@ useEffect(() => {
   }, []);
   
   useEffect(() => {
-    if (Cookie.get("accessToken")) navigate("/writerDashboard");
+    if (Cookie.get("accessToken")) navigate("/homepage");
   }, []);
 
   return (
