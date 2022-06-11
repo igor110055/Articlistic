@@ -103,13 +103,19 @@ const TempNavbar = () => {
       </a>
       <div className="nav-right">
         {isWriter === "true" && (
-          <a href="/writerDashboard" className="right-first right-content">
+          <span
+            onClick={() => navigate("/writerDashboard")}
+            className="right-first right-content"
+          >
             Writer-Dashboard
-          </a>
+          </span>
         )}
-        <a href="/wallet" className="right-first right-content">
+        <span
+          onClick={() => navigate("/wallet")}
+          className="right-first right-content"
+        >
           Wallet
-        </a>
+        </span>
         {/* <a href="#profile" className="right-content">Profile</a> */}
         {/* <a className="dropdown"> */}
         {/* <a href="#profile" className="right-content">Profile</a> */}

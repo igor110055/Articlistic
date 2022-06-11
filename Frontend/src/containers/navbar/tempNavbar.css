@@ -90,6 +90,7 @@
   /* padding: 5% 14px 5px 14px; */
   text-decoration: none;
   font-size: 17px;
+  cursor: pointer;
 }
 /* 
   .navbar a:hover, .dropdown:hover .dropbtn {
