@@ -61,6 +61,7 @@ async function setConfig(result) {
                 region: result["ATT_AWS_REGION"],
                 urlForArticles: result["URL_FOR_ARTICLES"],
                 urlForProfile: result["URL_FOR_PROFILE"],
+                urlForAudienceFile: result["URL_FOR_AUDIENCE_FILE"]
             },
             redis: {
                 uri: result["REDIS_URI"],

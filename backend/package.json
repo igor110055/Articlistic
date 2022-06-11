@@ -33,6 +33,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
+    "fast-csv": "^4.3.6",
     "google-auth-library": "^8.0.1",
     "ioredis": "^4.28.2",
     "joi": "^17.6.0",
