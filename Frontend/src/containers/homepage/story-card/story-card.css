@@ -1,7 +1,8 @@
 .story-card-container{
-    min-height: fit-content;
-    min-height: -moz-fit-content;
+    /* min-height: fit-content; */
+    /* min-height: -moz-fit-content; */
     width: 29%;
+    height:315px;
     max-width: 335px;
     background: #FFFFFF;
     box-shadow: 2px 5px 24px rgba(175, 176, 198, 0.297886);
@@ -81,6 +82,7 @@ color: #000000;
         width: 85.7%;
         min-width: 229px;
         min-height: 256px;
+        height: 315px;
         max-width: 250px;
     }
 
@@ -109,6 +111,7 @@ color: #000000;
         width: 70%;
         min-width: 229px;
         min-height: 256px;
+        height: 315px;
         max-width: 300px;
     }
 
@@ -119,5 +122,6 @@ color: #000000;
         width: 45%;
         min-width: 229px;
         max-width: 337px;
+        height: 315px;
     }
 }
