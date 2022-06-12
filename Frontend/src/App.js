@@ -19,6 +19,7 @@ import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
 import Wallet from "./containers/wallet/wallet";
 import Homepage from "./containers/homepage/homepage";
+import Profile from "./containers/profile/profile";
 
 function App() {
   const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
@@ -130,6 +131,15 @@ function App() {
                   element={
                     <PrivateRoute>
                       <WriterPublicationEditor />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
+                  path="/profile"
+                  element={
+                    <PrivateRoute>
+                      <Profile />
                     </PrivateRoute>
                   }
                 />

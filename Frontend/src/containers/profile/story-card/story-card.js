@@ -1,8 +1,8 @@
 import React from "react";
 import "./story-card.css";
 
-function StoryCard({ article, writer }) {
-  const { articlePic, readingTime, body, date, title } = article.public;
+function StoryCard(props) {
+  const { articlePic, readingTime, body, date, title,writer } = props.article;
 
   const formatDate = () => {
     var d = new Date(parseInt(date, 10));

@@ -17,7 +17,7 @@ function WriterStoriesComponent({ setActiveIdx }) {
   const writersData = Object.keys(userlist).map((key) => {
     return {
       name: key,
-      img: AlexTenario,
+      img: userlist[key].userData[0].profilePic,
 
       shortName: key.split(" ")[0],
     };
