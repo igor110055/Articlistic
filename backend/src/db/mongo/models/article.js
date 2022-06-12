@@ -341,6 +341,47 @@ async function getAllArticlesForUser(username, filters, limit, skip) {
     }
 }
 
+async function getArticlesForPublicationId(publicationId, limit = 5, skip = 0) {
+
+    /**
+     * This is used in homepage API. 
+     */
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        const articles = [];
+
+        await db.find({
+                publicationId: publicationId,
+                status: "PUBLISHED"
+            })
+            .limit(limit).skip(skip).sort({
+                _id: -1
+            }).forEach((article) => {
+
+                articles.push(article);
+            });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("getArticlesForPublicationId mongo response time: " + timeTaken.toString());
+
+        return articles;
+
+    } catch (e) {
+        logger.debug(e);
+        throw e;
+    }
+}
+
 
 
 
@@ -598,8 +639,8 @@ async function getArticlesForPublication(publicationId, limit, skip) {
         let res = [];
 
         await db.find({
-            publicationId: publicationId
-        })
+                publicationId: publicationId
+            })
             .limit(limit).skip(skip).forEach((x) => {
                 res.push(x);
             })
@@ -636,5 +677,6 @@ module.exports = {
     createUniquenessIndex,
     createNewArticle,
     getArticlesForPublication,
-    markForDeletion
+    markForDeletion,
+    getArticlesForPublicationId
 }
