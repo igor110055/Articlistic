@@ -53,7 +53,7 @@ function SignIn() {
 
   useEffect(() => {
     const accessToken = Cookie.get("accessToken");
-    if (accessToken) navigate("/writerDashboard");
+    if (accessToken) navigate("/homepage");
   });
 
   useEffect(() => {

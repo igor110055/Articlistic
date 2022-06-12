@@ -1,12 +1,28 @@
-.mobile-navbar-container{
-    width: 100%;
-    height: 3rem;
-    position: fixed;
-    background: #fff;    
-    bottom: 0;
+.mobile-navbar-container {
+  width: 100%;
+  height: 3rem;
+  position: fixed;
+  background: #fff;
+  bottom: 0;
 
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
+.mobile-signout-container {
+  /* position: relative; */
+  margin-top: -4.5rem;
+  margin-left: -3rem;
+  position: absolute;
+  /* display: flex; */
+  /* align-items: flex-end; */
+}
+
+.mobile-signout-text {
+  position: absolute;
+  background-color: #fff;
+  color: black;
+  padding: 8px;
+  /* margin-bottom: 4rem; */
+}
