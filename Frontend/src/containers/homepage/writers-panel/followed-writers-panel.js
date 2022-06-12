@@ -1,17 +1,5 @@
 import React, { useState } from "react";
 import AlexTenario from "../../../Images/users/AlexTenario.png";
-import Amarachi from "../../../Images/users/Amarachi.png";
-import Chandrava from "../../../Images/users/Chandrava.png";
-import Dontae from "../../../Images/users/Dontae.png";
-import HuHyon from "../../../Images/users/HuHyon-Suk.png";
-import IvanPolo from "../../../Images/users/IvanPolo.png";
-import Jordanna from "../../../Images/users/Jordanna.png";
-import LilahiLoselev from "../../../Images/users/LilahLoselev.png";
-import Lumir from "../../../Images/users/Lumir.png";
-import Stephanus from "../../../Images/users/Stephanus.png";
-import UesugiSuzuki from "../../../Images/users/UesugiSuzuki.png";
-import YiChunHwa from "../../../Images/users/YiChun-Hwa.png";
-
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as AttentiounLogo } from "../../../Images/logo.svg";
 
@@ -26,73 +14,19 @@ function FollowedWritersPanel({ activeIdx, setActiveIdx }) {
   const writersData = Object.keys(userlist).map((key) => {
     return {
       name: key,
-      img: AlexTenario,
+      img: userlist[key].userData[0].profilePic,
       shortName: key.split(" ")[0],
     };
   });
-
-  // [
-  //   {
-  //     name: "Alex Tenario",
-  //     img: AlexTenario,
-  //     shortName: "Alex"
-  //   },
-  //   {
-  //     name: "Amarachi",
-  //     img: Amarachi,
-  //     shortName: "Amarachi"
-  //   },
-  //   {
-  //     name: "Chandrava",
-  //     img: Chandrava,
-  //     shortName: "Chandrava"
-  //   },
-  //   {
-  //     name: "Dontae",
-  //     img: Dontae,
-  //     shortName: "Dontae"
-  //   },
-  //   {
-  //     name: "Hu Hyon-Suk",
-  //     img: HuHyon,
-  //     shortName: "Hyon-Suk"
-  //   },
-  //   {
-  //     name: "Ivan Polo",
-  //     img: IvanPolo,
-  //     shortName: "Ivan"
-  //   },
-  //   {
-  //     name: "Jordanna",
-  //     img: Jordanna,
-  //     shortName: "Jordanna"
-  //   },
-  //   {
-  //     name: "Lilahi Loselev",
-  //     img: LilahiLoselev,
-  //     shortName: "Lilahi"
-  //   },
-  //   {
-  //     name: "Lumir",
-  //     img: Lumir,
-  //     shortName: "Lumir"
-  //   },
-  //   {
-  //     name: "Stephanus",
-  //     img: Stephanus,
-  //     shortName: "Stephanus"
-  //   },
-  //   {
-  //     name: "Uesugi Suzuki",
-  //     img: UesugiSuzuki,
-  //     shortName: "Uesugi"
-  //   },
-  //   {
-  //     name: "Yi Chun-Hwa",
-  //     img: YiChunHwa,
-  //     shortName: "Chun-Hwa"
-  //   }
-  // ];
+  writersData.sort(function (a, b) {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
   return (
     <div className="writers-panel-container">
       <div className="followed-writers">

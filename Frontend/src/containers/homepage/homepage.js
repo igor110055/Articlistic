@@ -16,7 +16,6 @@ function Homepage() {
   const dispatch = useDispatch();
   useEffect(() => {
       var token = getAuthToken();
-      
       dispatch(getWritersandArticles({ token }));
   }, []);
 

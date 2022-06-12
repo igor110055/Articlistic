@@ -5,10 +5,9 @@ import Amarachi from "../../../Images/users/Amarachi.png";
 import Chandrava from "../../../Images/users/Chandrava.png";
 import StoryCard from "../story-card/story-card.js";
 import { useDispatch, useSelector } from "react-redux";
-import { ReactComponent as AttentiounLogo } from "../../../Images/HomepagePublicationSVG.svg";
 import "./writer-stories-component.css";
+import Writerpublicationsbutton from "./writer-publications-button";
 function WriterStoriesComponent({ setActiveIdx }) {
-  const [activePublication, setActivePublication] = useState("All Stories");
   const { userlist, message } = useSelector((state) => ({
     // thisState: state,
     userlist: state.homepage.userlist,
@@ -18,29 +17,20 @@ function WriterStoriesComponent({ setActiveIdx }) {
   const writersData = Object.keys(userlist).map((key) => {
     return {
       name: key,
-      img: AlexTenario,
+      img: userlist[key].userData[0].profilePic,
+
       shortName: key.split(" ")[0],
     };
   });
-
-  // [
-  //   ({
-  //     name: "Alex Tenario",
-  //     img: AlexTenario,
-  //     shortName: "Alex",
-  //   },
-  //   {
-  //     name: "Amarachi",
-  //     img: Amarachi,
-  //     shortName: "Amarachi",
-  //   },
-  //   {
-  //     name: "Chandrava",
-  //     img: Chandrava,
-  //     shortName: "Chandrava",
-  //   })
-  // ];
-
+  writersData.sort(function (a, b) {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
   const publicationData = [
     "All stories",
     "The Weekly",
@@ -81,23 +71,19 @@ function WriterStoriesComponent({ setActiveIdx }) {
             </p>
           </div>
           <div className="publications-nav">
-            {publicationData.map((publication, idx) => (
-              <button
-                key={idx}
-                className={`publication-button ${
-                  activePublication === publication ? "active-publication" : ""
-                }`}
-                onClick={() => setActivePublication(publication)}
-              >
-                <AttentiounLogo />
-                <span className="publication-span">{publication}</span>
-              </button>
-            ))}
+            <Writerpublicationsbutton publicationData={publicationData} />
           </div>
           <div className="writer-stories">
-            {userlist[writer.name].articles.reverse().slice(0, 4).map((article, idx) => (
-              <StoryCard article={article} writer={article.public.writerName} key={idx} />
-            ))}
+            {userlist[writer.name].articles
+              .reverse()
+              .slice(0, 4)
+              .map((article, idx) => (
+                <StoryCard
+                  article={article}
+                  writer={article.public.writerName}
+                  key={idx}
+                />
+              ))}
           </div>
         </div>
       ))}
