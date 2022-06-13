@@ -1,6 +1,6 @@
 .user-info {
-  width: 758px;
-  height: 440px;
+    width: 50rem;
+    height: 27rem;
   background: #ffffff;
   border-radius: 30px;
   margin-top: 12rem;
@@ -24,7 +24,7 @@
 .user-info-img {
   display: flex;
   position: relative;
-  bottom: 66px;
+  bottom: 4rem;
   padding: 0px 31px;
   justify-content: space-between;
   align-items: center;
@@ -108,7 +108,8 @@
   align-items: flex-start;
   justify-content: center;
   position: relative;
-  bottom: 62px;
+  bottom: 3rem;
+
   margin: 1px 23px;
 }
 .socials {
@@ -204,9 +205,9 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 60%;
+  width: 100%;
   position: relative;
-  bottom: 10px;
+  bottom: 1rem;
 }
 
 .first-funder {
@@ -264,8 +265,8 @@
   color: #000000;
 }
 .users-followers-info-bar {
-  width: 430px;
-  height: 424px;
+    width: 27rem;
+    height: 27rem;;
   margin-top: 10rem;
   margin-left: 52px;
   background: #ffffff;
@@ -373,4 +374,34 @@
   letter-spacing: -0.105151px;
 
   color: #eb4335;
+}
+.funders-sec{
+    display: flex;
+    justify-content: space-around;    width: 55%;
+}
+
+@media (max-width: 1200px) {
+    .user-info{
+        width: 38rem;height: 28rem;
+    }
+    .funders-username{
+        width: 100%;
+    }
+    .user-info{   
+        width: 88vw;
+        min-width: 38rem;
+        margin-bottom: 0;
+    }
+    .follow,.message{
+        width: 29%;
+        height: 45px;    min-width: 106px;
+    }.moreinfo{
+        width: 40px;
+    height: 40px;
+    }
+    .data{
+       
+    width: 88vw;
+
+    }
 }

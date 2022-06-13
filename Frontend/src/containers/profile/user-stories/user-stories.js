@@ -61,7 +61,7 @@ const storiesdata = [
   },
 ];
 const Userstories = () => {
-    const [clickedclass,setclickedclass]=useState("My Stories")
+    const [clickedclass,setclickedclass]=useState("Found Meaningful")
   return (
     <div className="story-user-list">
       <div className="user-stories-nav">

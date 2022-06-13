@@ -1,12 +1,55 @@
 .data {
   background: #ffffff;
   border-radius: 30px;
-  margin-left: 230px;
-  margin-right: 230px;
+  max-width: 78rem;
+  
 }
-
-@media (max-width: 768px) {
+.funders-sec-resp,.buttons-follow-resp{
+display: none;
+}
+.profile-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+@media (max-width:1200px) {
   #index-navbar {
     display: none;
   }
+  .funders-sec-resp,.buttons-follow-resp{
+    display: block;
+    }
+    .buttons-follow-resp{
+        width: 67%;
+        display: flex;
+       
+        justify-content: space-around;
+        align-items: center;
+    }
+    .funders-username{
+
+    }
+    .funders-sec-resp{
+
+        position: relative;
+        top: 2rem;
+        display: flex;
+        justify-content: space-around;
+        width: 62%;
+    
+    }
+    .users-followers-info-bar{
+        
+        min-width: 35rem;
+    width: 85vw;
+
+        margin: 2rem 1rem;
+    }
+    .funders-sec,.buttons-follow{
+        display: none;
+    }
+    .user-row{
+        flex-direction: column;
+    }
 }

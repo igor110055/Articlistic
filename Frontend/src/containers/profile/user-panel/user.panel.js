@@ -13,6 +13,10 @@ const UserPanel = () => {
   const [openfavoritemodal, setopenfavoritesmodal] = useState(false);
   const [followingmodal, setfollowingmodal] = useState("follow");
   const [blockmodal, setblock] = useState(false);
+  
+  const [clickedclass,setclickedclass]=useState("Writes")
+  
+const headdata = ["Writes", "Read"];
   const userslist = [
     {
       name: "Jason peter ross",
@@ -43,7 +47,16 @@ const UserPanel = () => {
               src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
               alt="user"
             />
+            <div className="funders-sec-resp">
+              <button className="top-funders">
+                Top Funders <span>23</span>
+              </button>
+              <button className="first-funder">
+                First Funder<span>45</span>
+              </button>
+              </div>
             <div className="buttons-follow">
+
               <button
                 className="follow"
                 onClick={() => {
@@ -77,12 +90,34 @@ const UserPanel = () => {
             <h3>Yash Chaudhari</h3>
             <div className="funders-username">
               <p className="username">@ts.rex</p>{" "}
+              <div className="funders-sec">
               <button className="top-funders">
                 Top Funders <span>23</span>
               </button>
               <button className="first-funder">
                 First Funder<span>45</span>
               </button>
+              </div>
+              <div className="buttons-follow-resp">
+
+              <button
+                className="follow"
+                onClick={() => {
+                  setfollowingmodal(true);
+                }}
+              >
+                Follow
+              </button>
+              <button className="message">Message</button>
+              <button
+                className="moreinfo"
+                onClick={() => {
+                  setopenfavoritesmodal((prev) => !prev);
+                }}
+              >
+                ...
+              </button>
+            </div>
             </div>
             <div className="followers-all">
               <p>67 Stories Funded</p>
@@ -113,10 +148,15 @@ const UserPanel = () => {
       </div>
 
       <div className="users-followers-info-bar">
-        <div className="followers-nav">
-          <p>Writes</p>
-          <p>Reads</p>
-        </div>
+          <div className="user-stories-nav">
+      {headdata.map((data, idx) => (
+          <div className={`user-stories-nav-items ${clickedclass==data?'active-stories-class':''}`}>
+            <p>{data}</p>
+            {clickedclass===data && (
+                <div className="blue-line-container"></div>
+            )}
+          </div>
+        ))}</div>
         <hr />
         <div className="followers-list">
           {userslist.map((data) => (
@@ -139,10 +179,7 @@ const UserPanel = () => {
         <Box className={classes.formContainer1}>
           <div className={classes.importForm}>
             <div className={classes.profile}>
-              <img
-                className={classes.img}
-                src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              />
+              <img className={classes.img} src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
               <h5>Block @tsk.rex ?</h5>
               <p>
                 They won't be able to find your profile or interact with you on
@@ -161,12 +198,12 @@ const UserPanel = () => {
 };
 
 const useStyles = makeStyles({
-  img: {
-    width: "140.98px",
-    height: "138px",
-    border: "10px solid white",
-    borderRadius: "50%",
-  },
+    img:{
+        width: "140.98px",
+        height: "138px",
+        border: "10px solid white",
+        borderRadius: "50%"
+    },
   profile: {
     display: "flex",
     flexDirection: "column",
