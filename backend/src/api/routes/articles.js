@@ -47,6 +47,7 @@ module.exports = function articlesRouter() {
 
     return new express.Router()
         .get('/get', useAuth(), getArticle)
+        .get('/latestForWriter', useAuth(), getLatestArticlesForWriter)
         .get('/getAllArticlesForUser', useAuth(), getAllArticlesForUser)
         .get('/getArticlesForPublication', useAuth(), getArticlesForPublication)
         .get('/import', useAuth(false, false, true), importArticle)
@@ -72,6 +73,36 @@ module.exports = function articlesRouter() {
         .post('/selection/respond', useAuth(), checkDb(true, true), respondToSelection)
 
         .post('/deleteImage', useAuth(), deleteEmbed);
+
+
+    async function getLatestArticlesForWriter(req, res) {
+        const routeName = 'GET /articles/latestForWriter';
+
+        let {
+            username,
+            limit,
+            skip
+        } = req.query;
+
+        if (!username || !limit || !skip) {
+            throw new BadRequestError('Missing parameters', routeName);
+        }
+
+        limit = parseInt(limit);
+        skip = parseInt(skip);
+
+        let articles;
+        try {
+            articles = await mongo.articles.getAllArticlesForUser(username, ["PUBLISHED"], limit, skip);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        return res.status(200).send({
+            articles
+        });
+
+    }
 
 
     async function addRead(req, res) {
@@ -502,7 +533,7 @@ module.exports = function articlesRouter() {
 
         let article;
         try {
-            article = await mongo.articles.getArticleById(articleId);
+            article = await mongo.articles.getArticleAlongWithPublication(articleId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
