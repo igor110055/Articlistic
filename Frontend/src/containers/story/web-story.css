@@ -124,6 +124,8 @@
 }
 
 .response-highlight {
+  width: 60%;
+  margin: 0 auto;
   margin-top: 88px;
   margin-bottom: 118px;
 }

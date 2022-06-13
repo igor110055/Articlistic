@@ -2,10 +2,18 @@ import React from "react";
 import "./responseHighlight.css";
 import ResponseCard from "./responseCard";
 import userImage from "../../../Images/user-image.png";
-function ResponseHighlight() {
+function ResponseHighlight({ isMobile }) {
   return (
     <div className="response-highlight-container">
-      <h2 className="response-highlight-header">Response Highlight</h2>
+      <div className="response-highlight-header-container">
+        <div className="response-highlight-circle"></div>
+        <h2
+          className="response-highlight-header"
+          style={isMobile ? { color: "#1A1A1A" } : {}}
+        >
+          Response Highlight
+        </h2>
+      </div>
       <ResponseCard
         selection={
           "Negativity bias is a well-known phenomenon in psychology. Adults spend more time looking at negative images than positive ones; t"
@@ -13,14 +21,15 @@ function ResponseHighlight() {
         response={{
           profilePic: userImage,
           profileName: "Remya Krishna",
-          responseText: "This is really a great insight to improve my business."
+          responseText:
+            "This is really a great insight to improve my business.",
         }}
         comments={[
           {
             profilePic: userImage,
             profileName: "Emlen Bever",
-            responseText: "Thank You"
-          }
+            responseText: "Thank You",
+          },
         ]}
       />
 
@@ -29,7 +38,7 @@ function ResponseHighlight() {
         response={{
           profilePic: userImage,
           profileName: "Gopichand Sana",
-          responseText: "Awesome!!!"
+          responseText: "Awesome!!!",
         }}
       />
     </div>

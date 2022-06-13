@@ -55,7 +55,6 @@
 
   color: #757575;
 }
-
 .mobile-writer-details-container .follow-buttons .mobile-follow-button {
   background: linear-gradient(128.16deg, #2b56ff 0%, #1395fd 90.57%);
   border-radius: 10px;
@@ -76,4 +75,36 @@
 
 .mobile-writer-details-container .follow-buttons .mobile-follow-button:focus {
   border: none;
+}
+
+.web-social-interaction {
+  display: none;
+}
+
+@media (min-width: 768px) and (max-width: 1000px) {
+  .web-social-interaction {
+    display: inline;
+  }
+  .mobile-social-interaction-div {
+    display: none;
+  }
+  .mobile-writer-details-container {
+    width: 85%;
+    max-width: 700px;
+    height: 96px;
+    box-sizing: border-box;
+    margin-top: -1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .web-social-interaction {
+    display: inline;
+  }
+  .mobile-writer-details-container {
+    width: 100%;
+    height: 96px;
+    box-sizing: border-box;
+    margin-top: -1rem;
+  }
 }

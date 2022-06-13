@@ -20,7 +20,10 @@ import ResponseMenu from "./components/responseMenu";
 import EnterWalletPinCard from "../wallet/components/enterWalletPinCard";
 import MoreFromWriter from "./components/moreFromWriter";
 import ResponseHighlight from "./components/responseHighlight";
-import "./story.css";
+import WriterDetails from "./mobile-components/writer-details/writer-details";
+import FollowedWritersPanel from "../homepage/writers-panel/followed-writers-panel";
+import TempNavbar from "../navbar/tempNavbar";
+import "./web-story.css";
 function Story() {
   const classes = useStyles();
   const { story, isFetchingStory, storyError, storyErrorMsg } = useSelector(
@@ -226,9 +229,15 @@ function Story() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        background: "#fff",
+      }}
+    >
+      <TempNavbar />
+      <FollowedWritersPanel />
       {getStorySuccess ? (
-        <div>
+        <div style={{ marginLeft: "76px" }}>
           <StoryCoverPhoto
             writerName={storyData.public.writerName}
             body={storyData.public.body}
@@ -237,89 +246,10 @@ function Story() {
             readingTime={storyData.public.readingTime}
             date={storyData.public.date}
           />
-          <div className={classes.writerInfoContainer}>
-            <Box component="span" className={classes.writerInfoName}>
-              <Box className={classes.iconNameContainer}>
-                <Box sx={{ marginRight: "10px" }}>
-                  <img
-                    src={userImage}
-                    className={classes.writerDisplayIcon}
-                    alt="profile"
-                  />
-                </Box>
-                <Box>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "800",
-                      color: "black",
-                    }}
-                  >
-                    {storyData.public.writerName}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "14px",
-                      color: "#636363",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {formatDate(storyData.public.date)} ·{" "}
-                    {storyData.public.readingTime} read
-                  </div>
-                </Box>
-              </Box>
-              <Box className={classes.rightDummyInfo}>
-                <Box className={classes.dummyRightContainer}>
-                  <div className={classes.dummySvgContainer}>
-                    <svg
-                      width="11"
-                      height="19"
-                      viewBox="0 0 13 21"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M12 20L6.17647 16.069L1 20V1H12V20Z"
-                        stroke="#2B406E"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
 
-                  <Button
-                    sx={{
-                      "&.MuiButton-text": { color: "white" },
-                      width: "25%",
-                      fontFamily: "Poppins",
-                      fontWeight: "700",
-                      fontSize: "16px",
-                      letterSpacing: "1px",
-                      textTransform: "capitalize",
-                      background:
-                        "linear-gradient(128.16deg, #2B56FF 0%, #1395FD 90.57%)",
-                      borderRadius: "10px",
-                    }}
-                    style={{
-                      marginRight: "4%",
-                      width: "8rem",
-                      height: "3rem",
-                    }}
-                  >
-                    Follow
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-          </div>
           <div className={classes.cardsContainer}>
             {!isTextSelected && (
               <div className={classes.firstFunderContainer}>
-                <div className={classes.funderText}>First Funder</div>
                 <TopFunderCard firstFunder />
               </div>
             )}
@@ -334,6 +264,14 @@ function Story() {
               </div>
             )}
             <div className={classes.storyDiv}>
+              <div className={classes.writerInfoContainer}>
+                <WriterDetails
+                  readingTime={storyData.public.readingTime}
+                  date={formatDate(storyData.public.date)}
+                  writerName={storyData.public.writerName}
+                  profilePic={storyData.public.profilePic}
+                />
+              </div>
               <div
                 className={classes.storyContainer}
                 onMouseUp={handleMouseUp}
@@ -344,7 +282,6 @@ function Story() {
             </div>
             {!isTextSelected && (
               <div className={classes.topFunderContainer}>
-                <div className={classes.funderText}>Top Funder</div>
                 <TopFunderCard />
                 <NextFunderCard name="Ayla Adrienne" amount={400} />
                 <NextFunderCard name="James Osbert" amount={350} />
@@ -461,20 +398,23 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-around",
+    width: "50%",
   },
   storyContainer: {
-    width: "758px",
+    width: "100%",
     flexDirection: "column",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
   writerInfoContainer: {
+    width: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     marginTop: "1.4rem",
     mixBlendMode: "normal",
+    margin: "0 auto 2rem",
   },
 
   writerInfoName: {
@@ -529,10 +469,10 @@ const useStyles = makeStyles({
     outlineOffset: "-6px",
   },
   cardsContainer: {
+    width: "100%",
     display: "flex",
     alignItems: "flex-start",
     justifyContent: "space-around",
-    marginTop: "31px",
   },
   firstFunderContainer: {
     display: "flex",

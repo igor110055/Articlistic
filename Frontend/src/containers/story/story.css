@@ -5,13 +5,13 @@
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .mobile-story {
     display: block;
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1000px) {
   .web-story {
     display: block;
   }

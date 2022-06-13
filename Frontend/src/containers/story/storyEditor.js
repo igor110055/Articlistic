@@ -54,6 +54,7 @@ function StoryEditor({ storyData }) {
             placeholder: "Publication Title",
             levels: [1, 2, 3],
             defaultLevel: 1,
+            fontSize: "16px",
             // fontFamily: 'Merriweather',
           },
         },
@@ -135,7 +136,7 @@ const useStyles = makeStyles({
     display: "inline-block",
     backgroundColor: "#FFFFFF",
     fontFamily: "Poppins",
-    width: "760px",
+    width: "100%",
     color: "#616161",
   },
 

@@ -10,7 +10,11 @@ import MeaningfulSVG from "../../Images/MeaningfulSVG.svg";
 import MobileStorySave from "../../Images/mobile-story-save.svg";
 import MobileStoryTwitter from "../../Images/mobile-story-twitter.svg";
 import MobileStoryShare from "../../Images/mobile-story-share.svg";
+import ResponseHighlight from "./components/responseHighlight";
+import { Modal } from "@mui/material";
+import MobileResponseMenu from "./mobile-components/mobile-response-menu/mobile-response-menu";
 import "./mobile-story.css";
+import TopFunderCard from "./components/topFunderCard";
 function MobileStory() {
   const { story, isFetchingStory, storyError, storyErrorMsg } = useSelector(
     (state) => ({
@@ -27,7 +31,11 @@ function MobileStory() {
   const [getStorySuccess, setStorySuccess] = useState(false);
   const [storyBody, setStoryBody] = useState({});
   const [storyData, setStoryData] = useState({});
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTextSelected, setIsTextSelected] = useState(false);
+  const [selectionData, setSelectionData] = useState("");
+  const [selectionPosition, setSelectionPosition] = useState(100);
+  const [selectedLine, setSelectedLine] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -68,10 +76,155 @@ function MobileStory() {
     return ds.substring(4, 10);
   };
 
+  function getIndicesOf(searchStr, str) {
+    var searchStrLen = searchStr.length;
+    if (searchStrLen === 0) {
+      return [];
+    }
+    var startIndex = 0,
+      index,
+      indices = [];
+
+    while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+      indices.push(index);
+      startIndex = index + searchStrLen;
+    }
+    return indices;
+  }
+
+  const extractLineFromParagraph = (wholeText, selectedData, anchorOffset) => {
+    if (!wholeText || !selectedData) return "";
+
+    selectedData = selectedData.replace(/^\.+|\.+$/g, "");
+    const paraArray = wholeText.split(".");
+    const textArray = selectedData.split(".");
+
+    paraArray.filter((sentence) => sentence !== undefined);
+    textArray.filter((sentence) => sentence !== undefined);
+    let indicesArray = [];
+
+    let firstPartOfSelection;
+
+    // For cases where few first elements of textArray are undefined
+    let j = 0;
+    while (j < textArray.length && textArray[j] === "") j++;
+
+    if (j === textArray.length) return "";
+    else firstPartOfSelection = textArray[j];
+
+    paraArray.forEach((sentence, idx) => {
+      if (sentence.includes(firstPartOfSelection)) indicesArray.push(idx);
+    });
+
+    //number of full stops before anchorOffset
+    let numDots = 0;
+    for (let i = 0; i < anchorOffset; i++) if (wholeText[i] === ".") numDots++;
+    let finalIdx = -1;
+
+    indicesArray.forEach((idx) => {
+      let foundSentences = true;
+
+      for (let i = 1; i < textArray.length - 1; i++) {
+        if (paraArray[idx + i] !== textArray[i]) foundSentences = false;
+      }
+
+      if (textArray.length !== 1) {
+        if (
+          paraArray[idx].endsWith(textArray[0]) === false ||
+          paraArray[idx + textArray.length - 1]?.startsWith(
+            textArray[textArray.length - 1] === false
+          )
+        ) {
+          foundSentences = false;
+        }
+      }
+
+      if (foundSentences) {
+        let offsetOfCurrentSentence = numDots;
+        for (let i = 0; i < idx; i++) {
+          offsetOfCurrentSentence += paraArray[i].length;
+        }
+
+        const allOccurences = getIndicesOf(
+          firstPartOfSelection,
+          paraArray[idx]
+        );
+
+        allOccurences.map((matchedIdx) => {
+          if (anchorOffset === offsetOfCurrentSentence + matchedIdx)
+            finalIdx = idx;
+        });
+        // if (anchorOffset === offsetOfCurrentSentence) finalIdx = idx;
+      }
+    });
+
+    let containingText;
+
+    for (let i = 0; i < textArray.length; i++) {
+      if (
+        paraArray[i + finalIdx] !== undefined &&
+        paraArray[i + finalIdx] !== ""
+      ) {
+        if (containingText !== undefined)
+          containingText += paraArray[i + finalIdx] + ".";
+        else containingText = paraArray[i + finalIdx] + ".";
+      }
+    }
+
+    console.log(containingText);
+    return containingText?.trim();
+  };
+
+  const handleMouseUp = () => {
+    const selection = window.getSelection();
+    // console.log(selection);
+    let text = selection.toString().trim();
+    if (text === "") {
+      setIsTextSelected(false);
+      setSelectionData("");
+    } else {
+      setIsModalOpen(true);
+      setIsTextSelected(true);
+      setSelectionData(text);
+      setSelectedLine(
+        extractLineFromParagraph(
+          selection?.baseNode?.wholeText?.toString()?.trim(),
+          selection.toString(),
+          selection.anchorOffset
+        )
+      );
+      let rect = selection.getRangeAt(0).getBoundingClientRect();
+      setSelectionPosition((rect.top + rect.bottom) / 2);
+    }
+  };
+
+  const handleTouch = (e) => {
+    e.preventDefault();
+    const selection = window.getSelection();
+    let text = selection.toString().trim();
+    if (text === "") {
+      setIsTextSelected(false);
+      setSelectionData("");
+    } else {
+      setIsModalOpen(true);
+      setIsTextSelected(true);
+      setSelectionData(text);
+      setSelectedLine(
+        extractLineFromParagraph(
+          selection?.baseNode?.wholeText?.toString()?.trim(),
+          selection.toString(),
+          selection.anchorOffset
+        )
+      );
+      let rect = selection.getRangeAt(0).getBoundingClientRect();
+      setSelectionPosition((rect.top + rect.bottom) / 2);
+    }
+  };
+
   return (
     <div className="mobile-story-container">
       {getStorySuccess ? (
-        <>
+        <div>
           <img
             className="mobile-article-pic"
             src={story.public.articlePic}
@@ -87,7 +240,10 @@ function MobileStory() {
             />
           </div>
 
-          <div className="mobile-social-interaction-div">
+          <div
+            className="mobile-social-interaction-div"
+            style={{ marginTop: "-1rem" }}
+          >
             <span className="meaningful-span">
               <img
                 src={MeaningfulSVG}
@@ -119,11 +275,41 @@ function MobileStory() {
                 {story.public.body}
               </h5>
             </div>
-            <div className="mobile-story-body">
-              <StoryEditor storyData={story.writeup} />
+            <div className="mobile-story-funder-cards">
+              <TopFunderCard />
+              <TopFunderCard firstFunder />
+            </div>
+
+            <div
+              className="mobile-story-body"
+              onTouchEnd={(e) => handleTouch(e)}
+              onMouseUp={handleMouseUp}
+              onMouseDown={handleMouseUp}
+            >
+              <StoryEditor storyData={storyBody} />
             </div>
           </div>
-        </>
+          <div className="mobile-story-bottom">
+            <ResponseHighlight isMobile />
+          </div>
+          <Modal
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            open={isModalOpen}
+            // open={true}
+            onClose={() => {
+              setIsModalOpen(false);
+            }}
+          >
+            <MobileResponseMenu
+              writerName={storyData.public.writerName}
+              profilePic={storyData.public.profilePic}
+            />
+          </Modal>
+        </div>
       ) : (
         <MainLoader />
       )}
