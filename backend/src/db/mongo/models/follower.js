@@ -163,7 +163,7 @@ async function getFollowedWriters(username, limit, skip) {
                 'from': 'users',
                 'localField': 'follows',
                 'foreignField': 'username',
-                'as': 'writerDetails',
+                'as': 'userDetails',
                 'pipeline': [{
                     '$project': {
                         'isWriter': 1,
@@ -174,7 +174,19 @@ async function getFollowedWriters(username, limit, skip) {
             }
         }, {
             '$match': {
-                'writerDetails.0.isWriter': true
+                'userDetails.0.isWriter': true
+            }
+        }, {
+            '$lookup': {
+                'from': 'writers',
+                'localField': 'follows',
+                'foreignField': 'username',
+                'as': 'writerDetails',
+                'pipeline': [{
+                    '$project': {
+                        'publications': 1
+                    }
+                }]
             }
         }]).forEach((x) => {
             followed.push(x);

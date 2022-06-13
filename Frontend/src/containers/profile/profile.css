@@ -1,0 +1,12 @@
+.data {
+  background: #ffffff;
+  border-radius: 30px;
+  margin-left: 230px;
+  margin-right: 230px;
+}
+
+@media (max-width: 768px) {
+  #index-navbar {
+    display: none;
+  }
+}

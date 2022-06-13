@@ -246,7 +246,7 @@ const test = {
 //     test
 // }
 
-// module.exports = config[env];
+// module.exports = config['local'];
 
 module.export = devEnvVariables;
 //module.exports = { getData }

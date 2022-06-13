@@ -154,7 +154,7 @@ function WriterForm() {
             <div className="email-form">
               {validCred.length != 0 && <PrimaryError message={validCred} />}
 
-              <Input type={"text"} placeholder={"name"} onChange={setname} />
+              <Input type={"text"} placeholder={"Display name"} onChange={setname} />
               <Input
                 type="text"
                 placeholder="username"
