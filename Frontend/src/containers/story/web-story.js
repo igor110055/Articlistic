@@ -144,7 +144,7 @@ function Story() {
         );
 
         // console.log(anchorOffset, offsetOfCurrentSentence);
-        allOccurences.map((matchedIdx) => {
+        allOccurences.forEach((matchedIdx) => {
           if (anchorOffset === offsetOfCurrentSentence + matchedIdx)
             finalIdx = idx;
         });

@@ -156,7 +156,7 @@ function MobileStory() {
           paraArray[idx]
         );
 
-        allOccurences.map((matchedIdx) => {
+        allOccurences.forEach((matchedIdx) => {
           if (anchorOffset === offsetOfCurrentSentence + matchedIdx)
             finalIdx = idx;
         });
@@ -383,6 +383,14 @@ function MobileStory() {
                     />
                   </div>
                   <h2 className="mobile-story-funding-sent-message">WooHoo!</h2>
+                  <p className="mobile-story-funding-sent-text">
+                    You have successfully funded ₹450 to Emlen Beaver.
+                  </p>
+                  <div className="mobile-story-funding-sent-button-div">
+                    <button className="mobile-story-funding-sent-share-button">
+                      Share
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
