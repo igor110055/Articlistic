@@ -1,4 +1,4 @@
-.pin-field {
+.enter-pin-content .pin-field {
   width: 44px;
   height: 43px;
   background: rgba(0, 79, 213, 0.86);
@@ -91,7 +91,7 @@
 }
 
 @media (max-width: 1000px) {
-  .pin-field {
+  .enter-pin-content .pin-field {
     height: 36px;
     width: 34px;
   }

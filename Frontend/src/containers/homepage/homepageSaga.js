@@ -23,7 +23,7 @@ function* getWritersAndArticles(action) {
 
     const url = `${baseURL}/${endPoints.userHomePageGet}`;
     var data = yield call(authGetRequest, url, headers);
-    // console.log(data);
+    console.log(data);
     if (!data.error) {
       yield put(getWritersSuccess(data.result));
     } else {

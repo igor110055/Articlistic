@@ -44,6 +44,7 @@ function MobileStory() {
   const [isFundModalOpen, setFundModalOpen] = useState(false);
   const dispatch = useDispatch();
   const [sentFunds, setSentFunds] = useState(false);
+
   useEffect(() => {
     //To get articleId
     //figure of what is the last index of "+" in url and then take substring which is after the last index
@@ -226,6 +227,11 @@ function MobileStory() {
     }
   };
 
+  window.addEventListener("touchstart", (e) => {
+    console.log("toched");
+    handleTouch(e);
+  });
+
   return (
     <div className="mobile-story-container ">
       {getStorySuccess ? (
@@ -291,6 +297,7 @@ function MobileStory() {
 
             <div
               className="mobile-story-body"
+              id="story-body"
               onTouchEnd={(e) => handleTouch(e)}
               onMouseUp={handleMouseUp}
               onMouseDown={handleMouseUp}
@@ -313,11 +320,13 @@ function MobileStory() {
               setIsModalOpen(false);
             }}
           >
-            <MobileResponseMenu
-              writerName={storyData.public.writerName}
-              profilePic={storyData.public.profilePic}
-              setFundModalOpen={setFundModalOpen}
-            />
+            <>
+              <MobileResponseMenu
+                writerName={storyData.public.writerName}
+                profilePic={storyData.public.profilePic}
+                setFundModalOpen={setFundModalOpen}
+              />
+            </>
           </Modal>
           <Modal
             sx={{

@@ -9,26 +9,29 @@ import {
 } from "../homepageAction";
 const Writerpublicationsbutton = ({ publicationData, writer }) => {
   const [activePublication, setActivePublication] = useState("All Stories");
+  const [once, setOnce] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (activePublication !== "") {
-      const token = getAuthToken();
-      if (activePublication !== "All Stories") {
-        dispatch(
-          getArticlesForPublicationInit({
-            token,
-            writer,
-            publicationId: activePublication,
-          })
-        );
-      } else {
-        dispatch(
-          getLatestArticlesForWriterInit({
-            token,
-            writer,
-          })
-        );
+    if (once) {
+      if (activePublication !== "") {
+        const token = getAuthToken();
+        if (activePublication !== "All Stories") {
+          dispatch(
+            getArticlesForPublicationInit({
+              token,
+              writer,
+              publicationId: activePublication,
+            })
+          );
+        } else {
+          dispatch(
+            getLatestArticlesForWriterInit({
+              token,
+              writer,
+            })
+          );
+        }
       }
     }
   }, [activePublication]);
@@ -56,6 +59,7 @@ const Writerpublicationsbutton = ({ publicationData, writer }) => {
           }`}
           onClick={() => {
             setActivePublication(publication.publicationId);
+            setOnce(true);
           }}
         >
           <img
