@@ -3,21 +3,33 @@ import { useDispatch } from "react-redux";
 
 import AttentiounLogo from "../../../Images/HomepagePublicationSVG.svg";
 import { getAuthToken } from "../../common/commonFunctions";
-import { getArticlesForPublicationInit } from "../homepageAction";
+import {
+  getArticlesForPublicationInit,
+  getLatestArticlesForWriterInit,
+} from "../homepageAction";
 const Writerpublicationsbutton = ({ publicationData, writer }) => {
   const [activePublication, setActivePublication] = useState("All Stories");
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (activePublication !== "" && activePublication !== "All Stories") {
+    if (activePublication !== "") {
       const token = getAuthToken();
-      dispatch(
-        getArticlesForPublicationInit({
-          token,
-          writer,
-          publicationId: activePublication,
-        })
-      );
+      if (activePublication !== "All Stories") {
+        dispatch(
+          getArticlesForPublicationInit({
+            token,
+            writer,
+            publicationId: activePublication,
+          })
+        );
+      } else {
+        dispatch(
+          getLatestArticlesForWriterInit({
+            token,
+            writer,
+          })
+        );
+      }
     }
   }, [activePublication]);
 

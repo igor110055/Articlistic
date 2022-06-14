@@ -5,6 +5,9 @@ import {
   GET_ARTICLES_FOR_PUBLICATION_FAILURE,
   GET_ARTICLES_FOR_PUBLICATION_SUCCESS,
   GET_ARTICLES_FOR_PUBLICATION_INIT,
+  GET_LATEST_ARTICLES_FOR_WRITER_INIT,
+  GET_LATEST_ARTICLES_FOR_WRITER_SUCCESS,
+  GET_LATEST_ARTICLES_FOR_WRITER_FAILURE,
 } from "../../utils/actionTypes";
 
 export const getWritersandArticles = (data) => {
@@ -43,6 +46,27 @@ export const getArticlesForPublicationSuccess = (data) => {
 export const getArticlesForPublicationFailure = (data) => {
   return {
     type: GET_ARTICLES_FOR_PUBLICATION_FAILURE,
+    data,
+  };
+};
+
+export const getLatestArticlesForWriterInit = (data) => {
+  return {
+    type: GET_LATEST_ARTICLES_FOR_WRITER_INIT,
+    data,
+  };
+};
+
+export const getLatestArticlesForWriterSuccess = (data) => {
+  return {
+    type: GET_LATEST_ARTICLES_FOR_WRITER_SUCCESS,
+    data,
+  };
+};
+
+export const getLatestArticlesForWriterFailure = (data) => {
+  return {
+    type: GET_LATEST_ARTICLES_FOR_WRITER_FAILURE,
     data,
   };
 };

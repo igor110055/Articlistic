@@ -75,4 +75,5 @@ export const endPoints = {
   walletActivate: "wallet/activate",
   walletResetPin: "wallet/resetPIN",
   getArticlesForPublication: "articles/getArticlesForPublication",
+  getLatestForWriter: "articles/latestForWriter",
 };

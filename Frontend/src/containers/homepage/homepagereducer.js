@@ -5,6 +5,8 @@ import {
   GET_HOME_PAGE_DATA_FAILURE,
   GET_HOME_PAGE_DATA_INIT,
   GET_HOME_PAGE_DATA_SUCCESS,
+  GET_LATEST_ARTICLES_FOR_WRITER_INIT,
+  GET_LATEST_ARTICLES_FOR_WRITER_SUCCESS,
 } from "../../utils/actionTypes";
 
 const initialError = "Some error happened. Please Try again.";
@@ -18,14 +20,24 @@ const initialState = {
   isGettingPublicationArticles: false,
   publicationArticlesSuccess: false,
   publicationArticlesError: false,
+
+  isGettingLatestForWriter: false,
+  getLatestForWriterSuccess: false,
+  getLatestForWriterFailure: false,
 };
 
 const homepage = (state = initialState, action) => {
   const { data } = action;
-
-  // if (action.type === "GET_ARTICLES_FOR_PUBLICATION_SUCCESS") {
-  //   console.log(action.data);
-  // }
+  // console.log(data);
+  let writer, articles, newUserList;
+  if (
+    action.type === "GET_LATEST_ARTICLES_FOR_WRITER_SUCCESS" ||
+    action.type === "GET_ARTICLES_FOR_PUBLICATION_SUCCESS"
+  ) {
+    writer = action.data.writer;
+    articles = action.data.articles;
+  }
+  // console.log(writer, articles);
   switch (action.type) {
     case GET_HOME_PAGE_DATA_INIT:
       return {
@@ -57,13 +69,23 @@ const homepage = (state = initialState, action) => {
         publicationArticlesError: false,
       };
     case GET_ARTICLES_FOR_PUBLICATION_SUCCESS:
+      newUserList = state.userlist;
+      newUserList[writer].articles = articles;
       return {
         ...state,
-        userlist: {
-          ...state.userlist,
-          writer: action.data.articles,
-        },
+        userlist: newUserList,
       };
+    case GET_LATEST_ARTICLES_FOR_WRITER_INIT:
+      return {
+        ...state,
+        isGettingLatestForWriter: true,
+        getLatestForWriterSuccess: false,
+        getLatestForWriterFailure: false,
+      };
+    case GET_LATEST_ARTICLES_FOR_WRITER_SUCCESS:
+      newUserList = state.userlist;
+      newUserList[writer].articles = articles;
+      return { ...state, userlist: newUserList };
     default:
       return state;
   }
