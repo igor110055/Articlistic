@@ -5,7 +5,7 @@ import RespondSVG from "../../../../Images/RespondSVG.svg";
 import ShareSVG from "../../../../Images/ShareSVG.svg";
 
 import "./mobile-response-menu.css";
-function MobileResponseMenu({ writerName, profilePic }) {
+function MobileResponseMenu({ writerName, profilePic, setFundModalOpen }) {
   return (
     <div className="mobile-response-menu-container">
       <div className="mobile-response-menu-writer-details">
@@ -44,6 +44,7 @@ function MobileResponseMenu({ writerName, profilePic }) {
           <button
             className="fund-button"
             style={{ width: "35%", height: "40px" }}
+            onClick={() => setFundModalOpen(true)}
           >
             Fund
           </button>

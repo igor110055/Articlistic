@@ -6,6 +6,7 @@ import { getAuthToken } from "../common/commonFunctions";
 import StoryEditor from "./storyEditor";
 import WriterDetails from "./mobile-components/writer-details/writer-details";
 import MainLoader from "../../components/mainLoader";
+import AttentiounLogo from "../../Images/logo.svg";
 import MeaningfulSVG from "../../Images/MeaningfulSVG.svg";
 import MobileStorySave from "../../Images/mobile-story-save.svg";
 import MobileStoryTwitter from "../../Images/mobile-story-twitter.svg";
@@ -15,6 +16,9 @@ import { Modal } from "@mui/material";
 import MobileResponseMenu from "./mobile-components/mobile-response-menu/mobile-response-menu";
 import "./mobile-story.css";
 import TopFunderCard from "./components/topFunderCard";
+import MobileStoryNavbar from "./mobile-components/mobile-story-navbar/mobile-story-navbar";
+import userImage from "../../Images/user-image.png";
+import EnterWalletPinCard from "../wallet/components/enterWalletPinCard";
 function MobileStory() {
   const { story, isFetchingStory, storyError, storyErrorMsg } = useSelector(
     (state) => ({
@@ -32,12 +36,14 @@ function MobileStory() {
   const [storyBody, setStoryBody] = useState({});
   const [storyData, setStoryData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [isTextSelected, setIsTextSelected] = useState(false);
   const [selectionData, setSelectionData] = useState("");
   const [selectionPosition, setSelectionPosition] = useState(100);
   const [selectedLine, setSelectedLine] = useState("");
+  const [isFundModalOpen, setFundModalOpen] = useState(false);
   const dispatch = useDispatch();
-
+  const [sentFunds, setSentFunds] = useState(false);
   useEffect(() => {
     //To get articleId
     //figure of what is the last index of "+" in url and then take substring which is after the last index
@@ -224,6 +230,10 @@ function MobileStory() {
     <div className="mobile-story-container ">
       {getStorySuccess ? (
         <div>
+          <MobileStoryNavbar
+            publicationName={"Emlen & Co."}
+            publicationLogo={AttentiounLogo}
+          />
           <img
             className="mobile-article-pic"
             src={story.public.articlePic}
@@ -306,7 +316,76 @@ function MobileStory() {
             <MobileResponseMenu
               writerName={storyData.public.writerName}
               profilePic={storyData.public.profilePic}
+              setFundModalOpen={setFundModalOpen}
             />
+          </Modal>
+          <Modal
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+            }}
+            open={isFundModalOpen}
+            onClose={() => {
+              setIsModalOpen(false);
+              setSentFunds(false);
+            }}
+          >
+            <div>
+              {!sentFunds && (
+                <div className="mobile-story-confirmFundsCards">
+                  <div className="mobile-story-modal-enter-pin-div">
+                    <EnterWalletPinCard />
+                  </div>
+                  <div className="mobile-story-modal-send-funds-section">
+                    <div className="mobile-story-modal-send-underline"></div>
+                    <div className="mobile-story-modal-fund-amount">
+                      <span className="mobile-story-modal-fund-amount-bold">
+                        Amount:
+                      </span>{" "}
+                      ₹500.00
+                    </div>
+                    <div className="mobile-story-modal-available-amount">
+                      <span className="mobile-story-modal-fund-amount-bold">
+                        Balance:
+                      </span>{" "}
+                      ₹450.00
+                    </div>
+                    <button
+                      className="mobile-story-modal-fund-anyway-button"
+                      onClick={() => setSentFunds(true)}
+                    >
+                      Send Anyway
+                    </button>
+                    <div className="mobile-story-modal-send-underline"></div>
+                    <div className="mobile-story-modal-fund-button-container">
+                      <button className="mobile-story-modal-add-funds-button">
+                        Add Funds
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {sentFunds && (
+                <div className="mobile-story-sent-funds-card">
+                  {/* <img src={ConfettiImage} alt="confetti" className="funding-confetti-image" /> */}
+                  <div className="mobile-story-funding-writer-funder-image-div">
+                    <img
+                      className="mobile-story-funding-writer-image"
+                      src={userImage}
+                      alt="user"
+                    />
+                    <img
+                      className="mobile-story-funding-writer-image mobile-story-funding-funder-image"
+                      src={userImage}
+                      alt="user"
+                    />
+                  </div>
+                  <h2 className="mobile-story-funding-sent-message">WooHoo!</h2>
+                </div>
+              )}
+            </div>
           </Modal>
         </div>
       ) : (

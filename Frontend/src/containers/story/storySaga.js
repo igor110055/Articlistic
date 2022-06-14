@@ -2,11 +2,7 @@ import { put, call, takeEvery } from "redux-saga/effects";
 import { baseURL, endPoints } from "../../utils/apiEndPoints";
 import { authGetRequest } from "../../utils/apiRequests";
 
-import {
-  GET_STORY_INIT,
-  GET_STORY_SUCCESS,
-  GET_STORY_FAILURE,
-} from "../../utils/actionTypes";
+import { GET_STORY_INIT } from "../../utils/actionTypes";
 
 import {
   getStoryInit,

@@ -1,0 +1,47 @@
+.mobile-story-navbar {
+  width: 100%;
+  height: 62px;
+  box-sizing: border-box;
+  padding: 16px 24px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mobile-story-publication-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-story-publication-logo {
+  height: 32px;
+  width: 32px;
+  margin-right: 10px;
+}
+
+.mobile-story-publication-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  /* identical to box height */
+
+  letter-spacing: -0.0583333px;
+
+  color: #1a1a1a;
+}
+
+.mobile-story-get-started-button {
+  background: linear-gradient(128.16deg, #2b56ff 0%, #1395fd 90.57%);
+  border-radius: 10px;
+  padding: 7px 16px;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.0583333px;
+
+  color: #ffffff;
+  outline: none;
+  cursor: pointer;
+  border: 0;
+}
