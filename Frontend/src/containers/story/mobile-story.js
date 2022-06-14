@@ -337,7 +337,7 @@ function MobileStory() {
             }}
             open={isFundModalOpen}
             onClose={() => {
-              setIsModalOpen(false);
+              setFundModalOpen(false);
               setSentFunds(false);
             }}
           >

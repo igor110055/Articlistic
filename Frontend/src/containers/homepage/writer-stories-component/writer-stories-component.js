@@ -10,7 +10,14 @@ function WriterStoriesComponent({ setActiveIdx }) {
     userlist: state.homepage.userlist,
     message: state.common.snackbar.message,
   }));
+  const publicationsMap = {};
 
+  Object.keys(userlist).forEach((key) => {
+    userlist[key].userData.publications.forEach((publication) => {
+      publicationsMap[publication.publicationId] = publication.publicationName;
+    });
+  });
+  // console.log(publicationsMap);
   const writersData = Object.keys(userlist).map((key) => {
     return {
       name: key,
@@ -21,6 +28,14 @@ function WriterStoriesComponent({ setActiveIdx }) {
     };
   });
   writersData.sort((a, b) => a.name.localeCompare(b.name));
+
+  const makeUrlForArticle = (article) => {
+    let name = article.public.title.split(" ");
+    let urlName = name.join("-");
+    return `/${publicationsMap[article.publicationId]}-by-${
+      article.public.writerName
+    }/${urlName}+${article.articleId}`;
+  };
   return (
     <div className="writer-stories-container">
       {writersData.map((writer, idx) => (
@@ -59,6 +74,7 @@ function WriterStoriesComponent({ setActiveIdx }) {
                 article={article}
                 writer={article.public.writerName}
                 key={idx}
+                url={makeUrlForArticle(article)}
               />
             ))}
           </div>

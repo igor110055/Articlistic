@@ -1,7 +1,10 @@
 import React from "react";
 import "./story-card.css";
+import { useNavigate } from "react-router-dom";
 
-function StoryCard({ article, writer }) {
+function StoryCard({ article, writer, url }) {
+  const navigate = useNavigate();
+
   const { articlePic, readingTime, body, date, title } = article.public;
 
   const formatDate = () => {
@@ -11,7 +14,7 @@ function StoryCard({ article, writer }) {
   };
 
   return (
-    <div className="story-card-container">
+    <div className="story-card-container" onClick={() => navigate(url)}>
       <img src={articlePic} className="articlePic" alt="articlePic" />
 
       <div className="story-title web-homepage-story-title">
