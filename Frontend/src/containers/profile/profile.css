@@ -13,7 +13,7 @@ display: none;
     align-items: center;
     margin: auto;
 }
-@media (max-width:1200px) {
+@media (max-width:1258px) {
   #index-navbar {
     display: none;
   }

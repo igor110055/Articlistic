@@ -66,7 +66,7 @@ const Userstories = () => {
     <div className="story-user-list">
       <div className="user-stories-nav">
         {headdata.map((data, idx) => (
-          <div className={`user-stories-nav-items ${clickedclass==data?'active-stories-class':''}`}>
+          <div onClick={()=>{setclickedclass(data)}} className={`user-stories-nav-items ${clickedclass==data?'active-stories-class':''}`}>
             <p>{data}</p>
             {clickedclass===data && (
                 <div className="blue-line-container"></div>

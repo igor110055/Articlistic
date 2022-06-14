@@ -37,9 +37,11 @@ letter-spacing: -0.0583333px;
 @media screen and (max-width: 1200px) {
  .user-stories-nav-items{
     font-size: 15px;
-    width: 42rem;
-    height: 26rem;
+    /* width: 42rem;
+    height: 26rem; */
 
  }
-    
+    .blue-line-container{
+        top: 10px;
+    }
 }
