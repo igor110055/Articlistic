@@ -484,17 +484,10 @@ module.exports = function userRouter() {
         let homepageData = [];
 
 
-        following.forEach((followerDetails) => {
+        following.forEach((followersDetails) => {
 
-            const publication = followerDetails.writerDetails[0].publications[0];
-
-            if (!publication) {
-                homepageData.push([]);
-            } else {
-
-                const firstPublicationId = publication.publicationId;
-                homepageData.push(mongo.articles.getArticlesForPublicationId(firstPublicationId));
-            }
+            const articleFetchUsername = followersDetails.follows;
+            homepageData.push(mongo.articles.getAllArticlesForUser(articleFetchUsername, ["PUBLISHED"], 5, 0));
 
         })
 
@@ -502,13 +495,12 @@ module.exports = function userRouter() {
         homepageData = await Promise.all(homepageData);
 
 
-
         let result = {};
 
         for (let i = 0; i < following.length; i++) {
 
             result[following[i].follows] = {};
-            result[following[i].follows]['articles'] = homepageData[i];
+            result[following[i].follows]['articles'] = homepageData[i].articles;
 
             result[following[i].follows]['userData'] = following[i].userDetails[0];
             result[following[i].follows].userData.publications = following[i].writerDetails[0].publications;

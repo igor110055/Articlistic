@@ -534,6 +534,46 @@ async function getArticleById(articleId) {
 }
 
 
+const getArticleAlongWithPublication = async (articleId) => {
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        let article;
+        await db.aggregate([{
+            '$match': {
+                'articleId': articleId
+            }
+        }, {
+            '$lookup': {
+                'from': 'publications',
+                'localField': 'publicationId',
+                'foreignField': 'publicationId',
+                'as': 'publication'
+            }
+        }]).forEach((x) => {
+            article = x;
+        })
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("getArticleById mongo response time: " + timeTaken.toString());
+        return article;
+
+
+    } catch (e) {
+        logger.debug(e);
+        throw e;
+    }
+}
 
 async function getArticleForWriters(writers, limit, skip) {
 
@@ -678,5 +718,6 @@ module.exports = {
     createNewArticle,
     getArticlesForPublication,
     markForDeletion,
-    getArticlesForPublicationId
+    getArticlesForPublicationId,
+    getArticleAlongWithPublication
 }
