@@ -1,25 +1,59 @@
-import React,{useState} from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
-import { ReactComponent as AttentiounLogo } from "../../../Images/HomepagePublicationSVG.svg";
-const Writerpublicationsbutton = (props) => {
-  const [activePublication, setActivePublication] = useState("");
+import AttentiounLogo from "../../../Images/HomepagePublicationSVG.svg";
+import { getAuthToken } from "../../common/commonFunctions";
+import { getArticlesForPublicationInit } from "../homepageAction";
+const Writerpublicationsbutton = ({ publicationData, writer }) => {
+  const [activePublication, setActivePublication] = useState("All Stories");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (activePublication !== "" && activePublication !== "All Stories") {
+      const token = getAuthToken();
+      dispatch(
+        getArticlesForPublicationInit({
+          token,
+          writer,
+          publicationId: activePublication,
+        })
+      );
+    }
+  }, [activePublication]);
+
   return (
     <>
-      {props.publicationData.map((publication, idx) => (
+      <button
+        className={`publication-button ${
+          activePublication === "All Stories" ? "active-publication" : ""
+        }`}
+        onClick={() => {
+          setActivePublication("All Stories");
+        }}
+      >
+        <img src={AttentiounLogo} alt="" className="publication-icon" />
+        <span className="publication-span">All Stories</span>
+      </button>
+      {publicationData.map((publication, idx) => (
         <button
           key={idx}
           className={`publication-button ${
-            activePublication === publication ? "active-publication" : ""
+            activePublication === publication.publicationId
+              ? "active-publication"
+              : ""
           }`}
           onClick={() => {
-            if(activePublication === publication){
-              setActivePublication("");
-              return;
-            }  
-            setActivePublication(publication)}}
+            setActivePublication(publication.publicationId);
+          }}
         >
-          <AttentiounLogo />
-          <span className="publication-span">{publication}</span>
+          <img
+            src={publication.publicationPic || AttentiounLogo}
+            alt=""
+            className="publication-icon"
+          />
+          <span className="publication-span">
+            {publication.publicationName}
+          </span>
         </button>
       ))}
     </>

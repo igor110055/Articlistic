@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import FollowedWritersPanel from "./writers-panel/followed-writers-panel";
 import WriterStoriesComponent from "./writer-stories-component/writer-stories-component";
 import "./homepage.css";
@@ -11,8 +11,8 @@ function Homepage() {
   const [activeIdx, setActiveIdx] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-      var token = getAuthToken();
-      dispatch(getWritersandArticles({ token }));
+    var token = getAuthToken();
+    dispatch(getWritersandArticles({ token }));
   }, []);
 
   return (

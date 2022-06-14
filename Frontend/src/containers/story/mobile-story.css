@@ -125,3 +125,9 @@
   width: 90%;
   margin: 0 auto;
 }
+
+@media (min-width: 768px) {
+  .mobile-story-container .tabs-social-interaction-div {
+    display: none;
+  }
+}

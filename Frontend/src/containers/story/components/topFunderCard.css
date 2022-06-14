@@ -179,6 +179,9 @@
   color: #000000;
 }
 
+.top-funder-mobile-content {
+  display: none;
+}
 @media (max-width: 1000px) {
   .top-funder-follows {
     display: none;
@@ -195,6 +198,9 @@
     display: none;
   }
 
+  .top-funder-mobile-content {
+    display: inline-block;
+  }
   .top-funder-profile-image {
     width: 33px;
     height: 33px;

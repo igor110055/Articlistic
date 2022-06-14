@@ -1,12 +1,9 @@
 import { useState } from "react";
-import TopStoriesCard from "../../writerContent/topStoriesCard";
-import AlexTenario from "../../../Images/users/AlexTenario.png";
-import Amarachi from "../../../Images/users/Amarachi.png";
-import Chandrava from "../../../Images/users/Chandrava.png";
 import StoryCard from "../story-card/story-card.js";
-import { useDispatch, useSelector } from "react-redux";
-import "./writer-stories-component.css";
+import { useSelector } from "react-redux";
 import Writerpublicationsbutton from "./writer-publications-button";
+
+import "./writer-stories-component.css";
 function WriterStoriesComponent({ setActiveIdx }) {
   const { userlist, message } = useSelector((state) => ({
     // thisState: state,
@@ -17,35 +14,13 @@ function WriterStoriesComponent({ setActiveIdx }) {
   const writersData = Object.keys(userlist).map((key) => {
     return {
       name: key,
-      img: userlist[key].userData[0].profilePic,
-
+      img: userlist[key].userData.profilePic,
       shortName: key.split(" ")[0],
+      profileName: userlist[key].userData.name,
+      publications: userlist[key].userData.publications,
     };
   });
-  writersData.sort(function (a, b) {
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name > b.name) {
-      return 1;
-    }
-    return 0;
-  });
-  const publicationData = [
-    "All stories",
-    "The Weekly",
-    "The Time Machine",
-    "Culture Study",
-    "Blue Print",
-    "Crypto Insider",
-    "All stories",
-    "The Weekly",
-    "The Time Machine",
-    "Culture Study",
-    "Blue Print",
-    "Crypto Insider",
-  ];
-
+  writersData.sort((a, b) => a.name.localeCompare(b.name));
   return (
     <div className="writer-stories-container">
       {writersData.map((writer, idx) => (
@@ -62,7 +37,7 @@ function WriterStoriesComponent({ setActiveIdx }) {
               alt="profile"
               className="profile-pic"
             />
-            <h3 className="profile-name">{writer.name}</h3>
+            <h3 className="profile-name">{writer.profileName}</h3>
             <p
               className="profile-subtitle"
               id="homepage-writer-profile-subtitle"
@@ -70,9 +45,14 @@ function WriterStoriesComponent({ setActiveIdx }) {
               (Writes about the insider secrets of the startup world)
             </p>
           </div>
-          <div className="publications-nav">
-            <Writerpublicationsbutton publicationData={publicationData} />
-          </div>
+          {writer.publications.length > 0 && (
+            <div className="publications-nav">
+              <Writerpublicationsbutton
+                publicationData={writer.publications}
+                writer={writer.name}
+              />
+            </div>
+          )}
           <div className="writer-stories">
             {userlist[writer.name].articles
               .reverse()

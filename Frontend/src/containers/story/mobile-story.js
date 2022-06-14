@@ -177,7 +177,6 @@ function MobileStory() {
 
   const handleMouseUp = () => {
     const selection = window.getSelection();
-    // console.log(selection);
     let text = selection.toString().trim();
     if (text === "") {
       setIsTextSelected(false);
@@ -222,7 +221,7 @@ function MobileStory() {
   };
 
   return (
-    <div className="mobile-story-container">
+    <div className="mobile-story-container ">
       {getStorySuccess ? (
         <div>
           <img
@@ -241,7 +240,7 @@ function MobileStory() {
           </div>
 
           <div
-            className="mobile-social-interaction-div"
+            className="mobile-social-interaction-div tabs-social-interaction-div"
             style={{ marginTop: "-1rem" }}
           >
             <span className="meaningful-span">

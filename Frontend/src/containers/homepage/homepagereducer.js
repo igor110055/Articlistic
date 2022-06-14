@@ -1,5 +1,7 @@
 import {
   GET_ABOUT_PUBLICATION_SUCCESS,
+  GET_ARTICLES_FOR_PUBLICATION_INIT,
+  GET_ARTICLES_FOR_PUBLICATION_SUCCESS,
   GET_HOME_PAGE_DATA_FAILURE,
   GET_HOME_PAGE_DATA_INIT,
   GET_HOME_PAGE_DATA_SUCCESS,
@@ -12,11 +14,18 @@ const initialState = {
   isGettinglist: false,
   listError: false,
   listErrorMsg: initialError,
+
+  isGettingPublicationArticles: false,
+  publicationArticlesSuccess: false,
+  publicationArticlesError: false,
 };
 
 const homepage = (state = initialState, action) => {
   const { data } = action;
 
+  // if (action.type === "GET_ARTICLES_FOR_PUBLICATION_SUCCESS") {
+  //   console.log(action.data);
+  // }
   switch (action.type) {
     case GET_HOME_PAGE_DATA_INIT:
       return {
@@ -26,7 +35,6 @@ const homepage = (state = initialState, action) => {
       };
 
     case GET_HOME_PAGE_DATA_SUCCESS:
-      
       return {
         ...state,
         userlist: data,
@@ -41,10 +49,24 @@ const homepage = (state = initialState, action) => {
         isGettinglist: false,
         listErrorMsg: action.error,
       };
-      default:
-        return state;  
+    case GET_ARTICLES_FOR_PUBLICATION_INIT:
+      return {
+        ...state,
+        isGettingPublicationArticles: true,
+        publicationArticlesSuccess: false,
+        publicationArticlesError: false,
+      };
+    case GET_ARTICLES_FOR_PUBLICATION_SUCCESS:
+      return {
+        ...state,
+        userlist: {
+          ...state.userlist,
+          writer: action.data.articles,
+        },
+      };
+    default:
+      return state;
   }
 };
-
 
 export default homepage;

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ReactComponent as AttentiounLogo } from "../../../Images/logo.svg";
-
+import userImage from "../../../Images/user-image.png";
 import "./followed-writers-panel.css";
 
 function FollowedWritersPanel({ activeIdx, setActiveIdx }) {
@@ -14,19 +14,11 @@ function FollowedWritersPanel({ activeIdx, setActiveIdx }) {
   const writersData = Object.keys(userlist).map((key) => {
     return {
       name: key,
-      img: userlist[key].userData[0].profilePic,
+      img: userlist[key].userData.profilePic,
       shortName: key.split(" ")[0],
     };
   });
-  writersData.sort(function (a, b) {
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name > b.name) {
-      return 1;
-    }
-    return 0;
-  });
+  writersData.sort((a, b) => a.name.localeCompare(b.name));
   return (
     <div className="writers-panel-container">
       <div className="followed-writers">
@@ -56,7 +48,7 @@ function FollowedWritersPanel({ activeIdx, setActiveIdx }) {
               )}
               <div className="writer-profile-icons">
                 <img
-                  src={writer.img}
+                  src={writer.img || userImage}
                   className="writer-profile-pic"
                   alt="writer"
                 />

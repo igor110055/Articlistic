@@ -5,28 +5,25 @@ import { authGetRequest } from "../../utils/apiRequests";
 import {
   GET_STORY_INIT,
   GET_STORY_SUCCESS,
-  GET_STORY_FAILURE
+  GET_STORY_FAILURE,
 } from "../../utils/actionTypes";
 
 import {
   getStoryInit,
   getStoryFailure,
-  getStorySuccess
+  getStorySuccess,
 } from "./storyActions.js";
 
 function* getStory(action) {
-  //   console.log("hello from saga");
   try {
     const { token, articleId } = action.data;
-    // console.log("from saga", articleId, token);
     const headers = {
-      Authorization: token
+      Authorization: token,
     };
     const url = `${baseURL}/${endPoints.getArticle}?articleId=${articleId}`;
     const res = yield call(authGetRequest, url, headers);
 
-    // console.log("from saga", res);
-
+    console.log(res);
     if (!res.error) yield put(getStorySuccess(res.article));
     else yield put(getStoryFailure(res.message));
   } catch (err) {
