@@ -142,7 +142,7 @@ function App() {
                 />
                 <Route
                   exact
-                  path="/:username/profile"
+                  path="/profile"
                   element={
                     <PrivateRoute>
                       <Profile />
