@@ -414,6 +414,11 @@
 }
 
 @media screen and (max-width: 640px) {
+    .user-info-name h3{
+        
+    margin: 0 8px;
+
+    }
   .users-followers-info-bar {
     min-width: 22rem;
   }
