@@ -7,6 +7,7 @@ import {
   GET_HOME_PAGE_DATA_SUCCESS,
   GET_LATEST_ARTICLES_FOR_WRITER_INIT,
   GET_LATEST_ARTICLES_FOR_WRITER_SUCCESS,
+  HOMEPAGE_SET_ACTIVE_INDEX_DATA,
 } from "../../utils/actionTypes";
 
 const initialError = "Some error happened. Please Try again.";
@@ -24,6 +25,8 @@ const initialState = {
   isGettingLatestForWriter: false,
   getLatestForWriterSuccess: false,
   getLatestForWriterFailure: false,
+
+  activeIdx: 0,
 };
 
 const homepage = (state = initialState, action) => {
@@ -86,6 +89,11 @@ const homepage = (state = initialState, action) => {
       newUserList = state.userlist;
       newUserList[writer].articles = articles;
       return { ...state, userlist: newUserList };
+    case HOMEPAGE_SET_ACTIVE_INDEX_DATA:
+      return {
+        ...state,
+        activeIdx: data.activeIdx,
+      };
     default:
       return state;
   }

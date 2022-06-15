@@ -8,6 +8,7 @@ import {
   GET_LATEST_ARTICLES_FOR_WRITER_INIT,
   GET_LATEST_ARTICLES_FOR_WRITER_SUCCESS,
   GET_LATEST_ARTICLES_FOR_WRITER_FAILURE,
+  HOMEPAGE_SET_ACTIVE_INDEX_DATA,
 } from "../../utils/actionTypes";
 
 export const getWritersandArticles = (data) => {
@@ -67,6 +68,13 @@ export const getLatestArticlesForWriterSuccess = (data) => {
 export const getLatestArticlesForWriterFailure = (data) => {
   return {
     type: GET_LATEST_ARTICLES_FOR_WRITER_FAILURE,
+    data,
+  };
+};
+
+export const setActiveIdxData = (data) => {
+  return {
+    type: HOMEPAGE_SET_ACTIVE_INDEX_DATA,
     data,
   };
 };

@@ -1,6 +1,13 @@
 .writer-stories-container {
   margin-left: 4.5rem;
-  margin-top: 5rem;
+  margin-top: 3rem;
+}
+
+.anchor {
+  display: block;
+  height: 115px; /*same height as header*/
+  margin-top: -115px; /*same height as header*/
+  visibility: hidden;
 }
 
 .writer-stories {

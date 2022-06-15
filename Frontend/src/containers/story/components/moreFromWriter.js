@@ -19,6 +19,7 @@ function MoreFromWriter({ articleId, writerName }) {
     setIsGettingArticles(true);
     const temp = getAuthToken();
     const params = new URLSearchParams({
+      limit: 5,
       skip: 0,
       filters: "PUBLISHED"
     });
@@ -29,7 +30,7 @@ function MoreFromWriter({ articleId, writerName }) {
         }
       })
       .then(res => {
-        // console.log(res);
+        console.log(res);
         setArticles(
           res.data.articles.filter(article => article.articleId !== articleId)
         );

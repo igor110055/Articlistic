@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getStoryInit } from "./storyActions";
 import { getAuthToken } from "../common/commonFunctions";
@@ -52,7 +52,8 @@ function Story() {
 
   const dispatch = useDispatch();
   //useParams for getting url parameters
-  const { articleInfo } = useParams();
+  const location = useLocation();
+  const articleInfo = location.pathname + location.search;
   useEffect(() => {
     //To get articleId
     //figure of what is the last index of "+" in url and then take substring which is after the last index
@@ -61,6 +62,37 @@ function Story() {
 
     setArticleId(articleInfo.slice(lastIdxOfPlus + 1));
   }, []);
+
+  useEffect(() => {
+    const token = getAuthToken();
+    //dispatching action for getting articles
+    // console.log("story",articleId);
+    if (articleId !== "") {
+      dispatch(getStoryInit({ articleId, token }));
+      setStoryInitiate(true);
+    }
+  }, [articleId]);
+
+  useEffect(() => {
+    if (storyError) {
+      setStoryInitiate(false);
+      setStorySuccess(false);
+      setStoryData({});
+    } else {
+      if (!isFetchingStory && getStoryInitiate) {
+        localStorage.setItem("story", JSON.stringify(story));
+        setStoryData(story);
+        setStorySuccess(true);
+        setStoryBody(JSON.parse(story?.writeup));
+      }
+    }
+  }, [isFetchingStory]);
+  const formatDate = (date) => {
+    let realDate = date || Date.now();
+    var d = new Date(parseInt(realDate, 10));
+    var ds = d.toString("MM dd");
+    return ds.substring(4, 10);
+  };
 
   //Get all occurrences of a string in string
   function getIndicesOf(searchStr, str) {
@@ -197,37 +229,6 @@ function Story() {
   //   console.log("selected Line", selectedLine);
   // }, [selectedLine]);
 
-  useEffect(() => {
-    const token = getAuthToken();
-    //dispatching action for getting articles
-    // console.log("story",articleId);
-    if (articleId !== "") {
-      dispatch(getStoryInit({ articleId, token }));
-      setStoryInitiate(true);
-    }
-  }, [articleId]);
-
-  useEffect(() => {
-    if (storyError) {
-      setStoryInitiate(false);
-      setStorySuccess(false);
-      setStoryData({});
-    } else {
-      if (!isFetchingStory && getStoryInitiate) {
-        localStorage.setItem("story", JSON.stringify(story));
-        setStoryData(story);
-        setStorySuccess(true);
-        setStoryBody(JSON.parse(story?.writeup));
-      }
-    }
-  }, [isFetchingStory]);
-  const formatDate = (date) => {
-    let realDate = date || Date.now();
-    var d = new Date(parseInt(realDate, 10));
-    var ds = d.toString("MM dd");
-    return ds.substring(4, 10);
-  };
-
   return (
     <div
       style={{
@@ -312,12 +313,12 @@ function Story() {
           <div className="response-highlight">
             <ResponseHighlight />
           </div>
-          <div>
+          {/* <div>
             <MoreFromWriter
               articleId={articleId}
               writerName={storyData.public.writerName}
             />
-          </div>
+          </div> */}
           <Modal
             sx={{
               display: "flex",

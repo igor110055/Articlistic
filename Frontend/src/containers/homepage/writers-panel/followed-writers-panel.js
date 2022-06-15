@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ReactComponent as AttentiounLogo } from "../../../Images/logo.svg";
 import userImage from "../../../Images/user-image.png";
 import "./followed-writers-panel.css";
+import { setActiveIdxData } from "../homepageAction";
+import { useLocation, useNavigate } from "react-router";
 
-function FollowedWritersPanel({ activeIdx, setActiveIdx }) {
-  const { userlist, message } = useSelector((state) => ({
+function FollowedWritersPanel() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  // console.log("location", location);
+  const { userlist, message, activeIdx } = useSelector((state) => ({
     // thisState: state,
     userlist: state.homepage.userlist,
     message: state.common.snackbar.message,
+    activeIdx: state.homepage.activeIdx,
   }));
   const writersData = Object.keys(userlist).map((key) => {
     return {
@@ -19,6 +26,16 @@ function FollowedWritersPanel({ activeIdx, setActiveIdx }) {
     };
   });
   writersData.sort((a, b) => a.name.localeCompare(b.name));
+
+  const handleWriterPanelClick = (idx) => {
+    console.log(location.pathname.split("#")[0]);
+    if (location.pathname.split("#")[0] === "/homepage") {
+      dispatch(setActiveIdxData({ activeIdx: idx }));
+    } else {
+      navigate("/homepage");
+      dispatch(setActiveIdxData({ activeIdx: idx }));
+    }
+  };
   return (
     <div className="writers-panel-container">
       <div className="followed-writers">
@@ -37,7 +54,7 @@ function FollowedWritersPanel({ activeIdx, setActiveIdx }) {
           <a
             className="writer"
             href={`#${writer.name}`}
-            onClick={() => setActiveIdx(idx)}
+            onClick={() => handleWriterPanelClick(idx)}
             id={`this-${writer.name}`}
             key={idx}
           >

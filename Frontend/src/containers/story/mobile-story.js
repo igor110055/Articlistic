@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getStoryInit } from "./storyActions";
 import { getAuthToken } from "../common/commonFunctions";
@@ -19,6 +19,7 @@ import TopFunderCard from "./components/topFunderCard";
 import MobileStoryNavbar from "./mobile-components/mobile-story-navbar/mobile-story-navbar";
 import userImage from "../../Images/user-image.png";
 import EnterWalletPinCard from "../wallet/components/enterWalletPinCard";
+import MoreFromWriter from "./components/moreFromWriter";
 function MobileStory() {
   const { story, isFetchingStory, storyError, storyErrorMsg } = useSelector(
     (state) => ({
@@ -29,7 +30,8 @@ function MobileStory() {
     })
   );
   //useParams for getting url parameters
-  const { articleInfo } = useParams();
+  const location = useLocation();
+  const articleInfo = location.pathname + location.search;
   const [articleId, setArticleId] = useState("");
   const [getStoryInitiate, setStoryInitiate] = useState(false);
   const [getStorySuccess, setStorySuccess] = useState(false);
@@ -227,11 +229,6 @@ function MobileStory() {
     }
   };
 
-  window.addEventListener("touchstart", (e) => {
-    console.log("toched");
-    handleTouch(e);
-  });
-
   return (
     <div className="mobile-story-container ">
       {getStorySuccess ? (
@@ -299,6 +296,8 @@ function MobileStory() {
               className="mobile-story-body"
               id="story-body"
               onTouchEnd={(e) => handleTouch(e)}
+              onTouchStart={(e) => handleTouch(e)}
+              onTouchMove={(e) => handleTouch(e)}
               onMouseUp={handleMouseUp}
               onMouseDown={handleMouseUp}
             >
@@ -307,6 +306,12 @@ function MobileStory() {
           </div>
           <div className="mobile-story-bottom">
             <ResponseHighlight isMobile />
+          </div>
+          <div>
+            {/* <MoreFromWriter
+              articleId={articleId}
+              writerName={storyData.public.writerName}
+            /> */}
           </div>
           <Modal
             sx={{

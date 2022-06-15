@@ -117,8 +117,6 @@ function StoryEditor({ storyData }) {
 
       // placeholder: 'Write your story!',
     });
-
-    console.log("works");
   };
 
   return (

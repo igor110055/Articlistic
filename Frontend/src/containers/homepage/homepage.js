@@ -3,7 +3,7 @@ import FollowedWritersPanel from "./writers-panel/followed-writers-panel";
 import WriterStoriesComponent from "./writer-stories-component/writer-stories-component";
 import "./homepage.css";
 import { getAuthToken } from "../common/commonFunctions";
-import { getWritersandArticles } from "./homepageAction";
+import { getWritersandArticles, setActiveIdxData } from "./homepageAction";
 import MobileNavbar from "../navbar/mobile-navbar";
 import TempNavbar from "../navbar/tempNavbar";
 import { useDispatch } from "react-redux";
@@ -13,6 +13,7 @@ function Homepage() {
   useEffect(() => {
     var token = getAuthToken();
     dispatch(getWritersandArticles({ token }));
+    dispatch(setActiveIdxData({ activeIdx, setActiveIdx }));
   }, []);
 
   return (
@@ -20,8 +21,8 @@ function Homepage() {
       <div id="homepage-navbar">
         <TempNavbar />
       </div>
-      <FollowedWritersPanel activeIdx={activeIdx} setActiveIdx={setActiveIdx} />
-      <WriterStoriesComponent setActiveIdx={setActiveIdx} />
+      <FollowedWritersPanel />
+      <WriterStoriesComponent />
       <div id="mobile-navbar">
         <MobileNavbar />
       </div>
