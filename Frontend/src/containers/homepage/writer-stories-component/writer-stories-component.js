@@ -32,11 +32,11 @@ function WriterStoriesComponent() {
   writersData.sort((a, b) => a.name.localeCompare(b.name));
 
   const makeUrlForArticle = (article) => {
+    let publicationName = publicationsMap[article.publicationId].split(" ");
+    let pubName = publicationName.join("-");
     let name = article.public.title.split(" ");
     let urlName = name.join("-");
-    return `/${publicationsMap[article.publicationId]}-by-${
-      article.public.writerName
-    }/${urlName}+${article.articleId}`;
+    return `/${pubName}-by-${article.public.writerName}/${urlName}+${article.articleId}`;
   };
   return (
     <div className="writer-stories-container">

@@ -296,7 +296,7 @@ function MobileStory() {
               className="mobile-story-body"
               id="story-body"
               onTouchEnd={(e) => handleTouch(e)}
-              onTouchStart={(e) => handleTouch(e)}
+              // onTouchStart={(e) => handleTouch(e)}
               onTouchMove={(e) => handleTouch(e)}
               onMouseUp={handleMouseUp}
               onMouseDown={handleMouseUp}
