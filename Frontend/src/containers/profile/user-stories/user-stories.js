@@ -1,4 +1,4 @@
-import StoryCard from "../story-card/story-card";
+import StoryCard from "../../homepage/story-card/story-card";
 import './user-stories.css';
 import {useState} from "react";
 import { useSelector } from "react-redux";
