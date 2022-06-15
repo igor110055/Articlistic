@@ -79,7 +79,8 @@
   display: flex;
   position: relative;
 
-  top: 2px;
+  top: 25px;
+
 
   justify-content: space-around;
   align-items: center;
@@ -489,7 +490,7 @@
     font-size: 23px;
   }
   .funders-username .username{
-    font-size: 18px;
+    font-size: 15px;
   }
   .users-followers-info-bar {
     min-width: 27rem;

@@ -53,22 +53,23 @@ function* getuser(action) {
 
     const url = `${baseURL}/${endPoints.profile}?username=${action.data.username}`;
     var data = yield call(authGetRequest, url, headers);
-    
-    const url1=`${baseURL}/users/followers?${params}`;
-    const params = new URLSearchParams({
-        skip: 0,
-        limit: 100,
-        username: action.data.username,
-      });
-    var follower=yield call(authGetRequest,url1,headers)
-    console.log('follower',follower);
-    const url2=`${baseURL}/users/following?${params}`;
-    var following=yield call(authGetRequest,url2,headers)
-    console.log('follow',follower,following)
-    console.log(data);
+    console.log("uybb",data)
+    // const url1=`${baseURL}/users/followers?${params}`;
+    // const params = new URLSearchParams({
+    //     skip: 0,
+    //     limit: 100,
+    //     username: action.data.username,
+    //   });
+
+    // var follower=yield call(authGetRequest,url1,headers)
+    // console.log('follower',follower);
+    // const url2=`${baseURL}/users/following?${params}`;
+    // var following=yield call(authGetRequest,url2,headers)
+    // console.log('follow',follower,following)
+    // console.log(data);
     // data=INIT_DATA;
     if (!data.error) {
-      yield put(getuserSuccess({data,follower,following}));
+      yield put(getuserSuccess(data));
     } else {
       yield put(getuserFailure(data.message));
     }
