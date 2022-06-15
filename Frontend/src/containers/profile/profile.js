@@ -11,9 +11,7 @@ const Profile = () => {
     const dispatch=useDispatch();
     const state= localStorage.getItem('user');
     const user = JSON.parse(state);
-//    const query = new URLSearchParams(this.props.location.search);
-//     console.log(query.get('username'));
-    console.log(user);
+
     useEffect(()=>{
         const token=getAuthToken();
         dispatch(getuser({username:user.userUserName,token}));

@@ -10,7 +10,7 @@ import AlexTanario from "../../../Images/users/AlexTenario.png";
 import { useSelector } from "react-redux";
 const UserPanel = () => {
     const data=useSelector(state=>state.profile)
-   console.log(data);
+ 
   const classes = useStyles();
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [openfavoritemodal, setopenfavoritesmodal] = useState(false);

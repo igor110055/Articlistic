@@ -28,7 +28,7 @@ export function* getArticlesInit(action) {
     });
     const url = `${baseURL}/${endPoints.getAllArticles}?${params}`;
     const data = yield authGetRequest(url, headers);
-    console.log("data", data);
+   
     if (!data.error) {
        
       yield put(getArticlessuccess(data.articles));
@@ -53,7 +53,7 @@ function* getuser(action) {
 
     const url = `${baseURL}/${endPoints.profile}?username=${action.data.username}`;
     var data = yield call(authGetRequest, url, headers);
-    console.log("uybb",data)
+   
     // const url1=`${baseURL}/users/followers?${params}`;
     // const params = new URLSearchParams({
     //     skip: 0,
