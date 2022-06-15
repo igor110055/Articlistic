@@ -1,0 +1,18 @@
+.web-story {
+  display: none;
+}
+.mobile-story {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  .mobile-story {
+    display: block;
+  }
+}
+
+@media (min-width: 1000px) {
+  .web-story {
+    display: block;
+  }
+}

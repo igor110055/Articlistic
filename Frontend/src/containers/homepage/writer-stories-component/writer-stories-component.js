@@ -1,91 +1,88 @@
 import { useState } from "react";
-import TopStoriesCard from "../../writerContent/topStoriesCard";
-import AlexTenario from "../../../Images/users/AlexTenario.png";
-import Amarachi from "../../../Images/users/Amarachi.png";
-import Chandrava from "../../../Images/users/Chandrava.png";
 import StoryCard from "../story-card/story-card.js";
-import { useDispatch, useSelector } from "react-redux";
-import "./writer-stories-component.css";
+import { useSelector, useDispatch } from "react-redux";
 import Writerpublicationsbutton from "./writer-publications-button";
-function WriterStoriesComponent({ setActiveIdx }) {
+import "./writer-stories-component.css";
+import { setActiveIdxData } from "../homepageAction.js";
+
+function WriterStoriesComponent() {
+  const dispatch = useDispatch();
   const { userlist, message } = useSelector((state) => ({
     // thisState: state,
     userlist: state.homepage.userlist,
     message: state.common.snackbar.message,
   }));
+  const publicationsMap = {};
 
+  Object.keys(userlist).forEach((key) => {
+    userlist[key].userData.publications.forEach((publication) => {
+      publicationsMap[publication.publicationId] = publication.publicationName;
+    });
+  });
+  // console.log(publicationsMap);
   const writersData = Object.keys(userlist).map((key) => {
     return {
       name: key,
-      img: userlist[key].userData[0].profilePic,
-
+      img: userlist[key].userData.profilePic,
       shortName: key.split(" ")[0],
+      profileName: userlist[key].userData.name,
+      publications: userlist[key].userData.publications,
     };
   });
-  writersData.sort(function (a, b) {
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name > b.name) {
-      return 1;
-    }
-    return 0;
-  });
-  const publicationData = [
-    "All stories",
-    "The Weekly",
-    "The Time Machine",
-    "Culture Study",
-    "Blue Print",
-    "Crypto Insider",
-    "All stories",
-    "The Weekly",
-    "The Time Machine",
-    "Culture Study",
-    "Blue Print",
-    "Crypto Insider",
-  ];
+  writersData.sort((a, b) => a.name.localeCompare(b.name));
 
+  const makeUrlForArticle = (article) => {
+    let publicationName = publicationsMap[article.publicationId].split(" ");
+    let pubName = publicationName.join("-");
+    let name = article.public.title.split(" ");
+    let urlName = name.join("-");
+    return `/${pubName}-by-${article.public.writerName}/${urlName}+${article.articleId}`;
+  };
   return (
     <div className="writer-stories-container">
       {writersData.map((writer, idx) => (
-        <div
-          className="writer-stories-content"
-          id={`${writer.name}`}
-          key={idx}
-          onMouseEnter={() => setActiveIdx(idx)}
-        >
-          <div className="header">
-            <img
-              src={writer.img}
-              id="homepage-writer-profile-img"
-              alt="profile"
-              className="profile-pic"
-            />
-            <h3 className="profile-name">{writer.name}</h3>
-            <p
-              className="profile-subtitle"
-              id="homepage-writer-profile-subtitle"
-            >
-              (Writes about the insider secrets of the startup world)
-            </p>
-          </div>
-          <div className="publications-nav">
-            <Writerpublicationsbutton publicationData={publicationData} />
-          </div>
-          <div className="writer-stories">
-            {userlist[writer.name].articles
-              .reverse()
-              .slice(0, 4)
-              .map((article, idx) => (
+        <>
+          <span className="anchor" id={`${writer.name}`}></span>
+          <div
+            className="writer-stories-content"
+            key={idx}
+            onMouseEnter={() => dispatch(setActiveIdxData({ activeIdx: idx }))}
+          >
+            <div className="header">
+              <img
+                src={writer.img}
+                id="homepage-writer-profile-img"
+                alt="profile"
+                className="profile-pic"
+              />
+              <h3 className="profile-name">{writer.profileName}</h3>
+              <p
+                className="profile-subtitle"
+                id="homepage-writer-profile-subtitle"
+              >
+                (Writes about the insider secrets of the startup world)
+              </p>
+            </div>
+            {writer.publications.length > 0 && (
+              <div className="publications-nav">
+                <Writerpublicationsbutton
+                  publicationData={writer.publications}
+                  writer={writer.name}
+                />
+              </div>
+            )}
+            <div className="writer-stories">
+              {userlist[writer.name].articles.map((article, idx) => (
                 <StoryCard
                   article={article}
                   writer={article.public.writerName}
                   key={idx}
+                  url={makeUrlForArticle(article)}
                 />
               ))}
+            </div>
           </div>
-        </div>
+        </>
       ))}
     </div>
   );

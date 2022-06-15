@@ -302,11 +302,15 @@ select {
 }
 
 .ce-header {
-  font-family: 'Merriweather','Poppins';
+  font-family: "Merriweather", "Poppins";
+  width: 90%;
+  margin: 0 auto !important;
 }
 .cdx-block {
   font-size: 18px;
   line-height: 2.1rem;
+  /* width: 90%; */
+  margin: 0 auto;
 }
 .cdx-block a {
   color: black;
@@ -388,16 +392,19 @@ select {
   line-height: 1.8em !important;
   color: #1a1a1a;
   margin-bottom: 1em;
+  width: 90%;
+  margin: 0 auto;
+  font-size: 16px;
 }
 
 .cdx-list__item {
   color: #1a1a1a;
-  line-height: 38px !important;
+  line-height: 38px;
 }
 
 [contenteditable="true"]:empty:not(:focus):before {
   content: attr(placeholder);
-  color: grey;
+  color: #1a1a1a;
 }
 
 .ce-header[contentEditable="true"][data-placeholder]::before {
@@ -408,7 +415,7 @@ select {
   .ce-block:first-child
   .ce-header[data-placeholder]:empty::before {
   content: attr(data-placeholder) !important;
-  color: grey;
+  color: #1a1a1a;
   position: absolute;
 }
 
@@ -572,4 +579,26 @@ select {
 }
 .embed-tool__content--twitter {
   width: 80% !important;
+}
+
+@media (max-width: 768px) {
+  .cdx-block {
+    font-size: 16px;
+    line-height: 24px;
+    color: black;
+  }
+}
+
+@media (min-width: 768px) {
+  .ce-paragraph {
+    width: 100%;
+    color: #000000;
+  }
+  .ce-header {
+    width: 100%;
+  }
+
+  .cdx-list__item {
+    line-height: 32px;
+  }
 }

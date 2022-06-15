@@ -146,7 +146,7 @@ const headdata = ["Writes", "Read"];
                 <img src={Twitter} />
                 <div className="website">
                   <img src={Website} alt="" />
-                  <p>tusharsinghkshatriya.com</p>
+                  <p>xyz.com</p>
                 </div>
               </div>
               {data.isWriter &&  <p className="writer-para">Writer</p>}

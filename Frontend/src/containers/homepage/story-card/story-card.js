@@ -1,7 +1,10 @@
 import React from "react";
 import "./story-card.css";
+import { useNavigate } from "react-router-dom";
 
-function StoryCard({ article, writer }) {
+function StoryCard({ article, writer, url }) {
+  const navigate = useNavigate();
+
   const { articlePic, readingTime, body, date, title } = article.public;
 
   const formatDate = () => {
@@ -11,10 +14,19 @@ function StoryCard({ article, writer }) {
   };
 
   return (
-    <div className="story-card-container">
+    <div className="story-card-container" onClick={() => navigate(url)}>
       <img src={articlePic} className="articlePic" alt="articlePic" />
-      <div className="story-title">{title?.substring(0, 60)}...</div>
-      <div className="story-body">{body?.substring(0, 70)}...</div>
+
+      <div className="story-title web-homepage-story-title">
+        {title?.substring(0, 20)} {title.length > 20 ? "..." : ""}
+      </div>
+      <div className="story-title mobile-homepage-story-title">
+        {title?.substring(0, 50)} {title.length > 50 ? "..." : ""}
+      </div>
+      <div className="story-body">
+        {body?.substring(0, 70)} {body.length > 70 ? "..." : ""}
+      </div>
+
       <div className="story-details">
         <div className="story-writer-details">
           By &nbsp;
@@ -73,9 +85,11 @@ function StoryCard({ article, writer }) {
               strokeLinejoin="round"
             />
           </svg>
-          {parseInt(readingTime) === 1 || parseInt(readingTime) === 0
-            ? `${parseInt(readingTime)} min Read`
-            : `${parseInt(readingTime)} mins Read`}
+          <span>
+            {parseInt(readingTime) === 1 || parseInt(readingTime) === 0
+              ? `${parseInt(readingTime)} min Read`
+              : `${parseInt(readingTime)} mins Read`}
+          </span>
         </div>
       </div>
     </div>

@@ -1,174 +1,22 @@
-import { put, call, takeLatest } from "redux-saga/effects";
+import { put, call, takeLatest, takeEvery } from "redux-saga/effects";
 import { baseURL, endPoints } from "../../utils/apiEndPoints";
+import { authGetRequest } from "../../utils/apiRequests";
 import {
-  // getRequest,
-  authGetRequest,
-  authPostRequest,
-  authPutRequest,
-  authDeleteRequest,
-} from "../../utils/apiRequests";
-import { getWritersSuccess, getWritersFailure } from "./homepageAction";
+  getWritersSuccess,
+  getWritersFailure,
+  getArticlesForPublicationSuccess,
+  getArticlesForPublicationFailure,
+  getLatestArticlesForWriterSuccess,
+  getLatestArticlesForWriterFailure,
+} from "./homepageAction";
 import {
   GET_HOME_PAGE_DATA_INIT,
-  GET_HOME_PAGE_DATA_FAILURE,
-  GET_HOME_PAGE_DATA_SUCCESS,
+  GET_ARTICLES_FOR_PUBLICATION_INIT,
+  GET_LATEST_ARTICLES_FOR_WRITER_INIT,
 } from "../../utils/actionTypes";
 
-
-const INIT_DATA={
-  "virenoswall": {
-      "articles": [
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-],
-      "count": 5
-  },
-  "ionVelocity": {
-      "articles": [
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},],
-      "count": 5
-  },
-  "nagar1111": {
-      "articles": [
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},
-{
-articlePic:
-  "https://images.unsplash.com/photo-1610072947120-8736bbfc56e1?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyODAwNTV8MHwxfHNlYXJjaHwxfHxmb3VyfGVufDB8fHx8MTY0OTUwNjQxOA&ixlib=rb-1.2.1&q=85",
-body: "BNPL solutions allow customers to spread out the cost of their purchases...",
-date: 1649771892446,
-readingTime: "1 min",
-title: "What Next for ‘Buy Now, Pay Later’ Companies?",
-writerName: "yashchaudhari",
-},],
-      "count": 5
-  }
-}
-
 function* getWritersAndArticles(action) {
-   
-    try {
+  try {
     const headers = {
       Authorization: action.data.token,
     };
@@ -176,7 +24,6 @@ function* getWritersAndArticles(action) {
     const url = `${baseURL}/${endPoints.userHomePageGet}`;
     var data = yield call(authGetRequest, url, headers);
     console.log(data);
-    // data=INIT_DATA;
     if (!data.error) {
       yield put(getWritersSuccess(data.result));
     } else {
@@ -188,6 +35,60 @@ function* getWritersAndArticles(action) {
 }
 
 export function* getWriterandArticlesSaga() {
-   
   yield takeLatest(GET_HOME_PAGE_DATA_INIT, getWritersAndArticles);
+}
+
+function* getArticleForPublication(action) {
+  try {
+    const headers = {
+      Authorization: action.data.token,
+    };
+
+    const url = `${baseURL}/${
+      endPoints.getArticlesForPublication
+    }?publicationId=${action.data.publicationId}&skip=${0}&limit=${4}`;
+
+    var data = yield call(authGetRequest, url, headers);
+
+    const response = { ...data, writer: action.data.writer };
+
+    // console.log(data);
+    if (!data.error) yield put(getArticlesForPublicationSuccess(response));
+    else yield put(getArticlesForPublicationFailure(data.message));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export function* getArticleForPublicationSaga() {
+  yield takeLatest(GET_ARTICLES_FOR_PUBLICATION_INIT, getArticleForPublication);
+}
+
+function* getLatestArticlesForWriter(action) {
+  try {
+    const headers = {
+      Authorization: action.data.token,
+    };
+    const url = `${baseURL}/${endPoints.getLatestForWriter}?username=${
+      action.data.writer
+    }&skip=${0}&limit=${4}`;
+
+    var data = yield call(authGetRequest, url, headers);
+    const response = {
+      articles: data.articles.articles,
+      writer: action.data.writer,
+    };
+
+    if (!data.error) yield put(getLatestArticlesForWriterSuccess(response));
+    else yield put(getLatestArticlesForWriterFailure(data.message));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export function* getLatestArticlesForWriterSaga() {
+  yield takeEvery(
+    GET_LATEST_ARTICLES_FOR_WRITER_INIT,
+    getLatestArticlesForWriter
+  );
 }

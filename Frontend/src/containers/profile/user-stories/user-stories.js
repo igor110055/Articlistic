@@ -15,13 +15,13 @@ const Userstories = () => {
         {headdata.map((data, idx) => (
           <div onClick={()=>{setclickedclass(data)}} className={`user-stories-nav-items ${clickedclass==data?'active-stories-class':''}`}>
             <p>{data}</p>
-            {clickedclass===data && (
-                <div className="blue-line-container"></div>
+            {clickedclass === data && (
+              <div className="blue-line-container"></div>
             )}
           </div>
         ))}
       </div>
-      <hr/>
+      <hr />
       <div className="stories-list">
         {data.articles.map((data, idx) => (
           <StoryCard article={data} />

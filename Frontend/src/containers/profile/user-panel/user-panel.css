@@ -190,7 +190,7 @@
   font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 13px;
   line-height: 24px;
   /* identical to box height */
   position: relative;
@@ -234,7 +234,7 @@
   font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 13px;
   line-height: 24px;
   /* identical to box height */
   position: relative;
@@ -432,15 +432,16 @@
   }
   .first-funder{
     position: relative;
-   font-size: 10px;
+   font-size: 10px;height: 25px;
     padding: 1px;width: 98px;
   }.top-funders span{
-    left: 33px;
+    left: 29px;
     bottom: 22px;
   }.website{
     position: relative;
     left: 71px;
   }
+ 
   .message {
     height: 32px;
     width: 76px;

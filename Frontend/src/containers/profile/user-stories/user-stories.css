@@ -42,6 +42,9 @@ letter-spacing: -0.0583333px;
         height: 38px;
 
     }
+    #index-navbar {
+        display: block;
+      }
     .funders-sec-resp{
         top:0;width:70%;
     }
@@ -62,7 +65,9 @@ letter-spacing: -0.0583333px;
     height: 26rem; */
 
  }
- 
+ /* #index-navbar {
+    display: block;
+  } */
     .blue-line-container{
         top: 10px;
     }

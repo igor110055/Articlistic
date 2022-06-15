@@ -11,6 +11,7 @@ import * as homePageSaga from "./containers/homepage/homepageSaga";
 import * as writerSaga from "./containers/writerform/writerformsaga";
 import * as walletSaga from "./containers/wallet/walletSaga";
 import * as profileSaga from "./containers/profile/profileSaga";
+import * as storySaga from "./containers/story/storySaga";
 export default function* rootSaga() {
   yield all(
     [
@@ -26,6 +27,7 @@ export default function* rootSaga() {
       ...Object.values(writerSaga),
       ...Object.values(walletSaga),
       ...Object.values(profileSaga),
+      ...Object.values(storySaga),
     ].map(spawn)
   );
 }

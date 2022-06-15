@@ -1,0 +1,107 @@
+.funding-perks-container{
+    display:inline-block;
+     /* margin-left: 30px; */
+     margin-bottom: 23px;
+     height: 262px;
+     width: 270px;
+    position: relative;
+    border: 1px solid transparent;
+    border-radius: 30px;
+    background: #FFFFFF;
+    background-clip: padding-box;
+    /* just to show box-shadow still works fine */
+    box-shadow: 0px 0px 41px 4px rgba(214, 230, 255, 0.5);
+}
+
+.funding-perks-container::after {
+    position: absolute;
+    top: -1px; bottom: -1px;
+    left: -1px; right: -1px;
+    background: linear-gradient(#2B56FF, #1395FD);
+    content: '';
+    z-index: -1;
+    border-radius: 30px;
+} 
+
+.funding-perks-content{
+    margin-top: 25px;
+    margin-left: 29px;
+}
+
+.funding-perks-title{
+    width: 142px;
+    height: 30px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: -0.105151px;
+    color: #000000;
+    margin: 0;
+}
+
+.funding-perks-subtitle{
+    margin: 0;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    /* identical to box height */
+
+    letter-spacing: -0.105151px;
+
+    color: #9E9E9E;
+}
+
+.funding-perks-benefits{
+    margin: 19px 25px 32px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.perk-text{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    /* line-height: 21px; */
+    letter-spacing: -0.105151px;
+    color: #616161;
+}
+
+.blue-perk-text{
+    color: #0095FF;
+}
+.first-perk{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.second-perk{
+    margin-top: 17px;
+    margin-bottom: 18px;
+ display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;   
+}
+
+.perk-svg-container{
+   margin-left: 10px;
+}
+
+.first-perk-svg{
+    margin-top: 2px;
+}
+
+.second-perk-svg{
+    margin-top: 1px;
+}
+
+.third-perk-svg{
+    margin-top: 4px;
+}

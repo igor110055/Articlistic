@@ -1,0 +1,133 @@
+.mobile-response-menu-container {
+  box-sizing: border-box;
+  width: 95%;
+  max-width: 500px;
+  margin: 0 auto;
+  /* max-width: ; */
+  background: #ffffff;
+  border-radius: 16px;
+  /* border-width: 1px; */
+  /* border-style: solid; */
+  /* border-image: linear-gradient(#1b73e8, #3095ff); */
+  border: 1px solid #1b73e8;
+  padding: 13px;
+}
+
+.mobile-response-menu-writer-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-response-menu-writer-profile-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.mobile-response-menu-writer-profile-pic {
+  height: 39px;
+  width: 39px;
+  object-fit: cover;
+  border-radius: 50%;
+  outline: 3px solid #3bacfc;
+  outline-offset: -6px;
+}
+
+.mobile-response-menu-writer-name-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+}
+
+.mobile-response-menu-writer-name-container span {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 16px;
+  /* identical to box height */
+
+  letter-spacing: -0.0583333px;
+
+  color: #000000;
+}
+
+.mobile-response-menu-fund-amount {
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 29px;
+  /* identical to box height */
+
+  text-align: right;
+  letter-spacing: -0.105151px;
+
+  color: #bdbdbd;
+}
+
+.mobile-response-menu-selected-fund-amount {
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 54px;
+  /* identical to box height */
+
+  text-align: right;
+  letter-spacing: -0.105151px;
+  margin-left: 4px;
+  color: #1a1a1a;
+}
+
+.mobile-response-menu-separator {
+  height: 1px;
+  width: 100%;
+  background-color: #efefef;
+  margin: 16px 0;
+}
+
+.mobile-response-menu-fund-buttons-container,
+.mobile-response-menu-fund-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-response-menu-fund-buttons-container {
+  margin-bottom: 1rem;
+}
+
+.mobile-response-menu-fund-buttons-container button {
+  height: 32px;
+}
+
+.mobile-response-menu-responses {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mobile-response-menu-responses .mobile-response-menu-button {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  border-radius: 22px;
+}
+
+.mobile-response-menu-responses .mobile-response-menu-button img {
+  height: 24px;
+}
+
+.mobile-response-menu-responses .mobile-response-menu-button span {
+  margin-left: 9px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 24px;
+  /* identical to box height, or 200% */
+
+  color: #000000;
+}
+
+.mobile-response-menu-responses .mobile-response-menu-button:hover {
+  border: 2px solid #62afff;
+}

@@ -15,7 +15,7 @@ display: none;
 }
 @media (max-width:1258px)  {
   #index-navbar {
-    display: none;
+    display: block;
   }
   .funders-sec-resp,.buttons-follow-resp{
     display: block;

@@ -1,0 +1,69 @@
+.response-menu{
+    width: 270px;
+    height: 260px;
+
+     position: relative;
+    border: 1px solid transparent;
+    border-radius: 30px;
+    background: #FFFFFF;
+    background-clip: padding-box;
+    /* just to show box-shadow still works fine */
+    box-shadow: 0px 0px 41px 4px rgba(214, 230, 255, 0.5);
+
+}
+.response-menu::after {
+    position: absolute;
+    top: -1px; bottom: -1px;
+    left: -1px; right: -1px;
+    background: linear-gradient(#2B56FF, #1395FD);
+    content: '';
+    z-index: -1;
+    border-radius: 30px;
+}
+.response-menu-content{
+    margin-left: 23px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.response-menu-button{
+    display: block;
+    width: 158px;
+    height: 50px;
+    padding-left: 13px;
+    border: none;
+    outline: none;
+    background: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    
+    /* margin-top: 7px; */
+    margin-bottom: 7px;
+}
+
+.response-menu-button-span{
+    margin-left: 20px;
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 21px;
+/* identical to box height */
+
+letter-spacing: -0.105151px;
+
+color: #000000;
+
+}
+
+.response-menu-button:hover{
+background: #FFFFFF;
+border: 2px solid #62AFFF;
+box-sizing: border-box;
+border-radius: 25.5px;
+
+}

@@ -19,6 +19,7 @@ import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
 import Wallet from "./containers/wallet/wallet";
 import Homepage from "./containers/homepage/homepage";
+import Story from "./containers/story/story";
 import Profile from "./containers/profile/profile";
 
 function App() {
@@ -97,6 +98,11 @@ function App() {
                 <Route exact path="/signup" element={<SignUp />} />
                 <Route exact path="/login" element={<SignIn />} />
                 <Route exact path="/login/writer" element={<WriterForm />} />
+                <Route
+                  exact
+                  path="/:publicationInfo/:articleInfo"
+                  element={<Story />}
+                />
                 {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
                 <Route
                   exact
