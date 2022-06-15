@@ -84,6 +84,9 @@ const TempNavbar = () => {
     );
     setSubmitClicked(true);
   };
+  const handleProfile=()=>{
+    navigate("/profile");
+  }
   return (
     <div className="topnav" id="myTopnav">
       <a>
@@ -160,6 +163,9 @@ const TempNavbar = () => {
             <div className="dropdown-content">
               <span onClick={handleSignout} style={{ cursor: "pointer" }}>
                 Signout
+              </span>
+              <span onClick={handleProfile} style={{ cursor: "pointer" }}>
+                Profile
               </span>
             </div>
           )}

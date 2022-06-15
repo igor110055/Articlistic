@@ -4,7 +4,7 @@ import Website from "../../../Images/socials/website.svg";
 import { makeStyles } from "@mui/styles";
 import "./user-panel.css";
 import { useState } from "react";
-
+import profilepic from '../../../Images/user-profile.jfif';
 import { Modal, Box } from "@material-ui/core";
 import AlexTanario from "../../../Images/users/AlexTenario.png";
 import { useSelector } from "react-redux";
@@ -48,7 +48,11 @@ const headdata = ["Writes", "Read"];
         <div className="user-info-bar">
           <div className="user-info-img">
             <img
-              src={data.profilePic===undefined?"https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60":data.profilePic}
+              src={
+                //   data.profilePic===undefined||data.profilePic.length==0?
+                profilepic
+                // :data.profilePic
+            }
               alt="user"
             />
             <div className="funders-sec-resp">
