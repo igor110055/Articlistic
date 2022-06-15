@@ -49,9 +49,9 @@ const headdata = ["Writes", "Read"];
           <div className="user-info-img">
             <img
               src={
-                //   data.profilePic===undefined||data.profilePic.length==0?
+                  data.profilePic===undefined||data.profilePic.length==0?
                 profilepic
-                // :data.profilePic
+                :data.profilePic
             }
               alt="user"
             />
