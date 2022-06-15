@@ -69,6 +69,7 @@ export const endPoints = {
   deleteArticleComplete: "articles/markForDeletion",
   deletePublication: "publication",
   followWriter: "users/followWriter",
+  profile:'users/profile',
   followMultipleWriters: "onboarding/followMultiple",
   googleSignup: "onboarding/google/signup",
   walletSendOTP: "wallet/sendOTP",

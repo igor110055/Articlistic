@@ -34,13 +34,35 @@ letter-spacing: -0.0583333px;
     overflow: hidden;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width:640px) {
+    .user-stories-nav-items{
+        font-size: 10px;
+    }
+    .user-stories-nav{
+        height: 38px;
+
+    }
+    .funders-sec-resp{
+        top:0;width:70%;
+    }
+    .blue-line-container{
+        top:5px;
+    }
+    .data{
+        
+    /* width: 24rem; */
+
+    }
+}
+
+@media screen and (max-width: 1200px) and (min-width:641px) {
  .user-stories-nav-items{
     font-size: 15px;
     /* width: 42rem;
     height: 26rem; */
 
  }
+ 
     .blue-line-container{
         top: 10px;
     }

@@ -2,7 +2,7 @@
   background: #ffffff;
   border-radius: 30px;
   max-width: 78rem;
-  
+  width: 81vw;
 }
 .funders-sec-resp,.buttons-follow-resp{
 display: none;
@@ -13,7 +13,7 @@ display: none;
     align-items: center;
     margin: auto;
 }
-@media (max-width:1258px) {
+@media (max-width:1258px)  {
   #index-navbar {
     display: none;
   }
@@ -33,7 +33,7 @@ display: none;
     .funders-sec-resp{
 
         position: relative;
-        top: 2rem;
+        top: 8px;
         display: flex;
         justify-content: space-around;
         width: 62%;
@@ -41,7 +41,7 @@ display: none;
     }
     .users-followers-info-bar{
         
-        min-width: 35rem;
+        min-width: 22rem;
     width: 85vw;
 
         margin: 2rem 1rem;

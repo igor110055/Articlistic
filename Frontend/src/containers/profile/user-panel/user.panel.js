@@ -7,7 +7,10 @@ import { useState } from "react";
 
 import { Modal, Box } from "@material-ui/core";
 import AlexTanario from "../../../Images/users/AlexTenario.png";
+import { useSelector } from "react-redux";
 const UserPanel = () => {
+    const data=useSelector(state=>state.profile)
+   console.log(data);
   const classes = useStyles();
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [openfavoritemodal, setopenfavoritesmodal] = useState(false);
@@ -16,6 +19,7 @@ const UserPanel = () => {
   const [unfollow,setunfollow]=useState(false)
   const [clickedclass,setclickedclass]=useState("Writes")
   const [unfollowmodal,setunfollowmodal]=useState(false)
+  
 const headdata = ["Writes", "Read"];
   const userslist = [
     {
@@ -44,7 +48,7 @@ const headdata = ["Writes", "Read"];
         <div className="user-info-bar">
           <div className="user-info-img">
             <img
-              src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+              src={data.profilePic===undefined?"https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60":data.profilePic}
               alt="user"
             />
             <div className="funders-sec-resp">
@@ -91,9 +95,9 @@ const headdata = ["Writes", "Read"];
             )}
           </div>
           <div className="user-info-name">
-            <h3>Yash Chaudhari</h3>
+            <h3>{data.name}</h3>
             <div className="funders-username">
-              <p className="username">@ts.rex</p>{" "}
+              <p className="username">@{`${!data.username||data.username.length==0?'xyz':data.username}`}</p>{" "}
               <div className="funders-sec">
               <button className="top-funders">
                 Top Funders <span>23</span>
@@ -125,8 +129,8 @@ const headdata = ["Writes", "Read"];
             </div>
             <div className="followers-all">
               <p>67 Stories Funded</p>
-              <p onClick={()=>{setfollowermodal('following')}}>608 Following</p>
-              <p onClick={()=>{setfollowermodal('follow')}}>756 Followers</p>
+              <p onClick={()=>{setfollowermodal('following')}}>{data.following==undefined?23:data.following} Following</p>
+              <p onClick={()=>{setfollowermodal('follow')}}>{data.follower==undefined?45:data.follower} Followers</p>
             </div>
             <p className="discription">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Optio
@@ -145,7 +149,7 @@ const headdata = ["Writes", "Read"];
                   <p>tusharsinghkshatriya.com</p>
                 </div>
               </div>
-              <p className="writer-para">Writer</p>
+              {data.isWriter &&  <p className="writer-para">Writer</p>}
             </div>
           </div>
         </div>

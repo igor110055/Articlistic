@@ -14,7 +14,7 @@ import rootSaga from "./rootSaga";
 import writerContent from "./containers/writerContent/writerReducers";
 import ArticleData from "./containers/writerContent/components/articleReducer";
 import wallet from "./containers/wallet/walletReducer";
-
+import profile from './containers/profile/profileReducer'
 const reducer = combineReducers({
   writers,
   // loginSignup,
@@ -28,7 +28,8 @@ const reducer = combineReducers({
   common,
   writerContent,
   ArticleData,
-  wallet
+  wallet,
+  profile
 });
 const sagaMiddleware = createSagaMiddleware();
 
