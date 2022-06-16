@@ -1,6 +1,8 @@
 .user-stories-nav{
     display: flex;    height: 60px;
     align-items: center;
+    width: 100%;
+
     justify-content: space-around;
 }
 .user-stories-nav-items{

@@ -4,23 +4,24 @@ import Website from "../../../Images/socials/website.svg";
 import { makeStyles } from "@mui/styles";
 import "./user-panel.css";
 import { useState } from "react";
-import profilepic from '../../../Images/user-profile.jfif';
+import profilepic from "../../../Images/user-profile.jfif";
 import { Modal, Box } from "@material-ui/core";
 import AlexTanario from "../../../Images/users/AlexTenario.png";
 import { useSelector } from "react-redux";
 const UserPanel = () => {
-    const data=useSelector(state=>state.profile)
- 
+  const data = useSelector((state) => state.profile);
+
   const classes = useStyles();
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [openfavoritemodal, setopenfavoritesmodal] = useState(false);
   const [followermodal, setfollowermodal] = useState("");
   const [blockmodal, setblock] = useState(false);
-  const [unfollow,setunfollow]=useState(false)
-  const [clickedclass,setclickedclass]=useState("Writes")
-  const [unfollowmodal,setunfollowmodal]=useState(false)
-  
-const headdata = ["Writes", "Read"];
+  const [unfollow, setunfollow] = useState(false);
+  const [clickedclass, setclickedclass] = useState("Writes");
+  const [followclickedclass, setfollowclickedclass] = useState("Followers");
+  const [unfollowmodal, setunfollowmodal] = useState(false);
+
+  const headdata = ["Writes", "Read"];
   const userslist = [
     {
       name: "Jason peter ross",
@@ -42,6 +43,7 @@ const headdata = ["Writes", "Read"];
   const handleOpenImport = () => {
     setImportModalOpen(true);
   };
+  const followerdata = ["Followers", "Following"];
   return (
     <div className="user-row">
       <div className="user-info">
@@ -49,10 +51,10 @@ const headdata = ["Writes", "Read"];
           <div className="user-info-img">
             <img
               src={
-                  data.profilePic===undefined||data.profilePic.length==0?
+                //   data.profilePic===undefined||data.profilePic.length==0?
                 profilepic
-                :data.profilePic
-            }
+                // :data.profilePic
+              }
               alt="user"
             />
             <div className="funders-sec-resp">
@@ -62,20 +64,19 @@ const headdata = ["Writes", "Read"];
               <button className="first-funder">
                 First Funder<span>45</span>
               </button>
-              </div>
+            </div>
             <div className="buttons-follow">
-
               <button
-                className={`${unfollow?'message':'follow'}`}
+                className={`${unfollow ? "message" : "follow"}`}
                 onClick={() => {
-                    if(unfollow){
-                        setunfollowmodal(true);
-                        return;
-                    }
-                setunfollow(true)
+                  if (unfollow) {
+                    setunfollowmodal(true);
+                    return;
+                  }
+                  setunfollow(true);
                 }}
               >
-               {unfollow?'Following':'Follow'}
+                {unfollow ? "Following" : "Follow"}
               </button>
               <button className="message">Message</button>
               <button
@@ -101,40 +102,58 @@ const headdata = ["Writes", "Read"];
           <div className="user-info-name">
             <h3>{data.name}</h3>
             <div className="funders-username">
-              <p className="username">@{`${!data.username||data.username.length==0?'xyz':data.username}`}</p>{" "}
+              <p className="username">
+                @
+                {`${
+                  !data.username || data.username.length == 0
+                    ? "xyz"
+                    : data.username
+                }`}
+              </p>{" "}
               <div className="funders-sec">
-              <button className="top-funders">
-                Top Funders <span>23</span>
-              </button>
-              <button className="first-funder">
-                First Funder<span>45</span>
-              </button>
+                <button className="top-funders">
+                  Top Funders <span>23</span>
+                </button>
+                <button className="first-funder">
+                  First Funder<span>45</span>
+                </button>
               </div>
               <div className="buttons-follow-resp">
-
-              <button
-                className={`${unfollow?'message':'follow'}`}
-                onClick={() => {
-                setunfollow(true)
-                }}
-              >
-               {unfollow?'Following':'Follow'}
-              </button>
-              <button className="message">Message</button>
-              <button
-                className="moreinfo"
-                onClick={() => {
-                  setopenfavoritesmodal((prev) => !prev);
-                }}
-              >
-                ...
-              </button>
-            </div>
+                <button
+                  className={`${unfollow ? "message" : "follow"}`}
+                  onClick={() => {
+                    setunfollow(true);
+                  }}
+                >
+                  {unfollow ? "Following" : "Follow"}
+                </button>
+                <button className="message">Message</button>
+                <button
+                  className="moreinfo"
+                  onClick={() => {
+                    setopenfavoritesmodal((prev) => !prev);
+                  }}
+                >
+                  ...
+                </button>
+              </div>
             </div>
             <div className="followers-all">
               <p>67 Stories Funded</p>
-              <p onClick={()=>{setfollowermodal('following')}}>{data.following==undefined?23:data.following} Following</p>
-              <p onClick={()=>{setfollowermodal('follow')}}>{data.follower==undefined?45:data.follower} Followers</p>
+              <p
+                onClick={() => {
+                  setfollowermodal("following");
+                }}
+              >
+                {data.following == undefined ? 23 : data.following} Following
+              </p>
+              <p
+                onClick={() => {
+                  setfollowermodal("follow");
+                }}
+              >
+                {data.follower == undefined ? 45 : data.follower} Followers
+              </p>
             </div>
             <p className="discription">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Optio
@@ -153,22 +172,30 @@ const headdata = ["Writes", "Read"];
                   <p>xyz.com</p>
                 </div>
               </div>
-              {data.isWriter &&  <p className="writer-para">Writer</p>}
+              {data.isWriter && <p className="writer-para">Writer</p>}
             </div>
           </div>
         </div>
       </div>
 
       <div className="users-followers-info-bar">
-          <div className="user-stories-nav">
-      {headdata.map((data, idx) => (
-          <div onClick={()=>{setclickedclass(data)}} className={`user-stories-nav-items ${clickedclass==data?'active-stories-class':''}`}>
-            <p>{data}</p>
-            {clickedclass===data && (
+        <div className="user-stories-nav">
+          {headdata.map((data, idx) => (
+            <div
+              onClick={() => {
+                setclickedclass(data);
+              }}
+              className={`user-stories-nav-items ${
+                clickedclass == data ? "active-stories-class" : ""
+              }`}
+            >
+              <p>{data}</p>
+              {clickedclass === data && (
                 <div className="blue-line-container"></div>
-            )}
-          </div>
-        ))}</div>
+              )}
+            </div>
+          ))}
+        </div>
         <hr />
         <div className="followers-list">
           {userslist.map((data) => (
@@ -191,15 +218,36 @@ const headdata = ["Writes", "Read"];
         <Box className={classes.formContainer1}>
           <div className={classes.importForm1}>
             <div className={classes.navbar}>
-            {userslist.map((data) => (
-            <div className="followers-list-item">
-              <div className={classes.navitems}>
-              <img src={data.img} />
-              <p>{data.name}</p>
-              </div>
-              <button className={classes.btn}>{followermodal==='follow'? 'Follow':'Following'}</button>
+              <div className="user-stories-nav">
+              {followerdata.map((data, idx) => (
+            <div
+              onClick={() => {
+                setclickedclass(data);
+              }}
+              className={`user-stories-nav-items ${
+                clickedclass == data ? "active-stories-class" : ""
+              }`}
+            >
+              <p>{data}</p>
+              {clickedclass === data && (
+                <div className="blue-line-container"></div>
+              )}
             </div>
           ))}
+              </div>
+              <div className={classes.userlist}>
+              {userslist.map((data) => (
+                <div className="followers-list-item">
+                  <div className={classes.navitems}>
+                    <img src={data.img} />
+                    <p>{data.name}</p>
+                  </div>
+                  <button className={classes.btn}>
+                    {followermodal === "follow" ? "Follow" : "Following"}
+                  </button>
+                </div>
+              ))}
+              </div>
             </div>
           </div>
         </Box>
@@ -215,7 +263,10 @@ const headdata = ["Writes", "Read"];
         <Box className={classes.formContainer1}>
           <div className={classes.importForm}>
             <div className={classes.profile}>
-              <img className={classes.img} src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
+              <img
+                className={classes.img}
+                src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+              />
               <h5>Block @tsk.rex ?</h5>
               <p>
                 They won't be able to find your profile or interact with you on
@@ -241,8 +292,10 @@ const headdata = ["Writes", "Read"];
         <Box className={classes.formContainer1}>
           <div className={classes.importForm}>
             <div className={classes.profile}>
-              <img className={classes.img} src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
-              
+              <img
+                className={classes.img}
+                src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+              />
             </div>
             <div className={classes.hr}></div>
             <div className={classes.btns}>
@@ -258,64 +311,65 @@ const headdata = ["Writes", "Read"];
 };
 
 const useStyles = makeStyles({
-    block:{
+  block: {
+    fontWeight: "600",
+    color: "#EB4335",
+    backgroundColor: "white",
+    border: "1px solid white",
+  },
+  userlist:{
+      marginTop:"12px",width:"100%"
+  },
+  cancel: {
+    fontWeight: "600",
+    fontSize: "15px",
+    lineHeight: "22px",
 
-fontWeight: "600",
-color: "#EB4335",    backgroundColor: "white",
-border: "1px solid white",
-    },
-    cancel:{
-fontWeight: "600",
-fontSize: "15px",
-lineHeight: "22px",
+    color: "#000000",
 
+    backgroundColor: "white",
+    border: "1px solid white",
+  },
+  hr: {
+    backgroundColor: "black",
+    height: "1px",
+    width: "100%",
+  },
+  importForm1: {
+    display: "flex",
+    position: "relative",
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-between",
 
-color: "#000000",
-
-        backgroundColor: "white",
-        border: "1px solid white",
-    }
-    ,
-    hr:{
-        backgroundColor:'black',
-        height:"1px",
-        width:'100%',
-    },
-    importForm1:{
-        display: "flex",
-        position: "relative",
-        alignItems: "center",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        top: "2rem"
-    },
-    btn:{
-        border:" 2px solid #CFCFCF",
-        borderRadius:" 6px",
-        backgroundColor: "white",
-        padding: "5px 10px"
-    },
-    img:{
-        width: "140.98px",
-        height: "138px",
-        border: "10px solid white",
-        borderRadius: "50%"
-    },
-    navitems:{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-around",
-        width: "60%"
-    },
-    navbar:{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        // verflow: "hidden"
-        width:"100%",
-        overflow:'hidden'
-    },
+  },
+  btn: {
+    border: " 2px solid #CFCFCF",
+    borderRadius: " 6px",
+    backgroundColor: "white",
+    padding: "5px 10px",
+  },
+  img: {
+    width: "140.98px",
+    height: "138px",
+    border: "10px solid white",
+    borderRadius: "50%",
+  },
+  navitems: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    width: "60%",
+  },
+  navbar: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    // verflow: "hidden"
+    width: "100%",
+    overflow: "hidden",
+  },
   profile: {
     display: "flex",
     flexDirection: "column",
@@ -375,8 +429,8 @@ color: "#000000",
     // padding: "27px",
     display: "flex",
     margin: "26px 38px 40px 39px",
-    // gap: "15px",   
-     height: "75%",
+    // gap: "15px",
+    height: "75%",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
@@ -402,3 +456,7 @@ color: "#000000",
 });
 
 export default UserPanel;
+
+
+
+

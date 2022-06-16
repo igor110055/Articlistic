@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 const headdata = ["My Stories", "Found Meaningful", "Stories Funded"];
 
 const Userstories = () => {
-    const [clickedclass,setclickedclass]=useState("Found Meaningful")
+    const [clickedclass,setclickedclass]=useState("My Stories")
     
     const data=useSelector(state=>state.profile)
     
