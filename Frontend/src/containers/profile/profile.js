@@ -6,15 +6,15 @@ import TempNavbar from "../navbar/tempNavbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getuser,getArticlesInit } from "./profileAction";
 import { getAuthToken, getRefreshToken } from "../common/commonFunctions";
-import { useLocation,useHistory } from 'react-router-dom';
+import { useLocation,useHistory, useParams } from 'react-router-dom';
 const Profile = () => {
     const dispatch=useDispatch();
     const state= localStorage.getItem('user');
     const user = JSON.parse(state);
-
+const stateparam=useParams();
     useEffect(()=>{
         const token=getAuthToken();
-        dispatch(getuser({username:user.userUserName,token}));
+        dispatch(getuser({username:stateparam.username,token}));
         const fetchArticles = skip => {
             const authToken = getAuthToken();
             const data = {

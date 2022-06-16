@@ -8,6 +8,7 @@ import profilepic from "../../../Images/user-profile.jfif";
 import { Modal, Box } from "@material-ui/core";
 import AlexTanario from "../../../Images/users/AlexTenario.png";
 import { useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
 const UserPanel = () => {
   const data = useSelector((state) => state.profile);
 
@@ -20,7 +21,9 @@ const UserPanel = () => {
   const [clickedclass, setclickedclass] = useState("Writes");
   const [followclickedclass, setfollowclickedclass] = useState("Followers");
   const [unfollowmodal, setunfollowmodal] = useState(false);
-
+  const stateparams = useParams();
+  const state = localStorage.getItem("user");
+  const user = JSON.parse(state);
   const headdata = ["Writes", "Read"];
   const userslist = [
     {
@@ -66,6 +69,9 @@ const UserPanel = () => {
               </button>
             </div>
             <div className="buttons-follow">
+            {stateparams.username == user.userUserName ? (
+                  <button className="message">Edit Profile</button>
+                ) :<>
               <button
                 className={`${unfollow ? "message" : "follow"}`}
                 onClick={() => {
@@ -87,6 +93,7 @@ const UserPanel = () => {
               >
                 ...
               </button>
+              </>}
             </div>
             {openfavoritemodal && (
               <div className="open-favorites">
@@ -119,23 +126,29 @@ const UserPanel = () => {
                 </button>
               </div>
               <div className="buttons-follow-resp">
-                <button
-                  className={`${unfollow ? "message" : "follow"}`}
-                  onClick={() => {
-                    setunfollow(true);
-                  }}
-                >
-                  {unfollow ? "Following" : "Follow"}
-                </button>
-                <button className="message">Message</button>
-                <button
-                  className="moreinfo"
-                  onClick={() => {
-                    setopenfavoritesmodal((prev) => !prev);
-                  }}
-                >
-                  ...
-                </button>
+                {stateparams.username == user.userUserName ? (
+                  <button className="message">Edit Profile</button>
+                ) : (
+                  <>
+                    <button
+                      className={`${unfollow ? "message" : "follow"}`}
+                      onClick={() => {
+                        setunfollow(true);
+                      }}
+                    >
+                      {unfollow ? "Following" : "Follow"}
+                    </button>
+                    <button className="message">Message</button>
+                    <button
+                      className="moreinfo"
+                      onClick={() => {
+                        setopenfavoritesmodal((prev) => !prev);
+                      }}
+                    >
+                      ...
+                    </button>
+                  </>
+                )}
               </div>
             </div>
             <div className="followers-all">
@@ -219,34 +232,34 @@ const UserPanel = () => {
           <div className={classes.importForm1}>
             <div className={classes.navbar}>
               <div className="user-stories-nav">
-              {followerdata.map((data, idx) => (
-            <div
-              onClick={() => {
-                setclickedclass(data);
-              }}
-              className={`user-stories-nav-items ${
-                clickedclass == data ? "active-stories-class" : ""
-              }`}
-            >
-              <p>{data}</p>
-              {clickedclass === data && (
-                <div className="blue-line-container"></div>
-              )}
-            </div>
-          ))}
+                {followerdata.map((data, idx) => (
+                  <div
+                    onClick={() => {
+                      setclickedclass(data);
+                    }}
+                    className={`user-stories-nav-items ${
+                      clickedclass == data ? "active-stories-class" : ""
+                    }`}
+                  >
+                    <p>{data}</p>
+                    {clickedclass === data && (
+                      <div className="blue-line-container"></div>
+                    )}
+                  </div>
+                ))}
               </div>
               <div className={classes.userlist}>
-              {userslist.map((data) => (
-                <div className="followers-list-item">
-                  <div className={classes.navitems}>
-                    <img src={data.img} />
-                    <p>{data.name}</p>
+                {userslist.map((data) => (
+                  <div className="followers-list-item">
+                    <div className={classes.navitems}>
+                      <img src={data.img} />
+                      <p>{data.name}</p>
+                    </div>
+                    <button className={classes.btn}>
+                      {followermodal === "follow" ? "Follow" : "Following"}
+                    </button>
                   </div>
-                  <button className={classes.btn}>
-                    {followermodal === "follow" ? "Follow" : "Following"}
-                  </button>
-                </div>
-              ))}
+                ))}
               </div>
             </div>
           </div>
@@ -317,8 +330,9 @@ const useStyles = makeStyles({
     backgroundColor: "white",
     border: "1px solid white",
   },
-  userlist:{
-      marginTop:"12px",width:"100%"
+  userlist: {
+    marginTop: "12px",
+    width: "100%",
   },
   cancel: {
     fontWeight: "600",
@@ -341,7 +355,6 @@ const useStyles = makeStyles({
     alignItems: "center",
     flexDirection: "column",
     justifyContent: "space-between",
-
   },
   btn: {
     border: " 2px solid #CFCFCF",
@@ -456,7 +469,3 @@ const useStyles = makeStyles({
 });
 
 export default UserPanel;
-
-
-
-

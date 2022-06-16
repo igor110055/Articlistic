@@ -6,6 +6,7 @@
     justify-content: space-around;
 }
 .user-stories-nav-items{
+    cursor: pointer;
     font-family: 'Poppins';
 font-style: normal;
 font-weight: 600;
