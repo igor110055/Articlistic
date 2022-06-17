@@ -1,11 +1,12 @@
 import "./button.css";
 import { CircularProgress } from "@mui/material";
 
-function Button({ text, blue, isSvg, Svg, callback, isDisabled }) {
+function Button({ text, blue, isSvg, Svg, callback, isDisabled, type }) {
   return (
     <button
       className="primary-button"
       onClick={callback}
+      type={type}
       style={
         blue
           ? {

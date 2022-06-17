@@ -8,7 +8,9 @@ const Sentry = require('@sentry/node');
 const mailClient = require("../../utils/mailer/client");
 
 const useAuth = require('../../middleware/auth')
-const { staticDecrypt } = require("../../utils/encryption/encryption")
+const {
+    staticDecrypt
+} = require("../../utils/encryption/encryption")
 const NetworkError = require('../../errors/NetworkError');
 const MissingParamError = require('../../errors/MissingParamError');
 const DatabaseError = require('../../errors/DatabaseError');
@@ -20,7 +22,12 @@ const checkDb = require('../../middleware/checkDb');
 const getTopFollowed = require('../../utils/functions/getTopFollowed');
 const { parseUploadedFile } = require("../../utils/Parser/csv")
 const s3 = require('../../utils/s3');
-const { followNotificationMail } = require('../../utils/mailer/email');
+const {
+    followNotificationMail
+} = require('../../utils/mailer/email');
+const {
+    email
+} = require('../../utils/otp');
 
 module.exports = function userRouter() {
 
@@ -329,8 +336,7 @@ module.exports = function userRouter() {
                     logger.debug(e, "Error in sending the follow notification mail")
                 }
             }
-        }
-        catch (e) {
+        } catch (e) {
             logger.debug(e, "First following check failed");
         }
 
@@ -340,13 +346,11 @@ module.exports = function userRouter() {
             const mailListId = writerData.mailing_list_id;
             if (mailListId) {
                 await mailClient.addFollowerToList(email, mailListId, name);
-            }
-            else {
+            } else {
                 logger.info("Mailing list id does not exist! Signup again to get your email notification working")
             }
 
-        }
-        catch (e) {
+        } catch (e) {
             logger.info(e, "Failed to add to mailing List");
         }
         return res.status(201).send({
@@ -374,16 +378,13 @@ module.exports = function userRouter() {
             if (mailListId) {
                 try {
                     await mailClient.removeFromList(mailListId, email)
-                }
-                catch (e) {
+                } catch (e) {
                     logger.debug(e, "Failed to remove writer from mailing list--", routeName)
                 }
-            }
-            else {
+            } else {
                 logger.info(`Mailing list is doesn't exist for Writer-${follows}!`)
             }
-        }
-        catch (e) {
+        } catch (e) {
             logger.debug(e, "--Unable to fetch writers Detail--", routeName)
         }
         return res.status(201).send({
@@ -473,26 +474,35 @@ module.exports = function userRouter() {
             following = await mongo.followers.getFollowedWriters(username, limit, skip);
 
         } catch (e) {
+
+            logger.debug(e);
             throw new DatabaseError(routeName, e);
         }
 
+
         let homepageData = [];
 
-        following.forEach((x) => {
 
-            homepageData.push(mongo.articles.getAllArticlesForUser(x, ["PUBLISHED"], 5, 0))
+        following.forEach((followersDetails) => {
+
+            const articleFetchUsername = followersDetails.follows;
+            homepageData.push(mongo.articles.getAllArticlesForUser(articleFetchUsername, ["PUBLISHED"], 5, 0));
 
         })
 
 
         homepageData = await Promise.all(homepageData);
 
+
         let result = {};
 
         for (let i = 0; i < following.length; i++) {
 
-            result[following[i]] = homepageData[i];
+            result[following[i].follows] = {};
+            result[following[i].follows]['articles'] = homepageData[i].articles;
 
+            result[following[i].follows]['userData'] = following[i].userDetails[0];
+            result[following[i].follows].userData.publications = following[i].writerDetails[0].publications;
         }
 
         return res.status(200).send({

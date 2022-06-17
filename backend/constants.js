@@ -21,6 +21,12 @@ const MDB_COLLECTION_WALLET_PAYOUT = 'wallet-payout';
 const MDB_COLLECTION_DOLLAR_VALUE = 'wallet-dollar-value';
 const MDB_COLLECTION_AUDIENCE = 'import-audience'
 
+const MDB_COLLECTION_ARTICLE_READS = 'article-reads';
+const MDB_COLLECTION_ARTICLE_VIEWS = 'article-views';
+
+
+
+const RDB_CLOUDWATCH_NEXT_TOKEN = '-cloudwatch-next-token-';
 /**
  * Wallet related things. 
  */
@@ -46,6 +52,8 @@ const TYPE_WALLET_ACTIVATION = 'activation';
 const TYPE_WALLET_FUND_ACCOUNT = 'fa';
 const TYPE_WALLET_WITHDRAW = 'withdraw';
 const TYPE_RESET_PIN = 'reset-pin';
+
+// Exporting the constants.
 
 
 module.exports = {
@@ -80,5 +88,8 @@ module.exports = {
     PAYOUT_STATUS_SUCCESS,
     PAYOUT_STATUS_FAILED,
     PAYOUT_STATUS_PENDING,
-    PAYOUT_TIMEOUT_REVERSE_TIMESTAMP
+    PAYOUT_TIMEOUT_REVERSE_TIMESTAMP,
+    RDB_CLOUDWATCH_NEXT_TOKEN,
+    MDB_COLLECTION_ARTICLE_READS,
+    MDB_COLLECTION_ARTICLE_VIEWS
 }

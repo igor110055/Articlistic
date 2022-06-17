@@ -7,7 +7,7 @@ import Button from "../primary-button/button";
 import { signupWithGoogleInit } from "../../signupActions";
 import { GOOGLE_CLIENT_ID } from "../../../../utils/apiEndPoints";
 import { userEmail, userPName, userUsername } from "../../../user/userActions";
-function GoogleAuth({ isSignIn, setDisplayPage }) {
+function GoogleAuth({ isSignIn }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -26,7 +26,8 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
 
   const handleGoogleLogin = async (googleData) => {
     localStorage.setItem("userEmail", googleData.profileObj.email);
-    dispatch(signupWithGoogleInit(googleData.tokenId));
+    if(googleData.tokenId !== undefined && googleData.tokenId !== null)
+      dispatch(signupWithGoogleInit(googleData.tokenId));
   };
 
   useEffect(() => {
@@ -43,16 +44,21 @@ function GoogleAuth({ isSignIn, setDisplayPage }) {
           userUserName: googleSignInData.username,
         })
       );
-      navigate("/writerDashboard");
+      navigate("/homepage");
     }
   }, [googleSignInSuccess]);
 
   useEffect(() => {
     if (googleSignupSuccess) {
       localStorage.setItem("createUserId", googleSignUpData.id);
-      setDisplayPage("setUpProfile");
+      if (
+        googleSignUpData.id !== undefined &&
+        googleSignUpData.id !== "undefined"
+      )
+        navigate("/signup");
     }
   }, [googleSignupSuccess]);
+
 
   const handleGoogleFailure = (error) => {
     console.error(error);

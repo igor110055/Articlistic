@@ -1,0 +1,26 @@
+.response-highlight-container {
+  width: 90%;
+}
+.response-highlight-header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.response-highlight-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  opacity: 0.16;
+  border: 4px solid #979797;
+}
+.response-highlight-header {
+  color: #0a2b98;
+  font-family: "Merriweather";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 33px;
+  letter-spacing: -0.0947917px;
+  margin: 0;
+  margin-left: -1.4rem;
+}

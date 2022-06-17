@@ -8,11 +8,14 @@ import writerEditor from "./containers/writerEditor/writerEditorReducer";
 import unsplash from "./containers/unsplash/unsplashReducer";
 import nft from "./containers/writerEditor/nftBlock/nftReducer";
 import home from "./containers/home/homeReducer";
+import homepage from "./containers/homepage/homepagereducer";
 import common from "./containers/common/commonReducer";
 import rootSaga from "./rootSaga";
 import writerContent from "./containers/writerContent/writerReducers";
 import ArticleData from "./containers/writerContent/components/articleReducer";
-
+import wallet from "./containers/wallet/walletReducer";
+import profile from './containers/profile/profileReducer'
+import storyReducer from "./containers/story/storyReducer";
 const reducer = combineReducers({
   writers,
   // loginSignup,
@@ -22,9 +25,13 @@ const reducer = combineReducers({
   unsplash,
   nft,
   home,
+  homepage,
   common,
   writerContent,
   ArticleData,
+  wallet,
+  profile,
+  storyReducer,
 });
 const sagaMiddleware = createSagaMiddleware();
 

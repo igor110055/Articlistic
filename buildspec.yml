@@ -73,8 +73,10 @@ phases:
 artifacts:
   files:
     - Frontend/build/**/*
+    - Frontend/serve.js
     - Frontend/node_modules/**/*
     - Frontend/RunFrontendScript.sh
+    - Frontend/getParameters.sh
     - Frontend/FrontendStopScript.sh
     - backend/**/*
     - appspec.yml

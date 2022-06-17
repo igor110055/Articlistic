@@ -704,7 +704,7 @@ const WriterEditor = () => {
   };
 
   return (
-    <div>
+    <div className={classes.whiteBackground}>
       {!isGettingArticle ? (
         <div>
           {!alreadySignedIn && <Auth setAlreadySignedIn={setAlreadySignedIn} />}
@@ -852,6 +852,9 @@ const LoginError = ({ message }) => {
 };
 
 const useStyles = makeStyles({
+  whiteBackground: {
+    backgroundColor: "#FFFFFF !important"
+  },
   editor: {
     lineHeight:'2.1rem',
   },

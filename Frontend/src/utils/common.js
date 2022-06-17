@@ -121,16 +121,12 @@ export const validatePassword = (password) => {
 };
 
 export const validateUserName = (uName) => {
-  if (
-    uName[uName.length - 1] !== "-" &&
-    uName[0] !== "-" &&
-    uName.length > 3 &&
-    uName.length < 21
-  ) {
-    return true;
-  }
-  return false;
+  const regex = /^[a-zA-Z][A-Za-z0-9-]*[a-zA-Z0-9]+$/;
+  if (uName.length < 3 || uName.length > 25) return false;
+  return regex.test(uName);
 };
+
+
 
 export const publicationAboutDefault = {
   time: 1643888103531,

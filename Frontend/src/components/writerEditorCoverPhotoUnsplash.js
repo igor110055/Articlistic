@@ -9,7 +9,7 @@ const WriterEditorCoverPhotoUnsplash = ({
   // setAddPhotoClicked,
   // setSelectedPhoto,
   setOpenImageDialog,
-  setUnsplashSelected
+  setUnsplashSelected,
 }) => {
   const [searchVal, setSearchVal] = useState("");
   const [submited, setSubmited] = useState(false);
@@ -25,12 +25,12 @@ const WriterEditorCoverPhotoUnsplash = ({
     isGettingUnsplash,
     getUnsplashError,
     // getUnsplashErrorMsg,
-    getUnsplashResp
-  } = useSelector(state => ({
+    getUnsplashResp,
+  } = useSelector((state) => ({
     isGettingUnsplash: state.unsplash.isGettingUnsplash,
     getUnsplashError: state.unsplash.getUnsplashError,
     // getUnsplashErrorMsg: state.unsplash.getUnsplashErrorMsg,
-    getUnsplashResp: state.unsplash.getUnsplashResp
+    getUnsplashResp: state.unsplash.getUnsplashResp,
   }));
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const WriterEditorCoverPhotoUnsplash = ({
   };
 
   const classes = useStyles();
-  const imageHandler = url => {
+  const imageHandler = (url) => {
     setImageSelected(true);
     setUnsplashURL(url);
     setSubmited(false);
@@ -65,10 +65,10 @@ const WriterEditorCoverPhotoUnsplash = ({
           label="Search from Unsplash"
           variant="standard"
           fullWidth
-          onChange={e => {
+          onChange={(e) => {
             setSearchVal(e.target.value);
           }}
-          onKeyDown={e => {
+          onKeyDown={(e) => {
             if (e.code === "Enter") {
               setSubmited(true);
 
@@ -88,8 +88,8 @@ const WriterEditorCoverPhotoUnsplash = ({
           PaperProps={{
             style: {
               backgroundColor: "transparent",
-              boxShadow: "none"
-            }
+              boxShadow: "none",
+            },
           }}
           classes={{ paper: classes.unsplashResult }}
         >
@@ -99,15 +99,17 @@ const WriterEditorCoverPhotoUnsplash = ({
             <div className={classes.unsplashImageContainer}>
               {submited &&
                 getUnsplashResp.results !== undefined &&
-                getUnsplashResp.results.map(eachImage => (
+                getUnsplashResp.results.map((eachImage, idx) => (
                   <img
                     src={eachImage.urls.small}
                     className={classes.imageStyle}
                     onClick={() =>
-                      imageHandler(eachImage.urls.full
+                      imageHandler(
+                        eachImage.urls.full
                         // , eachImage.description
-                        )
+                      )
                     }
+                    key={idx}
                     alt="url"
                   />
                 ))}
@@ -118,7 +120,7 @@ const WriterEditorCoverPhotoUnsplash = ({
                 textAlign: "center",
                 color: "white",
                 fontWeight: "bolder",
-                fontSize: "2rem"
+                fontSize: "2rem",
               }}
             >
               No results found
@@ -132,17 +134,17 @@ const WriterEditorCoverPhotoUnsplash = ({
 
 const useStyles = makeStyles({
   unsplash: {
-    marginBottom: "3%"
+    marginBottom: "3%",
     // paddingTop: '4rem',
   },
   e: {
-    visibility: "hidden"
+    visibility: "hidden",
   },
   unsplashImageContainer: {
     paddingTop: "1em",
     display: "flex",
     flexWrap: "wrap",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
   },
 
   imageStyle: {
@@ -153,14 +155,14 @@ const useStyles = makeStyles({
     maxHeight: "180px",
     marginBottom: "3%",
     // padding: '0% 2% 0% 2%',
-    cursor: "pointer"
+    cursor: "pointer",
   },
 
   displayImageStyle: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%"
+    width: "100%",
     // height: '400px',
   },
 
@@ -172,14 +174,14 @@ const useStyles = makeStyles({
     marginTop: "1%",
     fontFamily: "Poppins",
     "&:focus": {
-      outline: "none"
-    }
+      outline: "none",
+    },
   },
 
   displayImageInternal: {
     width: "100%",
     // height: '300px',
-    objectFit: "cover"
+    objectFit: "cover",
   },
   unsplashResult: {
     maxHeight: "500px",
@@ -187,8 +189,8 @@ const useStyles = makeStyles({
     width: "100%",
     // marginTop: '3%',
     paddingTop: "1%",
-    background: "transparent"
-  }
+    background: "transparent",
+  },
 });
 
 export default WriterEditorCoverPhotoUnsplash;

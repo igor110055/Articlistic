@@ -12,6 +12,8 @@ const NotAuthenticatedError = require('../../errors/NotAuthenticatedError');
 const NetworkError = require('../../errors/NetworkError');
 const ServiceError = require('../../errors/ServiceError');
 const api = require('../../utils/api');
+
+const cloudwatch = require('../../utils/cloudwatch/index');
 var s3 = require('../../utils/s3/index')
 
 const fileSystem = require('../../utils/fs/index')
@@ -672,6 +674,11 @@ module.exports = function walletRouter() {
         const fundAccountDetails = user.wallet.faDetails[0];
         const faId = fundAccountDetails.id;
 
+        /***
+         * Validating the input: 
+         * 1. The minimum amount for debiting is 500 & max is 10000. 
+         * 2. Code (OTP) should be 6 digit & greater than 100000. 
+         */
         const schema = Joi.object({
             amount: Joi.number().min(500).max(10000),
             code: Joi.number().min(100000)
@@ -775,6 +782,7 @@ module.exports = function walletRouter() {
                  */
 
                 try {
+                    await cloudwatch.reportP1AlarmForWithdrawAPI(payoutId, false);
 
                     await s3.init().withdrawTransactionReverseFailure(username, payoutId, amount);
 
@@ -818,13 +826,15 @@ module.exports = function walletRouter() {
 
             try {
 
-                await s3.init().withdrawMarkAsSuccessFailure(username, payoutId);
+
+                await cloudwatch.reportP1AlarmForWithdrawAPI(payoutId, true);
 
             } catch (err) {
 
                 Sentry.captureMessage(JSON.stringify({
                     username,
                     payoutId,
+                    amount,
                     type: 'reverse-txn-mark-success'
                 }));
 
@@ -841,11 +851,6 @@ module.exports = function walletRouter() {
          * 
          * There will be a cronjob - that will be fixing up these things. 
          */
-
-
-
-
-
 
 
 

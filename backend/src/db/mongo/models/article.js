@@ -341,6 +341,47 @@ async function getAllArticlesForUser(username, filters, limit, skip) {
     }
 }
 
+async function getArticlesForPublicationId(publicationId, limit = 5, skip = 0) {
+
+    /**
+     * This is used in homepage API. 
+     */
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        const articles = [];
+
+        await db.find({
+            publicationId: publicationId,
+            status: "PUBLISHED"
+        })
+            .limit(limit).skip(skip).sort({
+                _id: -1
+            }).forEach((article) => {
+
+                articles.push(article);
+            });
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("getArticlesForPublicationId mongo response time: " + timeTaken.toString());
+
+        return articles;
+
+    } catch (e) {
+        logger.debug(e);
+        throw e;
+    }
+}
+
 
 
 
@@ -482,11 +523,6 @@ async function getArticleById(articleId) {
         let timeTaken = endTime - startTime;
 
         logger.info("getArticleById mongo response time: " + timeTaken.toString());
-        if (articleId == 'some-random-articleId') {
-            logger.info('article Found: ');
-            logger.info(res);
-
-        }
         return res;
 
 
@@ -497,6 +533,46 @@ async function getArticleById(articleId) {
 }
 
 
+const getArticleAlongWithPublication = async (articleId) => {
+    let client;
+
+    try {
+
+        client = await MDB.getClient();
+
+        let db = client.db(dbName).collection(collection);
+
+        let startTime = Date.now();
+
+        let article;
+        await db.aggregate([{
+            '$match': {
+                'articleId': articleId
+            }
+        }, {
+            '$lookup': {
+                'from': 'publications',
+                'localField': 'publicationId',
+                'foreignField': 'publicationId',
+                'as': 'publication'
+            }
+        }]).forEach((x) => {
+            article = x;
+        })
+
+        let endTime = Date.now();
+
+        let timeTaken = endTime - startTime;
+
+        logger.info("getArticleById mongo response time: " + timeTaken.toString());
+        return article;
+
+
+    } catch (e) {
+        logger.debug(e);
+        throw e;
+    }
+}
 
 async function getArticleForWriters(writers, limit, skip) {
 
@@ -640,5 +716,7 @@ module.exports = {
     createUniquenessIndex,
     createNewArticle,
     getArticlesForPublication,
-    markForDeletion
+    markForDeletion,
+    getArticlesForPublicationId,
+    getArticleAlongWithPublication
 }

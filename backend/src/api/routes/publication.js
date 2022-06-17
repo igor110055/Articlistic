@@ -27,7 +27,9 @@ const {
     IMAGE_SIZE_LIMIT,
     DELETE_AFTER_PUBLICATION_TIMING
 } = require('../../../constants');
-const { createSingleSend } = require('../../utils/mailer/client');
+const {
+    createSingleSend
+} = require('../../utils/mailer/client');
 
 
 module.exports = function publicationRouter() {
@@ -35,7 +37,7 @@ module.exports = function publicationRouter() {
     return new express.Router()
         .get('/', useAuth(), getPublication)
         .get('/all', useAuth(), getAllPublications)
-        .get('/:id', articleFromPublication)
+        .get('/:id', useAuth(), articleFromPublication)
         .post('/new', useAuth(false, false, true), file.single('image'), newPublication)
         .put('/', useAuth(false, false, true), file.single('image'), updatePublication)
         .delete('/', useAuth(false, false, true), checkDb(false, false, false, true, true), markForDeletion)

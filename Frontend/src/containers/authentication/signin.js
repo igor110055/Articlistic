@@ -53,7 +53,7 @@ function SignIn() {
 
   useEffect(() => {
     const accessToken = Cookie.get("accessToken");
-    if (accessToken) navigate("/writerDashboard");
+    if (accessToken) navigate("/homepage");
   });
 
   useEffect(() => {
@@ -71,9 +71,13 @@ function SignIn() {
         })
       );
 
-      navigate("/writerDashboard");
+      navigate("/homepage");
     } else if (loginError) setValidCred(false);
   }, [loginError, isLoggedIn]);
+
+  useEffect(() => {
+    setValidCred(true);
+  }, [displayPage]);
 
   return (
     <div>
@@ -112,28 +116,31 @@ function SignIn() {
                     }
                   />
                 )}
-                <Input
-                  type={"email"}
-                  placeholder={"Email or username"}
-                  onChange={setEmail}
-                  onfocus={() => {
-                    return;
-                  }}
-                />
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  onChange={setPassword}
-                  onfocus={() => {
-                    return;
-                  }}
-                />
-                <Button
-                  text="Sign In"
-                  blue
-                  callback={() => handleSignIn()}
-                  isDisabled={isSendingLoginCred}
-                />
+                <form>
+                  <Input
+                    type={"email"}
+                    placeholder={"Email or username"}
+                    onChange={setEmail}
+                    onfocus={() => {
+                      return;
+                    }}
+                  />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    onChange={setPassword}
+                    onfocus={() => {
+                      return;
+                    }}
+                  />
+                  <Button
+                    text="Sign In"
+                    blue
+                    callback={() => handleSignIn()}
+                    isDisabled={isSendingLoginCred}
+                    type={"submit"}
+                  />
+                </form>
 
                 <p className="forgot-password" onClick={gotoForgot}>
                   Forgot Password?
@@ -143,6 +150,10 @@ function SignIn() {
             <p className="sign-up">
               Don't have an account yet?{" "}
               <span onClick={() => navigate("/signup")}>Sign up</span>
+            </p>
+            <p className="sign-up">
+              Register as a Writer{" "}
+              <span onClick={() => navigate("/login/writer")}>Register</span>
             </p>
           </div>
         )}

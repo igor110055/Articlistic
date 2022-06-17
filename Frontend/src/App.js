@@ -1,37 +1,28 @@
 import { getEnvVariables } from "./config";
-// import LandingPage from "./containers/loginSignup/landingPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import TempNavbar from "./containers/navbar/tempNavbar";
-// import OnBoarding from "./containers/loginSignup/onBoarding";
 import PrivateRoute from "./components/privateRoute";
-// import Home from "./containers/home/home";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-// import Cookie from "js-cookie";
+import WriterForm from "./containers/writerform/writerForm";
 import WriterSetting from "./containers/writerEditor/writerSetting";
 import WriterEditor from "./containers/writerEditor/writerEditor";
 import WriterContentContainer from "./containers/writerContent/writerContentContainer";
-// import Auth from "./components/auth";
 import NotFound from "./components/notFound";
 import CustomizedSnackbars from "./components/materialuiSnackbar";
 import { showSnackbar } from "./containers/common/commonActions";
 import WriterPublicationEditor from "./containers/writerContent/writerPublicationEditor";
-// import WriterAboutPublication from "./containers/writerContent/writerAboutPublication";
 import AboutPublication from "./containers/writerContent/aboutPublication";
 import "./App.css";
 import MultipleTab from "./utils/MultipleTab";
 import MainLoader from "./components/mainLoader";
 import SignUp from "./containers/authentication/signup";
 import SignIn from "./containers/authentication/signin";
+import Wallet from "./containers/wallet/wallet";
+import Homepage from "./containers/homepage/homepage";
+import Story from "./containers/story/story";
+import Profile from "./containers/profile/profile";
 
-// import PickFavWriters from "./containers/authentication/components/pick-fav-writers/pick-fav-writers";
-// import {
-//   getAuthToken,
-//   getRefreshToken,
-// } from "./containers/common/commonFunctions";
-// import getEnvVariables from "./config";
 function App() {
-  // const [alreadySignedIn, setAlreadySignedIn] = useState(Cookie.get('accessToken'));
   const [getEnvVariablesSuccess, setEnvVariablesSuccess] = useState(false);
   const [mulitpleTabs, setMultipleTabs] = useState(false);
   const { variant, message, open, state } = useSelector((state) => ({
@@ -43,9 +34,7 @@ function App() {
   }));
 
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   console.log(thisState);
-  // }, [thisState]);
+
   useEffect(() => {
     getEnvVariables(
       [
@@ -83,7 +72,6 @@ function App() {
     }
     if (e.key === "page_available") {
       setMultipleTabs(true);
-      // alert("Please Close other open tabs.");
     }
   };
   window.addEventListener("storage", onLocalStorageEvent, false);
@@ -91,7 +79,7 @@ function App() {
   return (
     //for writers
     <div>
-      {getEnvVariablesSuccess && (
+      {getEnvVariablesSuccess ? (
         <div className="App">
           {!mulitpleTabs && (
             <Router>
@@ -107,10 +95,14 @@ function App() {
                     </PrivateRoute>
                   }
                 />
-                {/* <Route exact path="/login" element={<LandingPage />} /> */}
-                {/* <Route exact path="/signup" element={<OnBoarding />} /> */}
                 <Route exact path="/signup" element={<SignUp />} />
                 <Route exact path="/login" element={<SignIn />} />
+                <Route exact path="/login/writer" element={<WriterForm />} />
+                <Route
+                  exact
+                  path="/:publicationInfo/:articleInfo"
+                  element={<Story />}
+                />
                 {/* <Route exact path="/pick" element={<PickFavWriters />} /> */}
                 <Route
                   exact
@@ -132,10 +124,37 @@ function App() {
                 />
                 <Route
                   exact
+                  path="/wallet"
+                  element={
+                    <PrivateRoute>
+                      <Wallet />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
                   path="/publication/edit"
                   element={
                     <PrivateRoute>
                       <WriterPublicationEditor />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
+                  path="/profile"
+                  element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  exact
+                  path="/homepage"
+                  element={
+                    <PrivateRoute>
+                      <Homepage />
                     </PrivateRoute>
                   }
                 />
@@ -168,6 +187,8 @@ function App() {
           />
           {/* <Navbar /> */}
         </div>
+      ) : (
+        <MainLoader />
       )}
     </div>
   );

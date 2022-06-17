@@ -65,21 +65,26 @@ function ForgotPassword({ setDisplayPage }) {
         associated with your Attentioun account.
       </p>
       <div className="forgot-password-button-container">
-        <PrimaryInput
-          placeholder={"Enter your email address"}
-          onChange={setEmail}
-          onfocus={() => {
-            return;
-          }}
-        />
-        {!validClick && <PrimaryError message={"Enter Valid Email address"} />}
-        {error && <PrimaryError message={getForgotEmailOTPErrorMsg} />}
-        <Button
-          blue
-          text={"Send OTP"}
-          callback={handleSendOTP}
-          isDisabled={isGettingForgotEmailOTP}
-        />
+        <form>
+          <PrimaryInput
+            placeholder={"Enter your email address"}
+            onChange={setEmail}
+            onfocus={() => {
+              return;
+            }}
+          />
+          {!validClick && (
+            <PrimaryError message={"Enter Valid Email address"} />
+          )}
+          {error && <PrimaryError message={getForgotEmailOTPErrorMsg} />}
+          <Button
+            blue
+            text={"Send OTP"}
+            callback={handleSendOTP}
+            isDisabled={isGettingForgotEmailOTP}
+            type={"submit"}
+          />
+        </form>
       </div>
       <div className="back-sign-in" onClick={gotoSignIn}>
         <OtherOptions className="other-options-svg" />

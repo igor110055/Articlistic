@@ -1,0 +1,66 @@
+.earnings-graph{
+    width: 383px;
+    height: 283px;
+
+
+    background: #FFFFFF;
+    box-shadow: 20px -1px 64px rgba(214, 230, 255, 0.5);
+    border-radius: 20px;
+
+    margin-left: 26px;
+}
+
+.earnings-graph .header {
+    width: 100%;
+    height: 66px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   
+    
+}
+
+.earnings-graph .header .earnings-text{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+    /* identical to box height */
+    margin-left: 32px;
+    letter-spacing: -0.120173px;
+
+    color: #636363;
+}
+
+.earnings-graph .header .date-picker{
+    margin-right: 24px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+
+    letter-spacing: -0.10682px;
+
+    color: #636363;
+
+}
+
+.earnings-graph .header .date-picker .svg-date-picker{
+    margin-left: 4px;
+    margin-top: -5px;
+}
+
+.earnings-graph .earnings-graph-separator{
+    width: 383px;
+    height: 1px;
+    mix-blend-mode: normal;
+    opacity: 0.19;
+    background-color: #979797;
+}

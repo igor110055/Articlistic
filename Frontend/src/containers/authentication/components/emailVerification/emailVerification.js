@@ -11,17 +11,14 @@ import PrimaryError from "../primary-error/primaryError";
 import left_img from "../../../../Images/background-left.svg";
 import right_img from "../../../../Images/background-right.svg";
 function EmailVerification({ setDisplayPage }) {
-  const {
-    isGettingEmailOTP,
-    getEmailOTPError,
-    getEmailOTPSuccess,
-  } = useSelector((state) => ({
-    isGettingEmailOTP: state.signupReducer.isGettingEmailOTP,
-    getEmailOTPError: state.signupReducer.getEmailOTPError,
-    getEmailOTPErrorMsg: state.signupReducer.getEmailOTPErrorMsg,
-    getEmailOTPResp: state.signupReducer.getEmailOTPResp,
-    getEmailOTPSuccess: state.signupReducer.getEmailOTPSuccess,
-  }));
+  const { isGettingEmailOTP, getEmailOTPError, getEmailOTPSuccess } =
+    useSelector((state) => ({
+      isGettingEmailOTP: state.signupReducer.isGettingEmailOTP,
+      getEmailOTPError: state.signupReducer.getEmailOTPError,
+      getEmailOTPErrorMsg: state.signupReducer.getEmailOTPErrorMsg,
+      getEmailOTPResp: state.signupReducer.getEmailOTPResp,
+      getEmailOTPSuccess: state.signupReducer.getEmailOTPSuccess,
+    }));
 
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -30,7 +27,10 @@ function EmailVerification({ setDisplayPage }) {
   const [usedEmail, setUsedEmail] = useState(false);
   const [displaySection, setDisplaySection] = useState("enterEmail");
   const handleContinue = () => {
-    setUsedEmail(false);
+    if (email === "") {
+      setValidClick(false);
+      return;
+    }
     setOnce(true);
     if (validateEmail(email)) {
       setValidClick(true);
@@ -73,27 +73,30 @@ function EmailVerification({ setDisplayPage }) {
         <div className="sign-up-with-email-container">
           <h3 className="sign-up-with-email-header">Sign up with your email</h3>
           <div className="email-input-div">
-            <Input
-              placeholder={"Enter your email address"}
-              type={"email"}
-              labelName={"Email address"}
-              inputBorderColor={!validClick ? "#EB4335" : "#c4c4c4"}
-              labelColor={!validClick ? "#EB4335" : "#777983"}
-              onChange={setEmail}
-              onfocus={() => {}}
-            />
-            {!validClick && (
-              <PrimaryError message={"Please enter a valid email address"} />
-            )}
-            {usedEmail && (
-              <PrimaryError message={"This email is already in use"} />
-            )}
-            <Button
-              text="Continue"
-              blue
-              callback={handleContinue}
-              isDisabled={isGettingEmailOTP}
-            />
+            <form>
+              <Input
+                placeholder={"Enter your email address"}
+                type={"email"}
+                labelName={"Email address"}
+                inputBorderColor={!validClick ? "#EB4335" : "#c4c4c4"}
+                labelColor={!validClick ? "#EB4335" : "#777983"}
+                onChange={setEmail}
+                onfocus={() => {}}
+              />
+              {!validClick && (
+                <PrimaryError message={"Please enter a valid email address"} />
+              )}
+              {usedEmail && (
+                <PrimaryError message={"This email is already in use"} />
+              )}
+              <Button
+                text="Continue"
+                blue
+                callback={handleContinue}
+                isDisabled={isGettingEmailOTP}
+                type={"submit"}
+              />
+            </form>
           </div>
           <div className="other-options" onClick={() => setDisplayPage("")}>
             <OtherOptions className="other-options-svg" />

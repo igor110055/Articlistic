@@ -146,21 +146,61 @@ async function getFollowedWriters(username, limit, skip) {
 
         let followed = [];
 
-        await db.find({
-            username: username,
-            isWriter: true
-        }).sort({
-            _id: -1
-        }).limit(limit).skip(skip).forEach((x) => {
-            followed.push(x.follows);
-        });
+        /**
+         * Aggregation: 
+         * Get all the following of the user. 
+         * Project the follows field to keep it light. 
+         * Join from writers collection & store it in a field. 
+         * Match that field's existence. (Get writers only)
+         * Sort by latest followed writer. 
+         */
+        await db.aggregate([{
+            '$match': {
+                'username': username
+            }
+        }, {
+            '$project': {
+                'follows': 1
+            }
+        }, {
+            '$lookup': {
+                'from': 'users',
+                'localField': 'follows',
+                'foreignField': 'username',
+                'as': 'userDetails',
+                'pipeline': [{
+                    '$project': {
+                        'isWriter': 1,
+                        'name': 1,
+                        'profilePic': 1
+                    }
+                }]
+            }
+        }, {
+            '$match': {
+                'userDetails.0.isWriter': true
+            }
+        }, {
+            '$lookup': {
+                'from': 'writers',
+                'localField': 'follows',
+                'foreignField': 'username',
+                'as': 'writerDetails',
+                'pipeline': [{
+                    '$project': {
+                        'publications': 1
+                    }
+                }]
+            }
+        }]).forEach((x) => {
+            followed.push(x);
+        })
 
         let endTime = Date.now();
 
         let timeTaken = endTime - startTime;
 
         logger.info("getFollowedWriters mongo response time: " + timeTaken.toString());
-        logger.debug(followed);
         return followed;
     } catch (e) {
         logger.debug(e);

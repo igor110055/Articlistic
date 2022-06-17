@@ -23,6 +23,9 @@ const ServiceError = require('../../errors/ServiceError');
 const NotAuthenticatedError = require('../../errors/NotAuthenticatedError');
 const logger = require('../../utils/logger');
 
+
+const articleAnalytics = require('../../utils/functions/analyticsData');
+
 const {
     v4: uuidv4
 } = require('uuid');
@@ -33,27 +36,32 @@ const {
     IMAGE_SIZE_LIMIT,
     DELETE_AFTER_ARTICLE_TIMING
 } = require('../../../constants');
-const { createSingleSend, deleteSingleSend } = require('../../utils/mailer/client');
+const {
+    createSingleSend,
+    deleteSingleSend
+} = require('../../utils/mailer/client');
 
 
 module.exports = function articlesRouter() {
 
     return new express.Router()
         .get('/get', useAuth(), getArticle)
+        .get('/latestForWriter', useAuth(), getLatestArticlesForWriter)
         .get('/getAllArticlesForUser', useAuth(), getAllArticlesForUser)
         .get('/getArticlesForPublication', useAuth(), getArticlesForPublication)
         .get('/import', useAuth(false, false, true), importArticle)
         .get('/topFunders', useAuth(), articleCheck(), getTopFunders)
 
 
+        .put('/analytics/read', addRead)
+        .put('/analytics/view', addView)
+        .get('/analytics/', useAuth(), checkDb(true, false, true), getArticleAnalytics)
+
         .put('/uploadImage', useAuth(), checkDb(true, false, true), file.single('image'), uploadEmbed)
         .put('/upload', useAuth(false, false, true), uploadArticle)
 
         .delete('/markForDeletion', useAuth(false, false, true), checkDb(true, false, true), markForDeletion)
 
-
-        // .post('/new', useAuth(), createArticleBluePrint)
-        // .post('/discard', useAuth(), checkDb(true), discardArticle)
 
         .post('/selection/meaningful', useAuth(), checkDb(true, false), updateMeaningfulCount)
         .post('/selection/unmeaningful', useAuth(), checkDb(true, false), removeFromMeaningful)
@@ -62,13 +70,67 @@ module.exports = function articlesRouter() {
         .get('/selection/find', useAuth(), checkDb(true), findSelection)
 
         .post('/selection/respond', useAuth(), checkDb(true, true), respondToSelection)
-        // .post('/selection/tip', useAuth(), tipSelection)
-        // .post('/selection/share', useAuth(), shareSelection)
 
         .post('/deleteImage', useAuth(), deleteEmbed);
 
 
-    async function getTopFunders(req, _res) {
+    async function getLatestArticlesForWriter(req, res) {
+        const routeName = 'GET /articles/latestForWriter';
+
+        let {
+            username,
+            limit,
+            skip
+        } = req.query;
+
+        if (!username || !limit || !skip) {
+            throw new BadRequestError('Missing parameters', routeName);
+        }
+
+        limit = parseInt(limit);
+        skip = parseInt(skip);
+
+        let articles;
+        try {
+            articles = await mongo.articles.getAllArticlesForUser(username, ["PUBLISHED"], limit, skip);
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        return res.status(200).send({
+            articles
+        });
+
+    }
+
+
+    async function addRead(req, res) {
+        const routeName = 'PUT /analytics/addRead';
+
+        try {
+            await mongo.articleReads.incrementRead();
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        return res.status(200).send();
+    }
+
+    async function addView(req, res) {
+        const routeName = 'PUT /analytics/addRead';
+
+
+        try {
+            await mongo.articleViews.incrementRead();
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        return res.status(200).send();
+
+    }
+
+    async function getTopFunders(req, res) {
         const routeName = 'get top funders';
         const articleId = req.articleId;
 
@@ -79,8 +141,61 @@ module.exports = function articlesRouter() {
 
 
 
+
     }
 
+    async function getArticleAnalytics(req, res) {
+
+        const routeName = 'get article views';
+        const articleId = req.articleId;
+        const username = req.username;
+
+        const {
+            type,
+            year,
+            views
+        } = req.body;
+
+        const validTypes = ['y', 'm', 'w'];
+
+        if (!validTypes.includes(type)) {
+            throw new BadRequestError('Type not permitted', routeName);
+        }
+
+
+        /**
+         * Get Query From MongoDB.
+         */
+        let analyticsDataFromDB;
+
+
+        try {
+            if (views) {
+                analyticsDataFromDB = await mongo.articleViews.getViewsForSpecificArticle(articleId);
+
+            } else {
+
+                analyticsDataFromDB = await mongo.articleReads.getReadsForSpecificArticle(articleId);
+
+            }
+        } catch (e) {
+            throw new DatabaseError(routeName, e);
+        }
+
+        let analyticsData;
+        if (type == 'y') {
+            analyticsData = articleAnalytics.getYearlyData(analyticsDataFromDB);
+        } else if (type == 'm') {
+            analyticsData = articleAnalytics.getMonthlyData(analyticsData, year);
+        } else if (type == 'w') {
+            analyticsData = articleAnalytics.getWeeklyData();
+        }
+
+
+        return res.status(200).send({
+            analyticsData
+        })
+    }
 
     async function markForDeletion(req, res) {
         const routeName = 'mark for deletion';
@@ -407,7 +522,7 @@ module.exports = function articlesRouter() {
 
         let article;
         try {
-            article = await mongo.articles.getArticleById(articleId);
+            article = await mongo.articles.getArticleAlongWithPublication(articleId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -502,8 +617,7 @@ module.exports = function articlesRouter() {
         try {
             const writerData = await mongo.writers.getWriterByName(username);
             listId = writerData.mailing_list_id;
-        }
-        catch (e) {
+        } catch (e) {
             logger.debug(e, "Unable to fetch writer's detail at", routeName);
         }
 
@@ -739,8 +853,7 @@ module.exports = function articlesRouter() {
                     try {
                         await mongo.transactionArticleCategory.publishNewArticle(username, articleId, status, writeupUpload, storySetting, publicData, categories, publicationId, false);
                         await createSingleSend(username, listId);
-                    }
-                    catch (e) {
+                    } catch (e) {
                         logger.info(e)
                         //await deleteSingleSend(listId);
                     }

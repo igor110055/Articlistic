@@ -5,7 +5,7 @@ import {
   authGetRequest,
   authPostRequest,
   authPutRequest,
-  authDeleteRequest
+  authDeleteRequest,
 } from "../../utils/apiRequests";
 import {
   CREATE_ABOUT_PUBLICATION_INIT,
@@ -14,7 +14,7 @@ import {
   GET_ABOUT_PUBLICATION_INIT,
   GET_PUBLICATIONS_INIT,
   UPDATE_PUBLICATIONS_INIT,
-  DELETE_PUBLICATION
+  DELETE_PUBLICATION,
 } from "../../utils/actionTypes";
 import {
   createAboutPublicationFailure,
@@ -34,12 +34,12 @@ import {
 function* getPublications(action) {
   try {
     const headers = {
-      Authorization: action.data.token
+      Authorization: action.data.token,
     };
 
     const url = `${baseURL}/${endPoints.getPublications}?username=${action.data.userUserName}`;
     const data = yield call(authGetRequest, url, headers);
-
+    console.log("writer ", data);
     if (!data.error) {
       yield put(getPublicationsSuccess(data.publications));
     } else {
@@ -57,7 +57,7 @@ export function* getPublicationsSaga() {
 function* getAboutPublication(action) {
   try {
     const headers = {
-      Authorization: action.data.token
+      Authorization: action.data.token,
     };
 
     const url = `${baseURL}/${endPoints.updateAboutPublication}?publicationId=${action.data.publicationId}`;
@@ -79,9 +79,9 @@ export function* getAboutPublicationSaga() {
 function* createPublication(action) {
   try {
     const headers = {
-      Authorization: action.data.token
+      Authorization: action.data.token,
     };
-    const url = `${baseURL}/${endPoints.createNewPublications}?username=${action.data.userUserName}&name=${action.data.name}`;
+    const url = `${baseURL}/${endPoints.createNewPublications}?name=${action.data.name}`;
     const data = yield call(authPostRequest, url, action.data.fd, headers);
 
     if (!data.error) {
@@ -104,7 +104,7 @@ function* createAboutPublication(action) {
   try {
     const { userUserName, name, publicationId, publicationData } = action.data;
     const headers = {
-      Authorization: action.data.token
+      Authorization: action.data.token,
     };
     const url = `${baseURL}/${endPoints.updateAboutPublication}?publicationId=${publicationId}&username=${userUserName}&name=${name}`;
     const data = yield call(
@@ -113,7 +113,7 @@ function* createAboutPublication(action) {
       {
         writeup: publicationData,
         publicationId,
-        intro: aboutPublicationData.blocks[0].data.text
+        intro: aboutPublicationData.blocks[0].data.text,
       },
       headers
     );
@@ -136,7 +136,7 @@ function* updatePublication(action) {
   try {
     const { userUserName, name, publicationId } = action.data;
     const headers = {
-      Authorization: action.data.token
+      Authorization: action.data.token,
     };
     const url = `${baseURL}/${endPoints.updatePublication}?publicationId=${publicationId}&username=${userUserName}&name=${name}`;
     const data = yield call(authPutRequest, url, action.data.fd, headers);
@@ -180,7 +180,7 @@ function* deletePublication(action) {
   try {
     const { token, publicationId } = action.data;
     const headers = {
-      Authorization: token
+      Authorization: token,
     };
     const url = `${baseURL}/${endPoints.deletePublication}?publicationId=${publicationId}`;
 

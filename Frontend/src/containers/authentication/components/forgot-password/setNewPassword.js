@@ -89,38 +89,41 @@ function SetNewPassword({ setDisplayPage }) {
         style={{ margin: 0 }}
       >{`Please enter a new password.`}</p>
       <div style={{ marginTop: "36px" }}>
-        <Input
-          type={"password"}
-          labelName={"New Password"}
-          inputBorderColor={!validPass ? "#EB4335" : "#777983"}
-          labelColor={!validPass ? "#EB4335" : "#777983"}
-          onChange={setNewPass}
-          onfocus={() => {
-            return;
-          }}
-        />
-        {!validPass && <PrimaryError message={"Use a strong password"} />}
-        <p className="password-constraints">
-          Password should contain 1 uppercase letter, 1 lowercase letter, 1
-          special character and 1 number. Minimum 8 characters.
-        </p>
-        <Input
-          type={"password"}
-          inputBorderColor={!samePass ? "#EB4335" : "#777983"}
-          labelColor={!samePass ? "#EB4335" : "#777983"}
-          labelName={"Confirm password"}
-          onChange={setConfirmPass}
-          onfocus={() => {
-            return;
-          }}
-        />
-        {!samePass && <PrimaryError message={"passwords do not match"} />}
-        <Button
-          blue
-          text={"Reset Password"}
-          callback={() => handleReset()}
-          isDisabled={isResettingPassword}
-        />
+        <form>
+          <Input
+            type={"password"}
+            labelName={"New Password"}
+            inputBorderColor={!validPass ? "#EB4335" : "#777983"}
+            labelColor={!validPass ? "#EB4335" : "#777983"}
+            onChange={setNewPass}
+            onfocus={() => {
+              return;
+            }}
+          />
+          {!validPass && <PrimaryError message={"Use a strong password"} />}
+          <p className="password-constraints">
+            Password should contain 1 uppercase letter, 1 lowercase letter, 1
+            special character and 1 number. Minimum 8 characters.
+          </p>
+          <Input
+            type={"password"}
+            inputBorderColor={!samePass ? "#EB4335" : "#777983"}
+            labelColor={!samePass ? "#EB4335" : "#777983"}
+            labelName={"Confirm password"}
+            onChange={setConfirmPass}
+            onfocus={() => {
+              return;
+            }}
+          />
+          {!samePass && <PrimaryError message={"passwords do not match"} />}
+          <Button
+            blue
+            text={"Reset Password"}
+            callback={() => handleReset()}
+            isDisabled={isResettingPassword}
+            type={"submit"}
+          />
+        </form>
       </div>
       <CustomizedSnackbars variant={variant} message={message} openS={open} />
     </div>
