@@ -35,7 +35,7 @@ module.exports = function publicationRouter() {
     return new express.Router()
         .get('/', useAuth(), getPublication)
         .get('/all', useAuth(), getAllPublications)
-
+        .get('/:id', articleFromPublication)
         .post('/new', useAuth(false, false, true), file.single('image'), newPublication)
         .put('/', useAuth(false, false, true), file.single('image'), updatePublication)
         .delete('/', useAuth(false, false, true), checkDb(false, false, false, true, true), markForDeletion)
@@ -46,6 +46,44 @@ module.exports = function publicationRouter() {
         .post('/article/image', useAuth(), file.single('image'), uploadImageEmbed);
 
 
+
+    async function articleFromPublication(req, res) {
+        let profileName
+        let username
+        const pubId = req.params.id;
+        let article;
+        let pubData;
+        try {
+            article = await mongo.articles.getArticlesForPublication(pubId, 8)
+            //logger.info(article);
+        }
+        catch (e) {
+            logger.debug(e, "Failed to fetch Articles")
+        }
+        try {
+            pubData = await mongo.publications.getPublication(pubId);
+            // logger.info(pubData);
+            username = pubData.username;
+            try {
+                let writersData = await mongo.users.getUserByUsername(username);
+                profileName = writersData.name;
+            } catch (err) {
+                logger.debug(err, "Failed to get writers name")
+            }
+        }
+        catch (e) {
+            logger.debug(e, "Failed to fetch Publication details")
+        }
+
+        res.status(200).send({
+            "Writers username": username,
+            "Writers profileName": profileName,
+            publicationName: pubData.publicationName,
+            publicationPic: pubData.publicationPic,
+            publicationAbout: pubData.publicationAbout,
+            article
+        })
+    }
 
     async function markForDeletion(req, res) {
         const routeName = 'mark publication for deletion';
