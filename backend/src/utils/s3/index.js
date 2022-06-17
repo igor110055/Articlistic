@@ -25,9 +25,9 @@ const writerAudienceBucket = "attentioun-writers-audience-data"
 let urlForArticles = config.aws.urlForArticles
 let urlForProfile = config.aws.urlForProfile
 let urlForAudienceFile = config.aws.urlForAudienceFile
-logger.info(config.aws.secretKey)
+
 var s3;
-logger.info(s3)
+
 
 function __init() {
     if (!s3) {

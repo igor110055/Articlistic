@@ -9,9 +9,10 @@ async function parseUploadedFile(fileStream) {
     const options = {
         objectMode: true,
         delimiter: ",",
-        quote: null,
+        quote: '"',
         headers: true,
         renameHeaders: false,
+        discardUnmappedColumns: true
     };
     return (await pareser(options, fileStream))
 }
@@ -25,12 +26,12 @@ async function pareser(options, fileStream) {
             })
             .on("data", async (row) => {
                 data.push(row);
-                logger.info("data in array")
+                //logger.info("data in array")
             })
             .on("end", async (rowCount) => {
-                logger.info(rowCount);
-                logger.info("parsing end");
-                // logger.info(data)
+                // logger.info(rowCount);
+                // logger.info("parsing end");
+                //  logger.info(data)
                 resolve(data);
                 //return data;
             });

@@ -19,6 +19,7 @@ const MDB_COLLECTION_INTERNAL_TRANSACTIONS = 'wallet-txn-internal';
 const MDB_COLLECTION_WALLET_ADD = 'wallet-add';
 const MDB_COLLECTION_WALLET_PAYOUT = 'wallet-payout';
 const MDB_COLLECTION_DOLLAR_VALUE = 'wallet-dollar-value';
+const MDB_COLLECTION_AUDIENCE = 'import-audience'
 
 /**
  * Wallet related things. 
@@ -65,6 +66,7 @@ module.exports = {
     MDB_COLLECTION_EMAIL,
     MDB_COLLECTION_BOOKMARKS,
     MDB_COLLECTION_EARNINGS_TO_WALLET,
+    MDB_COLLECTION_AUDIENCE,
     WALLET_ATT_CUT_RATE,
     IMAGE_SIZE_LIMIT,
     EARNING_MINIMUM_BALANCE,

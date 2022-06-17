@@ -42,7 +42,7 @@ module.exports = function userRouter() {
         .get('/profile', getProfile)
 
         .get('/homepage', useAuth(), getHomePage)
-        .put('/import', file.single('csv'), importUserFromFile)
+        .put('/import', file.single('csv'), useAuth(false, false, false, true), importUserFromFile)
         .get('/chats', useAuth(), getChatsForUser);
 
 
@@ -539,9 +539,9 @@ module.exports = function userRouter() {
     //Function to Import Audience from CSV for writer
     async function importUserFromFile(req, res) {
         let routeName = 'PUT /users/import'
-        logger.info(req.file);
+        //logger.info(req.file);
         let buffer = req.file.buffer;
-        let username = "dodhpur"
+        let username = req.username
         let ogfileName = req.file.originalname
         let stream;
         var data = [];
@@ -588,14 +588,29 @@ module.exports = function userRouter() {
             catch (e) {
                 logger.debug(e);
             }
-        }   //Adding to mailing list
+        }
         else {
+            //Adding to mailing list
+            /*
             let response;
             try {
                 response = await mailClient.addMultipleFollowerToList(data, listId)
                 logger.info(response, "Successfully added to mailing list");
             } catch (e) {
                 logger.debug(e, "Failed to add to Mailing List")
+            }
+            */
+
+            //Adding to Database
+            try {
+                data.map((x) => {
+                    x["writer"] = username
+                })
+                logger.info("new Data===>", data);
+                await mongo.audience.insertTheData(data)
+            }
+            catch (e) {
+                logger.debug(e, "Unable to save to Database");
             }
         }
         res.status(200).send({
