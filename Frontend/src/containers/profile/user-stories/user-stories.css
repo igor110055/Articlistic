@@ -2,8 +2,14 @@
     display: flex;    height: 60px;
     align-items: center;
     width: 100%;
-
     justify-content: space-around;
+}
+.user-stories-modal-nav{
+        border-bottom: 1px solid black;    display: flex;    height: 75px;
+        align-items: center;
+        width: 100%;
+        justify-content: space-around;
+    
 }
 .user-stories-nav-items{
     cursor: pointer;
@@ -62,6 +68,10 @@ letter-spacing: -0.0583333px;
     .data{
         
     /* width: 24rem; */
+
+    }
+    .user-stories-modal-nav{
+        height: 58px;
 
     }
 }

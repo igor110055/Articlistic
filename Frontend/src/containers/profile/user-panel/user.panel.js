@@ -25,6 +25,24 @@ const UserPanel = () => {
   const state = localStorage.getItem("user");
   const user = JSON.parse(state);
   const headdata = ["Writes", "Read"];
+  const [topfunded, settopfunded] = useState(false);
+  const [firstfunded, setfirstfunded] = useState(false);
+  function nFormatter(num, digits) {
+    const lookup = [
+      { value: 1, symbol: "" },
+      { value: 1e3, symbol: "k" },
+      { value: 1e6, symbol: "M" },
+      { value: 1e9, symbol: "G" },
+      { value: 1e12, symbol: "T" },
+      { value: 1e15, symbol: "P" },
+      { value: 1e18, symbol: "E" }
+    ];
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var item = lookup.slice().reverse().find(function(item) {
+      return num >= item.value;
+    });
+    return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
+  }
   const userslist = [
     {
       name: "Jason peter ross",
@@ -46,6 +64,14 @@ const UserPanel = () => {
   const handleOpenImport = () => {
     setImportModalOpen(true);
   };
+  function add3Dots(string, limit) {
+    var dots = "...";
+    if (string.length > limit) {
+      string = string.substring(0, limit) + dots;
+    }
+
+    return string;
+  }
   const followerdata = ["Followers", "Following"];
   return (
     <div className="user-row">
@@ -61,16 +87,32 @@ const UserPanel = () => {
               alt="user"
             />
             <div className="funders-sec-resp">
-              <button className="top-funders">
-                Top Funders <span>23</span>
-              </button>
-              <button className="first-funder">
-                First Funder<span>45</span>
-              </button>
+              <p
+                className="top-funders"
+                onClick={() => {
+                  settopfunded(true);
+                }}
+              >
+                Top Funders{" "}
+                <span>
+                  {data.topfundedlist ? data["topfundedlist"].length : 0}
+                </span>
+              </p>
+              <p
+                className="first-funder"
+                onClick={() => {
+                  setfirstfunded(true);
+                }}
+              >
+                First Funder
+                <span>
+                  {data.firstfundedlist ? data["firstfundedlist"].length : 0}
+                </span>
+              </p>
             </div>
             <div className="buttons-follow">
               {stateparams.username == user.userUserName ? (
-                <button className="message">Edit Profile</button>
+                <button className="edit-profile">Edit Profile</button>
               ) : (
                 <>
                   <button
@@ -120,12 +162,22 @@ const UserPanel = () => {
                 }`}
               </p>{" "}
               <div className="funders-sec">
-                <button className="top-funders">
-                  Top Funders <span>23</span>
-                </button>
-                <button className="first-funder">
-                  First Funder<span>45</span>
-                </button>
+                <p
+                  className="top-funders"
+                  onClick={() => {
+                    settopfunded(true);
+                  }}
+                >
+                  Top Funders <span>{data.topfundedlist ? data["topfundedlist"].length : 0}</span>
+                </p>
+                <p
+                  className="first-funder"
+                  onClick={() => {
+                    setfirstfunded(true);
+                  }}
+                >
+                  First Funder<span>{data.firstfundedlist ? data["firstfundedlist"].length : 0}</span>
+                </p>
               </div>
               <div className="buttons-follow-resp">
                 {stateparams.username == user.userUserName ? (
@@ -221,7 +273,7 @@ const UserPanel = () => {
           ))}
         </div>
       </div>
-      {/* <div className="writes-bar">
+      <div className="writes-bar">
         <div className="user-stories-nav">
           <div
             onClick={() => {
@@ -266,7 +318,7 @@ const UserPanel = () => {
             </div>
           ))}
         </div>
-      </div> */}
+      </div>
       <Modal
         open={followermodal.length != 0}
         onClose={() => {
@@ -278,7 +330,7 @@ const UserPanel = () => {
         <Box className={classes.formContainer1}>
           <div className={classes.importForm1}>
             <div className={classes.navbar}>
-              <div className="user-stories-nav">
+              <div className="user-stories-modal-nav">
                 {followerdata.map((data, idx) => (
                   <div
                     onClick={() => {
@@ -297,23 +349,29 @@ const UserPanel = () => {
               </div>
               <div className={classes.userlist}>
                 {data[followermodal.toLowerCase()] &&
+                  data[followermodal.toLowerCase()].length > 0 &&
                   data[followermodal.toLowerCase()].slice(0, 4).map((data) => (
                     <div className="followers-list-item">
                       <div className={classes.navitems}>
                         <img src={data.img} />
-                       
+
                         <div>
                           {" "}
-                          <p>{data.name}</p>
-                          
+                          <p>{add3Dots(data.name,7)}</p>
                         </div>
-                        {!data.isfollowing && <p className={classes.isfollowing}>Follow</p>}
+                        {!data.isfollowing && (
+                          <p className={classes.isfollowing}>Follow</p>
+                        )}
                       </div>
                       <button className={classes.btn}>
                         {followermodal === "follow" ? "Unfollow" : "Remove"}
                       </button>
                     </div>
                   ))}
+                {data[followermodal.toLowerCase()] &&
+                  data[followermodal.toLowerCase()].length == 0 && (
+                    <p className={classes.nofollowers}>No {followermodal}</p>
+                  )}
               </div>
             </div>
           </div>
@@ -329,7 +387,7 @@ const UserPanel = () => {
       >
         <Box className={classes.formContainer3}>
           <div className={classes.importForm}>
-            <div style={{width:"87%"}} className={classes.profile}>
+            <div style={{ width: "87%" }} className={classes.profile}>
               <img
                 className={classes.img}
                 src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
@@ -374,11 +432,164 @@ const UserPanel = () => {
           </div>
         </Box>
       </Modal>
+
+      <Modal
+        open={topfunded}
+        onClose={() => {
+          settopfunded(false);
+        }}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box className={classes.formContainer4}>
+          <div className={classes.importForm1}>
+            <div className={classes.navbar}>
+              <div className="user-stories-modal-nav">
+                <div
+                  className={`user-stories-nav-items ${"active-stories-class"}`}
+                >
+                  <p>Top Funded Stories</p>
+                  <div className="blue-line-container"></div>
+                </div>
+              </div>
+              <div className={classes.topfundedlist}>
+                {data["topfundedlist"] &&
+                  data["topfundedlist"].slice(0, 4).map((data) => (
+                    <div className="followers-list-item">
+                      <div className={classes.topfundeditems}>
+                        <div className={classes.storyfunded}>
+                          {" "}
+                          <img src={data.img} />
+                          <div className={classes.storywriters}>
+                            <h3>{data.title}</h3>
+                            <p>By {data.writer}</p>
+                          </div>
+                        </div>
+                        <button className={classes.topfundedbtn}>
+                          ₹ {nFormatter(data.amount,2)}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={firstfunded}
+        onClose={() => {
+          setfirstfunded(false);
+        }}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box className={classes.formContainer4}>
+          <div className={classes.importForm1}>
+            <div className={classes.navbar}>
+              <div className="user-stories-modal-nav">
+                <div
+                  className={`user-stories-nav-items ${"active-stories-class"}`}
+                >
+                  <p>First Funded Stories</p>
+                  <div className="blue-line-container"></div>
+                </div>
+              </div>
+              <div className={classes.topfundedlist}>
+                {data["firstfundedlist"] &&
+                  data["firstfundedlist"].slice(0, 4).map((data) => (
+                    <div className="followers-list-item">
+                      <div className={classes.firstfundeditems}>
+                        <div className={classes.storyfunded}>
+                          {" "}
+                          <img src={data.img} />
+                          <div className={classes.storywriters}>
+                            <h3>{data.title}</h3>
+                            <p>By {data.writer}</p>
+                          </div>
+                        </div>
+                        <button className={classes.firstfundedbtn}>
+                          ₹ {nFormatter(data.amount,2)}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+
+      
     </div>
   );
 };
 
 const useStyles = makeStyles({
+  firstfundedbtn: {
+    backgroundColor: "#59C995",
+    height: "33px",
+    border: "1px solid transparent",
+    width: "14%",
+    borderRadius: "21px",
+    fontWeight: "bold",
+  },
+  firstfundeditems: {
+    display: "flex",
+    justifyContent: "space-around",
+    width: "100%",
+    alignItems: "center",
+    margin: "5px 40px",
+    backgroundColor: "#DCF3E2",
+    borderRadius: "24px",
+    ['@media (max-width: 480px)']: { // eslint-disable-line no-useless-computed-key
+      
+    margin: "5px 8px"
+
+    },
+  },
+  storywriters:{
+    ['@media (max-width: 480px)']: { // eslint-disable-line no-useless-computed-key
+      
+      fontSize:"13px",
+      marginLeft: "18px"
+      },    
+  },
+  topfundedbtn: {
+    backgroundColor: "#FFD000",
+    height: "33px",
+    border: "1px solid transparent",
+    width: "14%",
+    borderRadius: "21px",
+    fontWeight: "bold",
+    ['@media (max-width: 480px)']: { // eslint-disable-line no-useless-computed-key
+      width: "18%"
+      },
+  },
+  storyfunded: {
+    display: "flex",
+    alignItems: "center",
+    width: "63%",
+    justifyContent: "space-around",
+  },
+  topfundedlist: {
+    width: "100%",
+  },
+  topfundeditems: {
+    display: "flex",
+    justifyContent: "space-around",
+    width: "100%",
+    alignItems: "center",
+    margin: "5px 40px",
+    background: "#FAEDCC",
+    borderRadius: "24px",
+    ['@media (max-width: 480px)']: { // eslint-disable-line no-useless-computed-key
+      
+    margin: "5px 19px"
+
+      },
+  },
   block: {
     fontWeight: "600",
     color: "#EB4335",
@@ -389,17 +600,18 @@ const useStyles = makeStyles({
     marginTop: "12px",
     width: "100%",
   },
-  isfollowing:{
-    fontFamily: 'Poppins',
-fontStyle: "normal",
-fontWeight: 600,
-fontSize: "13px",
-lineHeight: "34px",
-/* identical to box height, or 189% */
+  isfollowing: {
+    fontFamily: "Poppins",
+    fontStyle: "normal",
+    fontWeight: 600,
+    fontSize: "13px",
+    lineHeight: "34px",
+    /* identical to box height, or 189% */
 
-
-color: "#1395FD",
-
+    color: "#1395FD",
+  },
+  nofollowers: {
+    textAlign: "center",
   },
   cancel: {
     fontWeight: "600",
@@ -448,20 +660,19 @@ color: "#1395FD",
     justifyContent: "space-between",
   },
   btn: {
-    fontFamily: 'Poppins',
-    fontStyle: "normal",
-    fontWeight: 500,
-    fontSize: "15px",
-    lineHeight: "22px",
-    /* identical to box height */
-    border: "2px solid #CFCFCF",
-    borderRadius: "10px",
-    padding: "4px 9px",
-    background:"white",
-    textAlign: "center",
-    letterSpacing: "-0.0583333px",
-    
-    color: "#000000"
+       border: "2px solid #CFCFCF",
+       padding: "0px 13px",
+       background: "white",
+       borderRadius: "10px",
+       fontFamily: 'Poppins',
+       fontStyle: "normal",
+       fontWeight: 600,
+       fontSize: "12px",
+       lineHeight: "34px",
+       display: "flex",
+       alignItems: "center",
+       textAlign: "center",
+       color: "#000000"
   },
   img: {
     width: "36%",
@@ -475,6 +686,11 @@ color: "#1395FD",
     alignItems: "center",
     justifyContent: "space-between",
     width: "45%",
+    ['@media (max-width: 480px)']: { // eslint-disable-line no-useless-computed-key
+      
+    width: "53%"
+
+    },
   },
   navbar: {
     display: "flex",
@@ -489,7 +705,7 @@ color: "#1395FD",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    width:"100%",
+    width: "100%",
     justifyContent: "center",
   },
   btns: {
@@ -526,6 +742,24 @@ color: "#1395FD",
     marginTop: "10rem",
     borderRadius: "20px",
     outline: "none",
+    ['@media (max-width: 480px)']: { // eslint-disable-line no-useless-computed-key
+      width: "93%",
+      height: "95%",marginTop:"0",
+    },
+  },
+  formContainer4: {
+    width: "44rem",
+    height: "28rem",
+    backgroundColor: "white",
+    margin: "auto",
+    marginTop:"6rem",
+
+    borderRadius: "20px",
+    outline: "none",
+    ['@media (max-width: 480px)']: { // eslint-disable-line no-useless-computed-key
+      width: "96%",
+      height: "94%",marginTop:"0",
+    },
   },
   nav: {
     display: "flex",

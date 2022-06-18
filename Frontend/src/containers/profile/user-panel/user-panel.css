@@ -12,8 +12,10 @@
 }
 .data{
   background-color: white;
-    margin-top: 3rem;
-    border-radius: 3rem;width: 91vw;
+  margin-top: 3rem;
+  border-radius: 2rem;
+  width: 91vw;
+  padding: 7px 0;
 }
 .user-row {
   display: flex;
@@ -54,6 +56,23 @@
 }
 
 .message {
+  background: #ffffff;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  /* identical to box height */
+
+  letter-spacing: -0.0583333px;
+  width: 200px;
+  height: 48px;
+  color: #000000;
+}
+.edit-profile{
+  
   background: #ffffff;
   border: 1px solid #c4c4c4;
   border-radius: 10px;
@@ -192,16 +211,18 @@
 }
 
 .top-funders span {
-  border-radius: 36.9985px;
+  border-radius: 50%;
   font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 1em;
   line-height: 24px;
   /* identical to box height */
   position: relative;
   left: 15px;
-  padding: 7px;
+  
+  padding: 7px 10px;
+
   text-align: right;
   letter-spacing: -0.0567959px;
 
@@ -235,26 +256,22 @@
   color: #000000;
 }
 .writes-bar,.reads-bar{
-  width: 23rem;
-  height: 27rem;
-  margin-top: 10rem;
-  margin-left: 52px;
-  background: #ffffff;
-  border-radius: 30px;
-  overflow: hidden;
+display: none;
 }
 .first-funder span {
   background: linear-gradient(180deg, #59c995 0%, #59c978 100%);
-  border-radius: 36.9985px;
+  border-radius: 50%;
   font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
-  font-size: 11px;
+  font-size: 1em;
   line-height: 24px;
   /* identical to box height */
   position: relative;
   left: 15px;
-  padding: 7px;
+  
+  padding: 7px 10px;
+
   text-align: right;
   letter-spacing: -0.0567959px;
 
@@ -403,6 +420,35 @@
 
 
 @media (max-width: 480px) {
+  .user-row{
+    flex-direction: column;
+  }
+  .funders-username{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 100%;
+    flex-direction: column;
+    position: relative;
+    bottom: 1rem;
+  }
+  .writes-bar,.reads-bar{
+    display: block;
+    width: 23rem;
+    height: 27rem;
+    margin: 6px 0;
+    background: #ffffff;
+    border-radius: 30px;
+    overflow: hidden;
+  }
+  .data{
+    
+    margin-top: 1rem;
+
+  }
+  .funders-sec{
+    width: 100%;
+  }
   .user-info-name h3{
         
     margin: 0 8px;
@@ -412,10 +458,7 @@
     
     display: none;
   }
-  .writes-bar,.reads-bar{
-    display: block;
-    min-width: 22rem;
-  }
+  
   .writer-para {
     display: none;
   }
@@ -447,6 +490,13 @@
     width: 76px;
     font-size: 12px;
   }
+  .edit-profile{
+    height: 32px;
+    width: 47%;
+    font-size: 12px;
+    bottom: 10px;
+    position: relative;
+  }
   .moreinfo {
     height: 32px;
     width: 34px;
@@ -454,23 +504,23 @@
   }
   .user-info {
     margin-left: 0;
-    min-width: 27rem;
-    height: 32rem;
-    width: 25rem;
+   
+    height: 35rem;width: 25rem;
+  }
+  .user-info{
+    margin-top: 11rem;
+
   }
   .top-funders {
     padding: 1px 3px;
     width: 75px;
     height: 25px;
-    padding: 1px;
+    padding-right: 8px;
     position: relative;
     right: 30px;
     font-size: 10px;
   }
- .writes-bar,.reads-bar {
-  display: block;
-    min-width: 17rem;
-  } 
+ 
   .top-funders span.first-funder span {
     padding: 0;
   }
@@ -484,18 +534,16 @@
     height: 86px;
     position: relative;
     right: 26px;
-    top: 24px;
+    top: 4px;
   }
   .user-info-name h3{
     font-size: 23px;
   }
   .funders-username .username{
-    font-size: 15px;
+    font-size: 15px;    position: relative;
+    left: 9px;
   }
-  .writes-bar,.reads-bar{
-    display: block;
-  min-width: 27rem; 
-  } 
+ 
 }
 
 @media (min-width: 481px) and (max-width: 768px) { .user-info {
@@ -515,6 +563,12 @@
   width: 29%;
   height: 45px;
   min-width: 106px;
+}
+.edit-profile{
+  width: 48%;
+  height: 45px;
+  min-width: 106px;
+
 }
 .moreinfo {
   width: 40px;
@@ -549,6 +603,11 @@
     height: 45px;
     min-width: 106px;
   }
+  .edit-profile{
+    width: 29%;
+    height: 45px;
+    min-width: 106px;
+  }
   .moreinfo {
     width: 40px;
     height: 40px;
@@ -566,8 +625,6 @@
 
 @media screen and (min-width:1201px) {
   
-.writes-bar,.reads-bar{
-  display: none; 
-}
+
 
 }

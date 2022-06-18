@@ -9,11 +9,16 @@ import {
 } from "../../utils/apiRequests";
 
 import AlexTanario from "../../Images/users/AlexTenario.png";
-import { getuserSuccess, getuserFailure,getArticlessuccess } from "./profileAction";
+import {
+  getuserSuccess,
+  getuserFailure,
+  getArticlessuccess,
+} from "./profileAction";
 import {
   GET_USER_DATA_INIT,
   GET_USER_DATA_FAILURE,
-  GET_USER_DATA_SUCCESS,GET_ARTICLES_INIT
+  GET_USER_DATA_SUCCESS,
+  GET_ARTICLES_INIT,
 } from "../../utils/actionTypes";
 
 export function* getArticlesInit(action) {
@@ -22,7 +27,7 @@ export function* getArticlesInit(action) {
     const headers = {
       Authorization: action.data.authToken,
     };
-    console.log('data')
+    console.log("data");
     const params = new URLSearchParams({
       skip: skip,
       limit: limit,
@@ -30,9 +35,8 @@ export function* getArticlesInit(action) {
     });
     const url = `${baseURL}/${endPoints.getAllArticles}?${params}`;
     const data = yield authGetRequest(url, headers);
-   console.log('articles',data)
+    console.log("articles", data);
     if (!data.error) {
-       
       yield put(getArticlessuccess(data.articles));
     } else {
       yield put(getuserFailure(data.message));
@@ -47,7 +51,7 @@ export function* getArticlesInitSaga(action) {
 }
 
 function* getuser(action) {
-  console.log('ll',action);
+  console.log("ll", action);
   try {
     const headers = {
       Authorization: action.data.token,
@@ -55,40 +59,74 @@ function* getuser(action) {
 
     const url = `${baseURL}/${endPoints.profile}?username=${action.data.username}`;
     var data = yield call(authGetRequest, url, headers);
-   
+
     const params = new URLSearchParams({
-        skip: 0,
-        limit: 100,
-        username: action.data.username,
-      });
-    const url1=`${baseURL}/users/followers?${params}`;
-    
-    var follower=yield call(authGetRequest,url1,headers)
-    console.log('follower',follower);
-    const url2=`${baseURL}/users/following?${params}`;
-    var following=yield call(authGetRequest,url2,headers)
-    console.log('follow',follower,following)
+      skip: 0,
+      limit: 100,
+      username: action.data.username,
+    });
+    const url1 = `${baseURL}/users/followers?${params}`;
+
+    var follower = yield call(authGetRequest, url1, headers);
+    console.log("follower", follower);
+    const url2 = `${baseURL}/users/following?${params}`;
+    var following = yield call(authGetRequest, url2, headers);
+    console.log("follow", follower, following);
     console.log(data);
     // data=INIT_DATA;
-    const map=new Map();
-    following.following.forEach((x)=>{
-      map.set(x,1);
-    })
+    const map = new Map();
+    following.following.forEach((x) => {
+      map.set(x, 1);
+    });
 
-    
-    follower.followers=follower.followers.map(ele=>{
+    follower.followers = follower.followers.map((ele) => {
       return {
-        name:ele,
-        img:AlexTanario,
-        isfollowing:map.has(ele)
-      }
-    })
-    following.following=following.following.map(ele=>{
-      return{name:ele,
-      img:AlexTanario}
-    })
+        name: ele,
+        img: AlexTanario,
+        isfollowing: map.has(ele),
+      };
+    });
+    following.following = following.following.map((ele) => {
+      return { name: ele, img: AlexTanario };
+    });
+    var topfundedlist = [
+      {
+        img: AlexTanario,
+        title: "What Next for ‘Buy Now, Pay...",
+        writer: "Emlen Beaver",
+        amount: "1000",
+      },
+      {
+        img: AlexTanario,
+        title: "New Super fast charging can..",
+        writer: "Ron Weasley",
+        amount: "250",
+      },
+    ];
+    var firstfundedlist = [
+      {
+        img: AlexTanario,
+        title: "What Next for ‘Buy Now, Pay...",
+        writer: "Emlen Beaver",
+        amount: "1000",
+      },
+      {
+        img: AlexTanario,
+        title: "New Super fast charging can..",
+        writer: "Ron Weasley",
+        amount: "250",
+      },
+    ];
     if (!data.error) {
-      yield put(getuserSuccess({...data,...follower,...following}));
+      yield put(
+        getuserSuccess({
+          ...data,
+          ...follower,
+          ...following,
+          topfundedlist,
+          firstfundedlist,
+        })
+      );
     } else {
       yield put(getuserFailure(data.message));
     }
