@@ -10,6 +10,11 @@
   margin-bottom: 34px;
   margin-left: 29px;
 }
+.data{
+  background-color: white;
+    margin-top: 3rem;
+    border-radius: 3rem;width: 91vw;
+}
 .user-row {
   display: flex;
   align-items: center;
@@ -131,7 +136,7 @@
 .website {
   display: flex;
   justify-content: space-around;
-  width: 57%;
+  width: 43%;
 }
 .discription {
   font-family: "Poppins";
@@ -229,6 +234,15 @@
   border: 0;
   color: #000000;
 }
+.writes-bar,.reads-bar{
+  width: 23rem;
+  height: 27rem;
+  margin-top: 10rem;
+  margin-left: 52px;
+  background: #ffffff;
+  border-radius: 30px;
+  overflow: hidden;
+}
 .first-funder span {
   background: linear-gradient(180deg, #59c995 0%, #59c978 100%);
   border-radius: 36.9985px;
@@ -307,7 +321,7 @@
 
 .followers-list-item {
   display: flex;
-  width: 86%;
+  width: 98%;
   align-items: center;
   justify-content: space-around;
   margin: 10px 0;
@@ -324,7 +338,8 @@
   width: 208px;
   height: 212px;
   position: absolute;
-  left: 737px;
+  left: 49rem;
+  z-index: 4;
   top: 64px;
 }
 .website p {
@@ -334,6 +349,7 @@
   font-size: 17px;
   line-height: 24px;
   /* identical to box height */
+  margin: 0 7px;
 
   letter-spacing: -0.0583333px;
 
@@ -382,44 +398,22 @@
   width: 55%;
 }
 
-@media (max-width: 1258px) and (min-width: 641px) {
-  .user-info {
-    width: 38rem;
-    height: 28rem;
-  }
-  .funders-username {
-    width: 100%;
-  }
-  .user-info {
-    width: 88vw;
-    min-width: 38rem;
-    margin-bottom: 0;
-  }
-  .follow,
-  .message {
-    width: 29%;
-    height: 45px;
-    min-width: 106px;
-  }
-  .moreinfo {
-    width: 40px;
-    height: 40px;
-  }
-  .data {
-    width: 88vw;
-  }
-  .user-row {
-    flex-direction: column;
-  }
-}
 
-@media screen and (max-width: 640px) {
-    .user-info-name h3{
+
+
+
+@media (max-width: 480px) {
+  .user-info-name h3{
         
     margin: 0 8px;
 
     }
   .users-followers-info-bar {
+    
+    display: none;
+  }
+  .writes-bar,.reads-bar{
+    display: block;
     min-width: 22rem;
   }
   .writer-para {
@@ -473,9 +467,10 @@
     right: 30px;
     font-size: 10px;
   }
-  .users-followers-info-bar {
+ .writes-bar,.reads-bar {
+  display: block;
     min-width: 17rem;
-  }
+  } 
   .top-funders span.first-funder span {
     padding: 0;
   }
@@ -497,7 +492,82 @@
   .funders-username .username{
     font-size: 15px;
   }
-  .users-followers-info-bar {
-    min-width: 27rem;
+  .writes-bar,.reads-bar{
+    display: block;
+  min-width: 27rem; 
+  } 
+}
+
+@media (min-width: 481px) and (max-width: 768px) { .user-info {
+  width: 38rem;
+  height: 28rem;
+}
+.funders-username {
+  width: 100%;
+}
+.user-info {
+  width: 88vw;
+  min-width: 38rem;
+  margin-bottom: 0;
+}
+.follow,
+.message {
+  width: 29%;
+  height: 45px;
+  min-width: 106px;
+}
+.moreinfo {
+  width: 40px;
+  height: 40px;
+}
+.data {
+  width: 88vw;
+}
+.user-row {
+  flex-direction: column;
+}
+.users-followers-info-bar{
+  display: none;
+}}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .user-info {
+    width: 38rem;
+    height: 28rem;
   }
+  .funders-username {
+    width: 100%;
+  }
+  .user-info {
+    width: 88vw;
+    min-width: 38rem;
+    margin-bottom: 0;
+  }
+  .follow,
+  .message {
+    width: 29%;
+    height: 45px;
+    min-width: 106px;
+  }
+  .moreinfo {
+    width: 40px;
+    height: 40px;
+  }
+  .data {
+    width: 88vw;
+  }
+  .user-row {
+    flex-direction: column;
+  }
+  .users-followers-info-bar{
+    display: none;
+  }
+}
+
+@media screen and (min-width:1201px) {
+  
+.writes-bar,.reads-bar{
+  display: none; 
+}
+
 }

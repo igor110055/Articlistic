@@ -2,8 +2,6 @@ require('dotenv').config();
 const {
     parseArray
 } = require('../utils/parameterStore/paramStore');
-
-
 var environVarArray = ['SENTRY_URI', 'ATT_AWS_ACCESS_ID', 'ATT_AWS_REGION', 'ATT_AWS_S3_BUCKET_ARTICLES',
     'ATT_AWS_S3_BUCKET_PROFILE', 'ATT_AWS_SECRET_KEY', 'DEV_MONGO_DB_NAME',
     'DEV_MONGO_DB_URI', 'DEV_SALT_ENC', 'DEV_host', 'DEV_port', 'EXCHANGE_API_RATE_ACCESS_CODE',
@@ -11,13 +9,13 @@ var environVarArray = ['SENTRY_URI', 'ATT_AWS_ACCESS_ID', 'ATT_AWS_REGION', 'ATT
     'REACT_APP_SERVER_LINK', 'REDIS_URI', 'RP_KEY_ID', 'RP_SECRET_KEY',
     'SENDGRID_KEY', 'TF_API_KEY', 'TOKEN_SECRET', 'URL_FOR_ARTICLES', 'URL_FOR_PROFILE'
 ]
-
 async function runApp() {
-
-
     if (process.env.NODE_ENV !== 'local') {
         await parseArray(environVarArray);
     }
+    const {
+        main
+    } = require('../db/mongo/listener/articleInsert');
     var config = require('../../config');
     const app = require('./app');
     const logger = require('../utils/logger/index')
@@ -29,24 +27,16 @@ async function runApp() {
     const {
         RDB
     } = require('../db/redis/client');
-
-
     let env = config.environment;
     let port = config.hosting.port || 3000;
     let host = config.hosting.host || '0.0.0.0';
-
     const server = http.createServer(app);
-
     // start(server);
-
     server.listen(port, async () => {
-
-
-        MDB.getClient();
-        RDB.getClient();
+        await MDB.getClient();
+        await RDB.getClient();
+        main();
         logger.info("Server is up and running at " + host + " and port: " + port + " at Environment: " + env);
-
     });
 }
-
 runApp();

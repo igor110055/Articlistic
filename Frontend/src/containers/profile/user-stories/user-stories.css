@@ -37,7 +37,12 @@ letter-spacing: -0.0583333px;
     overflow: hidden;
 }
 
-@media screen and (max-width:640px) {
+
+
+
+
+
+@media (max-width: 480px) {
     .user-stories-nav-items{
         font-size: 10px;
     }
@@ -61,8 +66,7 @@ letter-spacing: -0.0583333px;
     }
 }
 
-@media screen and (max-width: 1200px) and (min-width:641px) {
- .user-stories-nav-items{
+@media (min-width: 481px) and (max-width: 768px) {  .user-stories-nav-items{
     font-size: 15px;
     /* width: 42rem;
     height: 26rem; */
@@ -73,5 +77,19 @@ letter-spacing: -0.0583333px;
   } */
     .blue-line-container{
         top: 10px;
-    }
+    }}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .user-stories-nav-items{
+        font-size: 15px;
+        /* width: 42rem;
+        height: 26rem; */
+    
+     }
+     /* #index-navbar {
+        display: block;
+      } */
+        .blue-line-container{
+            top: 10px;
+        }
 }

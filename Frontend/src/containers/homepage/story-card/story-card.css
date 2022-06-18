@@ -7,7 +7,7 @@
   background: #ffffff;
   box-shadow: 2px 5px 24px rgba(175, 176, 198, 0.297886);
   border-radius: 15px;
-
+cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

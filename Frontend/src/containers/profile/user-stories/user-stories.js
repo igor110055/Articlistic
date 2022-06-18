@@ -8,7 +8,14 @@ const Userstories = () => {
     const [clickedclass,setclickedclass]=useState("My Stories")
     
     const data=useSelector(state=>state.profile)
-    
+    console.log(data)
+    const makeUrlForArticle = (article) => {
+     
+      let pubName = "article";
+      let name = article.public.title.split(" ");
+      let urlName = name.join("-");
+      return `/${pubName}-by-${article.public.writerName}/${urlName}+${article.articleId}`;
+    };
   return (
     <div className="story-user-list">
       <div className="user-stories-nav">
@@ -24,7 +31,7 @@ const Userstories = () => {
       <hr />
       <div className="stories-list">
         {data.articles.map((data, idx) => (
-          <StoryCard article={data} />
+          <StoryCard article={data} url={makeUrlForArticle(data)} />
         ))}
       </div>
     </div>

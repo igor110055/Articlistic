@@ -67,6 +67,7 @@ const storiesdata = [
   ];
 const initialState = {
   articles:[] ,
+  // followers:[],following:[],
   isGettinglist: false,
   listError: false,
   listErrorMsg: initialError,
@@ -95,6 +96,7 @@ const homepage = (state = initialState, action) => {
       return {
         ...state,
         ...data,
+      
         isGettinglist: false,
         listError: false,
       };

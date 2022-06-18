@@ -85,7 +85,9 @@ const TempNavbar = () => {
     setSubmitClicked(true);
   };
   const handleProfile=()=>{
-    navigate("/profile");
+    const state = localStorage.getItem("user");
+    const user = JSON.parse(state);
+    navigate("/profile/"+user.userUserName);
   }
   return (
     <div className="topnav" id="myTopnav">
