@@ -39,6 +39,7 @@ async function createTTLIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -72,6 +73,7 @@ async function createOTP(email, otp) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -103,6 +105,7 @@ async function getEmailDoc(email) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -138,6 +141,7 @@ async function createWalletOTP(email, otp, type) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -172,6 +176,7 @@ async function checkWalletOTP(email, otp, type) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -205,6 +210,7 @@ async function checkOTP(email, otp) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -237,6 +243,7 @@ async function deleteOTP(otp) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -269,6 +276,7 @@ async function deleteAllOTPsWithEmail(email) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -301,6 +309,7 @@ async function deleteAllWalletOTPsWithEmail(email, type) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

@@ -36,6 +36,7 @@ async function createUniquenessIndex2() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -88,6 +89,7 @@ async function fetchChatsForUser(username, limit, skip) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 
@@ -140,6 +142,7 @@ async function createNewResponse(chatId, articleId, selection, user, writer, cha
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -177,6 +180,7 @@ async function createUniquenessIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -214,6 +218,7 @@ async function addNewChat(chatId, chatObj) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

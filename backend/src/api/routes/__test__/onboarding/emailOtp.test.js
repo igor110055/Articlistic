@@ -22,7 +22,7 @@ test('Return 400 if email is missing', async () => {
 
 })
 test('Return 409 if email already present', async () => {
-    id = await mongo.security.createUserAddEmail(email);
+    let id = await mongo.security.createUserAddEmail(email);
     await request(app).post("/onboarding/createUser").send({
         username,
         email,

@@ -12,13 +12,13 @@ const uc = MDB_COLLECTION_USERS;
 const wc = MDB_COLLECTION_WRITERS;
 const MDB = require('../client').MDB;
 
-// const delay = ms => new Promise(res => setTimeout(res, ms));
+
 
 async function tip(tipId, username, writer, articleId, selection, earning, attTax, otherTax, total, message) {
     var suffBalance = true;
 
     if (!tipId || !username || !writer || !articleId || !selection || !earning || !attTax || !total) {
-        throw "Some Missing Parameter";
+        throw new Error("Some Missing Parameter");
     }
 
     const objToBeInsert = {
@@ -34,7 +34,7 @@ async function tip(tipId, username, writer, articleId, selection, earning, attTa
         message
     }
 
-    client = await MDB.getClient();
+    let client = await MDB.getClient();
 
     let usersCollection = client.db(dbName).collection(uc);
     let internalTransactionsCollection = client.db(dbName).collection(itc);
@@ -98,9 +98,10 @@ async function tip(tipId, username, writer, articleId, selection, earning, attTa
          * Deducting from user's wallet
          * User response if doesn't match - 
          */
+        var userResponse
         try {
 
-            var userResponse = await usersCollection.updateOne({
+            userResponse = await usersCollection.updateOne({
                 username: username,
                 "wallet.credits": {
                     $gte: total

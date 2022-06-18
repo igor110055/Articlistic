@@ -6,7 +6,7 @@ const logger = require('../utils/logger');
 
 module.exports = function (checkArticleId, checkWriterUsername, checkArticleOwnerShip, checkPublication, checkPublicationOwnership) {
 
-    return async function asyncMiddleware(req, res, next) {
+    return async function asyncMiddleware(req, _res, next) {
         let {
             articleId,
             writer,
@@ -19,9 +19,9 @@ module.exports = function (checkArticleId, checkWriterUsername, checkArticleOwne
 
                 return next(new MissingParamError('Parameters missing - Article', 'middleware-rejection-article'));
             }
-
+            var article
             try {
-                var article = await mongo.articles.getArticleById(articleId);
+                article = await mongo.articles.getArticleById(articleId);
             } catch (e) {
                 return next(new DatabaseError('middleware-rejection-article', e));
             }
@@ -48,9 +48,9 @@ module.exports = function (checkArticleId, checkWriterUsername, checkArticleOwne
 
                 return next(new MissingParamError('Parameters missing - Writer', 'middleware-rejection-writer'));
             }
-
+            var writerInfo
             try {
-                var writerInfo = await mongo.writers.getWriterByName(writer);
+                writerInfo = await mongo.writers.getWriterByName(writer);
 
             } catch (e) {
                 return next(new DatabaseError('middleware-rejection-writer', e));
@@ -64,9 +64,9 @@ module.exports = function (checkArticleId, checkWriterUsername, checkArticleOwne
         }
 
         if (checkPublication) {
-
+            var publication
             try {
-                var publication = await mongo.publications.getPublication(publicationId);
+                publication = await mongo.publications.getPublication(publicationId);
             } catch (e) {
                 return next(new DatabaseError('middleware-rejection-pub-db', e));
             }

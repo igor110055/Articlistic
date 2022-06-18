@@ -43,9 +43,9 @@ async function onboardingUpdate(categories, following, username) {
 
 
         var res = await session.withTransaction(async () => {
-
+            var res1
             try {
-                var res1 = await userCollection.updateOne({
+                res1 = await userCollection.updateOne({
                     "username": username
                 }, {
                     $set: {
@@ -64,12 +64,12 @@ async function onboardingUpdate(categories, following, username) {
 
             if (!res1.modifiedCount) {
                 await session.abortTransaction();
-                throw "Transaction error";
+                throw new Error("Transaction error");
             }
-
+            var res2
             try {
 
-                var res2 = await writersCollection.updateMany({
+                res2 = await writersCollection.updateMany({
                     username: {
                         $in: following
                     }
@@ -90,7 +90,7 @@ async function onboardingUpdate(categories, following, username) {
 
             if (!res2.modifiedCount) {
                 await session.abortTransaction();
-                throw "Transaction error";
+                throw new Error("Transaction error");
             }
 
 
@@ -108,7 +108,7 @@ async function onboardingUpdate(categories, following, username) {
         return res;
 
     } catch (e) {
-
+        logger.debug(e);
         throw e;
 
     }

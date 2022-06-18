@@ -20,7 +20,7 @@ async function convertEarningsToWalletCredits(amount, username) {
         timestamp: Date.now()
     }
 
-    client = await MDB.getClient();
+    let client = await MDB.getClient();
 
     let usersCollection = client.db(dbName).collection(uc);
     let walletToEarningsCollection = client.db(dbName).collection(txn);
@@ -47,9 +47,9 @@ async function convertEarningsToWalletCredits(amount, username) {
          * For entering a record of the transaction 
          * that is gonna happen. 
          */
-
+        var p
         try {
-            var p = await walletToEarningsCollection.insertOne(objToBeInsert, {
+            p = await walletToEarningsCollection.insertOne(objToBeInsert, {
                 session: session
             });
         } catch (e) {
@@ -65,9 +65,10 @@ async function convertEarningsToWalletCredits(amount, username) {
          * Query for taking out money from 
          * earnings & putting them in wallet.
          */
+        var userResponse
         try {
 
-            var userResponse = await usersCollection.updateOne({
+            userResponse = await usersCollection.updateOne({
                 username: username,
                 "wallet.earnings": {
                     $gte: amount

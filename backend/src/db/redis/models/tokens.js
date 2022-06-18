@@ -72,10 +72,11 @@ async function check(token) {
 
     const client = await RDB.getClient();
     // await client.connect();
-
+    var res
     try {
-        var res = await client.ZRANK(collection, token);
+        res = await client.ZRANK(collection, token);
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 

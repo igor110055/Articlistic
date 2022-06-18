@@ -77,9 +77,9 @@ module.exports = function utilitiesRouter() {
         if (!rt) {
             throw new MissingParamError('Refresh Token Undefined.', routeName)
         }
-
+        var decryptedRt;
         try {
-            var decryptedRt = await encryption.decrypt(rt);
+            decryptedRt = await encryption.decrypt(rt);
 
         } catch (e) {
             throw new NotAuthenticatedError('Refresh token invalid', routeName);
@@ -228,8 +228,8 @@ module.exports = function utilitiesRouter() {
         } catch (e) {
             try {
                 await mongo.email.deleteOTP(code);
-            } catch (e) {
-                logger.fatal(e);
+            } catch (err) {
+                logger.fatal(err);
                 logger.fatal("DOUBLE ERROR")
             }
             throw new ServiceError('Send Email OTP - RP', routeName, e);
@@ -289,9 +289,9 @@ module.exports = function utilitiesRouter() {
 
         } else {
 
-
+            var id;
             try {
-                var id = await mongo.security.forgotPasswordUsingEmail(email);
+                id = await mongo.security.forgotPasswordUsingEmail(email);
             } catch (e) {
                 throw new DatabaseError(routeName, e);
             }

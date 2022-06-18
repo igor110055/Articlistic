@@ -80,7 +80,7 @@ async function createArticleBluePrint(username, articleId) {
     }
 }
 
-async function selectionNewChat(selection, chatId) {
+async function selectionNewChat(selection, _chatId) {
     let client;
 
     try {
@@ -358,9 +358,9 @@ async function getArticlesForPublicationId(publicationId, limit = 5, skip = 0) {
         const articles = [];
 
         await db.find({
-                publicationId: publicationId,
-                status: "PUBLISHED"
-            })
+            publicationId: publicationId,
+            status: "PUBLISHED"
+        })
             .limit(limit).skip(skip).sort({
                 _id: -1
             }).forEach((article) => {
@@ -387,7 +387,7 @@ async function getArticlesForPublicationId(publicationId, limit = 5, skip = 0) {
 
 
 
-async function updateArticle(articleId, status, writeup, storySetting, earlyAccess = false, pub) {
+async function updateArticle(articleId, status, writeup, storySetting, pub, earlyAccess = false) {
 
     let updateParam = {};
     updateParam.earlyAccess = earlyAccess;
@@ -443,7 +443,7 @@ async function updateArticle(articleId, status, writeup, storySetting, earlyAcce
 
 
 
-async function createNewArticle(username, articleId, status, writeup, storySetting, earlyAccess = false, pub, origin, originUrl) {
+async function createNewArticle(username, articleId, status, writeup, storySetting, pub, origin, originUrl, earlyAccess = false) {
 
     let updateParam = {};
     updateParam.earlyAccess = earlyAccess;
@@ -509,7 +509,6 @@ async function getArticleById(articleId) {
     try {
 
         client = await MDB.getClient();
-
         let db = client.db(dbName).collection(collection);
 
         let startTime = Date.now();
@@ -679,8 +678,8 @@ async function getArticlesForPublication(publicationId, limit, skip) {
         let res = [];
 
         await db.find({
-                publicationId: publicationId
-            })
+            publicationId: publicationId
+        })
             .limit(limit).skip(skip).forEach((x) => {
                 res.push(x);
             })

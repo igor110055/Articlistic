@@ -1,7 +1,5 @@
 var express = require('express');
 
-// require('../../errors/customError');
-
 var mongo = require('../../db/mongo/index');
 const logger = require('../../utils/logger/index')
 const s3 = require('../../utils/s3/index');
@@ -39,8 +37,8 @@ module.exports = function publicationRouter() {
     return new express.Router()
         .get('/', useAuth(), getPublication)
         .get('/all', useAuth(), getAllPublications)
-
-        .post('/', useAuth(false, false, true), file.single('image'), newPublication)
+        .get('/:id', useAuth(), articleFromPublication)
+        .post('/new', useAuth(false, false, true), file.single('image'), newPublication)
         .put('/', useAuth(false, false, true), file.single('image'), updatePublication)
         .delete('/', useAuth(false, false, true), checkDb(false, false, false, true, true), markForDeletion)
 
@@ -50,6 +48,44 @@ module.exports = function publicationRouter() {
         .post('/article/image', useAuth(), file.single('image'), uploadImageEmbed);
 
 
+
+    async function articleFromPublication(req, res) {
+        let profileName
+        let username
+        const pubId = req.params.id;
+        let article;
+        let pubData;
+        try {
+            article = await mongo.articles.getArticlesForPublication(pubId, 8)
+            //logger.info(article);
+        }
+        catch (e) {
+            logger.debug(e, "Failed to fetch Articles")
+        }
+        try {
+            pubData = await mongo.publications.getPublication(pubId);
+            // logger.info(pubData);
+            username = pubData.username;
+            try {
+                let writersData = await mongo.users.getUserByUsername(username);
+                profileName = writersData.name;
+            } catch (err) {
+                logger.debug(err, "Failed to get writers name")
+            }
+        }
+        catch (e) {
+            logger.debug(e, "Failed to fetch Publication details")
+        }
+
+        res.status(200).send({
+            "Writers username": username,
+            "Writers profileName": profileName,
+            publicationName: pubData.publicationName,
+            publicationPic: pubData.publicationPic,
+            publicationAbout: pubData.publicationAbout,
+            article
+        })
+    }
 
     async function markForDeletion(req, res) {
         const routeName = 'mark publication for deletion';
@@ -82,9 +118,9 @@ module.exports = function publicationRouter() {
         }
         let buffer = req.file.buffer;
 
-
+        var pub
         try {
-            var pub = await mongo.publications.getPublicationForCheck(publicationId);
+            pub = await mongo.publications.getPublicationForCheck(publicationId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -126,9 +162,9 @@ module.exports = function publicationRouter() {
         if (!publicationId) {
             throw new MissingParamError('Publication Id required', routeName);
         }
-
+        var link
         try {
-            var link = await mongo.publications.getPublicationArticle(publicationId);
+            link = await mongo.publications.getPublicationArticle(publicationId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -137,9 +173,9 @@ module.exports = function publicationRouter() {
         if (!link || !link.publicationArticle) {
             throw new NotFoundError('There is no publication article', routeName);
         }
-
+        var content;
         try {
-            var content = await apis.articles.getArticle(link.publicationArticle);
+            content = await apis.articles.getArticle(link.publicationArticle);
 
         } catch (e) {
             throw new ServiceError('axios-apis-getPublication-Article', routeName, e);
@@ -173,9 +209,9 @@ module.exports = function publicationRouter() {
          */
 
         if (!publications || !publications.length) {
-
+            var writer
             try {
-                var writer = await mongo.writers.getWriterByName(username);
+                writer = await mongo.writers.getWriterByName(username);
             } catch (e) {
                 throw new DatabaseError(routeName, e);
             }
@@ -206,9 +242,9 @@ module.exports = function publicationRouter() {
         if (!publicationId || !writeup || !intro) {
             throw new MissingParamError('Publication Id or Writeup or Intro not present.', routeName);
         }
-
+        var pub
         try {
-            var pub = await mongo.publications.getPublicationForCheck(publicationId);
+            pub = await mongo.publications.getPublicationForCheck(publicationId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -221,10 +257,10 @@ module.exports = function publicationRouter() {
 
 
         let articleBuffer = Buffer.from(writeup, 'utf8');
-
+        var resLink
         try {
 
-            var resLink = await s3.init().uploadPublicationArticle(articleBuffer, username, publicationId);
+            resLink = await s3.init().uploadPublicationArticle(articleBuffer, username, publicationId);
 
         } catch (e) {
             throw new ServiceError('s3-articles', routeName, e);
@@ -242,18 +278,7 @@ module.exports = function publicationRouter() {
         }
 
 
-        /*
-         SENDING THE UPDATE TO MAIL ON SUCCESSFULL ARTICLE PUBLISHING
 
-        try {
-            const writerData = await mongo.writers.getWriterByName(username);
-            const mailingId = writerData.mailing_list_id;
-            await createSingleSend(username, mailingId);
-        }
-        catch (e) {
-            logger.debug(e, "Failed to send mail", routeName);
-        }
-        */
         res.status(200).send({
             message: 'Updated Successfully.',
             'articleLink': resLink.url
@@ -276,9 +301,9 @@ module.exports = function publicationRouter() {
         } = req.query;
 
         if (!publicationId) throw new MissingParamError('Missing publication Id', routeName)
-
+        var publication
         try {
-            var publication = await mongo.publications.getPublication(publicationId);
+            publication = await mongo.publications.getPublication(publicationId);
 
         } catch (e) {
             throw new DatabaseError(routeName, e);
@@ -326,9 +351,9 @@ module.exports = function publicationRouter() {
         if (publicationOneLiner && publicationOneLiner.length < 255) {
             throw new BadRequestError('Minimum length of one liner is 255');
         }
-
+        var pub
         try {
-            var pub = await mongo.publications.getPublicationForCheck(publicationId);
+            pub = await mongo.publications.getPublicationForCheck(publicationId);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -496,9 +521,9 @@ module.exports = function publicationRouter() {
                 try {
 
                     await s3.init().deleteFile(resLink.fileName, true);
-                } catch (e) {
+                } catch (err) {
                     logger.fatal(e);
-                    throw new ServiceError('s3-publication-deleteImage', routeName, e);
+                    throw new ServiceError('s3-publication-deleteImage', routeName, err);
                 }
             }
 

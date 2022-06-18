@@ -15,9 +15,9 @@ module.exports = async function insertDollarValue() {
      */
 
     logger.info("Insert dollar value cronjob is working");
-
+    var dollarApiResponse
     try {
-        var dollarApiResponse = await getDollarValue.getDollarValue();
+        dollarApiResponse = await getDollarValue.getDollarValue();
     } catch (e) {
         Sentry.captureException("Could not fetch dollar value");
     }

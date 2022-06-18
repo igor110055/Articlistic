@@ -8,7 +8,6 @@ var file = require('../../middleware/files');
 
 const s3 = require('../../utils/s3');
 
-// require('../../errors/customError');
 
 var mongo = require('../../db/mongo/index');
 const logger = require('../../utils/logger/index')
@@ -202,9 +201,9 @@ module.exports = function onboardingRouter() {
          * Return an error. 
          */
 
-
+        var verificationCount;
         try {
-            var verificationCount = await mongo.users.checkIfDocumentsExist(usernames);
+            verificationCount = await mongo.users.checkIfDocumentsExist(usernames);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -222,8 +221,8 @@ module.exports = function onboardingRouter() {
          */
 
 
-        for (let i = 0; i < usernames.length; i++) {
-            const follows = usernames[i];
+        for (let i of usernames) {
+            const follows = i;
 
             multipleFollowerAdd.push({
                 username,
@@ -233,9 +232,9 @@ module.exports = function onboardingRouter() {
 
         }
 
-
+        var insertedCount
         try {
-            var insertedCount = await mongo.followers.followMultiple(multipleFollowerAdd);
+            insertedCount = await mongo.followers.followMultiple(multipleFollowerAdd);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -248,9 +247,9 @@ module.exports = function onboardingRouter() {
 
     async function getListOfWriters(req, res) {
         const routeName = 'get onboarding writers';
-
+        var writers
         try {
-            var writers = await mongo.writers.getWriters();
+            writers = await mongo.writers.getWriters();
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -264,9 +263,9 @@ module.exports = function onboardingRouter() {
 
     async function getListOfWriters(req, res) {
         const routeName = 'get onboarding writers';
-
+        var writers
         try {
-            var writers = await mongo.writers.getWriters();
+            writers = await mongo.writers.getWriters();
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -287,9 +286,9 @@ module.exports = function onboardingRouter() {
         const userInfo = await verifyGoogleIdToken(token);
 
         const email = encryption.staticEncrypt(userInfo.email);
-
+        var user
         try {
-            var user = await mongo.users.getUser(email, false, true);
+            user = await mongo.users.getUser(email, false, true);
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -317,9 +316,9 @@ module.exports = function onboardingRouter() {
 
         } else {
 
-
+            var id
             try {
-                var id = await mongo.security.createUserAddEmail(userInfo.email);
+                id = await mongo.security.createUserAddEmail(userInfo.email);
             } catch (e) {
                 throw new DatabaseError(routeName, e);
             }
@@ -597,14 +596,14 @@ module.exports = function onboardingRouter() {
         /* The above code is encrypting the private fields of the user object. 
          * This won't be there while creating a user using google user.
          */
-
+        var encryptedPrivateField
         if (!googleUser) {
 
             var privateField = {
                 email,
                 password
             }
-            var encryptedPrivateField = encryption.encrypt(privateField);
+            encryptedPrivateField = encryption.encrypt(privateField);
         }
 
         var emailEncrypted = encryption.staticEncrypt(email);
@@ -776,9 +775,9 @@ module.exports = function onboardingRouter() {
                 logger.fatal("Could not delete OTP from verified for some duration.");
             }
         }
-
+        var mon
         try {
-            var mon = await mongo.security.createUserAddEmail(email);
+            mon = await mongo.security.createUserAddEmail(email);
 
         } catch (e) {
             throw new DatabaseError(routeName, e);

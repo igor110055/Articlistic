@@ -12,9 +12,9 @@ module.exports = function (setArticle) {
 
             return next(new MissingParamError('Parameters missing - Article', 'middleware-rejection-article'));
         }
-
+        var article
         try {
-            var article = await mongo.articles.getArticleById(articleId);
+            article = await mongo.articles.getArticleById(articleId);
         } catch (e) {
             return next(new DatabaseError('middleware-rejection-article', e));
         }

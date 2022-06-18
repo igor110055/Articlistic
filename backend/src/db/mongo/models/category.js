@@ -49,6 +49,7 @@ async function getCategories(skip, limit) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -82,6 +83,7 @@ async function createUniquenessIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

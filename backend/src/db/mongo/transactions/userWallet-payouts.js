@@ -29,7 +29,7 @@ async function payout(amount, username, payoutId) {
         status: PAYOUT_STATUS_PENDING
     }
 
-    client = await MDB.getClient();
+    let client = await MDB.getClient();
 
     let usersCollection = client.db(dbName).collection(uc);
     let walletToEarningsCollection = client.db(dbName).collection(po);
@@ -73,9 +73,10 @@ async function payout(amount, username, payoutId) {
          * Query for taking out money from 
          * earnings & putting them in wallet.
          */
+        var userResponse
         try {
 
-            var userResponse = await usersCollection.updateOne({
+            userResponse = await usersCollection.updateOne({
                 username: username,
                 "wallet.earnings": {
                     $gte: amount + EARNING_MINIMUM_BALANCE
@@ -125,7 +126,7 @@ async function reversePayout(amount, username, payoutId) {
 
 
 
-    client = await MDB.getClient();
+    let client = await MDB.getClient();
 
     let usersCollection = client.db(dbName).collection(uc);
     let walletToEarningsCollection = client.db(dbName).collection(po);

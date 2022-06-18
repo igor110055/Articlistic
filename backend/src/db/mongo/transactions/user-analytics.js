@@ -44,10 +44,10 @@ async function createUser(user, listId) {
 
 
         var res = await session.withTransaction(async () => {
-
+            var userInsert
             try {
 
-                var userInsert = await userCollection.insertOne(user, {
+                userInsert = await userCollection.insertOne(user, {
                     session: session
                 });
 
@@ -59,12 +59,12 @@ async function createUser(user, listId) {
 
             if (!userInsert.insertedId) {
                 await session.abortTransaction();
-                throw "Transaction error";
+                throw new Error("Transaction error");
             }
-
+            var analyticsInsert
             try {
 
-                var analyticsInsert = await analyticsCollection.insertOne({
+                analyticsInsert = await analyticsCollection.insertOne({
                     'username': username,
                     'writers': [],
                     'articles': []
@@ -81,13 +81,13 @@ async function createUser(user, listId) {
 
             if (!analyticsInsert.insertedId) {
                 await session.abortTransaction();
-                throw "Transaction error";
+                throw new Error("Transaction error");
             }
 
             if (isWriter) {
-
+                var writerInsert
                 try {
-                    var writerInsert = await writersCollection.insertOne({
+                    writerInsert = await writersCollection.insertOne({
                         'username': username,
                         'publications': [],
                         'categories': [],
@@ -103,7 +103,7 @@ async function createUser(user, listId) {
 
                 if (!writerInsert.insertedId) {
                     await session.abortTransaction();
-                    throw "createUser: DB: New Writer Not Inserted"
+                    throw new Error("createUser: DB: New Writer Not Inserted");
                 }
 
             }
@@ -120,6 +120,7 @@ async function createUser(user, listId) {
         return res;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

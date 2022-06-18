@@ -53,10 +53,10 @@ async function createPublication(publicationId, publicationName, publicationPic,
 
 
         var res = await session.withTransaction(async () => {
-
+            var publicationInsert
             try {
 
-                var publicationInsert = await publicationsCollection.insertOne(publication, {
+                publicationInsert = await publicationsCollection.insertOne(publication, {
                     session: session
                 });
 
@@ -68,12 +68,12 @@ async function createPublication(publicationId, publicationName, publicationPic,
 
             if (!publicationInsert.insertedId) {
                 await session.abortTransaction();
-                throw "Transaction error";
+                throw new Error("Transaction error");
             }
-
+            var writersUpdate
             try {
 
-                var writersUpdate = await writersCollection.updateOne({
+                writersUpdate = await writersCollection.updateOne({
                     'username': username
                 }, {
                     $push: {
@@ -97,7 +97,7 @@ async function createPublication(publicationId, publicationName, publicationPic,
 
             if (!writersUpdate.modifiedCount) {
                 await session.abortTransaction();
-                throw "createPublication-3";
+                throw new Error("createPublication-3");
             }
 
         }, transactionOptions);
@@ -111,7 +111,7 @@ async function createPublication(publicationId, publicationName, publicationPic,
         return res;
 
     } catch (e) {
-
+        logger.debug(e);
         throw e;
 
     }
@@ -167,10 +167,10 @@ async function updatePublication(publicationId, publicationName, publicationPic,
 
 
         var res = await session.withTransaction(async () => {
-
+            var publicationUpdate
             try {
 
-                var publicationUpdate = await publicationsCollection.updateOne({
+                publicationUpdate = await publicationsCollection.updateOne({
                     publicationId
                 }, {
                     $set: pubUpdate
@@ -186,12 +186,12 @@ async function updatePublication(publicationId, publicationName, publicationPic,
 
             if (!publicationUpdate.modifiedCount) {
                 await session.abortTransaction();
-                throw "Transaction error";
+                throw new Error("Transaction error");
             }
-
+            var writersUpdate
             try {
 
-                var writersUpdate = await writersCollection.updateOne({
+                writersUpdate = await writersCollection.updateOne({
                     'username': username,
                     'publications.publicationId': publicationId
                 }, {
@@ -209,7 +209,7 @@ async function updatePublication(publicationId, publicationName, publicationPic,
 
             if (!writersUpdate.modifiedCount) {
                 await session.abortTransaction();
-                throw "createPublication-3";
+                throw new Error("createPublication-3");
             }
 
         }, transactionOptions);
@@ -223,7 +223,7 @@ async function updatePublication(publicationId, publicationName, publicationPic,
         return res;
 
     } catch (e) {
-
+        logger.debug(e);
         throw e;
 
     }

@@ -1,22 +1,16 @@
 const AWS = require('aws-sdk');
 const logger = require("../logger/index");
 var config = require("../../../config");
-var result = {};
-// var test1 = { "name": "hamdi" }
+var newResult = {};
 var ssmClient;
-
-// var credentials = new AWS.SharedIniFileCredentials({ profile: 'default' });
-// AWS.config.credentials = credentials;
-
 
 
 async function parseArray(arrayOfEnvVariable) {
     try {
-        for (var i = 0; i < arrayOfEnvVariable.length; i++) {
-            const x = await arrayOfEnvVariable[i];
-            result[x] = await getFromParamStore(x);
+        for (let i of arrayOfEnvVariable) {
+            newResult[i] = await getFromParamStore(i);
         }
-        await setConfig(result);
+        await setConfig(newResult);
     }
     catch (e) {
         logger.error(`error`, e);
@@ -32,15 +26,14 @@ async function mapValues(z) {
             const value = subService[subkey];   // value of each sub-service
             config[key][subkey] = value;
         });
-        // logger.info(subkey, value)
+
     })
 }
 
 
 async function setConfig(result) {
     try {
-        // logger.info("====>>>>", result);
-        config_var = {
+        var config_var = {
             environment: process.env["NODE_ENV"],
             hosting: {
                 host: result["DEV_host"],
@@ -68,6 +61,7 @@ async function setConfig(result) {
                 region: result["ATT_AWS_REGION"],
                 urlForArticles: result["URL_FOR_ARTICLES"],
                 urlForProfile: result["URL_FOR_PROFILE"],
+                urlForAudienceFile: result["URL_FOR_AUDIENCE_FILE"]
             },
             redis: {
                 uri: result["REDIS_URI"],
@@ -112,7 +106,6 @@ const getFromParamStore = async (envArrayElem) => {
             WithDecryption: true,
         }).promise();
 
-        // logger.info("The decrypted param---", envArrayElem, "---", decryptedParameter.Parameter.Value);
         return (decryptedParameter.Parameter.Value);
     }
     catch (e) {

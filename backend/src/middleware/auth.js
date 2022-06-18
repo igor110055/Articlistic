@@ -8,7 +8,7 @@ const redis = require('../db/redis/index')
 
 
 module.exports = function (isSocketMiddleware, logout, checkIfWriter, attachUserWithRequest) {
-    return async function asyncMiddleware(req, res, next) {
+    return async function asyncMiddleware(req, _res, next) {
 
         let token = isSocketMiddleware ? req.handshake.auth.token : req.headers.authorization;
 
@@ -21,14 +21,14 @@ module.exports = function (isSocketMiddleware, logout, checkIfWriter, attachUser
             return;
 
         }
-
+        var decryptedToken
         try {
 
             let tokenObj = await encryption.decrypt(token);
             if (!tokenObj || !tokenObj.token) {
-                throw "Token not present"
+                throw new Error("Token not present");
             }
-            var decryptedToken = tokenObj.token;
+            decryptedToken = tokenObj.token;
 
         } catch (e) {
             next(new NotAuthenticatedError('Could not authenticate - Decryption.', 'middleware-rejection'))
@@ -38,7 +38,7 @@ module.exports = function (isSocketMiddleware, logout, checkIfWriter, attachUser
         let presentInDb;
 
         try {
-            // presentInDb = await mongo.blacklist.checkToken(decryptedToken);
+
 
             presentInDb = await redis.token.check(decryptedToken);
 
@@ -63,7 +63,7 @@ module.exports = function (isSocketMiddleware, logout, checkIfWriter, attachUser
 
         if (!check || !check.payload || !check.payload.username) {
             next(new NotAuthenticatedError('Could not authenticate - expired.', 'middleware-rejection'));
-            return;
+
         } else {
 
 
@@ -78,7 +78,7 @@ module.exports = function (isSocketMiddleware, logout, checkIfWriter, attachUser
                      */
 
                     if (checkIfWriter && (!user || !user.isWriter)) {
-                        throw "It is required to be a writer for this operation."
+                        throw new Error("It is required to be a writer for this operation.");
                     }
 
                     req.user = user;
@@ -92,7 +92,7 @@ module.exports = function (isSocketMiddleware, logout, checkIfWriter, attachUser
                         logger.info("User not found in cache, checking in mongodb");
                         var userInMongo = await mongo.users.getUserByUsername(check.payload.username);
                         if (!userInMongo) {
-                            throw 'No user found';
+                            throw new Error('No user found');
                         } else {
                             await redis.users.push(check.payload.username.toString());
                         }

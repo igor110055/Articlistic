@@ -8,7 +8,7 @@ const {
 
 let dirForImages = "images/";
 let dirForArticles = "articles/"
-
+let dirForCsvFile = "csv/"
 let dirForProfile = "/profile/"
 let dirForPublication = "/publications/"
 
@@ -19,13 +19,15 @@ const dirForWithdrawMarkAsSuccess = "markSuccess/";
 const articlesBucket = config.aws.s3BucketArticles;
 const profileBucket = config.aws.s3BucketProfile;
 const errorBucket = "dev-attentioun-error-data";
-
+const writerAudienceBucket = "attentioun-writers-audience-data"
 
 
 let urlForArticles = config.aws.urlForArticles
 let urlForProfile = config.aws.urlForProfile
+let urlForAudienceFile = config.aws.urlForAudienceFile
 
 var s3;
+
 
 function __init() {
     if (!s3) {
@@ -54,8 +56,9 @@ function __init() {
         fullDeleteArticle: fullDeleteArticle,
         withdrawTransactionReverseFailure,
         withdrawMarkAsSuccessFailure,
-        deleteMultipleFilesFromErrorData
-
+        deleteMultipleFilesFromErrorData,
+        uploadWriterAudienceFile: uploadWriterAudienceFile,
+        getAudienceFileStream
     }
 }
 
@@ -89,13 +92,14 @@ async function uploadPublicationArticle(buffer, username, publicationId) {
     /*
     yash-dxt/publications/articles/publicationId
     */
+    var compressedFile
     try {
-        var compressedFile = await gzip(buffer);
+        compressedFile = await gzip(buffer);
     } catch (e) {
-        throw {
+        throw new Error({
             error: e,
             message: 'Could not compress'
-        }
+        });
     }
     await uploadFileFromStream(compressedFile, fileName, profileBucket);
 
@@ -201,13 +205,14 @@ async function deleteFile(fileName, profile) {
 
 async function uploadArticle(buffer, username, articleId) {
     let fileName = dirForArticles + username + "/" + articleId + '.gzip';
+    var compressedFile
     try {
-        var compressedFile = await gzip(buffer);
+        compressedFile = await gzip(buffer);
     } catch (e) {
-        throw {
+        throw new Error({
             error: e,
             message: 'Could not compress'
-        }
+        });
     }
     await uploadFileFromStream(compressedFile, fileName, articlesBucket);
 
@@ -226,11 +231,40 @@ async function uploadImageEmbed(buffer, username, articleId) {
     return `${urlForArticles}${fileName}`;
 }
 
+//It uploads the CSV in S3
+async function uploadWriterAudienceFile(bufferData, username, ogfileName) {
+    let fileName = `${username}/` + ogfileName;
+    try {
+        const x = await uploadFileFromStream(bufferData, fileName, writerAudienceBucket);
+        logger.info("FIle uploaded", x)
+        return x;
+    }
+    catch (e) {
+        logger.debug(e, "Unable to upload csv to s3");
+    }
+}
+//It Converts the uploaded CSV to Stream to get it parsed easily
+async function getAudienceFileStream(username, ogfileName) {
+    let fileName = `${username}/` + ogfileName;
+    const params = {
+        Bucket: writerAudienceBucket,
+        Key: fileName
+    }
+    try {
+        const s3Stream = await s3.getObject(params).createReadStream();
+        return s3Stream;
+    }
+    catch (e) {
+        logger.debug(e, "Unable to stream CSV file")
+    }
+}
+
 async function deleteAllImagesRelatedToArticle(articleId) {
     let fileName = dirForImages + `${articleId}/`;
     try {
         await del(fileName, articlesBucket);
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
     return 'success';
@@ -241,6 +275,7 @@ async function deleteArticle(username, articleId) {
     try {
         await del(fileName, articlesBucket);
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
     return 'success';
@@ -337,6 +372,7 @@ async function fullDeleteArticle(username, articleId) {
     try {
         await deleteMultipleFiles(files, articlesBucket);
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

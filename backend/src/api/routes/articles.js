@@ -5,7 +5,7 @@ var express = require('express');
 var useAuth = require('../../middleware/auth');
 var file = require('../../middleware/files');
 
-// var gzip = require('gzip');
+
 
 const articleCheck = require('../../middleware/articleCheck');
 var mongo = require('../../db/mongo/index')
@@ -19,7 +19,6 @@ const BadRequestError = require('../../errors/BadRequestError');
 
 const DatabaseError = require('../../errors/DatabaseError');
 const ServiceError = require('../../errors/ServiceError');
-// const BadRequestError = require('../../errors/BadRequestError');
 
 const NotAuthenticatedError = require('../../errors/NotAuthenticatedError');
 const logger = require('../../utils/logger');
@@ -304,9 +303,9 @@ module.exports = function articlesRouter() {
 
         limit = parseInt(limit);
         skip = parseInt(skip);
-
+        var articles
         try {
-            var articles = await mongo.articles.getArticlesForPublication(publicationId, limit, skip)
+            articles = await mongo.articles.getArticlesForPublication(publicationId, limit, skip)
         } catch (e) {
             throw new DatabaseError(routeName, e);
         }
@@ -319,17 +318,7 @@ module.exports = function articlesRouter() {
 
     }
 
-    /*
 
-    async function tipSelection(req, res) {
-        let username = req.username;
-    }
-
-    async function shareSelection(req, res) {
-        let username = req.username;
-    }
-
-    */
     async function findSelection(req, res) {
         let routeName = '/selection/find';
         let articleId = req.articleId;
@@ -524,7 +513,7 @@ module.exports = function articlesRouter() {
         let {
             articleId
         } = req.query;
-        // let username = req.username;
+
 
         if (!articleId) {
             throw new MissingParamError('Missing article id', routeName);
@@ -604,9 +593,9 @@ module.exports = function articlesRouter() {
         limit = parseInt(limit);
         skip = parseInt(skip)
 
-
+        var articles;
         try {
-            var articles = await mongo.articles.getAllArticlesForUser(username, filters, limit, skip);
+            articles = await mongo.articles.getAllArticlesForUser(username, filters, limit, skip);
         } catch (e) {
             throw new DatabaseError(routeName, e)
         }
@@ -658,13 +647,13 @@ module.exports = function articlesRouter() {
         if (newlyImported && !articleId) throw new BadRequestError('Article id is required for newly imported articles', routeName)
 
         if (publicationId) {
-            let res = await mongo.publications.getPublication(publicationId);
+            let resData = await mongo.publications.getPublication(publicationId);
 
-            if (!res) {
+            if (!resData) {
                 throw new NotFoundError('Publication not there/ User not allowed to do this operation', routeName);
             }
 
-            if (res.username != username) {
+            if (resData.username != username) {
                 throw new NotAuthenticatedError('Not allowed to do this operation', routeName);
             }
         }
@@ -710,10 +699,10 @@ module.exports = function articlesRouter() {
             }
 
         }
-
+        var newArticle;
         if (!articleId) {
 
-            var newArticle = true;
+            newArticle = true;
             articleId = uuidv4();
 
             if (status == "PUBLISHED" && !publicationId) {
@@ -749,22 +738,22 @@ module.exports = function articlesRouter() {
                 */
 
                 newArticle = false;
-                let articleCheck;
+                let articleExistCheck;
                 try {
-                    articleCheck = await mongo.articles.getArticleById(articleId);
+                    articleExistCheck = await mongo.articles.getArticleById(articleId);
                 } catch (e) {
                     throw new DatabaseError(routeName, e);
                 }
 
-                if (!articleCheck) {
+                if (!articleExistCheck) {
                     throw new NotFoundError('Could not find article', routeName);
                 }
 
-                if (articleCheck.username != username) {
+                if (articleExistCheck.username != username) {
                     throw new NotAuthenticatedError('You are not allowed to change the article. ', routeName);
                 }
 
-                if (articleCheck.status == "PUBLISHED" && status != "PUBLISHED") {
+                if (articleExistCheck.status == "PUBLISHED" && status != "PUBLISHED") {
                     throw new NotAuthenticatedError('You can not change a published article to another type', routeName);
                 }
 
@@ -841,11 +830,11 @@ module.exports = function articlesRouter() {
                     /*
                         In case of drafts we don't have story settings so we don't need to deal with many collections. Only the article collection will suffice. 
                     */
-                    await mongo.articles.updateArticle(articleId, status, writeupUpload, false, false, publicData);
+                    await mongo.articles.updateArticle(articleId, status, writeupUpload, false, publicData, false);
 
                 } else {
 
-                    await mongo.transactionArticleCategory.updatePublishedArticle(articleId, status, writeupUpload, storySetting, false, publicData, categories, publicationId);
+                    await mongo.transactionArticleCategory.updatePublishedArticle(articleId, status, writeupUpload, storySetting, publicData, categories, publicationId, false);
                 }
             } catch (e) {
                 // await s3.init().deleteFile(fn);
@@ -859,10 +848,10 @@ module.exports = function articlesRouter() {
                         In case of drafts we don't have story settings. 
                     */
 
-                    await mongo.articles.createNewArticle(username, articleId, status, writeupUpload, false, false, publicData, origin, originUrl);
+                    await mongo.articles.createNewArticle(username, articleId, status, writeupUpload, false, publicData, origin, originUrl, false);
                 } else {
                     try {
-                        await mongo.transactionArticleCategory.publishNewArticle(username, articleId, status, writeupUpload, storySetting, false, publicData, categories, publicationId);
+                        await mongo.transactionArticleCategory.publishNewArticle(username, articleId, status, writeupUpload, storySetting, publicData, categories, publicationId, false);
                         await createSingleSend(username, listId);
                     } catch (e) {
                         logger.info(e)

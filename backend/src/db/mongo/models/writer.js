@@ -24,26 +24,26 @@ async function getWriters() {
         const allWriters = [];
 
         await db.aggregate([{
-                $limit: 15
-            }, {
-                $lookup: {
-                    from: "users",
-                    localField: "username",
-                    foreignField: "username",
-                    as: "details",
-                    "pipeline": [{
-                        "$project": {
-                            _id: 0,
-                            email: 0,
-                            phone: 0,
-                            refreshToken: 0,
-                            wallet: 0,
-                            public: 0,
-                            private: 0
-                        }
-                    }]
-                }
+            $limit: 15
+        }, {
+            $lookup: {
+                from: "users",
+                localField: "username",
+                foreignField: "username",
+                as: "details",
+                "pipeline": [{
+                    "$project": {
+                        _id: 0,
+                        email: 0,
+                        phone: 0,
+                        refreshToken: 0,
+                        wallet: 0,
+                        public: 0,
+                        private: 0
+                    }
+                }]
             }
+        }
 
 
         ]).forEach((x) => {
@@ -61,6 +61,7 @@ async function getWriters() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -92,6 +93,7 @@ async function getWriterByName(username) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
@@ -139,84 +141,10 @@ async function getWriterProfile(username, my) {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
-
-/*
-async function removeWriterCategory(username, category) {
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-        let writer = await db.updateOne({
-            'username': username
-        }, {
-            $pull: {
-                categories: category
-            }
-        })
-
-        //
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("getWriterByName mongo response time: " + timeTaken.toString());
-
-
-        return writer;
-
-
-    } catch (e) {
-        throw e;
-    }
-}
-
-*/
-/*
-async function insertWriter(username, description, categories, image, profileName,list_id) {
-    let client;
-
-    try {
-
-        client = await MDB.getClient();
-        let db = client.db(dbName).collection(collection);
-
-        let startTime = Date.now();
-
-
-
-        await db.insertOne({
-            username: username,
-            description: description,
-            categories: categories ? categories : [],
-            image: image,
-            name: profileName
-        });
-
-        let endTime = Date.now();
-
-        let timeTaken = endTime - startTime;
-
-        logger.info("followWriter mongo response time: " + timeTaken.toString());
-
-
-        return;
-
-
-    } catch (e) {
-        throw e;
-    }
-}
-
-*/
-
 
 async function createUniquenessIndex() {
     let client;
@@ -245,6 +173,7 @@ async function createUniquenessIndex() {
 
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

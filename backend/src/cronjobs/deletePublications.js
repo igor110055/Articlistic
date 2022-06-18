@@ -11,10 +11,10 @@ module.exports = async function deletePublications() {
     let time = Date.now();
 
     logger.info('Deleting publications - triggered.');
-
+    var publicationsToBeDeleted
     try {
 
-        var publicationsToBeDeleted = await mongo.publications.getPublicationsToBeDeleted(time);
+        publicationsToBeDeleted = await mongo.publications.getPublicationsToBeDeleted(time);
 
     } catch (e) {
 
@@ -38,10 +38,10 @@ module.exports = async function deletePublications() {
         const pubUsername = pub.username;
 
         logger.info(`Delete publication for ${pubUsername}  with publicationId: ${publicationId} `);
-
+        var articles
         try {
 
-            var articles = await mongo.articles.getArticlesForPublication(publicationId);
+            articles = await mongo.articles.getArticlesForPublication(publicationId);
 
         } catch (e) {
             Sentry.captureException(e);
@@ -119,9 +119,9 @@ module.exports = async function deletePublications() {
 
                 await mongo.publications.delPubS3Error(publicationId);
 
-            } catch (e) {
+            } catch (err) {
 
-                Sentry.captureException(e);
+                Sentry.captureException(err);
 
             }
         }

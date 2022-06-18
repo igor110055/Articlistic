@@ -11,7 +11,7 @@ const collection = MDB_COLLECTION_INTERNAL_TRANSACTIONS;
 
 async function getTopFunders(articleId) {
 
-    if (!articleId) throw "Article Id is required parameter";
+    if (!articleId) throw new Error("Article Id is required parameter");
 
     let client;
 
@@ -25,45 +25,45 @@ async function getTopFunders(articleId) {
         const topFunders = [];
 
         let response = await db.aggregate([{
-                $match: {
-                    articleId: articleId
-                }
-            },
-            {
-                $group: {
-                    _id: {
-                        username: '$username',
-                        articleId: '$articleId'
-                    },
-                    totalAmount: {
-                        $sum: '$total'
-                    }
-                }
-            }, {
-                $sort: {
-                    totalAmount: -1
-                }
-            }, {
-                $lookup: {
-                    from: 'users',
-                    localField: '_id.username',
-                    foreignField: 'username',
-                    as: 'users',
-                    "pipeline": [{
-                        "$project": {
-                            _id: 0,
-                            email: 0,
-                            phone: 0,
-                            refreshToken: 0,
-                            wallet: 0,
-                            public: 0,
-                            private: 0
-                        }
-                    }]
-                }
-            }, {
-                $limit: 5
+            $match: {
+                articleId: articleId
             }
+        },
+        {
+            $group: {
+                _id: {
+                    username: '$username',
+                    articleId: '$articleId'
+                },
+                totalAmount: {
+                    $sum: '$total'
+                }
+            }
+        }, {
+            $sort: {
+                totalAmount: -1
+            }
+        }, {
+            $lookup: {
+                from: 'users',
+                localField: '_id.username',
+                foreignField: 'username',
+                as: 'users',
+                "pipeline": [{
+                    "$project": {
+                        _id: 0,
+                        email: 0,
+                        phone: 0,
+                        refreshToken: 0,
+                        wallet: 0,
+                        public: 0,
+                        private: 0
+                    }
+                }]
+            }
+        }, {
+            $limit: 5
+        }
         ])
 
         let endTime = Date.now();
@@ -75,6 +75,7 @@ async function getTopFunders(articleId) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }

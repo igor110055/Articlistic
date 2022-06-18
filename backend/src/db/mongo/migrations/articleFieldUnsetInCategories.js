@@ -11,6 +11,7 @@ const {
 
 
 async function unsetArticleFieldInCategories() {
+    let client;
     try {
 
         client = await MDB.getClient();

@@ -13,7 +13,7 @@ async function payoutSuccess(payoutId) {
 
 
     if (!payoutId) {
-        throw "Some required parameters missing for updating order"
+        throw new Error("Some required parameters missing for updating order");
     }
 
     let client;
@@ -42,6 +42,7 @@ async function payoutSuccess(payoutId) {
         return response;
 
     } catch (e) {
+        logger.debug(e);
         throw e;
     }
 }
